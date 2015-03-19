@@ -4,9 +4,7 @@
 
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
 
-Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
-
-[!map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/target-1-on.png)
+![map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/map-bg-med.jpg)
 
 Developed by: MECC
 Released: 2990
@@ -23,6 +21,9 @@ This is meant to be a tongue-in-cheek re-creation of The Oregon Trail, from the 
 ## The Trajectory ##
 The "trail" will be loosely based on realistic constraints, but we'll do a bit of a scenic route for plot's sake. This might involve some gravity-assist hand-waiving (physicists look away), but there will absolutely NOT be any of this maneuver-through-an-asteroid-field nonsense. Notable milestones along the ~~trail~~ trajectory might include:
  
+ * notable asteroids or visable-from-orbit planetary features
+ * lava tubes
+ * lagrange points
 
 ## Dev Details ##
 These are up for discussion, but here are my tentative thoughts:
