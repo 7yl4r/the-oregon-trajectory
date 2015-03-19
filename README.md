@@ -1,4 +1,44 @@
-# the-oregon-trajectory
+# the-oregon-trajectory #
 
 [![Join the chat at https://gitter.im/7yl4r/the-oregon-trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
+
+Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
+
+[!map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/target-1-on.png)
+
+Developed by: MECC
+Released: 2990
+Genre: Adventure, Educational, Simulation
+Perspective: 3rd-Person Perspective, Side-Scrolling, Human
+Theme: Managerial, Real-Time
+Educational: Planetology, History
+
+-------------------------------------------------------------------------------------------------
+
+# Begin Historical Role-Play #
+This is meant to be a tongue-in-cheek re-creation of The Oregon Trail, from the perspective of a 30th century intelligence. Unless we get a lot of contributors, we'll probably need to cut content (and mini-games) but ideally we stick to the original style of gameplay. The game is largely text-driven with accompanying graphics and videos; interactive experiences are desired but will be up on the chopping block until core features are in place. 
+
+## The Trajectory ##
+The "trail" will be loosely based on realistic constraints, but we'll do a bit of a scenic route for plot's sake. This might involve some gravity-assist hand-waiving (physicists look away), but there will absolutely NOT be any of this maneuver-through-an-asteroid-field nonsense. Notable milestones along the ~~trail~~ trajectory might include:
+ 
+
+## Dev Details ##
+These are up for discussion, but here are my tentative thoughts:
+
+Game sections can be implemented in a number of ways, but the game will be primarily driven by HTML5, javascript/coffeescript, & css/less. The game may traverse a number of html pages or may be implemented as a single-page angular application (if I find others comfortable with that), but will most definitely not be run inside a single canvas. WebGL scenes from [Cosmosium](https://github.com/rSimulate/Cosmosium) will be utilized along with existing content from any consenting parties. We don't have time to create all this content, so I want to find a way to leverage existing works as much as possible. Further details will be developed based on the responses I get, so send your ideas/thoughts/questions to me early. 
+
+Please don't feel intimidated or hesitate to contact me, I want to find a workflow where you can be happy on this project. Whether you're a writer, programmer, artist, or even a playtester, [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+## first steps to getting involved ##
+
+1. github account
+2. say hello [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+3. review [The Oregon Trail](https://archive.org/details/msdos_Oregon_Trail_The_1990)
+4. go!
+
+## acknowledgements ##
+
+* awesome map from [planetary resources](http://www.planetaryresources.com/asteriods/#asteroids-map)
+* game details bastardized from [the internet archive's page on the Oregon Trail](https://archive.org/details/msdos_Oregon_Trail_The_1990) (and presumably the original MECC release)
