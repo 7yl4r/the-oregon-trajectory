@@ -16,7 +16,9 @@ Educational: Planetology, History
 -------------------------------------------------------------------------------------------------
 
 # Begin Historical Role-Play #
-This is meant to be a tongue-in-cheek re-creation of The Oregon Trail, from the perspective of a 30th century intelligence. Unless we get a lot of contributors, we'll probably need to cut content (and mini-games) but ideally we stick to the original style of gameplay. The game is largely text-driven with accompanying graphics and videos; interactive experiences are desired but will be up on the chopping block until core features are in place. 
+This is meant to be a tongue-in-cheek re-creation of The Oregon Trail, from the perspective of a 30th century intelligence. [Rogue-lite](http://www.giantbomb.com/forums/general-discussion-30/agreedisagree-by-modern-standards-oregon-trail-was-562547/?page=1#js-message-5994632), procedural, and nearly impossible to win.
+
+Unless we get a lot of contributors, we'll probably need to cut content (and mini-games) but ideally we stick to the original style of gameplay. The game is largely text-driven with accompanying graphics and videos; interactive experiences are desired but will be up on the chopping block until core features are in place. 
 
 ## The Trajectory ##
 The "trail" will be loosely based on realistic constraints, but we'll do a bit of a scenic route for plot's sake. This might involve some gravity-assist hand-waiving (physicists look away), but there will absolutely NOT be any of this maneuver-through-an-asteroid-field nonsense. Notable milestones along the ~~trail~~ trajectory might include:
@@ -43,3 +45,21 @@ Please don't feel intimidated or hesitate to contact me, I want to find a workfl
 
 * awesome map from [planetary resources](http://www.planetaryresources.com/asteriods/#asteroids-map)
 * game details bastardized from [the internet archive's page on the Oregon Trail](https://archive.org/details/msdos_Oregon_Trail_The_1990) (and presumably the original MECC release)
+
+## Additional Links / inspiration ##
+#### [The Organ Trail](https://play.google.com/store/apps/details?id=com.hatsproductions.OrganTrail) ####
+Zombies survival in the style of the Oregon Trail
+#### Real-life x-over ####
+![](http://i.imgur.com/iICqqPq.jpg)
+#### Suggested random events ####
+
+* a variation on [the dissin Terry joke](http://www.reddit.com/r/Jokes/comments/17sfkv/playing_oregon_trail/)
+
+#### HTML Tombstone Generator ####
+[Here](http://www.oregontrailtombstone.com/).
+
+#### History of The Oregon Trail ####
+[The game, I mean](http://www.citypages.com/2011-01-19/news/oregon-trail-how-three-minnesotans-forged-its-path/).
+
+#### Humorous Video ####
+[In need of overdubbing with "space words"](https://www.youtube.com/watch?v=CHps2SecuDk)
