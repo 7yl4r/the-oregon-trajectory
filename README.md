@@ -4,14 +4,20 @@
 
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
 
+![launch](http://i.imgur.com/a7GD71v.png)
+
+Released: 2990
+
+Genre: Adventure, Educational, Simulation
+
+Perspective: 3rd-Person Perspective, Side-Scrolling, Human
+
+Theme: Managerial, Real-Time
+
+Educational: Planetology, History
+
 ![map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/map-bg-med.jpg)
 
-Developed by: MECC
-Released: 2990
-Genre: Adventure, Educational, Simulation
-Perspective: 3rd-Person Perspective, Side-Scrolling, Human
-Theme: Managerial, Real-Time
-Educational: Planetology, History
 
 -------------------------------------------------------------------------------------------------
 
