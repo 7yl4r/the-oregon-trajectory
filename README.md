@@ -41,7 +41,7 @@ These are up for discussion, but here are my tentative thoughts:
 
 Game sections can be implemented in a number of ways, but the game will be primarily driven by HTML5, javascript/coffeescript, & css/less. The game may traverse a number of html pages or may be implemented as a single-page angular application (if I find others comfortable with that), but will most definitely not be run inside a single canvas. WebGL scenes from [Cosmosium](https://github.com/rSimulate/Cosmosium) will be utilized along with existing content from any consenting parties. We don't have time to create all this content, so I want to find a way to leverage existing works as much as possible. Further details will be developed based on the responses I get, so send your ideas/thoughts/questions to me early. 
 
-Please don't feel intimidated or hesitate to contact me, I want to find a workflow where you can be happy on this project. Whether you're a writer, programmer, artist, or even a playtester, [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+Please don't feel intimidated or hesitate to contact me, I want to find a workflow where you can be happy on this project whether you're a writer, programmer, artist, or even a playtester.
 
 ## first steps to getting involved ##
 
@@ -49,6 +49,15 @@ Please don't feel intimidated or hesitate to contact me, I want to find a workfl
 2. say hello [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 3. review [The Oregon Trail](https://archive.org/details/msdos_Oregon_Trail_The_1990)
 4. contribute!
+
+## version 1.0.0 ##
+Basic, bare bones version includes the original features of The Oregon Trail and not a hair more.
+
+## stretch goals ##
+If we have extra manhours, these are some improvements to 1.0.0 we'd like to include.
+* more advanced store pages. Choose your ship specs (engine type, etc), and then store offerings are tailored to remove stuff you don't need. Additionally, shop sub-pages to seperate 'food/energy/water' from fuel
+* more advanced trajectory planner. v1 puts user on a set trajectory, but a big part of mission planning is finding a good launch window and trajectory plan. 
+
 
 ## diaglogue-tree resources ##
 * [dialogue.js](https://github.com/scottbw/dialoguejs)
