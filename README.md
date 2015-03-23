@@ -27,7 +27,7 @@ The "trail" will be loosely based on realistic constraints, but we'll do a bit o
  * lava tubes
  * lagrange points
 
-## Dev Details ##
+# Dev Details #
 These are up for discussion, but here are my tentative thoughts:
 
 Game sections can be implemented in a number of ways, but the game will be primarily driven by HTML5, javascript/coffeescript, & css/less. The game may traverse a number of html pages or may be implemented as a single-page angular application (if I find others comfortable with that), but will most definitely not be run inside a single canvas. WebGL scenes from [Cosmosium](https://github.com/rSimulate/Cosmosium) will be utilized along with existing content from any consenting parties. We don't have time to create all this content, so I want to find a way to leverage existing works as much as possible. Further details will be developed based on the responses I get, so send your ideas/thoughts/questions to me early. 
@@ -39,7 +39,12 @@ Please don't feel intimidated or hesitate to contact me, I want to find a workfl
 1. github account
 2. say hello [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 3. review [The Oregon Trail](https://archive.org/details/msdos_Oregon_Trail_The_1990)
-4. go!
+4. contribute!
+
+## diaglogue-tree resources ##
+* [dialogue.js](https://github.com/scottbw/dialoguejs)
+* [Lemma dialogger](https://github.com/et1337/Lemma/tree/master/Dialogger) (nice web ui for buidling dialog, and [blog writeup](http://et1337.com/2014/05/16/the-poor-mans-dialogue-tree/) too)
+* [convo.js](https://github.com/hoverbird/convo)
 
 ## acknowledgements ##
 
