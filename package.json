@@ -54,6 +54,7 @@
         "header-navbar": "./ng-modules/navHeader/navHeader.js",
         "splash-header": "./ng-modules/splashHeader/splashHeader.js",
         "app-footer": "./ng-modules/appFooter/appFooter.coffee",
-        "social-button-directive": "./ng-modules/socialButtons/socialButtons.js"
+        "social-button-directive": "./ng-modules/socialButtons/socialButtons.js",
+        "main-menu": "./ng-modules/mainMenu/mainMenu.js"
     }
 }

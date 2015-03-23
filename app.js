@@ -7,7 +7,8 @@ var app = angular.module('ng-boot-boiler-demo',
         require('ngTouch'),
         require('header-navbar'),
         require('splash-header'),
-        require('app-footer')
+        require('app-footer'),
+        require('main-menu')
     ], function($httpProvider){
         FastClick.attach(document.body);
         delete $httpProvider.defaults.headers.common['X-Requested-With'];

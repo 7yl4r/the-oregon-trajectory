@@ -5,7 +5,7 @@ app = angular.module('app-footer', [])
 app.directive("appFooter", () ->
     return {
         restrict: 'E',
-        templateUrl: "ng-modules/appFooter/appFooter.html"
+        templateUrl: "/ng-modules/appFooter/appFooter.html"
     }
 )
 
