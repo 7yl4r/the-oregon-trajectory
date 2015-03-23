@@ -1,0 +1,74 @@
+/* Page headers */
+.bs-header {
+  padding: 30px 15px 40px; /* side padding builds on .container 15px, so 30px */
+  font-size: 16px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+  color: #cdbfe3;
+  background-color: #563d7c;
+  background-image: url(header.png);
+}
+.bs-header a {
+  color: #fff;
+  font-weight: normal;
+}
+.bs-header h1 {
+  color: #fff;
+}
+.bs-header p {
+  font-weight: 200;
+  line-height: 1.4;
+}
+.bs-header .container {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .bs-header {
+    font-size: 30px;
+    text-align: left;
+  }
+  .bs-header h1 {
+    font-size: 100px;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .bs-header p {
+    margin-right: 25%;
+  }
+}
+
+.navbar-inner {
+  -webkit-box-shadow: 0 3px 3px rgba(0,0,0,0.175);
+  box-shadow: 0 3px 3px rgba(0,0,0,0.175);
+}
+
+.navbar-nav .dropdown .navbar-brand {
+  max-width: 100%;
+  margin-right: inherit;
+  margin-left: inherit;
+}
+
+.header-placeholder {
+  height: 50px;
+}
+
+@media screen and (min-width: 768px) {
+
+  .dropdown.open > .navbar-brand + .dropdown-menu {
+    left: 10px;
+  }
+
+  .header-placeholder {
+    height: 50px;
+  }
+
+  .navbar-nav .dropdown .navbar-brand {
+    max-width: 200px;
+    margin-right: 5px;
+    margin-left: 10px;
+  }
+
+}

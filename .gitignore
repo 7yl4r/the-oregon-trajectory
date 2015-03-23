@@ -1,0 +1,9 @@
+# jetbrains
+.idea/
+
+# build files
+bundle.js
+bundle.css
+
+# npm dependencies
+node_modules/

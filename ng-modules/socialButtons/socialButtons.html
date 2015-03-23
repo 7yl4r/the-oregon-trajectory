@@ -1,0 +1,20 @@
+<div class="bs-social container" ng-controller="trustyUrl">
+    <ul class="bs-social-buttons">
+        <li ng-show="::ghWatchBtn">
+            <iframe src={{::trustSrc(ghWatchBtn)}}
+                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+        </li>
+        <li ng-show="::ghForkBtn">
+            <iframe src={{::trustSrc(ghForkBtn)}}
+                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+        </li>
+        <li ng-show="::twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+               data-hashtags="angularjs">Tweet</a>
+        </li>
+        <li ng-show="::gplus">
+            <!-- Place this tag where you want the +1 button to render. -->
+            <div class="g-plusone" data-size="medium"></div>
+        </li>
+    </ul>
+</div>
