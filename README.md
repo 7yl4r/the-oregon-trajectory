@@ -18,6 +18,7 @@ Educational: Planetology, History
 
 ![map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/map-bg-med.jpg)
 
+[gameplay storyboard on google slides](https://docs.google.com/presentation/d/1ihHx87kblOmQkT12vq68Q_uwOBYdLQET56Rgdd7GUQY/edit?usp=sharing)
 
 -------------------------------------------------------------------------------------------------
 
