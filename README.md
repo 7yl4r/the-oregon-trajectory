@@ -58,12 +58,6 @@ If we have extra manhours, these are some improvements to 1.0.0 we'd like to inc
 * more advanced store pages. Choose your ship specs (engine type, etc), and then store offerings are tailored to remove stuff you don't need. Additionally, shop sub-pages to seperate 'food/energy/water' from fuel
 * more advanced trajectory planner. v1 puts user on a set trajectory, but a big part of mission planning is finding a good launch window and trajectory plan. 
 
-
-## diaglogue-tree resources ##
-* [dialogue.js](https://github.com/scottbw/dialoguejs)
-* [Lemma dialogger](https://github.com/et1337/Lemma/tree/master/Dialogger) (nice web ui for buidling dialog, and [blog writeup](http://et1337.com/2014/05/16/the-poor-mans-dialogue-tree/) too)
-* [convo.js](https://github.com/hoverbird/convo)
-
 ## acknowledgements ##
 
 * awesome map from [planetary resources](http://www.planetaryresources.com/asteriods/#asteroids-map)
