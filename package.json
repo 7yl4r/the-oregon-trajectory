@@ -56,6 +56,7 @@
         "app-footer": "./ng-modules/appFooter/appFooter.coffee",
         "social-button-directive": "./ng-modules/socialButtons/socialButtons.js",
         "main-menu": "./ng-modules/mainMenu/mainMenu.js",
-        "shop": "./ng-modules/shop/shop.js"
+        "shop": "./ng-modules/shop/shop.js",
+        "you-win": "./ng-modules/youWin/youWin.js"
     }
 }
