@@ -111,7 +111,7 @@ app = angular.module('app-footer', []);
 app.directive("appFooter", function() {
   return {
     restrict: 'E',
-    templateUrl: "/ng-modules/appFooter/appFooter.html"
+    templateUrl: "/the-oregon-trajectory/ng-modules/appFooter/appFooter.html"
   };
 });
 
@@ -127,7 +127,7 @@ var app = angular.module('main-menu', []);
 app.directive("mainMenu", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/mainMenu/mainMenu.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/mainMenu/mainMenu.html"
     };
 });
 
@@ -140,7 +140,7 @@ var app = angular.module('header-navbar', []);
 app.directive("navHeader", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/navHeader/navHeader.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/navHeader/navHeader.html"
     };
 });
 
@@ -153,7 +153,7 @@ var app = angular.module('shop', []);
 app.directive("shop", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/shop/shop.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/shop/shop.html"
     };
 });
 
@@ -172,7 +172,7 @@ app.controller("trustyUrl", ['$sce', '$scope', function($sce, $scope) {
 app.directive("socialButtons", function() {
     return {
         restrict: 'AE',
-        templateUrl: "/ng-modules/socialButtons/socialButtons.html",
+        templateUrl: "/the-oregon-trajectory/ng-modules/socialButtons/socialButtons.html",
         scope: {
             ghForkBtn:'@',
             ghWatchBtn:'@',
@@ -219,7 +219,7 @@ var app = angular.module(
 app.directive("splashHeader", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/splashHeader/splashHeader.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/splashHeader/splashHeader.html"
     };
 });
 
@@ -232,7 +232,7 @@ var app = angular.module('you-win', []);
 app.directive("youWin", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/youWin/youWin.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/youWin/youWin.html"
     };
 });
 
