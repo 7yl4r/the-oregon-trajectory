@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="ng-boot-boiler-demo" id="top">
+<html lang="en" ng-app="the-oregon-trajectory" id="top">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +8,8 @@
     <title>ng-boot-boiler</title>
 
     <meta name="description" content="angular & bootstrap boilerplate for rapid modern web dev">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
     <!-- browserify bundle -->
     <script src="bundle.js"></script>
@@ -25,20 +27,20 @@
 
     <splash-header></splash-header>
 
-    <div class="container">
+    <div class="container" ng-controller="MainCtrl as MainCtrl">
         the sections below are toggled hide/show as needed
 
-        main menu
-        <main-menu></main-menu>
-        
-        shop
-        <shop></shop>
+        <main-menu class="game-module"></main-menu>
 
-        you win
-        <you-win></you-win>
+        <shop class="game-module"></shop>
 
-        another section of the app
-        TODO...
+        <you-win class="game-module"></you-win>
+
+        <div id="debug section">
+            debug tools: <br>
+            active module: {{MainCtrl.active_module}} <br>
+            <button ng-click="$emit('switchToModule', 'you-win')">instaWin</button>
+        </div>
     </div><!-- /.container -->
 
 </div><!-- /.main -->

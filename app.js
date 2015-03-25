@@ -1,7 +1,8 @@
+// jquery must be loaded before this...
 require('angular');
 require('fastclick');
 
-var app = angular.module('ng-boot-boiler-demo',
+var app = angular.module('the-oregon-trajectory',
     [
         require('ui.bootstrap'),
         require('ngTouch'),
@@ -17,28 +18,41 @@ var app = angular.module('ng-boot-boiler-demo',
     }
 );
 
-app.controller('MainCtrl', function($scope, $http, $document, $modal, orderByFilter) {
-    $scope.showBuildModal = function() {
-        var modalInstance = $modal.open({
-            templateUrl: 'buildModal.html',
-            controller: 'SelectModulesCtrl',
-            resolve: {
-                modules: function(buildFilesService) {
-                    return buildFilesService.getModuleMap()
-                        .then(function (moduleMap) {
-                            return Object.keys(moduleMap);
-                        });
-                }
-            }
-        });
-    };
+app.controller('MainCtrl', function($scope, $modal) {
+    window.MainCtrl = this;  // for debug
+    vm = this;
+    vm.active_module = 'main-menu';
+    //vm.submodules = [];  // secondary modules which are also active (NYI)
 
+    vm.switchToModule = function(event, newModuleName){
+        // enables switching between modules
+        vm.active_module = newModuleName;
+
+        // had to use jquery here... b/c I'm not angulicious enough
+        $('.game-module').hide();
+        $(newModuleName).show();
+    }
+    $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
+    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
+
+    vm.moduleIsActive = function(magicStr){
+        // returns true if module identified by magicStr should be active currently
+        if (magicStr === vm.active_module){
+            return true
+        } else {  // TODO: check for submodules
+            return false
+        }
+    }
+
+    // this example is retained here for later use
+    /*
     $scope.showDownloadModal = function() {
         var modalInstance = $modal.open({
             templateUrl: 'downloadModal.html',
             controller: 'DownloadCtrl'
         });
     };
+    */
 });
 
 /*
