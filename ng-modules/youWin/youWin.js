@@ -5,7 +5,7 @@ var app = angular.module('you-win', []);
 app.directive("youWin", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/youWin/youWin.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/youWin/youWin.html"
     };
 });
 

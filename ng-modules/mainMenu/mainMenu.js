@@ -5,7 +5,7 @@ var app = angular.module('main-menu', []);
 app.directive("mainMenu", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/mainMenu/mainMenu.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/mainMenu/mainMenu.html"
     };
 });
 

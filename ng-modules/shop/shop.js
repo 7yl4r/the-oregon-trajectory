@@ -5,7 +5,7 @@ var app = angular.module('shop', []);
 app.directive("shop", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/shop/shop.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/shop/shop.html"
     };
 });
 
