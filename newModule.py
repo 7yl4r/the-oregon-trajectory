@@ -25,6 +25,8 @@ TEST_PAGE_PRE = """<!DOCTYPE html>
 
    <meta name="description" content="angular & bootstrap boilerplate for rapid modern web dev">
 
+   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
    <!-- browserify bundle -->
    <script src="./../../bundle.js"></script>
 
