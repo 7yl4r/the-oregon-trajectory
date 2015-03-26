@@ -47,6 +47,7 @@
         }
     },
     "browser":{
+        "travel-screen":"./ng-modules/travelScreen/travelScreen.js",
         "header-navbar": "./ng-modules/navHeader/navHeader.js",
         "splash-header": "./ng-modules/splashHeader/splashHeader.js",
         "app-footer": "./ng-modules/appFooter/appFooter.coffee",

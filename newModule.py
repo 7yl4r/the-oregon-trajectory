@@ -15,7 +15,7 @@ app.directive("{1}", function() {{
 module.exports = angular.module('{0}').name;"""
 
 TEST_PAGE_PRE = """<!DOCTYPE html>
-<html lang="en" ng-app="ng-boot-boiler-demo" id="top">
+<html lang="en" ng-app="the-oregon-trajectory" id="top">
 <head>
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
