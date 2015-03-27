@@ -19,11 +19,19 @@ app.controller("travelScreenController", ['$scope', function($scope){
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.img = document.getElementById("test-bg");
+    vm.tileW = 1920;  // TODO: load this dynamically
     vm.shipImg = document.getElementById("player-ship");
 
     vm.travel = function(){
         //console.log('travel!');
         vm.x -= TRAVEL_SPEED;
+
+        // append new bg tile if needed
+        var overhang = vm.tileW + vm.x - window.innerWidth;
+        console.log(overhang);
+        if (overhang < 100){
+            console.log('need new tile');
+        }
     }
 
     vm.reposition = function(){
