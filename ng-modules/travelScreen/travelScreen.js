@@ -18,7 +18,8 @@ app.controller("travelScreenController", ['$scope', function($scope){
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
-    vm.img = document.getElementById("scream");
+    vm.img = document.getElementById("test-bg");
+    vm.shipImg = document.getElementById("player-ship");
 
     vm.travel = function(){
         //console.log('travel!');
@@ -47,6 +48,8 @@ app.controller("travelScreenController", ['$scope', function($scope){
         vm.reposition();  //TODO: only do this when needed, not every draw
 
         vm.ctx.drawImage(vm.img, vm.x, 0);
+        var shipW = 150, shipH = 338;
+        vm.ctx.drawImage(vm.shipImg, window.innerWidth/2-shipW/2, 300-shipH/2);
     }
 
     $scope.$on('draw', vm.drawBg);

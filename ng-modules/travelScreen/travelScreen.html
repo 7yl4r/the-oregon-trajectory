@@ -1,17 +1,15 @@
 <div class="col-xs-12" ng-controller="travelScreenController as travelCtrl">
-	put travel screen view content here...
-
-    <p>Image to use:</p>
-    <img id="scream" src="http://upload.wikimedia.org/wikipedia/commons/a/ab/Space_banner.jpg" alt="The Scream"
-            style="display:none">
-
-    <p>Canvas:</p>
     <div id="footer-outer">
         <div id="footer">
+            <!-- todo: these images don't really _have_ to be on a canvas... -->
+            <img id="player-ship" src="assets/sprites/ship.png" style="display:none">
+            <img id="test-bg" src="assets/backgrounds/earth.jpg" style="display:none">
+
             <canvas id="travelCanvas" width="100%" height="600px" style="border:1px solid #d3d3d3;">
                 Your browser does not support the HTML5 canvas tag. :(
             </canvas>
-            distance traveled: {{x}}
+
+            distance traveled: {{travelCtr.x}}
             <button ng-click="travelCtrl.travel()">travel one step</button>
             <button ng-hold="travelCtrl.travel()"
                     ng-hold-interval="TRAVEL_SPEED"
