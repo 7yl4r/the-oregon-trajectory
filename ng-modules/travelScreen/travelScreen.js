@@ -9,11 +9,37 @@ app.directive("travelScreen", function() {
     };
 });
 
+app.controller("travelScreenController", function(){
+    var TRAVEL_SPEED = 5;  // pixels per movement tick
+    var vm = this;
+    vm.x = 0;
+    // TODO: do these need to be set after $(document).ready()?
+    vm.c = document.getElementById("travelCanvas");
+    vm.ctx = vm.c.getContext("2d");
+    vm.img = document.getElementById("scream");
+
+    vm.travel = function(){
+        console.log('travel!');
+        vm.x -= TRAVEL_SPEED;
+        vm.drawBg();
+    }
+
+    vm.drawBg = function(){
+        // resize to window  TODO: only do this when needed, not every draw
+        var rect = vm.window.getBoundingClientRect();
+        console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+        vm.ctx.canvas.width  = window.innerWidth;
+        vm.ctx.canvas.height = window.innerHeight;
+
+        vm.ctx.drawImage(vm.img, vm.x, 0);
+    }
+});
+
 window.drawBg = function() {
-    var c = document.getElementById("travelCanvas");
-    var ctx = c.getContext("2d");
-    var img = document.getElementById("scream");
-    ctx.drawImage(img, 10, 10);
+
 }
+
+//drawBg();
 
 module.exports = angular.module('travel-screen').name;
