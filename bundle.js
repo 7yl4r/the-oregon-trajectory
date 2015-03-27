@@ -3,8 +3,7 @@
 require('angular');
 require('fastclick');
 
-var app = angular.module('the-oregon-trajectory',
-    [
+var app = angular.module('the-oregon-trajectory', [
         require('ui.bootstrap'),
         require('ngTouch'),
         require('header-navbar'),
@@ -12,26 +11,33 @@ var app = angular.module('the-oregon-trajectory',
         require('app-footer'),
         require('main-menu'),
         require('shop'),
-        require('you-win')
+        require('you-win'),
+        require('travel-screen')
     ], function($httpProvider){
         FastClick.attach(document.body);
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }
 );
 
-app.controller('MainCtrl', function($scope, $modal) {
+app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
     window.MainCtrl = this;  // for debug
     vm = this;
     vm.active_module = 'main-menu';
-    //vm.submodules = [];  // secondary modules which are also active (NYI)
 
+    vm.MSPF = 100;  // ms per frame
+    //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){
         // enables switching between modules
         vm.active_module = newModuleName;
 
         // had to use jquery here... b/c I'm not angulicious enough
-        $('.game-module').hide();
-        $(newModuleName).show();
+        var active_element = $(newModuleName);
+        if(active_element.length === 0){
+            throw Error('game module ' + newModuleName + ' not found in DOM!');
+        } else {
+            $('.game-module').hide();
+            active_element.show();
+        }
     }
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
     vm.switchToModule({}, 'main-menu');  // init app by starting main menu
@@ -54,7 +60,13 @@ app.controller('MainCtrl', function($scope, $modal) {
         });
     };
     */
-});
+
+    vm.scheduleDraw = function(){
+        $scope.$broadcast('draw');
+        setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
+    }
+    vm.scheduleDraw();  // do first draw
+}]);
 
 /*
  * The following compatibility check is from:
@@ -101,7 +113,7 @@ var isOldBrowser;
 
 })();
 
-},{"angular":11,"app-footer":2,"fastclick":12,"header-navbar":4,"main-menu":3,"ngTouch":10,"shop":5,"splash-header":7,"ui.bootstrap":9,"you-win":8}],2:[function(require,module,exports){
+},{"angular":13,"app-footer":2,"fastclick":14,"header-navbar":4,"main-menu":3,"ngTouch":12,"shop":6,"splash-header":8,"travel-screen":9,"ui.bootstrap":11,"you-win":10}],2:[function(require,module,exports){
 var app;
 
 require('angular');
@@ -119,7 +131,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":11}],3:[function(require,module,exports){
+},{"angular":13}],3:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('main-menu', []);
@@ -132,7 +144,7 @@ app.directive("mainMenu", function() {
 });
 
 module.exports = angular.module('main-menu').name;
-},{"angular":11}],4:[function(require,module,exports){
+},{"angular":13}],4:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('header-navbar', []);
@@ -145,7 +157,96 @@ app.directive("navHeader", function() {
 });
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":11}],5:[function(require,module,exports){
+},{"angular":13}],5:[function(require,module,exports){
+/*
+ angular directive: repeat action while mouse is clicked down for a long period of time
+ and until the mouse is released.
+
+ To use: (after adding code dependency of course)
+ <button ng-hold="foo()" ng-hold-interval="1000;1,200;10;100;10,20" ng-hold-done="bar()">
+
+ ng-hold-interval syntax = interval,interval,interval...
+ interval = delay;count | delay
+
+ count for last interval is not used. if count isn't specified default is 1.
+ delay is in milliseconds.
+
+ thus: 1000;1,200;10;100;10,20 means:
+ 1) first single delay of 1000ms
+ 2) then 10 delays of 200ms
+ 3) then 10 delays of 100ms
+ 4) then endless delays of 20ms
+
+ ng-hold-done attr event can be used to finalize stuff - will be called as last call after ng-hold calls ended.
+
+ events stop once mouse is released or element is exited.
+ last event call is the ng-hold-done.
+
+ based on: https://gist.github.com/srfrnk/9641a310d3e6092ca28b
+ */
+require('angular');
+
+var app = angular.module("directives/ngHold", []);
+
+app.directive('ngHold', [function () {
+    return {
+        restrict: "A",
+        link: function (scope, elm, attrs) {
+
+        },
+        controller: ["$scope", "$element", "$attrs", "$transclude", "$timeout", function ($scope, $element, $attrs, $transclude, $timeout) {
+            var onHold = function () {
+                return $scope.$eval($attrs.ngHold);
+            };
+            var onDone = function () {
+                return $scope.$eval($attrs.ngHoldDone);
+            };
+
+            var intervals = [];
+            ($attrs.ngHoldInterval || "500").split(",").forEach(function (interval) {
+                intervals.push(interval.split(";"));
+            });
+            var timeout=null;
+            var intervalIdx;
+            var intervalCount;
+
+            function timeoutFoo() {
+                intervalCount++;
+                var max = intervals[intervalIdx].length == 1 ? 1 : intervals[intervalIdx][1];
+                if (intervalCount > max) {
+                    intervalIdx = Math.min(intervalIdx + 1, intervals.length - 1);
+                    intervalCount = 1;
+                }
+                timeout = $timeout(timeoutFoo, intervals[intervalIdx][0]);
+                onHold();
+            }
+
+            $element.on("mousedown", function (e) {
+                intervalIdx = 0;
+                intervalCount = 1;
+                timeout = $timeout(timeoutFoo, intervals[intervalIdx][0]);
+                $scope.$apply(onHold);
+            });
+            $element.on("mouseup", function (e) {
+                if (!!timeout) {
+                    $timeout.cancel(timeout);
+                    $scope.$apply(onDone);
+                    timeout=null;
+                }
+            });
+            $element.on("mouseleave", function (e) {
+                if (!!timeout) {
+                    $timeout.cancel(timeout);
+                    $scope.$apply(onDone);
+                    timeout=null;
+                }
+            });
+        }]
+    };
+}]);
+
+module.exports = angular.module('directives/ngHold').name;
+},{"angular":13}],6:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('shop', []);
@@ -159,7 +260,7 @@ app.directive("shop", function() {
 
 module.exports = angular.module('shop').name;
 
-},{"angular":11}],6:[function(require,module,exports){
+},{"angular":13}],7:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -206,7 +307,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":11}],7:[function(require,module,exports){
+},{"angular":13}],8:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -224,7 +325,123 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":11,"social-button-directive":6}],8:[function(require,module,exports){
+},{"angular":13,"social-button-directive":7}],9:[function(require,module,exports){
+var Tile;
+
+require('angular');
+
+window.TRAVEL_SPEED = 1;
+
+Tile = (function() {
+  function Tile(startX, imageElement) {
+    this.x = startX;
+    this.img = imageElement;
+    this.tileW = 1920;
+  }
+
+  Tile.prototype.draw = function(ctx) {
+    ctx.drawImage(this.img, this.x, 0);
+  };
+
+  Tile.prototype.travel = function() {
+    return this.x -= window.TRAVEL_SPEED;
+  };
+
+  Tile.prototype.getOverhang = function() {
+    return this.tileW + this.x - window.innerWidth;
+  };
+
+  Tile.prototype.hasTravelledOffscreen = function() {
+    return (this.tileW + this.x) < 0;
+  };
+
+  return Tile;
+
+})();
+
+
+var app = angular.module('travel-screen', [
+    require('ng-hold')
+]);
+
+app.directive("travelScreen", function() {
+    return {
+        restrict: 'E',
+        templateUrl: "/the-oregon-trajectory/ng-modules/travelScreen/travelScreen.html"
+    };
+});
+
+app.controller("travelScreenController", ['$scope', function($scope){
+    var vm = this;
+    vm.x = 0;
+    // TODO: do these need to be set after $(document).ready()?
+    vm.canvasElement = document.getElementById("travelCanvas");
+    vm.ctx = vm.canvasElement.getContext("2d");
+    vm.shipImg = document.getElementById("player-ship");
+
+    vm.tiles = [new Tile(0, document.getElementById("test-bg"))];
+
+    vm.travel = function(){
+        //console.log('travel!');
+        vm.x += TRAVEL_SPEED;
+
+        vm.tiles.forEach(function(tile){
+            tile.travel();
+        });
+
+        // remove old offscreen tiles
+        while(vm.tiles[0].hasTravelledOffscreen()){
+            vm.tiles.splice(0, 1);  // remove leftmost tile
+            console.log('tile removed');
+        }
+
+        // append new bg tiles if needed
+        var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
+        while (overhang < 100){
+            vm.tiles.push(new Tile(window.innerWidth + overhang, document.getElementById("test-bg")));
+            overhang = vm.tiles[vm.tiles.length -1].getOverhang();
+            console.log('tile added');
+        }
+    }
+
+    vm.reposition = function(){
+        var pad = 30;  // estimated size of vertical scrollbar to prevent appearance of horiz. scrollbar
+
+        // move element to far left of screen
+        var bodyRect = document.body.getBoundingClientRect(),
+        elemRect = vm.canvasElement.getBoundingClientRect(),
+        offset   = elemRect.left - bodyRect.left;
+
+        // console.log('Element is ' + offset + ' horizontal pixels from <body>');
+        var prevPos = parseInt(vm.canvasElement.style.marginLeft);
+        if (isNaN(prevPos)){ prevPos = 0; }
+        vm.canvasElement.style.marginLeft = prevPos-offset + 'px';
+        vm.canvasElement.style.left = 0;
+
+        // resize element to window
+        vm.ctx.canvas.width  = window.innerWidth - pad;
+    }
+
+    vm.drawBg = function(){
+        vm.reposition();  //TODO: only do this when needed, not every draw
+
+        vm.tiles.forEach(function(tile) {
+            tile.draw(vm.ctx);
+        });
+
+        var shipW = 150, shipH = 338;
+        vm.ctx.drawImage(vm.shipImg, window.innerWidth/2-shipW/2, 300-shipH/2);
+    }
+
+    $scope.$on('draw', vm.drawBg);
+}]);
+
+module.exports = angular.module('travel-screen').name;
+;
+
+
+
+},{"angular":13,"ng-hold":5}],10:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('you-win', []);
@@ -237,7 +454,7 @@ app.directive("youWin", function() {
 });
 
 module.exports = angular.module('you-win').name;
-},{"angular":11}],9:[function(require,module,exports){
+},{"angular":13}],11:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -256,7 +473,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":11}],10:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":13}],12:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -280,7 +497,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":11}],11:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":13}],13:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -540,7 +757,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
