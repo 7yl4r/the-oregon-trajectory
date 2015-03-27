@@ -1,22 +1,18 @@
-<div class="col-xs-12" ng-controller="travelScreenController as travelCtrl">
-    <div id="footer-outer">
-        <div id="footer">
-            <!-- todo: these images don't really _have_ to be on a canvas... -->
-            <img id="player-ship" src="assets/sprites/ship.png" style="display:none">
-            <img id="test-bg" src="assets/backgrounds/earth.jpg" style="display:none">
-            <img id="sun-bg" src="assets/backgrounds/sun_transparent.png" style="display:none">
+<div ng-controller="travelScreenController as travelCtrl">
+    <!-- todo: these images don't really _have_ to be on a canvas... -->
+    <img id="player-ship" src="assets/sprites/ship.png" style="display:none">
+    <img id="test-bg" src="assets/backgrounds/earth.jpg" style="display:none">
+    <img id="sun-bg" src="assets/backgrounds/sun_transparent.png" style="display:none">
 
-            <canvas id="travelCanvas" width="100%" height="600px" style="border:1px solid #d3d3d3;">
-                Your browser does not support the HTML5 canvas tag. :(
-            </canvas>
+    <canvas id="travelCanvas" width="100%" height="600px">
+        Your browser does not support the HTML5 canvas tag. :(
+    </canvas>
 
-            distance traveled: {{travelCtrl.x}}
-            <button ng-click="travelCtrl.travel()">travel one step</button>
-            <button ng-hold="travelCtrl.travel()"
-                    ng-hold-interval="TRAVEL_SPEED"
-                    ng-hold-done="console.log('done')">
-                hold to travel
-            </button>
-        </div>
-    </div>
+    distance traveled: {{travelCtrl.x}}
+    <button ng-click="travelCtrl.travel()">travel one step</button>
+    <button ng-hold="travelCtrl.travel()"
+            ng-hold-interval="TRAVEL_SPEED"
+            ng-hold-done="console.log('done')">
+        hold to travel
+    </button>
 </div>
