@@ -18,10 +18,11 @@ var app = angular.module('the-oregon-trajectory', [
     }
 );
 
-app.controller('MainCtrl', function($scope, $modal) {
+app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
     window.MainCtrl = this;  // for debug
     vm = this;
     vm.active_module = 'main-menu';
+    vm.MSPF = 100;  // ms per frame
     //vm.submodules = [];  // secondary modules which are also active (NYI)
 
     vm.switchToModule = function(event, newModuleName){
@@ -32,6 +33,7 @@ app.controller('MainCtrl', function($scope, $modal) {
         $('.game-module').hide();
         $(newModuleName).show();
     }
+
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
     vm.switchToModule({}, 'main-menu');  // init app by starting main menu
 
@@ -53,7 +55,14 @@ app.controller('MainCtrl', function($scope, $modal) {
         });
     };
     */
-});
+
+    vm.scheduleDraw = function(){
+        console.log('drawing');
+        $scope.$broadcast('draw');
+        setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
+    }
+    vm.scheduleDraw();  // do first draw
+}]);
 
 /*
  * The following compatibility check is from:

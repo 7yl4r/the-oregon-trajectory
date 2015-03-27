@@ -11,7 +11,7 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", function(){
+app.controller("travelScreenController", ['$scope', function($scope){
     window.TRAVEL_SPEED = 5;  // pixels per movement tick
     var vm = this;
     vm.x = 0;
@@ -23,7 +23,6 @@ app.controller("travelScreenController", function(){
     vm.travel = function(){
         //console.log('travel!');
         vm.x -= TRAVEL_SPEED;
-        vm.drawBg();
     }
 
     vm.reposition = function(){
@@ -49,12 +48,8 @@ app.controller("travelScreenController", function(){
 
         vm.ctx.drawImage(vm.img, vm.x, 0);
     }
-});
 
-window.drawBg = function() {
-
-}
-
-//drawBg();
+    $scope.$on('draw', vm.drawBg);
+}]);
 
 module.exports = angular.module('travel-screen').name;
