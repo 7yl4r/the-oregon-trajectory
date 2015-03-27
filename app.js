@@ -22,18 +22,22 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
     window.MainCtrl = this;  // for debug
     vm = this;
     vm.active_module = 'main-menu';
+
     vm.MSPF = 100;  // ms per frame
     //vm.submodules = [];  // secondary modules which are also active (NYI)
-
     vm.switchToModule = function(event, newModuleName){
         // enables switching between modules
         vm.active_module = newModuleName;
 
         // had to use jquery here... b/c I'm not angulicious enough
-        $('.game-module').hide();
-        $(newModuleName).show();
+        var active_element = $(newModuleName);
+        if(active_element.length === 0){
+            throw Error('game module ' + newModuleName + ' not found in DOM!');
+        } else {
+            $('.game-module').hide();
+            active_element.show();
+        }
     }
-
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
     vm.switchToModule({}, 'main-menu');  // init app by starting main menu
 
@@ -57,7 +61,6 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
     */
 
     vm.scheduleDraw = function(){
-        console.log('drawing');
         $scope.$broadcast('draw');
         setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
     }

@@ -12,7 +12,7 @@ app.directive("travelScreen", function() {
 });
 
 app.controller("travelScreenController", ['$scope', function($scope){
-    window.TRAVEL_SPEED = 5;  // pixels per movement tick
+    window.TRAVEL_SPEED = 1;  // pixels per movement tick
     var vm = this;
     vm.x = 0;
     // TODO: do these need to be set after $(document).ready()?
