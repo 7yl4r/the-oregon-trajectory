@@ -29,7 +29,8 @@ class Tile
 # switching to javascript here...
 `
 var app = angular.module('travel-screen', [
-    require('ng-hold')
+    require('ng-hold'),
+    require('game')
 ]);
 
 app.directive("travelScreen", function() {
@@ -39,8 +40,10 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', function($scope){
+app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
+    window.trav = this;
+    vm.game = data;
     vm.x = 0;
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
@@ -52,6 +55,8 @@ app.controller("travelScreenController", ['$scope', function($scope){
     vm.travel = function(){
         //console.log('travel!');
         vm.x += TRAVEL_SPEED;
+
+        vm.game.travel();
 
         vm.tiles.forEach(function(tile){
             tile.travel();

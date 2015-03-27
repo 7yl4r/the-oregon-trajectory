@@ -1,7 +1,10 @@
-// jquery must be loaded before this...
-require('angular');
-require('fastclick');
+# jquery must be loaded before this...
+require('angular')
+require('fastclick')
 
+# "main" controller
+`
+// WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
         require('ui.bootstrap'),
         require('ngTouch'),
@@ -19,7 +22,6 @@ var app = angular.module('the-oregon-trajectory', [
 );
 
 app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
-    window.MainCtrl = this;  // for debug
     vm = this;
     vm.active_module = 'main-menu';
 
@@ -97,7 +99,7 @@ var isOldBrowser;
     var objectUrl = url.createObjectURL(svg);
 
     if (/^blob:/.exec(objectUrl) === null || !supportsFile) {
-        // `URL.createObjectURL` created a URL that started with something other
+        // URL.createObjectURL created a URL that started with something other
         // than "blob:", which means it has been polyfilled and is not supported by
         // this browser.
         failback();
@@ -111,3 +113,4 @@ var isOldBrowser;
     }
 
 })();
+`
