@@ -12,7 +12,12 @@
                 Your browser does not support the HTML5 canvas tag. :(
             </canvas>
             distance traveled: {{x}}
-            <button ng-click="travelCtrl.travel()">travel</button>
+            <button ng-click="travelCtrl.travel()">travel one step</button>
+            <button ng-hold="travelCtrl.travel()"
+                    ng-hold-interval="TRAVEL_SPEED"
+                    ng-hold-done="console.log('done')">
+                hold to travel
+            </button>
         </div>
     </div>
 </div>
