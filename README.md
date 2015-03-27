@@ -4,6 +4,8 @@
 
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
 
+### [CLICK HERE TO PLAY!](http://7yl4r.github.io/the-oregon-trajectory/) ###
+
 ![launch](http://i.imgur.com/a7GD71v.png)
 
 Released: 2290

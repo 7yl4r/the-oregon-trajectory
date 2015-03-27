@@ -47,7 +47,7 @@ app.controller("travelScreenController", ['$scope', function($scope){
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.shipImg = document.getElementById("player-ship");
 
-    vm.tiles = [new Tile(0, document.getElementById("test-bg"))];
+    vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
 
     vm.travel = function(){
         //console.log('travel!');
