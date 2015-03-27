@@ -15,7 +15,7 @@ app.directive("{1}", function() {{
 module.exports = angular.module('{0}').name;"""
 
 TEST_PAGE_PRE = """<!DOCTYPE html>
-<html lang="en" ng-app="ng-boot-boiler-demo" id="top">
+<html lang="en" ng-app="the-oregon-trajectory" id="top">
 <head>
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -103,6 +103,17 @@ for line in fileinput.input('package.json', inplace=1):
     else:
         if inserted:
             print '        "' + hyphen_name + '":"' + directory + camel_name + '.js",'
+        inserted = False
+    print line,
+
+print 'adding module to app.js main module'
+inserted = False
+for line in fileinput.input('app.js', inplace=1):
+    if line.strip() == "var app = angular.module('the-oregon-trajectory', [":
+        inserted = True
+    else:
+        if inserted:
+            print "         require('" + hyphen_name + "'),"
         inserted = False
     print line,
 

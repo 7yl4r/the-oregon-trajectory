@@ -2,8 +2,7 @@
 require('angular');
 require('fastclick');
 
-var app = angular.module('the-oregon-trajectory',
-    [
+var app = angular.module('the-oregon-trajectory', [
         require('ui.bootstrap'),
         require('ngTouch'),
         require('header-navbar'),
@@ -11,26 +10,33 @@ var app = angular.module('the-oregon-trajectory',
         require('app-footer'),
         require('main-menu'),
         require('shop'),
-        require('you-win')
+        require('you-win'),
+        require('travel-screen')
     ], function($httpProvider){
         FastClick.attach(document.body);
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }
 );
 
-app.controller('MainCtrl', function($scope, $modal) {
+app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
     window.MainCtrl = this;  // for debug
     vm = this;
     vm.active_module = 'main-menu';
-    //vm.submodules = [];  // secondary modules which are also active (NYI)
 
+    vm.MSPF = 100;  // ms per frame
+    //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){
         // enables switching between modules
         vm.active_module = newModuleName;
 
         // had to use jquery here... b/c I'm not angulicious enough
-        $('.game-module').hide();
-        $(newModuleName).show();
+        var active_element = $(newModuleName);
+        if(active_element.length === 0){
+            throw Error('game module ' + newModuleName + ' not found in DOM!');
+        } else {
+            $('.game-module').hide();
+            active_element.show();
+        }
     }
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
     vm.switchToModule({}, 'main-menu');  // init app by starting main menu
@@ -53,7 +59,13 @@ app.controller('MainCtrl', function($scope, $modal) {
         });
     };
     */
-});
+
+    vm.scheduleDraw = function(){
+        $scope.$broadcast('draw');
+        setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
+    }
+    vm.scheduleDraw();  // do first draw
+}]);
 
 /*
  * The following compatibility check is from:
