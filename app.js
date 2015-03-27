@@ -2,8 +2,7 @@
 require('angular');
 require('fastclick');
 
-var app = angular.module('the-oregon-trajectory',
-    [
+var app = angular.module('the-oregon-trajectory', [
         require('ui.bootstrap'),
         require('ngTouch'),
         require('header-navbar'),
@@ -11,7 +10,8 @@ var app = angular.module('the-oregon-trajectory',
         require('app-footer'),
         require('main-menu'),
         require('shop'),
-        require('you-win')
+        require('you-win'),
+        require('travel-screen')
     ], function($httpProvider){
         FastClick.attach(document.body);
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
