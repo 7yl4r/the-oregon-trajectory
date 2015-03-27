@@ -106,6 +106,17 @@ for line in fileinput.input('package.json', inplace=1):
         inserted = False
     print line,
 
+print 'adding module to app.js main module'
+inserted = False
+for line in fileinput.input('app.js', inplace=1):
+    if line.strip() == "var app = angular.module('the-oregon-trajectory', [":
+        inserted = True
+    else:
+        if inserted:
+            print "         require('" + hyphen_name + "'),"
+        inserted = False
+    print line,
+
 print 'adding styles to app.less'
 with open("app.less", 'r+') as f:
     content = f.read()
