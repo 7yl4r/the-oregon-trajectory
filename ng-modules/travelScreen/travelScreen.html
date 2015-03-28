@@ -9,7 +9,7 @@
     </canvas>
 
     distance traveled: {{travelCtrl.x}} <br>
-    health: {{travelCtrl.game.shipHealth}} {{travelCtrl.game.crewHealth}} <br>
+    health: {{travelCtrl.game.shipHealth}} . {{travelCtrl.game.getShipHealth()}} . {{travelCtrl.shipHealth}}<br>
     <button ng-click="travelCtrl.travel()">travel one step</button>
     <button ng-hold="travelCtrl.travel()"
             ng-hold-interval="TRAVEL_SPEED"

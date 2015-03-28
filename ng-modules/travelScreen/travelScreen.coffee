@@ -43,6 +43,7 @@ app.directive("travelScreen", function() {
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
     window.trav = this;
+    vm.shipHealth = -1;
     vm.game = data;
     vm.x = 0;
     // TODO: do these need to be set after $(document).ready()?
@@ -78,6 +79,8 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     }
 
     vm.drawBg = function(){
+        vm.shipHealth = data.getShipHealth()
+
         // resize element to window
         vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
 

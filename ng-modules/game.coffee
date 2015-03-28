@@ -21,8 +21,8 @@ class Game
         @crewHealth.forEach( (health, i)=>
             if Math.random() > 0.5
                 healthChanged = true
-                health -= 1
-                if health < 1
+                @crewHealth[i] -= 1
+                if @crewHealth[i] < 1
                     console.log('crew member died!')
                     @scope.$broadcast('crew death', i)
                     @crewHealth.splice(i, 1)  # remove the crew member
@@ -30,6 +30,9 @@ class Game
         if healthChanged
             console.log('health has changed')
             @_calcShipHealth()
+
+    getShipHealth: ()->
+        return @shipHealth
 
 app = angular.module('game', [])
 
