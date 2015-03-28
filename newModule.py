@@ -106,9 +106,9 @@ for line in fileinput.input('package.json', inplace=1):
         inserted = False
     print line,
 
-print 'adding module to app.js main module'
+print 'adding module to app.coffee main module'
 inserted = False
-for line in fileinput.input('app.js', inplace=1):
+for line in fileinput.input('app.coffee', inplace=1):
     if line.strip() == "var app = angular.module('the-oregon-trajectory', [":
         inserted = True
     else:

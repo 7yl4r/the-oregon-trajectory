@@ -8,8 +8,8 @@
         Your browser does not support the HTML5 canvas tag. :(
     </canvas>
 
-    distance traveled: {{travelCtrl.x}}
-    <button ng-click="travelCtrl.travel()">travel one step</button>
+    distance traveled: {{travelCtrl.x}} <br>
+    health: {{travelCtrl.gameData.shipHealth}}<br>
     <button ng-hold="travelCtrl.travel()"
             ng-hold-interval="TRAVEL_SPEED"
             ng-hold-done="console.log('done')">

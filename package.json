@@ -55,6 +55,7 @@
         "main-menu": "./ng-modules/mainMenu/mainMenu.js",
         "shop": "./ng-modules/shop/shop.js",
         "you-win": "./ng-modules/youWin/youWin.js",
+        "game": "./ng-modules/game.coffee",
 
         "ng-hold": "./ng-modules/ngHold.js",
 
