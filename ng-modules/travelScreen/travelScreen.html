@@ -16,11 +16,17 @@
                     Health: {{travelCtrl.gameData.shipHealth}}%
                 </div>
             </div>
-            distance traveled: {{travelCtrl.x}} <br>
-            <button ng-hold="travelCtrl.travel()"
+            <button class="btn btn-primary" type="button">
+                <span class="glyphicon glyphicon-resize-horizontal"></span>
+                distance traveled: <span class="badge">{{travelCtrl.x}}</span>
+            </button>
+
+            <button id="travel-btn"
+                    class="btn btn-primary"
+                    ng-hold="travelCtrl.travel()"
                     ng-hold-interval="TRAVEL_SPEED"
                     ng-hold-done="console.log('done')">
-                hold to travel
+                <span class="fui-play"></span> hold to travel
             </button>
         </div>
     </div>
