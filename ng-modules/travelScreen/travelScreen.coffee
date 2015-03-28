@@ -1,6 +1,8 @@
 require('angular');
 
-window.TRAVEL_SPEED = 1 # pixels per movement tick
+window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
+window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
+
 
 # TODO: move this to separate file and require it here
 class Tile
@@ -8,6 +10,7 @@ class Tile
         @x = startX
         @img = imageElement
         @tileW = 1920  # TODO: load this dynamically
+        @travelCount = 0
 
     draw: (ctx)->
         # draws the tile
@@ -16,7 +19,11 @@ class Tile
 
     travel: ()->
         # moves the tile 1 travel unit
-        @x -= window.TRAVEL_SPEED
+        if @travelCount > TRAVELS_PER_MOVE
+            @x -= window.TRAVEL_SPEED
+            @travelCount = 0
+        else
+            @travelCount += 1
 
     getOverhang: ()->
         # returns theoretical amount of tile overhanging right of screen, yet to be traveled to
