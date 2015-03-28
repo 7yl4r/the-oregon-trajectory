@@ -1,9 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// jquery must be loaded before this...
 require('angular');
+
 require('fastclick');
 
+
+// WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+         require('game-over'),
         require('ui.bootstrap'),
         require('ngTouch'),
         require('header-navbar'),
@@ -20,7 +23,6 @@ var app = angular.module('the-oregon-trajectory', [
 );
 
 app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
-    window.MainCtrl = this;  // for debug
     vm = this;
     vm.active_module = 'main-menu';
 
@@ -98,7 +100,7 @@ var isOldBrowser;
     var objectUrl = url.createObjectURL(svg);
 
     if (/^blob:/.exec(objectUrl) === null || !supportsFile) {
-        // `URL.createObjectURL` created a URL that started with something other
+        // URL.createObjectURL created a URL that started with something other
         // than "blob:", which means it has been polyfilled and is not supported by
         // this browser.
         failback();
@@ -112,8 +114,11 @@ var isOldBrowser;
     }
 
 })();
+;
 
-},{"angular":13,"app-footer":2,"fastclick":14,"header-navbar":4,"main-menu":3,"ngTouch":12,"shop":6,"splash-header":8,"travel-screen":9,"ui.bootstrap":11,"you-win":10}],2:[function(require,module,exports){
+
+
+},{"angular":15,"app-footer":2,"fastclick":16,"game-over":4,"header-navbar":6,"main-menu":5,"ngTouch":14,"shop":8,"splash-header":10,"travel-screen":11,"ui.bootstrap":13,"you-win":12}],2:[function(require,module,exports){
 var app;
 
 require('angular');
@@ -131,7 +136,91 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":13}],3:[function(require,module,exports){
+},{"angular":15}],3:[function(require,module,exports){
+var Game, app;
+
+require('angular');
+
+Game = (function() {
+  function Game(gameScope) {
+    this.scope = gameScope;
+    this.distanceTraveled = 0;
+    this.crewHealth = [100, 100];
+    this.shipHealth = 100;
+  }
+
+  Game.prototype._calcShipHealth = function() {
+    var healthSum;
+    healthSum = this.crewHealth.reduce(function(prev, current) {
+      return current + prev;
+    });
+    this.shipHealth = healthSum / this.crewHealth.length;
+  };
+
+  Game.prototype.travel = function() {
+    var healthChanged;
+    healthChanged = false;
+    this.crewHealth.forEach((function(_this) {
+      return function(health, i) {
+        if (Math.random() > 0.5) {
+          healthChanged = true;
+          _this.crewHealth[i] -= 1;
+          if (_this.crewHealth[i] < 1) {
+            console.log('crew member died!');
+            _this.scope.$broadcast('crew death', i);
+            _this.crewHealth.splice(i, 1);
+            if (_this.crewHealth.length < 1) {
+              console.log('game over!');
+              _this.scope.$broadcast('switchToModule', 'game-over');
+              _this.reset();
+            }
+          }
+        }
+      };
+    })(this));
+    if (healthChanged) {
+      this._calcShipHealth();
+    }
+  };
+
+  Game.prototype.reset = function() {
+    this.distanceTraveled = 0;
+    this.crewHealth = [100, 100];
+    this.shipHealth = 100;
+  };
+
+  return Game;
+
+})();
+
+app = angular.module('game', []);
+
+app.factory('data', [
+  '$rootScope', function($rootScope) {
+    var game;
+    game = new Game($rootScope);
+    return game;
+  }
+]);
+
+module.exports = angular.module('game').name;
+
+
+
+},{"angular":15}],4:[function(require,module,exports){
+require('angular');
+
+var app = angular.module('game-over', []);
+
+app.directive("gameOver", function() {
+    return {
+        restrict: 'E',
+        templateUrl: "/the-oregon-trajectory/ng-modules/gameOver/gameOver.html"
+    };
+});
+
+module.exports = angular.module('game-over').name;
+},{"angular":15}],5:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('main-menu', []);
@@ -144,7 +233,7 @@ app.directive("mainMenu", function() {
 });
 
 module.exports = angular.module('main-menu').name;
-},{"angular":13}],4:[function(require,module,exports){
+},{"angular":15}],6:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('header-navbar', []);
@@ -157,7 +246,7 @@ app.directive("navHeader", function() {
 });
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":13}],5:[function(require,module,exports){
+},{"angular":15}],7:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -246,7 +335,7 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":13}],6:[function(require,module,exports){
+},{"angular":15}],8:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('shop', []);
@@ -260,7 +349,7 @@ app.directive("shop", function() {
 
 module.exports = angular.module('shop').name;
 
-},{"angular":13}],7:[function(require,module,exports){
+},{"angular":15}],9:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -307,7 +396,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":13}],8:[function(require,module,exports){
+},{"angular":15}],10:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -325,7 +414,7 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":13,"social-button-directive":7}],9:[function(require,module,exports){
+},{"angular":15,"social-button-directive":9}],11:[function(require,module,exports){
 var Tile;
 
 require('angular');
@@ -361,7 +450,8 @@ Tile = (function() {
 
 
 var app = angular.module('travel-screen', [
-    require('ng-hold')
+    require('ng-hold'),
+    require('game')
 ]);
 
 app.directive("travelScreen", function() {
@@ -371,8 +461,9 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', function($scope){
+app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
+    vm.gameData = data;
     vm.x = 0;
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
@@ -384,6 +475,8 @@ app.controller("travelScreenController", ['$scope', function($scope){
     vm.travel = function(){
         //console.log('travel!');
         vm.x += TRAVEL_SPEED;
+
+        vm.gameData.travel();
 
         vm.tiles.forEach(function(tile){
             tile.travel();
@@ -404,26 +497,9 @@ app.controller("travelScreenController", ['$scope', function($scope){
         }
     }
 
-    vm.reposition = function(){
-        var pad = 30;  // estimated size of vertical scrollbar to prevent appearance of horiz. scrollbar
-
-        // move element to far left of screen
-        var bodyRect = document.body.getBoundingClientRect(),
-        elemRect = vm.canvasElement.getBoundingClientRect(),
-        offset   = elemRect.left - bodyRect.left;
-
-        // console.log('Element is ' + offset + ' horizontal pixels from <body>');
-        var prevPos = parseInt(vm.canvasElement.style.marginLeft);
-        if (isNaN(prevPos)){ prevPos = 0; }
-        vm.canvasElement.style.marginLeft = prevPos-offset + 'px';
-        vm.canvasElement.style.left = 0;
-
-        // resize element to window
-        vm.ctx.canvas.width  = window.innerWidth - pad;
-    }
-
     vm.drawBg = function(){
-        vm.reposition();  //TODO: only do this when needed, not every draw
+        // resize element to window
+        vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
 
         vm.tiles.forEach(function(tile) {
             tile.draw(vm.ctx);
@@ -441,7 +517,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"angular":13,"ng-hold":5}],10:[function(require,module,exports){
+},{"angular":15,"game":3,"ng-hold":7}],12:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('you-win', []);
@@ -454,7 +530,7 @@ app.directive("youWin", function() {
 });
 
 module.exports = angular.module('you-win').name;
-},{"angular":13}],11:[function(require,module,exports){
+},{"angular":15}],13:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -473,7 +549,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":13}],12:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":15}],14:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -497,7 +573,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":13}],13:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":15}],15:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -757,7 +833,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
