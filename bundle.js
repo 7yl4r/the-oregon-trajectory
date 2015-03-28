@@ -505,11 +505,14 @@ require('angular');
 
 window.TRAVEL_SPEED = 1;
 
+window.TRAVELS_PER_MOVE = 5;
+
 Tile = (function() {
   function Tile(startX, imageElement) {
     this.x = startX;
     this.img = imageElement;
     this.tileW = 1920;
+    this.travelCount = 0;
   }
 
   Tile.prototype.draw = function(ctx) {
@@ -517,7 +520,12 @@ Tile = (function() {
   };
 
   Tile.prototype.travel = function() {
-    return this.x -= window.TRAVEL_SPEED;
+    if (this.travelCount > TRAVELS_PER_MOVE) {
+      this.x -= window.TRAVEL_SPEED;
+      return this.travelCount = 0;
+    } else {
+      return this.travelCount += 1;
+    }
   };
 
   Tile.prototype.getOverhang = function() {
