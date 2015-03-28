@@ -15,7 +15,6 @@ class Game
         @shipHealth = healthSum/@crewHealth.length
 
     travel: ()->
-        console.log('travel')
         # progress 1 time-tick of travel and update the game values
         healthChanged = false
         @crewHealth.forEach( (health, i)=>
@@ -26,9 +25,11 @@ class Game
                     console.log('crew member died!')
                     @scope.$broadcast('crew death', i)
                     @crewHealth.splice(i, 1)  # remove the crew member
+                    if @crewHealth.length < 1
+                      console.log('game over!')
+                      @scope.$emit('switchToModule', 'game-over')
         )
         if healthChanged
-            console.log('health has changed')
             @_calcShipHealth()
 
     getShipHealth: ()->

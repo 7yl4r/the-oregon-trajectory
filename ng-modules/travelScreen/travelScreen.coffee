@@ -55,7 +55,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         //console.log('travel!');
         vm.x += TRAVEL_SPEED;
 
-        vm.game.travel();
+        vm.gameData.travel();
 
         vm.tiles.forEach(function(tile){
             tile.travel();
