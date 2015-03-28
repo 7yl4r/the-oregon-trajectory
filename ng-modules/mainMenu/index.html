@@ -2,12 +2,8 @@
 <html lang="en" ng-app="the-oregon-trajectory" id="top">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>The Oregon Trajectory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-    <title>ng-module test</title>
-
-    <meta name="description" content="angular & bootstrap boilerplate for rapid modern web dev">
 
     <!-- browserify bundle -->
     <script src="./../../bundle.js"></script>
@@ -15,24 +11,41 @@
     <!-- less bundle -->
     <link rel="stylesheet" href="./../../bundle.css"/>
 
+    <!-- Loading Bootstrap -->
+    <link href="../dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="../dist/css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="author" href="https://github.com/7yl4r">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+    <script src="js/vendor/html5shiv.js"></script>
+    <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body class="ng-cloak" ng-controller="MainCtrl">
-
 <nav-header></nav-header>
+<body class="ng-cloak" ng-controller="MainCtrl">
+    <div role="main">
 
-<div role="main">
+        <div class="container">
 
-    <div class="container">
+            main menu is the game's starting menu.
+            <main-menu></main-menu>
 
-        main menu is the game's starting menu.
-        <main-menu></main-menu>
+        </div><!-- /.container -->
 
-    </div><!-- /.container -->
+    </div><!-- /.main -->
 
-</div><!-- /.main -->
 
-<app-footer></app-footer>
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="../dist/js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../dist/js/vendor/video.js"></script>
+    <script src="../dist/js/flat-ui.min.js"></script>
 
 </body>
+<app-footer></app-footer>
 </html>
