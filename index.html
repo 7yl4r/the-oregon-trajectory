@@ -46,7 +46,9 @@
             <div id="debug section">
                 debug tools: <br>
                 active module: {{MainCtrl.active_module}} <br>
-                <button ng-click="$emit('switchToModule', 'you-win')">instaWin</button>
+                <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'travel-screen')">Travel</button>
+                <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'shop')">Shop</button>
+                <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'you-win')">instaWin</button>
             </div>
         </div><!-- /.container -->
 
