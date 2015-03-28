@@ -42,14 +42,19 @@ app.directive("travelScreen", function() {
 
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
-    vm.gameData = data;
-    vm.x = 0;
-    // TODO: do these need to be set after $(document).ready()?
-    vm.canvasElement = document.getElementById("travelCanvas");
-    vm.ctx = vm.canvasElement.getContext("2d");
-    vm.shipImg = document.getElementById("player-ship");
 
-    vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+    vm.init = function(){
+        vm.gameData = data;
+        vm.x = 0;
+        // TODO: do these need to be set after $(document).ready()?
+        vm.canvasElement = document.getElementById("travelCanvas");
+        vm.ctx = vm.canvasElement.getContext("2d");
+        vm.shipImg = document.getElementById("player-ship");
+
+        vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+    }
+    vm.init();
+    $scope.$on('resetGame', vm.init);
 
     vm.travel = function(){
         //console.log('travel!');

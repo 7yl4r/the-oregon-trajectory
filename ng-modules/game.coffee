@@ -12,7 +12,6 @@ class Game
         if @crewHealth.length < 1
             console.log('game over!')
             @scope.$broadcast('switchToModule', 'game-over')
-            # TODO: emit reset game event?
             return
 
         healthSum = @crewHealth.reduce((prev,current)->
@@ -32,10 +31,6 @@ class Game
                     console.log('crew member died!')
                     @scope.$broadcast('crew death', i)
                     @crewHealth.splice(i, 1)  # remove the crew member
-                    if @crewHealth.length < 1
-                        console.log('game over!')
-                        @scope.$broadcast('switchToModule', 'game-over')
-                        # TODO: emit reset game event?
         )
         if healthChanged
             @_calcShipHealth()
@@ -46,6 +41,7 @@ class Game
         @distanceTraveled = 0
         @crewHealth = [100, 100]
         @shipHealth = 100
+        @scope.$broadcast('resetGame')
         return
 
 app = angular.module('game', [])
@@ -54,6 +50,5 @@ app.factory('data', ['$rootScope', ($rootScope) ->
     game = new Game($rootScope)
     return game
 ])
-
 
 module.exports = angular.module('game').name
