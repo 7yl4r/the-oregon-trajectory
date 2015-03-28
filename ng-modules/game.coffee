@@ -13,6 +13,7 @@ class Game
                 return current + prev
         )
         @shipHealth = healthSum/@crewHealth.length
+        return
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
@@ -26,15 +27,21 @@ class Game
                     @scope.$broadcast('crew death', i)
                     @crewHealth.splice(i, 1)  # remove the crew member
                     if @crewHealth.length < 1
-                      console.log('game over!')
-                      @scope.$emit('switchToModule', 'game-over')
-                      # TODO: emit reset game? or just call @reset method?
+                        console.log('game over!')
+                        @scope.$broadcast('switchToModule', 'game-over')
+                        @reset()  # TODO: emit reset game event?
+                        return
         )
         if healthChanged
             @_calcShipHealth()
+            return
 
-    getShipHealth: ()->
-        return @shipHealth
+    reset: ()->
+        # re-initializes the game
+        @distanceTraveled = 0
+        @crewHealth = [100, 100]
+        @shipHealth = 100
+        return
 
 app = angular.module('game', [])
 
