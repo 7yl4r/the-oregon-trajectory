@@ -140,7 +140,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
                 vm.sprites[location].draw(vm.ctx)
             } else {
                 // get random y value and add to list of current sprites
-                vm.sprites[location] = new Sprite('/assets/sprites/station_sheet.png', -1000, Math.random()*200+200);
+                vm.sprites[location] = new Sprite('/the-oregon-trajectory/assets/sprites/station_sheet.png', -1000, Math.random()*200+200);
             }
             // TODO: remove sprites once we're done with them..
         }

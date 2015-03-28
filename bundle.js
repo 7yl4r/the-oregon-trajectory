@@ -363,6 +363,74 @@ app.directive("shop", function() {
     };
 });
 
+app.controller("ShopController", ['$scope', 'data', function($scope, data){
+    this.tab = 1;
+
+    this.isSet = function(checkTab) {
+        return this.tab === checkTab;
+    };
+
+    this.setTab = function(activeTab) {
+        this.tab = activeTab;
+    };
+
+    this.item_consumables = [
+        {
+            name: 'Rocket Fuel',
+            description: "Placeholder text",
+            price: 1,
+            image: ""},
+        {
+            name: 'Life Support',
+            description: "Placeholder text",
+            price: 2,
+            image: ""},
+        {
+            name: 'Food',
+            description: "Placeholder text",
+            price: 3,
+            image: ""},
+        {
+            name: 'Water',
+            description: "Placeholder text",
+            price: 4,
+            image: ""},
+        {
+            name: 'Drill Bit',
+            description: "Placeholder text",
+            price: 5,
+            image: ""},
+        {
+            name: 'Spare Engine',
+            description: "Placeholder text",
+            price: 6,
+            image: ""}
+    ];
+
+    this.item_mods = [
+        {
+            name: 'Rocket Payload 1',
+            description: "Placeholder text",
+            price: 1,
+            image: ""},
+        {
+            name: 'Rocket Payload 2',
+            description: "Placeholder text",
+            price: 1,
+            image: ""},
+        {
+            name: 'Rocket 1',
+            description: "Placeholder text",
+            price: 1,
+            image: ""},
+        {
+            name: 'Rocket 2',
+            description: "Placeholder text",
+            price: 1,
+            image: ""}
+    ];
+}]);
+
 module.exports = angular.module('shop').name;
 
 },{"angular":15}],9:[function(require,module,exports){
@@ -431,7 +499,7 @@ app.directive("splashHeader", function() {
 
 module.exports = angular.module('splash-header').name;
 },{"angular":15,"social-button-directive":9}],11:[function(require,module,exports){
-var Tile;
+var Sprite, Tile;
 
 require('angular');
 
@@ -464,6 +532,57 @@ Tile = (function() {
 
 })();
 
+Sprite = (function() {
+  function Sprite(spritesheet, x, y) {
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+    this.sheet = new Image();
+    this.sheet.src = spritesheet;
+    this.h = 399;
+    this.w = 182;
+    this.x = x;
+    this.y = y;
+    this.frame_n = 0;
+    this.max_frames = 4;
+    this.draws_per_frame = 50;
+    this.draw_counter = 0;
+  }
+
+  Sprite.prototype.next_frame = function() {
+    this.frame_n += 1;
+    if (this.frame_n > this.max_frames) {
+      return this.frame_n = 0;
+    }
+  };
+
+  Sprite.prototype.draw = function(ctx, x, y) {
+    var ssx, ssy;
+    if (x == null) {
+      x = this.x;
+    }
+    if (y == null) {
+      y = this.y;
+    }
+    ssx = this.frame_n * this.w;
+    ssy = 0;
+    x = x - this.w / 2;
+    y = y - this.h / 2;
+    ctx.drawImage(this.sheet, ssx, ssy, this.w, this.h, x, y, this.w, this.h);
+    this.draw_counter += 1;
+    if (this.draw_counter > this.draws_per_frame) {
+      this.next_frame();
+      return this.draw_counter = 0;
+    }
+  };
+
+  return Sprite;
+
+})();
+
 
 var app = angular.module('travel-screen', [
     require('ng-hold'),
@@ -490,6 +609,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.shipImg = document.getElementById("player-ship");
 
         vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+        vm.sprites = {}
     }
     vm.init();
     $scope.$on('resetGame', vm.init);
@@ -521,18 +641,30 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.drawSprite = function(location, Xposition){
         // draws location if in view at global Xposition
-        var spriteW = 288, spriteH = 500;
+        var spriteW = 500;  // max sprite width (for checking when to draw)
 
         // if w/in reasonable draw distance
         if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
             && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
-            // TODO:
-            // if sprite already in current sprites
-            // use existing y value (add small bit of drift?)
-            // else
-            // get random y value and add to list of current sprites
-            var rel_x = Xposition-vm.x;  // position relative to window view
-            vm.ctx.drawImage(vm.stationImg, rel_x - spriteW / 2, 300 - spriteH / 2);  // TODO: try to use gifs appended to dom
+            if (location in vm.sprites){  // if sprite already in current sprites
+                var rel_x = Xposition-vm.x;
+                vm.sprites[location].x = rel_x
+                // use existing y value (add small bit of drift)
+                if (Math.random() < 0.01) {  // small chance of drift
+                    vm.sprites[location].y += Math.round(Math.random() * 2 - 1)
+                    if (vm.sprites[location].y > 400) {
+                        vm.sprites[location].y = 399
+                    }
+                    if (vm.sprites[location].y < 200) {
+                        vm.sprites[location].y = 201
+                    }
+                }
+                vm.sprites[location].draw(vm.ctx)
+            } else {
+                // get random y value and add to list of current sprites
+                vm.sprites[location] = new Sprite('/the-oregon-trajectory/assets/sprites/station_sheet.png', -1000, Math.random()*200+200);
+            }
+            // TODO: remove sprites once we're done with them..
         }
     }
 
