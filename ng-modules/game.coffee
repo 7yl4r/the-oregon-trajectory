@@ -28,6 +28,7 @@ class Game
                     if @crewHealth.length < 1
                       console.log('game over!')
                       @scope.$emit('switchToModule', 'game-over')
+                      # TODO: emit reset game? or just call @reset method?
         )
         if healthChanged
             @_calcShipHealth()
