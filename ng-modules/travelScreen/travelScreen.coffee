@@ -42,7 +42,7 @@ app.directive("travelScreen", function() {
 
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
-    vm.stationImg = document.getElementById("station");
+    vm.stationImg = document.getElementById("station-sprite");
 
     vm.init = function(){
         vm.gameData = data;
