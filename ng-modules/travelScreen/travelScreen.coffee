@@ -26,6 +26,40 @@ class Tile
         # returns true if tile has travelled left off screen
         return (@tileW + @x) < 0
 
+class Sprite
+    constructor: (spritesheet, x=0, y=0)->
+        # sets up new sprite using given spritesheet src centered at x & y position on canvas
+        @sheet = new Image()
+        @sheet.src = spritesheet
+        @h = 399
+        @w = 182
+        @x = x
+        @y = y
+        @frame_n = 0
+        @max_frames = 4
+        # for slowing animation speed
+        @draws_per_frame = 50  # number of draw calls before setting new frame
+        @draw_counter = 0
+
+    next_frame: ()->
+        @frame_n += 1
+        if @frame_n > @max_frames
+            @frame_n = 0
+
+    draw: (ctx, x=@x, y=@y) ->
+        # draws a sprite centered at given location, or uses internal
+        # set locations to start in sprite sheet
+        ssx = @frame_n * @w
+        ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
+        x = x - @w/2
+        y = y - @h/2
+        ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w, @h)
+        @draw_counter += 1
+        if @draw_counter > @draws_per_frame
+            @next_frame()
+            @draw_counter = 0
+
+
 # switching to javascript here...
 `
 var app = angular.module('travel-screen', [
@@ -53,6 +87,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.shipImg = document.getElementById("player-ship");
 
         vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+        vm.sprites = {}
     }
     vm.init();
     $scope.$on('resetGame', vm.init);
@@ -84,18 +119,30 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.drawSprite = function(location, Xposition){
         // draws location if in view at global Xposition
-        var spriteW = 288, spriteH = 500;
+        var spriteW = 500;  // max sprite width (for checking when to draw)
 
         // if w/in reasonable draw distance
         if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
             && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
-            // TODO:
-            // if sprite already in current sprites
-            // use existing y value (add small bit of drift?)
-            // else
-            // get random y value and add to list of current sprites
-            var rel_x = Xposition-vm.x;  // position relative to window view
-            vm.ctx.drawImage(vm.stationImg, rel_x - spriteW / 2, 300 - spriteH / 2);  // TODO: try to use gifs appended to dom
+            if (location in vm.sprites){  // if sprite already in current sprites
+                var rel_x = Xposition-vm.x;
+                vm.sprites[location].x = rel_x
+                // use existing y value (add small bit of drift)
+                if (Math.random() < 0.01) {  // small chance of drift
+                    vm.sprites[location].y += Math.round(Math.random() * 2 - 1)
+                    if (vm.sprites[location].y > 400) {
+                        vm.sprites[location].y = 399
+                    }
+                    if (vm.sprites[location].y < 200) {
+                        vm.sprites[location].y = 201
+                    }
+                }
+                vm.sprites[location].draw(vm.ctx)
+            } else {
+                // get random y value and add to list of current sprites
+                vm.sprites[location] = new Sprite('/assets/sprites/station_sheet.png', -1000, Math.random()*200+200);
+            }
+            // TODO: remove sprites once we're done with them..
         }
     }
 

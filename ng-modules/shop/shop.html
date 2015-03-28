@@ -1,14 +1,17 @@
-<div>
+<div ng-controller="ShopController as shop">
     <h1>Jebediah's General Store, KSC, Earth</h1>
     July 1 2025
     <h2>Consumables</h2>
-    <ul>
-        <li>Rocket Fuel - $0mil</li>
-        <li>Life Support - $0mil</li>
-        <li>Food - $0mil</li>
-        <li>Water - $0mil</li>
-        <li>Drill Bits - $0mil</li>
-        <li>Spare Engine - $0mil</li>
-    </ul>
+    <div class="item-list">
+        <div class="item-container" ng-repeat="item in shop.item_consumables">
+            <div class="item-contents">
+                <h3>{{item.name}}</h3>
+                <hr>
+                <h4>{{item.description}}</h4><br>
+                <img ng-src="{item.image}"/><br>
+            </div>
+            <button class="btn btn-inverse item-buy">{{item.price | currency}}</button>
+        </div>
+    </div>
     <h2></h2>
 </div>
