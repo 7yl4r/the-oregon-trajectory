@@ -9,4 +9,13 @@ app.directive("mainMenu", function() {
     };
 });
 
+app.controller("mainMenuController", ['data', '$scope', function(data, $scope){
+    var vm = this;
+
+    vm.startGame = function(){
+        data.reset();
+        $scope.$emit('switchToModule', 'travel-screen');
+    }
+}]);
+
 module.exports = angular.module('main-menu').name;

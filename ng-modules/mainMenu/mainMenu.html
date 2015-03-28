@@ -1,7 +1,7 @@
-<div>
+<div ng-controller="mainMenuController as menuCtrl">
     You may:
     <ul>
-        <li><button ng-click="$emit('switchToModule', 'travel-screen')">Travel the trajectory</button></li>
+        <li><button ng-click="menuCtrl.startGame()">Travel the trajectory</button></li>
         <li>learn about the trajectory</li>
         <li>see the leaderboard</li>
         <li>follow our twitter</li>

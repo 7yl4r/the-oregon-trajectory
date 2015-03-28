@@ -9,6 +9,12 @@ class Game
 
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaing crew members
+        if @crewHealth.length < 1
+            console.log('game over!')
+            @scope.$broadcast('switchToModule', 'game-over')
+            # TODO: emit reset game event?
+            return
+
         healthSum = @crewHealth.reduce((prev,current)->
                 return current + prev
         )
@@ -29,8 +35,7 @@ class Game
                     if @crewHealth.length < 1
                         console.log('game over!')
                         @scope.$broadcast('switchToModule', 'game-over')
-                        @reset()  # TODO: emit reset game event?
-                        return
+                        # TODO: emit reset game event?
         )
         if healthChanged
             @_calcShipHealth()
