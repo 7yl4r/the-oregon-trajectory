@@ -1,7 +1,16 @@
 <div ng-controller="travelScreenController as travelCtrl">
     <!-- todo: these images don't really _have_ to be on a canvas... -->
     <img id="player-ship" src="/assets/sprites/ship.png" style="display:none">
-    <img id="station" src="/assets/sprites/station.gif" style="display:none">
+    <img id="station-sprite" src="/assets/sprites/station.png" style="display:none">
+    <!-- for other ways you might render animations:
+    <img id="station-gif" src="/assets/sprites/station.gif" style="display:none">
+    <video autoplay loop id="station-video" style="display:none">
+        <source src="/assets/sprites/station.webm" type='video/webm; codecs="vp8, vorbis" '>
+        <source src="/assets/sprites/station.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2" '>
+        <source src="/assets/sprites/station.ogg" type='video/ogg; codecs="theora, vorbis" '>
+    </video>
+    -->
+
     <img id="test-bg" src="/assets/backgrounds/earth.jpg" style="display:none">
     <img id="sun-bg" src="/assets/backgrounds/sun_transparent.png" style="display:none">
 
