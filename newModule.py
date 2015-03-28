@@ -41,11 +41,13 @@ TEST_PAGE_PRE = """<!DOCTYPE html>
 
 <div role="main">
 
-   <div class="container">
+   <div>
+        <!-- main menu needed here for init -->
+        <main-menu class="game-module" style="display:none"></main-menu>
         """
 
 TEST_PAGE_POST = """
-    </div><!-- /.container -->
+    </div>
 
 </div><!-- /.main -->
 
