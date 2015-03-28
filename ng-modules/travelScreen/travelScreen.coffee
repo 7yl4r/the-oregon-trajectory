@@ -84,14 +84,14 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.drawSprite = function(location, Xposition){
         // draws location if in view at global Xposition
-        var spriteW = 554, spriteH = 1216;
+        var spriteW = 288, spriteH = 500;
 
         // if w/in reasonable draw distance
         if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
             && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
             // TODO:
             // if sprite already in current sprites
-            // use existing y value
+            // use existing y value (add small bit of drift?)
             // else
             // get random y value and add to list of current sprites
             var rel_x = Xposition-vm.x;  // position relative to window view
