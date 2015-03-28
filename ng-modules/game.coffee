@@ -6,19 +6,12 @@ class Game
         @distanceTraveled = 0
         @crewHealth = [100, 100]
         @shipHealth = 100
-
-    _calcShipHealth: ()->
-        # recalculates shipHealth summary of health of remaing crew members
-        if @crewHealth.length < 1
-            console.log('game over!')
-            @scope.$broadcast('switchToModule', 'game-over')
-            return
-
-        healthSum = @crewHealth.reduce((prev,current)->
-                return current + prev
-        )
-        @shipHealth = healthSum/@crewHealth.length
-        return
+        @locations = {
+            "ksc":0,
+            "iss": 1000,
+            "moon":10000,
+            "mars":100000
+        }
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
@@ -42,6 +35,20 @@ class Game
         @crewHealth = [100, 100]
         @shipHealth = 100
         @scope.$broadcast('resetGame')
+        return
+
+    # === "private" methods ===
+    _calcShipHealth: ()->
+        # recalculates shipHealth summary of health of remaing crew members
+        if @crewHealth.length < 1
+            console.log('game over!')
+            @scope.$broadcast('switchToModule', 'game-over')
+            return
+
+        healthSum = @crewHealth.reduce((prev,current)->
+            return current + prev
+        )
+        @shipHealth = healthSum/@crewHealth.length
         return
 
 app = angular.module('game', [])

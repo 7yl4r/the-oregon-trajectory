@@ -42,6 +42,7 @@ app.directive("travelScreen", function() {
 
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
+    vm.stationImg = document.getElementById("station");
 
     vm.init = function(){
         vm.gameData = data;
@@ -81,19 +82,49 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         }
     }
 
-    vm.drawBg = function(){
-        // resize element to window
-        vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
+    vm.drawSprite = function(location, Xposition){
+        // draws location if in view at global Xposition
+        var spriteW = 554, spriteH = 1216;
 
+        // if w/in reasonable draw distance
+        if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
+            && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
+            // TODO:
+            // if sprite already in current sprites
+            // use existing y value
+            // else
+            // get random y value and add to list of current sprites
+            var rel_x = Xposition-vm.x;  // position relative to window view
+            vm.ctx.drawImage(vm.stationImg, rel_x - spriteW / 2, 300 - spriteH / 2);  // TODO: try to use gifs appended to dom
+        }
+    }
+
+    vm.drawLocations = function(){
+        for (var loc in data.locations){
+            var pos = data.locations[loc];
+            vm.drawSprite(loc, pos);
+        }
+    }
+
+    vm.drawBg = function(){
         vm.tiles.forEach(function(tile) {
             tile.draw(vm.ctx);
         });
+    }
 
+    vm.drawShip = function(){
         var shipW = 150, shipH = 338;
         vm.ctx.drawImage(vm.shipImg, window.innerWidth/2-shipW/2, 300-shipH/2);
     }
 
-    $scope.$on('draw', vm.drawBg);
+    vm.draw = function(){
+        // resize element to window
+        vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
+        vm.drawBg();
+        vm.drawLocations();
+        vm.drawShip();
+    }
+    $scope.$on('draw', vm.draw);
 }]);
 
 module.exports = angular.module('travel-screen').name;
