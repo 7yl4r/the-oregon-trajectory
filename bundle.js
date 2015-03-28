@@ -147,15 +147,13 @@ Game = (function() {
     this.distanceTraveled = 0;
     this.crewHealth = [100, 100];
     this.shipHealth = 100;
+    this.locations = {
+      "ksc": 0,
+      "iss": 1000,
+      "moon": 10000,
+      "mars": 100000
+    };
   }
-
-  Game.prototype._calcShipHealth = function() {
-    var healthSum;
-    healthSum = this.crewHealth.reduce(function(prev, current) {
-      return current + prev;
-    });
-    this.shipHealth = healthSum / this.crewHealth.length;
-  };
 
   Game.prototype.travel = function() {
     var healthChanged;
@@ -168,12 +166,7 @@ Game = (function() {
           if (_this.crewHealth[i] < 1) {
             console.log('crew member died!');
             _this.scope.$broadcast('crew death', i);
-            _this.crewHealth.splice(i, 1);
-            if (_this.crewHealth.length < 1) {
-              console.log('game over!');
-              _this.scope.$broadcast('switchToModule', 'game-over');
-              _this.reset();
-            }
+            return _this.crewHealth.splice(i, 1);
           }
         }
       };
@@ -187,6 +180,20 @@ Game = (function() {
     this.distanceTraveled = 0;
     this.crewHealth = [100, 100];
     this.shipHealth = 100;
+    this.scope.$broadcast('resetGame');
+  };
+
+  Game.prototype._calcShipHealth = function() {
+    var healthSum;
+    if (this.crewHealth.length < 1) {
+      console.log('game over!');
+      this.scope.$broadcast('switchToModule', 'game-over');
+      return;
+    }
+    healthSum = this.crewHealth.reduce(function(prev, current) {
+      return current + prev;
+    });
+    this.shipHealth = healthSum / this.crewHealth.length;
   };
 
   return Game;
@@ -231,6 +238,15 @@ app.directive("mainMenu", function() {
         templateUrl: "/the-oregon-trajectory/ng-modules/mainMenu/mainMenu.html"
     };
 });
+
+app.controller("mainMenuController", ['data', '$scope', function(data, $scope){
+    var vm = this;
+
+    vm.startGame = function(){
+        data.reset();
+        $scope.$emit('switchToModule', 'travel-screen');
+    }
+}]);
 
 module.exports = angular.module('main-menu').name;
 },{"angular":15}],6:[function(require,module,exports){
@@ -463,14 +479,20 @@ app.directive("travelScreen", function() {
 
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
-    vm.gameData = data;
-    vm.x = 0;
-    // TODO: do these need to be set after $(document).ready()?
-    vm.canvasElement = document.getElementById("travelCanvas");
-    vm.ctx = vm.canvasElement.getContext("2d");
-    vm.shipImg = document.getElementById("player-ship");
+    vm.stationImg = document.getElementById("station");
 
-    vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+    vm.init = function(){
+        vm.gameData = data;
+        vm.x = 0;
+        // TODO: do these need to be set after $(document).ready()?
+        vm.canvasElement = document.getElementById("travelCanvas");
+        vm.ctx = vm.canvasElement.getContext("2d");
+        vm.shipImg = document.getElementById("player-ship");
+
+        vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+    }
+    vm.init();
+    $scope.$on('resetGame', vm.init);
 
     vm.travel = function(){
         //console.log('travel!');
@@ -497,19 +519,49 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         }
     }
 
-    vm.drawBg = function(){
-        // resize element to window
-        vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
+    vm.drawSprite = function(location, Xposition){
+        // draws location if in view at global Xposition
+        var spriteW = 288, spriteH = 500;
 
+        // if w/in reasonable draw distance
+        if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
+            && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
+            // TODO:
+            // if sprite already in current sprites
+            // use existing y value (add small bit of drift?)
+            // else
+            // get random y value and add to list of current sprites
+            var rel_x = Xposition-vm.x;  // position relative to window view
+            vm.ctx.drawImage(vm.stationImg, rel_x - spriteW / 2, 300 - spriteH / 2);  // TODO: try to use gifs appended to dom
+        }
+    }
+
+    vm.drawLocations = function(){
+        for (var loc in data.locations){
+            var pos = data.locations[loc];
+            vm.drawSprite(loc, pos);
+        }
+    }
+
+    vm.drawBg = function(){
         vm.tiles.forEach(function(tile) {
             tile.draw(vm.ctx);
         });
+    }
 
+    vm.drawShip = function(){
         var shipW = 150, shipH = 338;
         vm.ctx.drawImage(vm.shipImg, window.innerWidth/2-shipW/2, 300-shipH/2);
     }
 
-    $scope.$on('draw', vm.drawBg);
+    vm.draw = function(){
+        // resize element to window
+        vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
+        vm.drawBg();
+        vm.drawLocations();
+        vm.drawShip();
+    }
+    $scope.$on('draw', vm.draw);
 }]);
 
 module.exports = angular.module('travel-screen').name;
