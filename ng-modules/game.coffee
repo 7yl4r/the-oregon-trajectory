@@ -20,6 +20,7 @@ class Game
         @fuel = 0
         @radiationChance = .01
         @money = 100
+        @visited = ['ksc']
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values

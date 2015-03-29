@@ -93,6 +93,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
         vm.sprites = {}
         vm.shipY = 300;
+        vm.shipX = window.innerWidth/3;
     }
     vm.init();
     $scope.$on('resetGame', vm.init);
@@ -117,16 +118,24 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
             overhang = vm.tiles[vm.tiles.length -1].getOverhang();
             console.log('tile added');
         }
+
+        var shipW = 150;
+        for (var loc in data.locations){
+            var pos = data.locations[loc];
+            if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+                data.visited.push(loc);
+                $scope.$emit('switchToModule', 'shop');
+            }
+        }
     }
 
     vm.drift = function(height){
         // returns slightly drifted modification on given height
         if (Math.random() < 0.01) {  // small chance of drift
-            height += Math.round(Math.random() * 2 - 1)
+            height += Math.round(Math.random() * 2 - 1);
             if (height > 400) {
                 height = 399
-            }
-            if (height < 200) {
+            } else if (height < 200) {
                 height = 201
             }
         }
@@ -170,7 +179,8 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     vm.drawShip = function(){
         var shipW = 150, shipH = 338;
         vm.shipY = vm.drift(vm.shipY);
-        vm.ctx.drawImage(vm.shipImg, window.innerWidth/3-shipW/2, vm.shipY-shipH/2);
+        vm.shipX = window.innerWidth/3;
+        vm.ctx.drawImage(vm.shipImg, vm.shipX-shipW/2, vm.shipY-shipH/2);
     }
 
     vm.draw = function(){
