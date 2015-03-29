@@ -14,7 +14,7 @@ app.controller("mainMenuController", ['data', '$scope', function(data, $scope){
 
     vm.startGame = function(){
         data.reset();
-        $scope.$emit('switchToModule', 'travel-screen');
+        $scope.$emit('switchToModule', 'shop');
     }
 }]);
 
