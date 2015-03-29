@@ -56,6 +56,13 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             if (itemName == item.name) this.activeItem = item;
         }
     };
+
+    this.ifItemActive = function(itemName) {
+        if (itemName == this.activeItem.name) {
+            return "item-container-selected";
+        }
+        return '';
+    }
 }]);
 
 module.exports = angular.module('shop').name;

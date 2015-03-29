@@ -25,7 +25,8 @@
     </div>
     <div class="storefront">
         <div class="item-list">
-            <div class="item-container" ng-repeat="item in shop.item_consumables" ng-click="shop.setActiveItem(item.name)">
+            <div class="item-container" ng-class="shop.ifItemActive(item.name)"
+                 ng-repeat="item in shop.item_consumables" ng-click="shop.setActiveItem(item.name)">
                 <div class="item-contents">
                     <h3>{{item.name}}</h3>
                     <img ng-src="{item.image}"/><br>
