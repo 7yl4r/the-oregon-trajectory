@@ -144,9 +144,7 @@ require('angular');
 Game = (function() {
   function Game(gameScope) {
     this.scope = gameScope;
-    this.distanceTraveled = 0;
-    this.crewHealth = [100, 100];
-    this.shipHealth = 100;
+    this._init();
     this.locations = {
       "ksc": 0,
       "iss": 1000,
@@ -155,20 +153,54 @@ Game = (function() {
     };
   }
 
+  Game.prototype._init = function() {
+    this.distanceTraveled = 0;
+    this.crewHealth = [100, 100];
+    this.shipHealth = 100;
+    this.rations = 0;
+    this.fuel = 0;
+    this.radiationChance = .01;
+    this.money = 100;
+    return this.visited = ['ksc'];
+  };
+
   Game.prototype.travel = function() {
+    var crew_i, results;
+    this.distanceTraveled += 1;
+    if (Math.random() < this.radiationChance) {
+      this.irradiate();
+    }
+    if (this.rations < 1) {
+      results = [];
+      for (crew_i in this.crewHealth) {
+        results.push(this.hurtCrew(crew_i, Math.random() * 0.6));
+      }
+      return results;
+    } else {
+      if (Math.random() < .3) {
+        return this.rations -= this.crewHealth.length;
+      }
+    }
+  };
+
+  Game.prototype.hurtCrew = function(i, amnt) {
+    amnt = Math.round(amnt);
+    this.crewHealth[i] -= amnt;
+    if (this.crewHealth[i] < 1) {
+      console.log('crew member died!');
+      this.scope.$broadcast('crew death', i);
+      this.crewHealth.splice(i, 1);
+    }
+    return this._calcShipHealth();
+  };
+
+  Game.prototype.irradiate = function() {
     var healthChanged;
     healthChanged = false;
     this.crewHealth.forEach((function(_this) {
       return function(health, i) {
-        if (Math.random() > 0.5) {
-          healthChanged = true;
-          _this.crewHealth[i] -= 1;
-          if (_this.crewHealth[i] < 1) {
-            console.log('crew member died!');
-            _this.scope.$broadcast('crew death', i);
-            return _this.crewHealth.splice(i, 1);
-          }
-        }
+        healthChanged = true;
+        return _this.hurtCrew(i, Math.random());
       };
     })(this));
     if (healthChanged) {
@@ -177,9 +209,7 @@ Game = (function() {
   };
 
   Game.prototype.reset = function() {
-    this.distanceTraveled = 0;
-    this.crewHealth = [100, 100];
-    this.shipHealth = 100;
+    this._init();
     this.scope.$broadcast('resetGame');
   };
 
@@ -244,7 +274,7 @@ app.controller("mainMenuController", ['data', '$scope', function(data, $scope){
 
     vm.startGame = function(){
         data.reset();
-        $scope.$emit('switchToModule', 'travel-screen');
+        $scope.$emit('switchToModule', 'shop');
     }
 }]);
 
@@ -354,7 +384,10 @@ module.exports = angular.module('directives/ngHold').name;
 },{"angular":15}],8:[function(require,module,exports){
 require('angular');
 
-var app = angular.module('shop', []);
+var app = angular.module('shop', [
+    require('ng-hold'),
+    require('game')
+]);
 
 app.directive("shop", function() {
     return {
@@ -365,6 +398,7 @@ app.directive("shop", function() {
 
 app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.tab = 1;
+    this.data = data;
 
     this.isSet = function(checkTab) {
         return this.tab === checkTab;
@@ -374,12 +408,32 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
         this.tab = activeTab;
     };
 
+    this.buy = function(item){
+        // for consumables:
+        if (typeof item.key !== 'undefined') {
+            this.data[item.key] += 1
+        } else {
+            // TODO: apply item some other way
+            ;
+        }
+        this.data.money -= item.price;
+    }
+
     this.item_consumables = [
         {
             name: 'Rocket Fuel',
-            description: "Placeholder text",
+            description: "You won't get very far without this.",
             price: 1,
-            image: ""},
+            image: "",
+            key: "fuel"
+        },{
+            name: 'Rations',
+            description: "Not just freeze-dried ice cream.",
+            price: 1,
+            image: "",
+            key: "rations"
+        }
+        /*
         {
             name: 'Life Support',
             description: "Placeholder text",
@@ -405,6 +459,7 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             description: "Placeholder text",
             price: 6,
             image: ""}
+            */
     ];
 
     this.item_mods = [
@@ -433,7 +488,7 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
 
 module.exports = angular.module('shop').name;
 
-},{"angular":15}],9:[function(require,module,exports){
+},{"angular":15,"game":3,"ng-hold":7}],9:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -606,27 +661,23 @@ app.directive("travelScreen", function() {
 
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
-    vm.stationImg = document.getElementById("station-sprite");
+    vm.data = data;
+    // TODO: do these need to be set after $(document).ready()?
+    vm.canvasElement = document.getElementById("travelCanvas");
+    vm.ctx = vm.canvasElement.getContext("2d");
+    vm.shipImg = document.getElementById("player-ship");
 
     vm.init = function(){
-        vm.gameData = data;
-        vm.x = 0;
-        // TODO: do these need to be set after $(document).ready()?
-        vm.canvasElement = document.getElementById("travelCanvas");
-        vm.ctx = vm.canvasElement.getContext("2d");
-        vm.shipImg = document.getElementById("player-ship");
-
         vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
         vm.sprites = {}
+        vm.shipY = 300;
+        vm.shipX = window.innerWidth/3;
     }
     vm.init();
     $scope.$on('resetGame', vm.init);
 
     vm.travel = function(){
-        //console.log('travel!');
-        vm.x += TRAVEL_SPEED;
-
-        vm.gameData.travel();
+        data.travel();
 
         vm.tiles.forEach(function(tile){
             tile.travel();
@@ -645,6 +696,28 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
             overhang = vm.tiles[vm.tiles.length -1].getOverhang();
             console.log('tile added');
         }
+
+        var shipW = 150;
+        for (var loc in data.locations){
+            var pos = data.locations[loc];
+            if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+                data.visited.push(loc);
+                $scope.$emit('switchToModule', 'shop');
+            }
+        }
+    }
+
+    vm.drift = function(height){
+        // returns slightly drifted modification on given height
+        if (Math.random() < 0.01) {  // small chance of drift
+            height += Math.round(Math.random() * 2 - 1);
+            if (height > 400) {
+                height = 399
+            } else if (height < 200) {
+                height = 201
+            }
+        }
+        return height;
     }
 
     vm.drawSprite = function(location, Xposition){
@@ -652,21 +725,13 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         var spriteW = 500;  // max sprite width (for checking when to draw)
 
         // if w/in reasonable draw distance
-        if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
-            && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
+        if (data.distanceTraveled + window.innerWidth + spriteW > Xposition    // if close enough
+            && data.distanceTraveled - spriteW < Xposition                  ) { // if we haven't passed it
             if (location in vm.sprites){  // if sprite already in current sprites
-                var rel_x = Xposition-vm.x;
+                var rel_x = Xposition-data.distanceTraveled;
                 vm.sprites[location].x = rel_x
                 // use existing y value (add small bit of drift)
-                if (Math.random() < 0.01) {  // small chance of drift
-                    vm.sprites[location].y += Math.round(Math.random() * 2 - 1)
-                    if (vm.sprites[location].y > 400) {
-                        vm.sprites[location].y = 399
-                    }
-                    if (vm.sprites[location].y < 200) {
-                        vm.sprites[location].y = 201
-                    }
-                }
+                vm.sprites[location].y = vm.drift(vm.sprites[location].y);
                 vm.sprites[location].draw(vm.ctx)
             } else {
                 // get random y value and add to list of current sprites
@@ -691,7 +756,9 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.drawShip = function(){
         var shipW = 150, shipH = 338;
-        vm.ctx.drawImage(vm.shipImg, window.innerWidth/2-shipW/2, 300-shipH/2);
+        vm.shipY = vm.drift(vm.shipY);
+        vm.shipX = window.innerWidth/3;
+        vm.ctx.drawImage(vm.shipImg, vm.shipX-shipW/2, vm.shipY-shipH/2);
     }
 
     vm.draw = function(){

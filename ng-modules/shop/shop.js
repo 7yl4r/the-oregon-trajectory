@@ -1,6 +1,9 @@
 require('angular');
 
-var app = angular.module('shop', []);
+var app = angular.module('shop', [
+    require('ng-hold'),
+    require('game')
+]);
 
 app.directive("shop", function() {
     return {
@@ -11,6 +14,7 @@ app.directive("shop", function() {
 
 app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.tab = 1;
+    this.data = data;
 
     this.isSet = function(checkTab) {
         return this.tab === checkTab;
@@ -20,12 +24,32 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
         this.tab = activeTab;
     };
 
+    this.buy = function(item){
+        // for consumables:
+        if (typeof item.key !== 'undefined') {
+            this.data[item.key] += 1
+        } else {
+            // TODO: apply item some other way
+            ;
+        }
+        this.data.money -= item.price;
+    }
+
     this.item_consumables = [
         {
             name: 'Rocket Fuel',
-            description: "Placeholder text",
+            description: "You won't get very far without this.",
             price: 1,
-            image: ""},
+            image: "",
+            key: "fuel"
+        },{
+            name: 'Rations',
+            description: "Not just freeze-dried ice cream.",
+            price: 1,
+            image: "",
+            key: "rations"
+        }
+        /*
         {
             name: 'Life Support',
             description: "Placeholder text",
@@ -51,6 +75,7 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             description: "Placeholder text",
             price: 6,
             image: ""}
+            */
     ];
 
     this.item_mods = [

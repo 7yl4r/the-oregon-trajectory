@@ -1,7 +1,7 @@
 <div ng-controller="travelScreenController as travelCtrl">
-    <!-- todo: these images don't really _have_ to be on a canvas... -->
-    <img id="player-ship" src="/the-oregon-trajectory/assets/sprites/ship.png" style="display:none">
-    <img id="station-sprite" src="/the-oregon-trajectory/assets/sprites/station.png" style="display:none">
+    <!-- todo: these images don't really _have_ to be in the html... -->
+    <img id="player-ship" src="/assets/sprites/ship.png" style="display:none">
+
     <img id="test-bg" src="/the-oregon-trajectory/assets/backgrounds/earth.jpg" style="display:none">
     <img id="sun-bg" src="/the-oregon-trajectory/assets/backgrounds/sun_transparent.png" style="display:none">
 
@@ -12,14 +12,23 @@
         <div id="travel-ui">
             <div class="progress health-bar">
                 <div class="progress-bar progress-bar-danger"
-                     ng-style="{'width': travelCtrl.gameData.shipHealth + '%', 'min-width': '6em'}"
-                     aria-valuenow="{{travelCtrl.gameData.shipHealth}}" aria-valuemin="0" aria-valuemax="100">
-                    Health: {{travelCtrl.gameData.shipHealth}}%
+                     ng-style="{'width': travelCtrl.data.shipHealth + '%', 'min-width': '6em'}"
+                     aria-valuenow="{{travelCtrl.data.shipHealth}}" aria-valuemin="0" aria-valuemax="100">
+                    Health: {{travelCtrl.data.shipHealth}}%
                 </div>
             </div>
+
             <button class="btn btn-primary" type="button">
                 <span class="glyphicon glyphicon-resize-horizontal"></span>
-                distance traveled: <span class="badge">{{travelCtrl.x}}</span>
+                distance traveled: <span class="badge">{{travelCtrl.data.distanceTraveled}}</span>
+            </button>
+            <button class="btn btn-primary" type="button">
+                <span class="glyphicon glyphicon-cutlery"></span>
+                rations: <span class="badge">{{travelCtrl.data.rations}}</span>
+            </button>
+            <button class="btn btn-primary" type="button">
+                <span class="glyphicon glyphicon-tint"></span>
+                fuel: <span class="badge">{{travelCtrl.data.fuel}}</span>
             </button>
 
             <button id="travel-btn"
