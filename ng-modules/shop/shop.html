@@ -1,24 +1,45 @@
-<div ng-controller="ShopController as shop">
-    <h1>Jebediah's General Store, KSC, Earth</h1>
-    July 1 2025
-    <h2>Consumables</h2>
-    <div class="item-list">
-        <div class="item-container" ng-repeat="item in shop.item_consumables">
-            <div class="item-contents">
-                <h3>{{item.name}}</h3>
-                <hr>
-                <h4>{{item.description}}</h4><br>
-                <img ng-src="{item.image}"/><br>
-            </div>
-            <!-- NOTE: ng-hold interval is longer for more $$$ items -->
-            <button ng-click="shop.buy(item)"
-                    ng-hold="shop.buy(item)"
-                    ng-hold-interval="500/item.price"
-                    class="btn btn-inverse item-buy">
-                {{item.price | currency}}
+<div ng-app="shop" ng-controller="ShopController as shop">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+                <span class="sr-only">Toggle navigation</span>
             </button>
+            <a class="navbar-brand" href="#">Jebediah's General Store, Earth</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-01">
+            <ul class="nav navbar-nav">
+                <li><a href="#">Consumables</a></li>
+                <li><a href="#">Modifiers</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+    <p id="date">July 1 2025</p>
+    <div class="item-container">
+        <div class="item-contents">
+            <h3>{{shop.activeItem.name}}</h3>
+            <img ng-src="{shop.activeItem.image}"/><br>
+        </div>
+        <div class="item-description">
+            <h7>{{shop.activeItem.description}}</h7><br>
+        </div>
+    </div>
+    <div class="storefront">
+        <div class="item-list">
+            <div class="item-container" ng-repeat="item in shop.item_consumables" ng-click="shop.setActiveItem(item.name)">
+                <div class="item-contents">
+                    <h3>{{item.name}}</h3>
+                    <img ng-src="{item.image}"/><br>
+                </div>
+                <!-- NOTE: ng-hold interval is longer for more $$$ items -->
+                <button ng-click="shop.buy(item)"
+                        ng-hold="shop.buy(item)"
+                        ng-hold-interval="500/item.price"
+                        class="btn btn-inverse item-buy">
+                    {{item.price | currency}}
+                </button>
+            </div>
         </div>
     </div>
     <h2>budget: {{shop.data.money}}</h2>
-    <button ng-click="$emit('switchToModule', 'travel-screen')">to space!!!</button>
+    <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'travel-screen')">to space!!!</button>
 </div>

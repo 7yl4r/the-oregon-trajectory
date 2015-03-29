@@ -13,33 +13,12 @@ app.directive("shop", function() {
 });
 
 app.controller("ShopController", ['$scope', 'data', function($scope, data){
-    this.tab = 1;
     this.data = data;
-
-    this.isSet = function(checkTab) {
-        return this.tab === checkTab;
-    };
-
-    this.setTab = function(activeTab) {
-        this.tab = activeTab;
-    };
-
-    this.buy = function(item){
-        // for consumables:
-        if (typeof item.key !== 'undefined') {
-            this.data[item.key] += 1
-        } else {
-            // TODO: apply item some other way
-            ;
-        }
-        this.data.money -= item.price;
-    }
-
     this.item_consumables = [
         {
             name: 'Rocket Fuel',
             description: "You won't get very far without this.",
-            price: 1,
+            price: 2,
             image: "",
             key: "fuel"
         },{
@@ -49,57 +28,34 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             image: "",
             key: "rations"
         }
-        /*
-        {
-            name: 'Life Support',
-            description: "Placeholder text",
-            price: 2,
-            image: ""},
-        {
-            name: 'Food',
-            description: "Placeholder text",
-            price: 3,
-            image: ""},
-        {
-            name: 'Water',
-            description: "Placeholder text",
-            price: 4,
-            image: ""},
-        {
-            name: 'Drill Bit',
-            description: "Placeholder text",
-            price: 5,
-            image: ""},
-        {
-            name: 'Spare Engine',
-            description: "Placeholder text",
-            price: 6,
-            image: ""}
-            */
     ];
+    this.tab = 1;
+    this.activeItem = this.item_consumables[0];
 
-    this.item_mods = [
-        {
-            name: 'Rocket Payload 1',
-            description: "Placeholder text",
-            price: 1,
-            image: ""},
-        {
-            name: 'Rocket Payload 2',
-            description: "Placeholder text",
-            price: 1,
-            image: ""},
-        {
-            name: 'Rocket 1',
-            description: "Placeholder text",
-            price: 1,
-            image: ""},
-        {
-            name: 'Rocket 2',
-            description: "Placeholder text",
-            price: 1,
-            image: ""}
-    ];
+    this.buy = function(item){
+        // for consumables:
+        if (typeof item.key !== 'undefined') {
+            this.data[item.key] += 1
+        } else {
+            // TODO: apply item some other way
+        }
+        this.data.money -= item.price;
+    };
+
+    this.isSet = function(checkTab) {
+        return this.tab === checkTab;
+    };
+
+    this.setTab = function(activeTab) {
+        this.tab = activeTab;
+    };
+
+    this.setActiveItem = function(itemName) {
+        for (var i = 0; i < this.item_consumables.length; i++) {
+            var item = this.item_consumables[i];
+            if (itemName == item.name) this.activeItem = item;
+        }
+    };
 }]);
 
 module.exports = angular.module('shop').name;
