@@ -3,9 +3,7 @@ require('angular')
 class Game
     constructor: (gameScope)->
         @scope = gameScope
-        @distanceTraveled = 0
-        @crewHealth = [100, 100]
-        @shipHealth = 100
+        @_init()  # initializes params
         @locations = {
             "ksc":0,
             "iss": 1000,
@@ -15,25 +13,41 @@ class Game
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
+        @distanceTraveled += 1
+        if Math.random() < @radiationChance
+            @irradiate()
+
+    hurtCrew: (i, amnt)->
+        # hurts crewmember i given amnt (and checks for death)
+        @crewHealth[i] -= amnt
+        if @crewHealth[i] < 1
+            console.log('crew member died!')
+            @scope.$broadcast('crew death', i)
+            @crewHealth.splice(i, 1)  # remove the crew member
+
+    irradiate: ()->
+        # irradiates the crew; use with care
         healthChanged = false
         @crewHealth.forEach( (health, i)=>
             if Math.random() > 0.5
                 healthChanged = true
-                @crewHealth[i] -= 1
-                if @crewHealth[i] < 1
-                    console.log('crew member died!')
-                    @scope.$broadcast('crew death', i)
-                    @crewHealth.splice(i, 1)  # remove the crew member
+                @hurtCrew(i, 1)
         )
         if healthChanged
             @_calcShipHealth()
             return
 
-    reset: ()->
+    _init: ()->
         # re-initializes the game
         @distanceTraveled = 0
         @crewHealth = [100, 100]
         @shipHealth = 100
+        @rations = 0
+        @fuel = 0
+        @radiationChance = .1
+
+    reset: ()->
+        @_init()
         @scope.$broadcast('resetGame')
         return
 

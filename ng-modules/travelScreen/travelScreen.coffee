@@ -83,11 +83,10 @@ app.directive("travelScreen", function() {
 
 app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
     var vm = this;
+    vm.data = data;
     vm.stationImg = document.getElementById("station-sprite");
 
     vm.init = function(){
-        vm.gameData = data;
-        vm.x = 0;
         // TODO: do these need to be set after $(document).ready()?
         vm.canvasElement = document.getElementById("travelCanvas");
         vm.ctx = vm.canvasElement.getContext("2d");
@@ -100,10 +99,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     $scope.$on('resetGame', vm.init);
 
     vm.travel = function(){
-        //console.log('travel!');
-        vm.x += TRAVEL_SPEED;
-
-        vm.gameData.travel();
+        data.travel();
 
         vm.tiles.forEach(function(tile){
             tile.travel();
@@ -129,10 +125,10 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         var spriteW = 500;  // max sprite width (for checking when to draw)
 
         // if w/in reasonable draw distance
-        if (vm.x + window.innerWidth + spriteW > Xposition    // if close enough
-            && vm.x - spriteW < Xposition                  ) { // if we haven't passed it
+        if (data.distanceTraveled + window.innerWidth + spriteW > Xposition    // if close enough
+            && data.distanceTraveled - spriteW < Xposition                  ) { // if we haven't passed it
             if (location in vm.sprites){  // if sprite already in current sprites
-                var rel_x = Xposition-vm.x;
+                var rel_x = Xposition-data.distanceTraveled;
                 vm.sprites[location].x = rel_x
                 // use existing y value (add small bit of drift)
                 if (Math.random() < 0.01) {  // small chance of drift
