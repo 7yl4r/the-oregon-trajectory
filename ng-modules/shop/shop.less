@@ -1,8 +1,24 @@
+.shop-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
 #date {
   display: block;
 }
 
+.active-item {
+  order: 1;
+  flex: 0 0 auto;
+}
+
 .storefront {
+  order: 2;
+  flex: 1 0 auto;
   display: inline-block;
 }
 
