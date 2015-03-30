@@ -115,7 +115,7 @@ for line in fileinput.input('app.coffee', inplace=1):
         inserted = True
     else:
         if inserted:
-            print "          require('" + hyphen_name + "'),"
+            print "        require('" + hyphen_name + "'),"
         inserted = False
     print line,
 
