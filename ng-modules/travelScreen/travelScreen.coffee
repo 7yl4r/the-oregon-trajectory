@@ -93,9 +93,29 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.sprites = {}
         vm.shipY = 300;
         vm.shipX = window.innerWidth/3;
+        vm.travelling = false;
     }
     vm.init();
     $scope.$on('resetGame', vm.init);
+
+    vm.startTravel = function(){
+        vm.travelling = true;
+        setTimeout(vm.go, TRAVEL_SPEED);
+    }
+
+    vm.go = function(){
+        if (vm.travelling){
+            vm.travel()
+            setTimeout(vm.go, TRAVEL_SPEED);
+        }  // else stop going
+    }
+
+    vm.stopTravel = function(){
+        vm.travelling = false;
+    }
+    $scope.$on('switchToModule', function(switchingTo){
+        vm.stopTravel();
+    });
 
     vm.travel = function(){
         data.travel();
