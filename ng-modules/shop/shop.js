@@ -33,13 +33,17 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.activeItem = this.item_consumables[0];
 
     this.buy = function(item){
-        // for consumables:
-        if (typeof item.key !== 'undefined') {
-            this.data[item.key] += 1
+        if (item.price <= data.money){
+            // for consumables:
+            if (typeof item.key !== 'undefined') {
+                this.data[item.key] += 1
+            } else {
+                // TODO: apply item some other way
+            }
+            this.data.money -= item.price;
         } else {
-            // TODO: apply item some other way
+            ; // not enough money to buy!
         }
-        this.data.money -= item.price;
     };
 
     this.isSet = function(checkTab) {
