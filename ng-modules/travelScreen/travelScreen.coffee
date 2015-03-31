@@ -125,6 +125,11 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         }
     };
 
+    vm.getNextTile = function(xpos){
+        // if distance travelled to destination big enough, append destination tile, else use filler
+        return new Tile(xpos, document.getElementById("test-bg"));
+    }
+
     vm.travel = function(){
         data.travel();
 
@@ -141,7 +146,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         // append new bg tiles if needed
         var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
         while (overhang < 100){
-            vm.tiles.push(new Tile(window.innerWidth + overhang, document.getElementById("test-bg")));
+            vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
             overhang = vm.tiles[vm.tiles.length -1].getOverhang();
             console.log('tile added');
         }
