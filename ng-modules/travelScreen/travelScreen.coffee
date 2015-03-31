@@ -9,7 +9,6 @@ class Tile
     constructor: (startX, imageElement)->
         @x = startX
         @img = imageElement
-        @tileW = 1920  # TODO: load this dynamically
         @travelCount = 0
 
     draw: (ctx)->
@@ -27,11 +26,11 @@ class Tile
 
     getOverhang: ()->
         # returns theoretical amount of tile overhanging right of screen, yet to be traveled to
-        return @tileW + @x - window.innerWidth
+        return @img.naturalWidth + @x - window.innerWidth
 
     hasTravelledOffscreen: ()->
         # returns true if tile has travelled left off screen
-        return (@tileW + @x) < 0
+        return (@img.naturalWidth + @x) < 0
 
 class Sprite
     constructor: (spritesheet, x=0, y=0)->
@@ -90,7 +89,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     vm.shipImg = document.getElementById("player-ship");
 
     vm.init = function(){
-        vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+        vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         vm.sprites = {}
         vm.shipY = 300;
         vm.shipX = window.innerWidth/3;
