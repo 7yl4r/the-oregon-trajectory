@@ -47,7 +47,7 @@
         }
     },
     "browser":{
-        "maneuver-screen":"./ng-modules/maneuver-screen/maneuverScreen.js",
+        "maneuver-screen":"./ng-modules/maneuverScreen/maneuverScreen.js",
         "game-over":"./ng-modules/gameOver/gameOver.js",
         "travel-screen":"./ng-modules/travelScreen/travelScreen.coffee",
         "header-navbar": "./ng-modules/navHeader/navHeader.js",
