@@ -80,13 +80,14 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
+app.controller("travelScreenController", ['$scope', 'data', '$interval', function($scope, data, $interval){
     var vm = this;
     vm.data = data;
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.shipImg = document.getElementById("player-ship");
+    var  timeoutId;
 
     vm.init = function(){
         vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
@@ -100,18 +101,24 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.startTravel = function(){
         vm.travelling = true;
-        setTimeout(vm.go, TRAVEL_SPEED);
+        timeoutId = $interval(vm.go, TRAVEL_SPEED);
     }
 
     vm.go = function(){
-        if (vm.travelling){
-            vm.travel()
-            setTimeout(vm.go, TRAVEL_SPEED);
-        }  // else stop going
+        if (vm.travelling) vm.travel();
+        else if (timeoutId != undefined) vm.stopTravel();
+
+    }
+
+    // PRIVATE FUNCTION
+    var cancelInterval = function() {
+        var result = $interval.cancel(timeoutId);
+        if (result == true) timeoutId = undefined;
     }
 
     vm.stopTravel = function(){
         vm.travelling = false;
+        cancelInterval();
     }
     $scope.$on('switchToModule', function(switchingTo){
         vm.stopTravel();
