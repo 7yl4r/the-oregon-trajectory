@@ -6,6 +6,7 @@ require('fastclick')
 `
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('maneuver-screen'),
         require('game-over'),
         require('ui.bootstrap'),
         require('ngTouch'),
