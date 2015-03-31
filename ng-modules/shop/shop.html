@@ -18,29 +18,31 @@
         <div class="showcase">
             <div class="item-container active-item">
                 <div class="item-contents">
-                    <h3 class="item-name">{{shop.activeItem.name}}</h3>
+                    <h4 class="item-name">{{shop.activeItem.name}}</h4>
                     <img class="item-image" ng-src="{{shop.activeItem.image}}"/><br>
                 </div>
                 <div class="item-description">
-                    <h7>{{shop.activeItem.description}}</h7><br>
+                    {{shop.activeItem.description}}<br>
                 </div>
             </div>
         </div>
         <div class="storefront">
             <div class="col-md-4 item-col" ng-repeat="item in shop.item_consumables">
-                <div class="item-container" ng-class="shop.ifItemActive(item.name)"
-                     ng-click="shop.setActiveItem(item.name)">
-                    <div class="item-contents">
-                        <h3 class="item-name">{{item.name}}</h3>
-                        <img class="item-image" ng-src="{{item.image}}"/><br>
+                <div class="item-outer">
+                    <div class="item-container" ng-class="shop.ifItemActive(item.name)"
+                         ng-click="shop.setActiveItem(item.name)">
+                        <div class="item-contents">
+                            <h4 class="item-name">{{item.name}}</h4>
+                            <img class="item-image" ng-src="{{item.image}}"/><br>
+                        </div>
+                        <!-- NOTE: ng-hold interval is longer for more $$$ items -->
+                        <button ng-click="shop.buy(item)"
+                                ng-hold="shop.buy(item)"
+                                ng-hold-interval="500/item.price"
+                                class="btn btn-inverse item-buy">
+                            {{item.price | currency}}
+                        </button>
                     </div>
-                    <!-- NOTE: ng-hold interval is longer for more $$$ items -->
-                    <button ng-click="shop.buy(item)"
-                            ng-hold="shop.buy(item)"
-                            ng-hold-interval="500/item.price"
-                            class="btn btn-inverse item-buy">
-                        {{item.price | currency}}
-                    </button>
                 </div>
             </div>
         </div>
