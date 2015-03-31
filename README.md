@@ -5,8 +5,7 @@
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
 
 ### [CLICK HERE TO PLAY!](http://7yl4r.github.io/the-oregon-trajectory/) ###
-
-![launch](http://i.imgur.com/a7GD71v.png)
+![screenshot](http://i.imgur.com/jK6kihi.png)
 
 Released: 2290
 
@@ -22,6 +21,7 @@ Educational: Planetology, History
 
 [gameplay storyboard on google slides](https://docs.google.com/presentation/d/1ihHx87kblOmQkT12vq68Q_uwOBYdLQET56Rgdd7GUQY/edit?usp=sharing)
 
+![launch](http://i.imgur.com/a7GD71v.png)
 -------------------------------------------------------------------------------------------------
 
 # Begin Historical Role-Play #
