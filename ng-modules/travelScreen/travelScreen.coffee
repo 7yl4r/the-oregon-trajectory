@@ -117,6 +117,14 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.stopTravel();
     });
 
+    vm.toggleTravel = function(){
+        if (vm.travelling){
+            vm.stopTravel();
+        } else {
+            vm.startTravel();
+        }
+    };
+
     vm.travel = function(){
         data.travel();
 

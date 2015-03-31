@@ -33,14 +33,19 @@
 
             <button id="travel-btn"
                     class="btn btn-primary"
-                    ng-click="travelCtrl.startTravel()">
+                    ng-click="travelCtrl.toggleTravel()">
 
                     <!-- TODO: use these to trigger acceleration:
                     ng-hold="travelCtrl.travel()"
                     ng-hold-interval="TRAVEL_SPEED"
                     ng-hold-done="console.log('done')">
                     -->
-                <span class="fui-play"></span> resume interplanetary travel
+                <span ng-show="travelCtrl.travelling">
+                    <span class="fui-pause"></span> stop to assess the situation
+                </span>
+                <span ng-show="!travelCtrl.travelling">
+                    <span class="fui-play"></span> resume interplanetary travel
+                </span>
             </button>
         </div>
     </div>
