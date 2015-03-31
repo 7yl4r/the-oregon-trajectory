@@ -6,7 +6,7 @@ require('fastclick');
 
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
-         require('game-over'),
+        require('game-over'),
         require('ui.bootstrap'),
         require('ngTouch'),
         require('header-navbar'),
@@ -159,8 +159,8 @@ Game = (function() {
     this.shipHealth = 100;
     this.rations = 0;
     this.fuel = 0;
-    this.radiationChance = .01;
-    this.money = 100;
+    this.radiationChance = .005;
+    this.money = 1000;
     return this.visited = ['ksc'];
   };
 
@@ -177,7 +177,7 @@ Game = (function() {
       }
       return results;
     } else {
-      if (Math.random() < .3) {
+      if (Math.random() < .01) {
         return this.rations -= this.crewHealth.length;
       }
     }
@@ -403,13 +403,13 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             name: 'Rocket Fuel',
             description: "You won't get very far without this.",
             price: 2,
-            image: "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "fuel"
         },{
             name: 'Rations',
             description: "Not just freeze-dried ice cream.",
             price: 1,
-            image: "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "rations"
         }
     ];
@@ -417,13 +417,17 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.activeItem = this.item_consumables[0];
 
     this.buy = function(item){
-        // for consumables:
-        if (typeof item.key !== 'undefined') {
-            this.data[item.key] += 1
+        if (item.price <= data.money){
+            // for consumables:
+            if (typeof item.key !== 'undefined') {
+                this.data[item.key] += 1
+            } else {
+                // TODO: apply item some other way
+            }
+            this.data.money -= item.price;
         } else {
-            // TODO: apply item some other way
+            ; // not enough money to buy!
         }
-        this.data.money -= item.price;
     };
 
     this.isSet = function(checkTab) {
@@ -529,7 +533,6 @@ Tile = (function() {
   function Tile(startX, imageElement) {
     this.x = startX;
     this.img = imageElement;
-    this.tileW = 1920;
     this.travelCount = 0;
   }
 
@@ -547,11 +550,11 @@ Tile = (function() {
   };
 
   Tile.prototype.getOverhang = function() {
-    return this.tileW + this.x - window.innerWidth;
+    return this.img.naturalWidth + this.x - window.innerWidth;
   };
 
   Tile.prototype.hasTravelledOffscreen = function() {
-    return (this.tileW + this.x) < 0;
+    return (this.img.naturalWidth + this.x) < 0;
   };
 
   return Tile;
@@ -631,13 +634,46 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     vm.shipImg = document.getElementById("player-ship");
 
     vm.init = function(){
-        vm.tiles = [new Tile(0, document.getElementById("sun-bg"))];
+        vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         vm.sprites = {}
         vm.shipY = 300;
         vm.shipX = window.innerWidth/3;
+        vm.travelling = false;
     }
     vm.init();
     $scope.$on('resetGame', vm.init);
+
+    vm.startTravel = function(){
+        vm.travelling = true;
+        setTimeout(vm.go, TRAVEL_SPEED);
+    }
+
+    vm.go = function(){
+        if (vm.travelling){
+            vm.travel()
+            setTimeout(vm.go, TRAVEL_SPEED);
+        }  // else stop going
+    }
+
+    vm.stopTravel = function(){
+        vm.travelling = false;
+    }
+    $scope.$on('switchToModule', function(switchingTo){
+        vm.stopTravel();
+    });
+
+    vm.toggleTravel = function(){
+        if (vm.travelling){
+            vm.stopTravel();
+        } else {
+            vm.startTravel();
+        }
+    };
+
+    vm.getNextTile = function(xpos){
+        // if distance travelled to destination big enough, append destination tile, else use filler
+        return new Tile(xpos, document.getElementById("test-bg"));
+    }
 
     vm.travel = function(){
         data.travel();
@@ -655,7 +691,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         // append new bg tiles if needed
         var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
         while (overhang < 100){
-            vm.tiles.push(new Tile(window.innerWidth + overhang, document.getElementById("test-bg")));
+            vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
             overhang = vm.tiles[vm.tiles.length -1].getOverhang();
             console.log('tile added');
         }

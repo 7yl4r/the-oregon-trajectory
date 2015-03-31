@@ -19,13 +19,13 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             name: 'Rocket Fuel',
             description: "You won't get very far without this.",
             price: 2,
-            image: "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "fuel"
         },{
             name: 'Rations',
             description: "Not just freeze-dried ice cream.",
             price: 1,
-            image: "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "rations"
         }
     ];
@@ -33,13 +33,17 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.activeItem = this.item_consumables[0];
 
     this.buy = function(item){
-        // for consumables:
-        if (typeof item.key !== 'undefined') {
-            this.data[item.key] += 1
+        if (item.price <= data.money){
+            // for consumables:
+            if (typeof item.key !== 'undefined') {
+                this.data[item.key] += 1
+            } else {
+                // TODO: apply item some other way
+            }
+            this.data.money -= item.price;
         } else {
-            // TODO: apply item some other way
+            ; // not enough money to buy!
         }
-        this.data.money -= item.price;
     };
 
     this.isSet = function(checkTab) {

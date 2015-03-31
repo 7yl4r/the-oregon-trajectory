@@ -18,8 +18,8 @@ class Game
         @shipHealth = 100
         @rations = 0
         @fuel = 0
-        @radiationChance = .01
-        @money = 100
+        @radiationChance = .005
+        @money = 1000
         @visited = ['ksc']
 
     travel: ()->
@@ -32,7 +32,7 @@ class Game
             for crew_i of @crewHealth
                 @hurtCrew(crew_i, Math.random()*0.6)
         else
-            if Math.random() < .3  # if hungry
+            if Math.random() < .01  # if hungry
                 @rations -= @crewHealth.length  # eat
 
     hurtCrew: (i, amnt)->
