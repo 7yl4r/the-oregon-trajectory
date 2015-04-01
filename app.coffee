@@ -2,6 +2,9 @@
 require('angular')
 require('fastclick')
 
+window.onbeforeunload = () ->
+    return 'You will lose your progress !';
+
 # "main" controller
 `
 // WARN: do not change this next line unless you update newModule.py as well!

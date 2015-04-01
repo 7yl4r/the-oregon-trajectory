@@ -3,13 +3,13 @@ require('angular')
 class Game
     constructor: (gameScope)->
         @scope = gameScope
-        @_init()  # initializes params
         @locations = {
             "ksc":0,
             "iss": 1000,
             "moon":10000,
             "mars":100000
         }
+        @_init()  # initializes params
 
     _init: ()->
         # re-initializes the game
@@ -21,6 +21,7 @@ class Game
         @radiationChance = .005
         @money = 1000
         @visited = ['ksc']
+        @nextWaypoint = @_getStatsToNextLocation()
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
@@ -34,6 +35,12 @@ class Game
         else
             if Math.random() < .01  # if hungry
                 @rations -= @crewHealth.length  # eat
+
+        # update next location if needed
+        if @distanceTraveled > @nextWaypoint.location
+            @nextWaypoint = @_getStatsToNextLocation()
+        else  # just update the distance
+            @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
 
     hurtCrew: (i, amnt)->
         # hurts crewmember i given amnt (and checks for death)
@@ -63,6 +70,42 @@ class Game
         return
 
     # === "private" methods ===
+    _getRemainingLocations: ()->
+        # returns obj with aligned arrays of locations & distances not yet reached
+        locNames = []
+        locDists = []
+        for key of @locations
+            if @locations[key] > @distanceTraveled
+                locNames.push(key)
+                locDists.push(@locations[key])
+        return {
+        "names": locNames,
+        "distances": locDists
+        }
+
+    _getStatsToNextLocation: ()->
+        # returns distance, location, & name of next location as dict
+        # {
+        #   distance: 222,
+        #   name: "the place",
+        #   location: 555
+        # }
+        # location is relative to starting position, distance is relative to current ship position
+        remaining = @_getRemainingLocations()
+
+        # get minimum of remaining locations
+        next = {}
+        next.location = remaining.distances[0]
+        next.name     = remaining.names[0]
+        for i of remaining.distances
+            if remaining.distances[i] < next.distance  # assumes no equal distances
+                next.location = remaining.distances[i]
+                next.name = remaining.names[i]
+
+            # calculate distance remaining before arrival
+        next.distance = next.location - @distanceTraveled
+        return next
+
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaing crew members
         if @crewHealth.length < 1
