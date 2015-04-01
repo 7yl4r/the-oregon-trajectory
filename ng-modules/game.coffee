@@ -19,15 +19,16 @@ class Game
         @shipHealth = 100
         @rations = 0
         @fuel = 0
+        @fuelExpense = 0.25;
         @radiationChance = .005
         @money = 1000
         @visited = ['ksc']
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
-        if @fuel >= 1
+        if @fuel >= @fuelExpense
             @distanceTraveled += 1
-            @fuel--
+            @fuel -= @fuelExpense
         else
             @end()
 

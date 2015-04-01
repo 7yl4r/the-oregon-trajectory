@@ -138,7 +138,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     }
 
     vm.travel = function(){
-        if (data.fuel >= 1) {
+        if (data.fuel >= data.fuelExpense) {
             data.travel();
 
             vm.tiles.forEach(function(tile){
