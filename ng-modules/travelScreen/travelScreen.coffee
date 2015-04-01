@@ -93,7 +93,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         vm.sprites = {}
         vm.shipY = 300;
-        vm.shipX = window.innerWidth/3;
+        vm.shipX = 0;
         vm.travelling = false;
     }
     vm.init();
@@ -141,6 +141,15 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         if (data.fuel >= data.fuelExpense) {
             data.travel();
 
+        // travel ship to optimal screen position
+        if (vm.shipX < window.innerWidth/3){
+            console.log('x:', vm.shipX);
+            vm.shipX += 1;
+        } else {
+            vm.shipX = window.innerWidth / 3;
+        }
+
+        // move the tiles
             vm.tiles.forEach(function(tile){
                 tile.travel();
             });
@@ -226,7 +235,6 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     vm.drawShip = function(){
         var shipW = 150, shipH = 338;
         vm.shipY = vm.drift(vm.shipY);
-        vm.shipX = window.innerWidth/3;
         vm.ctx.drawImage(vm.shipImg, vm.shipX-shipW/2, vm.shipY-shipH/2);
     }
 

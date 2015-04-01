@@ -22,6 +22,7 @@
                 <span class="glyphicon glyphicon-resize-horizontal"></span>
                 distance traveled: <span class="badge">{{travelCtrl.data.distanceTraveled}}</span>
             </button>
+
             <button class="btn btn-primary" type="button">
                 <span class="glyphicon glyphicon-cutlery"></span>
                 rations: <span class="badge">{{travelCtrl.data.rations}}</span>
@@ -46,6 +47,12 @@
                 <span ng-show="!travelCtrl.travelling">
                     <span class="fui-play"></span> resume interplanetary travel
                 </span>
+            </button>
+
+            <button class="btn btn-primary" type="button">
+                <span class="glyphicon glyphicon-resize-horizontal"></span>
+                distance to next station ({{travelCtrl.data.nextWaypoint.name}}):
+                <span class="badge">{{travelCtrl.data.nextWaypoint.distance}}</span>
             </button>
         </div>
     </div>
