@@ -19,13 +19,13 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             name: 'Rocket Fuel',
             description: "You won't get very far without this.",
             price: 2,
-            image: "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: data.gameDir + "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "fuel"
         },{
             name: 'Rations',
             description: "Not just freeze-dried ice cream.",
             price: 1,
-            image: "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: data.gameDir + "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "rations"
         }
     ];

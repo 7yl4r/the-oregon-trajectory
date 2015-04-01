@@ -10,6 +10,7 @@ class Game
             "moon":10000,
             "mars":100000
         }
+        @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
 
     _init: ()->
         # re-initializes the game
