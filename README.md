@@ -36,7 +36,7 @@ The "trail" will be loosely based on realistic constraints, but we'll do a bit o
  * lava tubes
  * lagrange points
 
- ![trajectory](http://i.imgur.com/owPzscY.png)
+ ![trajectory](http://i.imgur.com/ZEGio4D.png)
 
 # Dev Details #
 These are up for discussion, but here are my tentative thoughts:
