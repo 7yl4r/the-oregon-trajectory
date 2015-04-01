@@ -24,6 +24,6 @@ app.controller('ManeuverScreenCtrl', function($scope){
   //background image
 
   //title
-}
+});
 
 module.exports = angular.module('maneuver-screen').name;
