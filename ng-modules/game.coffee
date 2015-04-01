@@ -25,7 +25,12 @@ class Game
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
-        @distanceTraveled += 1
+        if @fuel >= 1
+            @distanceTraveled += 1
+            @fuel--
+        else
+            @end()
+
         if Math.random() < @radiationChance
             @irradiate()
 
@@ -63,12 +68,16 @@ class Game
         @scope.$broadcast('resetGame')
         return
 
+    end: ()->
+        console.log('game over!')
+        @scope.$broadcast('switchToModule', 'game-over')
+        return
+
     # === "private" methods ===
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaing crew members
         if @crewHealth.length < 1
-            console.log('game over!')
-            @scope.$broadcast('switchToModule', 'game-over')
+            @end()
             return
 
         healthSum = @crewHealth.reduce((prev,current)->

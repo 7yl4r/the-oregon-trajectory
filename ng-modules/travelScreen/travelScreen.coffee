@@ -106,7 +106,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
 
     vm.go = function(){
         if (vm.travelling) vm.travel();
-        else if (timeoutId != undefined) vm.stopTravel();
+        else if (typeof timeoutId !== 'undefined') vm.stopTravel();
 
     }
 
@@ -138,33 +138,40 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     }
 
     vm.travel = function(){
-        data.travel();
+        if (data.fuel >= 1) {
+            data.travel();
 
-        vm.tiles.forEach(function(tile){
-            tile.travel();
-        });
+            vm.tiles.forEach(function(tile){
+                tile.travel();
+            });
 
-        // remove old offscreen tiles
-        while(vm.tiles[0].hasTravelledOffscreen()){
-            vm.tiles.splice(0, 1);  // remove leftmost tile
-            console.log('tile removed');
-        }
-
-        // append new bg tiles if needed
-        var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
-        while (overhang < 100){
-            vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
-            overhang = vm.tiles[vm.tiles.length -1].getOverhang();
-            console.log('tile added');
-        }
-
-        var shipW = 150;
-        for (var loc in data.locations){
-            var pos = data.locations[loc];
-            if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
-                data.visited.push(loc);
-                $scope.$emit('switchToModule', 'shop');
+            // remove old offscreen tiles
+            while(vm.tiles[0].hasTravelledOffscreen()){
+                vm.tiles.splice(0, 1);  // remove leftmost tile
+                console.log('tile removed');
             }
+
+            // append new bg tiles if needed
+            var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
+            while (overhang < 100){
+                vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
+                overhang = vm.tiles[vm.tiles.length -1].getOverhang();
+                console.log('tile added');
+            }
+
+            var shipW = 150;
+            for (var loc in data.locations){
+                var pos = data.locations[loc];
+                if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+                    data.visited.push(loc);
+                    $scope.$emit('switchToModule', 'shop');
+                }
+            }
+        }
+        // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
+        else { // end game
+            vm.stopTravel();
+            data.end();
         }
     }
 
