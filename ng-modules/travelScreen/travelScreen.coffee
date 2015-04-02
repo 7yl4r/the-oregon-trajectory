@@ -29,7 +29,10 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.shipImg = document.getElementById("player-ship");
-    var  timeoutId;
+    vm.shipW = 150;
+    vm.shipH = 338;
+
+    var timeoutId;
 
     vm.init = function(){
         vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
@@ -49,7 +52,6 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     vm.go = function(){
         if (vm.travelling) vm.travel();
         else if (typeof timeoutId !== 'undefined') vm.stopTravel();
-
     }
 
     // PRIVATE FUNCTION
@@ -84,11 +86,11 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
             data.travel();
 
         // travel ship to optimal screen position
-        if (vm.shipX < window.innerWidth/3){
+        if (vm.shipX < vm._getIdealShipPos()){
             vm.shipX += 1;
             vm.data.distanceTraveled += 1
         } else {
-            vm.shipX = window.innerWidth / 3;
+            vm.shipX = vm._getIdealShipPos();
         }
 
         // move the tiles
@@ -115,6 +117,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
                 var pos = data.locations[loc];
                 if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
                     data.visited.push(loc);
+                    console.log('arrived at ', loc);
                     $scope.$emit('switchToModule', 'shop');
                 }
             }
@@ -163,7 +166,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
 
     vm.drawLocations = function(){
         for (var loc in data.locations){
-            var pos = data.locations[loc];
+            var pos = data.locations[loc] + vm.shipX + vm.shipW/2;
             vm.drawSprite(loc, pos);
         }
     }
@@ -175,9 +178,8 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     }
 
     vm.drawShip = function(){
-        var shipW = 150, shipH = 338;
         vm.shipY = vm.drift(vm.shipY);
-        vm.ctx.drawImage(vm.shipImg, vm.shipX-shipW/2, vm.shipY-shipH/2);
+        vm.ctx.drawImage(vm.shipImg, vm.shipX-vm.shipW/2, vm.shipY-vm.shipH/2);
     }
 
     vm.draw = function(){
@@ -188,6 +190,10 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         vm.drawShip();
     }
     $scope.$on('draw', vm.draw);
+
+    vm._getIdealShipPos = function(){
+        return window.innerWidth / 3
+    }
 }]);
 
 module.exports = angular.module('travel-screen').name;

@@ -5,7 +5,7 @@ class Game
         @scope = gameScope
         @locations = {
             "ksc":0,
-            "iss": 1000,
+            "iss": 1500,
             "moon":3000,
             "mars":7000
         }
@@ -87,7 +87,7 @@ class Game
         BIG_NUMBER = 99999999999
         @crewHealth = [BIG_NUMBER, BIG_NUMBER]
         @fuel = BIG_NUMBER
-        TRAVEL_SPEED = 20
+        window.TRAVEL_SPEED = 10
 
     # === "private" methods ===
     _getRemainingLocations: ()->
