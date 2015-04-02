@@ -84,15 +84,15 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         if (data.fuel >= data.fuelExpense) {
             data.travel();
 
-        // travel ship to optimal screen position
-        if (vm.shipX < vm._getIdealShipPos()){
-            vm.shipX += 1;
-            vm.data.distanceTraveled += 1
-        } else {
-            vm.shipX = vm._getIdealShipPos();
-        }
+            // move ship to optimal screen position
+            if (vm.shipX < vm._getIdealShipPos()){
+                vm.shipX += 1;
+                vm.data.distanceTraveled += 1
+            } else {
+                vm.shipX = vm._getIdealShipPos();
+            }
 
-        // move the tiles
+            // move the tiles
             vm.tiles.forEach(function(tile){
                 tile.travel();
             });
@@ -111,6 +111,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
                 console.log('tile added');
             }
 
+            // handle arrival at stations/events
             var shipW = 150;
             for (var loc in data.locations){
                 var pos = data.locations[loc];
@@ -120,6 +121,10 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
                     $scope.$emit('switchToModule', 'shop');
                 }
             }
+
+            // handle random events
+            // TODO: if is a good time/place for an event
+            randy.roll()
         }
         // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
         else { // end game
@@ -193,6 +198,12 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     vm._getIdealShipPos = function(){
         return window.innerWidth / 3
     }
+
+    $scope.$on('encounter', function(args){
+        // on random encounter
+        console.log('adding encounter:', args);
+        // TODO: place marker off screen & add to locations?
+    });
 }]);
 
 module.exports = angular.module('travel-screen').name;
