@@ -3,7 +3,7 @@ require('angular');
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 
-Randyvents = require('./../Randyvents/Randyvents.coffee')
+Randy = require('./ng-randy/ng-randy.coffee')
 
 # switching to javascript here...
 `
@@ -22,7 +22,8 @@ app.directive("travelScreen", function() {
 app.controller("travelScreenController", ['$scope', 'data', '$interval', function($scope, data, $interval){
     var vm = this;
     vm.data = data;
-    window.randy = new Randyvents($scope);
+    vm.randy = new Randy($scope);
+    window.randy = vm.randy;  // for debug
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
