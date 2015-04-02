@@ -17,10 +17,15 @@ class Game
         @distanceTraveled = 0
         @crewHealth = [100, 100]
         @shipHealth = 100
+
         @rations = 0
+        @eatChance = 0.1  # chance of eating per tick
+
         @fuel = 0
         @fuelExpense = 0.1;
-        @radiationChance = .005
+        @fuelChance = 0.7;  # chance of expending fuel per tick
+
+        @radiationChance = .005  # chance of being irradiated per tick
         @money = 1000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
@@ -29,7 +34,7 @@ class Game
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
             @distanceTraveled += 1
-            if Math.random() < 0.7
+            if Math.random() < @fuelChance
                 @fuel -= @fuelExpense
         else
             @end()
@@ -41,7 +46,7 @@ class Game
             for crew_i of @crewHealth
                 @hurtCrew(crew_i, Math.random()*0.6)
         else
-            if Math.random() < .01  # if hungry
+            if Math.random() < @eatChance  # if hungry
                 @rations -= @crewHealth.length  # eat
 
         # update next location if needed
@@ -106,9 +111,11 @@ class Game
     _getStatsToNextLocation: ()->
         # returns distance, location, & name of next location as dict
         # {
-        #   distance: 222,
-        #   name: "the place",
-        #   location: 555
+        #   distance:       111,    # distance to the place
+        #   name:      "the place",
+        #   location:       333,    # absolute location of the place
+        #   fuelEstimate:   444,    # estimate of fuel to get there
+        #   rationEstimate: 555     # estimate of rations to get there
         # }
         # location is relative to starting position, distance is relative to current ship position
         remaining = @_getRemainingLocations()
@@ -123,7 +130,9 @@ class Game
                 next.name = remaining.names[i]
 
             # calculate distance remaining before arrival
-        next.distance = next.location - @distanceTraveled - window.innerWidth/3  # adust for ship position
+        next.distance = next.location - @distanceTraveled - window.innerWidth/3  # adjust for ship position
+        next.fuelEstimate = next.distance * @fuelExpense * @fuelChance / TRAVEL_SPEED
+        next.rationEstimate = next.distance * @eatChance * @crewHealth.length / TRAVEL_SPEED
         return next
 
     _calcShipHealth: ()->
