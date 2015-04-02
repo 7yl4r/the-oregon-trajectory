@@ -18,7 +18,7 @@
         <div class="flex-container">
             <div class="shop-box info-item">
                 Distance Traveled: {{shop.data.distanceTraveled}}<br>
-                Distance to next location: {{shop.getDistToNext()}}<br>
+                Distance to {{shop.data.nextWaypoint.name}}: {{shop.data.nextWaypoint.distance}}<br>
                 Current fuel efficiency: {{100 * (1 - shop.data.fuelExpense)}}%
             </div>
         </div>
