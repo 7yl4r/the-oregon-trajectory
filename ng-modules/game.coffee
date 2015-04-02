@@ -19,17 +19,21 @@ class Game
         @shipHealth = 100
         @rations = 0
         @fuel = 0
-        @fuelExpense = 0.25;
+        @fuelExpense = 0.1;
         @radiationChance = .005
         @money = 1000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
 
+        # "private" properties
+        @_shipX = window.innerWidth/3
+
     travel: ()->
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
             @distanceTraveled += 1
-            @fuel -= @fuelExpense
+            if Math.random() < 0.7
+                @fuel -= @fuelExpense
         else
             @end()
 
@@ -81,6 +85,13 @@ class Game
         @scope.$broadcast('switchToModule', 'game-over')
         return
 
+    # === debug helper methods ===
+    GODMODE: ()->
+        BIG_NUMBER = 99999999999
+        @crewHealth = [BIG_NUMBER, BIG_NUMBER]
+        @fuel = BIG_NUMBER
+        TRAVEL_SPEED = 20
+
     # === "private" methods ===
     _getRemainingLocations: ()->
         # returns obj with aligned arrays of locations & distances not yet reached
@@ -115,7 +126,7 @@ class Game
                 next.name = remaining.names[i]
 
             # calculate distance remaining before arrival
-        next.distance = next.location - @distanceTraveled
+        next.distance = next.location - @distanceTraveled - window.innerWidth/3  # adust for ship position
         return next
 
     _calcShipHealth: ()->
@@ -134,6 +145,7 @@ app = angular.module('game', [])
 
 app.factory('data', ['$rootScope', ($rootScope) ->
     game = new Game($rootScope)
+    window.game = game
     return game
 ])
 
