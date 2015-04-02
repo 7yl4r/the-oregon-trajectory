@@ -1,5 +1,8 @@
 require('angular')
 
+window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
+window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
+
 class Game
     constructor: (gameScope)->
         @scope = gameScope
@@ -33,7 +36,7 @@ class Game
     travel: ()->
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
-            @distanceTraveled += 1
+            @distanceTraveled += TRAVEL_SPEED
             if Math.random() < @fuelChance
                 @fuel -= @fuelExpense
         else

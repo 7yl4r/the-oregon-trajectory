@@ -1,10 +1,5 @@
 require('angular');
 
-window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
-window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
-
-
-# TODO: move this to separate file and require it here
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 
