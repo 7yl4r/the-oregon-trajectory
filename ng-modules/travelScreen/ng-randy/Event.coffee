@@ -4,12 +4,12 @@ module.exports = class Event
         @name = eventJSON.name
         @criteria = eventJSON.criteria
         @chance = eventJSON.chance
-        @data = eventJSON.args
+        @args = eventJSON.args
         @count = 0  # number of times event has triggered
         @scope = $scope
 
     trigger: ()->
         @count += 1
         console.log(@type, ':', @name, ' triggered')
-        @scope.$broadcast(@type, [name, data])
+        @scope.$broadcast(@type, [@name, @args])
 # or should this be $emit?

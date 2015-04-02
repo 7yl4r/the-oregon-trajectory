@@ -5,6 +5,10 @@ Sprite = require('./Sprite.coffee')
 
 Randy = require('./ng-randy/ng-randy.coffee')
 
+MIN_TRAVELS_PER_EVENT = 1000  # min amount of travel between events
+EVENT_CONSISTENCY = 3  # affects variability in event timing. high values = more consistent timing. must be > 0
+# units of EVENT_CONSISTENCY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
+
 # switching to javascript here...
 `
 var app = angular.module('travel-screen', [
@@ -23,6 +27,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     var vm = this;
     vm.data = data;
     vm.randy = new Randy($scope);
+    randyTime = 0;
     window.randy = vm.randy;  // for debug
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
@@ -85,7 +90,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
             data.travel();
 
             // move ship to optimal screen position
-            if (vm.shipX < vm._getIdealShipPos()){
+            if (vm.shipX < vm._getIdealShipPos()) {
                 vm.shipX += 1;
                 vm.data.distanceTraveled += 1
             } else {
@@ -93,29 +98,29 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
             }
 
             // move the tiles
-            vm.tiles.forEach(function(tile){
+            vm.tiles.forEach(function (tile) {
                 tile.travel();
             });
 
             // remove old offscreen tiles
-            while(vm.tiles[0].hasTravelledOffscreen()){
+            while (vm.tiles[0].hasTravelledOffscreen()) {
                 vm.tiles.splice(0, 1);  // remove leftmost tile
                 console.log('tile removed');
             }
 
             // append new bg tiles if needed
             var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
-            while (overhang < 100){
+            while (overhang < 100) {
                 vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
-                overhang = vm.tiles[vm.tiles.length -1].getOverhang();
+                overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
                 console.log('tile added');
             }
 
             // handle arrival at stations/events
             var shipW = 150;
-            for (var loc in data.locations){
+            for (var loc in data.locations) {
                 var pos = data.locations[loc];
-                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0) {  // passing & not yet visited
                     data.visited.push(loc);
                     console.log('arrived at ', loc);
                     $scope.$emit('switchToModule', 'shop');
@@ -124,7 +129,15 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
 
             // handle random events
             // TODO: if is a good time/place for an event
-            randy.roll()
+            if (randyTime > MIN_TRAVELS_PER_EVENT){
+                if (randy.roll()){
+                    randyTime = 0
+                } else {
+                    randyTime = MIN_TRAVELS_PER_EVENT/EVENT_CONSISTENCY
+                }
+            } else {
+                randyTime += 1
+            }
         }
         // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
         else { // end game

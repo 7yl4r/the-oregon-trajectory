@@ -66,6 +66,7 @@ module.exports = class Randy
             @events.push(new_event)
 
     roll: ()->
+        # :returns: true if event was triggered, else false
         # Uses just one random call to optimize,
         # and only allows one event to trigger at a time.
         # This means that events aren't 100% random,
@@ -90,12 +91,13 @@ module.exports = class Randy
                 trigger = true
                 if event.count < 1  # if never seen this event
                     event.trigger()
-                    return
+                    return true
                 else  # wait and maybe trigger a more novel event
                     if most_novel_event.count > event.count
                         most_novel_event = event
         # if we reach here, no novel events triggered
         if trigger
             most_novel_event.trigger()
+            return true
         else
-            return  # no events triggered
+            return false  # no events triggered
