@@ -6,8 +6,8 @@ class Game
         @locations = {
             "ksc":0,
             "iss": 1000,
-            "moon":10000,
-            "mars":100000
+            "moon":3000,
+            "mars":7000
         }
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
@@ -24,9 +24,6 @@ class Game
         @money = 1000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
-
-        # "private" properties
-        @_shipX = window.innerWidth/3
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values

@@ -86,6 +86,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         // travel ship to optimal screen position
         if (vm.shipX < window.innerWidth/3){
             vm.shipX += 1;
+            vm.data.distanceTraveled += 1
         } else {
             vm.shipX = window.innerWidth / 3;
         }
@@ -112,7 +113,7 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
             var shipW = 150;
             for (var loc in data.locations){
                 var pos = data.locations[loc];
-                if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
                     data.visited.push(loc);
                     $scope.$emit('switchToModule', 'shop');
                 }
