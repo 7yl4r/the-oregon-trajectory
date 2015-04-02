@@ -66,7 +66,16 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             return "item-container-selected";
         }
         return '';
-    }
+    };
+
+    this.getDistToNext = function() {
+        for (var loc in data.locations) {
+            var pos = data.locations[loc];
+            if (pos > data.distanceTraveled)
+                return pos - data.distanceTraveled;
+        }
+        return 0;
+    };
 }]);
 
 module.exports = angular.module('shop').name;
