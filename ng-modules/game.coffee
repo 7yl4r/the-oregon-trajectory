@@ -133,7 +133,7 @@ class Game
                 next.name = remaining.names[i]
 
             # calculate distance remaining before arrival
-        next.distance = next.location - @distanceTraveled - window.innerWidth/3  # adjust for ship position
+        next.distance = next.location - @distanceTraveled
         next.fuelEstimate = next.distance * @fuelExpense * @fuelChance / TRAVEL_SPEED
         next.rationEstimate = next.distance * @eatChance * @crewHealth.length / TRAVEL_SPEED
         return next

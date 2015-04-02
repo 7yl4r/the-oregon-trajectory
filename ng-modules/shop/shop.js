@@ -66,7 +66,7 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             return "item-container-selected";
         }
         return '';
-    }
+    };
 }]);
 
 module.exports = angular.module('shop').name;

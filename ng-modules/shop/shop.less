@@ -1,11 +1,36 @@
 
+#game-info {
+  display: block;
+  width: 50%;
+}
+
 #date {
   display: block;
+}
+
+.info-container {
+  background-color: #ECF0F1;
+  margin: 1em auto;
+  padding: 0.5em;
+  border-radius: 1ch;
+}
+
+.info-container h4 {
+  margin: 0;
+}
+
+.shop-box {
+  background-color: #e6eaeb;
+  margin: 1em;
+  box-shadow: 0 0 10em 1px #BDC3C7 inset;
+  border-radius: 1ch;
 }
 
 .flex-container {
   display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .showcase {
@@ -24,10 +49,6 @@
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
   display: inline-block;
-  background-color: #BDC3C7;
-  margin: 1em;
-  box-shadow: 0 0 10em 1px #82888c inset;
-  border-radius: 1ch;
 }
 
 .item-col {
@@ -42,13 +63,16 @@
 .item-container {
   width: 10em;
   height: 10em;
-  background-color: #ECF0F1;
-  box-shadow: 0.5em 0.5em 0.2em #82888c;
   margin: 1em auto;
   padding: 0;
   position: relative;
   display: block;
   border-radius: 1ch;
+}
+
+.container-shadow {
+  background-color: #ECF0F1;
+  box-shadow: 0.5em 0.5em 0.3em #82888c;
 }
 
 .item-container-selected {
@@ -63,7 +87,6 @@
   width: 100%;
   text-align: center;
   display: block;
-  margin: 0.2em;
 }
 
 .item-image {
