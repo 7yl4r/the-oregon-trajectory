@@ -2,12 +2,14 @@
 
 [![Join the chat at https://gitter.im/7yl4r/the-oregon-trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[University of Earth-L4's entry for NASA SpaceApps 2198 challenge - 200 years of space habitation history](https://2015.spaceappschallenge.org/challenge/asteroids-2025-2100-future-history/)
+
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
 
 ### [CLICK HERE TO PLAY!](http://7yl4r.github.io/the-oregon-trajectory/) ###
 ![screenshot](http://i.imgur.com/jK6kihi.png)
 
-Released: 2290
+Released: 2298
 
 Genre: Adventure, Educational, Simulation
 
