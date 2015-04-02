@@ -43,6 +43,7 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
         } else {
             $('.game-module').hide();
             active_element.show();
+            $("html, body").animate({ scrollTop: 0 }, "fast");
         }
     }
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
