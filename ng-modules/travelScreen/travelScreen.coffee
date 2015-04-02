@@ -3,29 +3,7 @@ require('angular');
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 
-class Event
-    constructor: (name, eventJSON, $scope)->
-        @name = name
-        @criteria = eventJSON.criteria
-        @action = eval(eventJSON.action)
-        $scope.on(name, action)
-
-randomEvents = {  # TODO: load these from json file(s)
-    "space-junk": {
-        "criteria": {
-            "locations": ['earth']
-        },
-        "action": "function(){
-                console.log('you encountered space junk!');
-                // TODO: launch collect stuff game module
-            }"
-    }
-}
-
-# TODO:
-# events = []
-# for eventkey in randomEvents
-#   events.push(new Event(eventkey, randomEvents[eventkey], $scope)
+Randyvents = require('./../Randyvents/Randyvents.coffee')
 
 # switching to javascript here...
 `
@@ -44,6 +22,7 @@ app.directive("travelScreen", function() {
 app.controller("travelScreenController", ['$scope', 'data', '$interval', function($scope, data, $interval){
     var vm = this;
     vm.data = data;
+    window.randy = new Randyvents($scope);
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
