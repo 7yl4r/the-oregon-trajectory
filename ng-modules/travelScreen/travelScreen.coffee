@@ -3,6 +3,30 @@ require('angular');
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 
+class Event
+    constructor: (name, eventJSON, $scope)->
+        @name = name
+        @criteria = eventJSON.criteria
+        @action = eval(eventJSON.action)
+        $scope.on(name, action)
+
+randomEvents = {  # TODO: load these from json file(s)
+    "space-junk": {
+        "criteria": {
+            "locations": ['earth']
+        },
+        "action": "function(){
+                console.log('you encountered space junk!');
+                // TODO: launch collect stuff game module
+            }"
+    }
+}
+
+# TODO:
+# events = []
+# for eventkey in randomEvents
+#   events.push(new Event(eventkey, randomEvents[eventkey], $scope)
+
 # switching to javascript here...
 `
 var app = angular.module('travel-screen', [
