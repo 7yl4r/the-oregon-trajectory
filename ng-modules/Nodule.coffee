@@ -7,7 +7,6 @@ module.exports = class Nodule
         @isActive = false
 
         @scope.$on('switchToModule', (event, nextModule)=>
-            console.log('switch to nodule', @)
             if not @isActive
                 if nextModule == @name  # if switching to this module
                     @isActive = true
