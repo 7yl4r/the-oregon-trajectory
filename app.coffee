@@ -3,12 +3,11 @@ require('angular')
 require('fastclick')
 require('soundjs')
 
-# load sounds
-createjs.Sound.registerSound("assets/sound/SomethingBad.wav", "badEvent")
-
 # show warning before navigating from the page
 window.onbeforeunload = () ->
     return 'You will lose your progress!'
+
+# createjs.Sound.alternateExtensions = ["mp3"]  # TODO: use this to support more browsers
 
 # "main" controller
 `
@@ -31,11 +30,26 @@ var app = angular.module('the-oregon-trajectory', [
     }
 );
 
-app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
+app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     vm = this;
     vm.active_module = 'main-menu';
 
     vm.MSPF = 100;  // ms per frame
+
+    // load sound effects
+    createjs.Sound.registerSound("assets/sound/SomethingBad.wav", "badEvent");
+
+    // load music(s)
+    createjs.Sound.registerSound("assets/sound/music/Ambience1.wav", "ambient");
+
+    // This is fired for each sound that is registered.
+    music = createjs.Sound.play("ambient");
+    music.on("complete", vm.onMusicEnd, this);
+    vm.onMusicEnd = function (){
+        // TODO: select new music
+        vm.music = createjs.Sound.play("ambient");
+    }
+
     //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){
         // enables switching between modules
