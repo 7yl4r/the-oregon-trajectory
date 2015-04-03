@@ -1,9 +1,14 @@
 # jquery must be loaded before this...
 require('angular')
 require('fastclick')
+require('soundjs')
 
+# load sounds
+createjs.Sound.registerSound("assets/sound/SomethingBad.wav", "badEvent")
+
+# show warning before navigating from the page
 window.onbeforeunload = () ->
-    return 'You will lose your progress !';
+    return 'You will lose your progress!'
 
 # "main" controller
 `
