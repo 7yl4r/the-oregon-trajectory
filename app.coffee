@@ -36,14 +36,27 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     vm.MSPF = 100;  // ms per frame
 
     vm.music = new Howl({
-        urls: ['assets/sound/music/Ambience1/Ambience1.mp3', 'assets/sound/music/Ambience1/Ambience1.ogg'],
-        autoplay: true,
-        loop: true,
-        volume: 0.9,
-        onend: function() {
-            alert('Finished!');
-        }
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg']
     });
+    vm.music.play();
+
+    vm.musicVol = 0.9;
+    vm.MUSIC_FADE_TIME = 300;
+
+    vm.changeMusicTo = function(event, newMusicObj){
+        console.log('switching music to', newMusicObj, 'from', vm.music);
+        vm.music.fadeOut(0, vm.MUSIC_FADE_TIME);
+        //vm.music.stop();
+
+        newMusicObj.fadeIn(vm.musicVol, vm.MUSIC_FADE_TIME);
+        vm.music = newMusicObj;
+        // keep reference to playing music
+
+//        newMusicObj.play();
+//        vm.music.play();
+//        vm.music.fadeIn({"to":vm.musicVol, "duration":vm.MUSIC_FADE_TIME});
+    }
+    $scope.$on('changeMusicTo', vm.changeMusicTo);
 
     //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){
@@ -61,7 +74,6 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
         }
     }
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
-    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
 
     vm.moduleIsActive = function(magicStr){
         // returns true if module identified by magicStr should be active currently
@@ -86,6 +98,7 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
         $scope.$broadcast('draw');
         setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
     }
+    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
     vm.scheduleDraw();  // do first draw
 }]);
 

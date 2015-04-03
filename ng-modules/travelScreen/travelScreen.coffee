@@ -17,7 +17,7 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', 'data', '$interval', function($scope, data, $interval){
+app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
     var vm = this;
     vm.data = data;
     // TODO: do these need to be set after $(document).ready()?
@@ -26,6 +26,12 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     vm.shipImg = document.getElementById("player-ship");
     vm.shipW = 150;
     vm.shipH = 338;
+
+    vm.active = false;
+    vm.music = new Howl({
+        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+        loop: true
+    });
 
     var timeoutId;
 
@@ -55,12 +61,24 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         if (result == true) timeoutId = undefined;
     }
 
+    $rootScope.$on('switchToModule', function(event, nextModule){
+        if (!vm.active){
+            if (nextModule == 'travel-screen'){  // if switching to this module
+                $scope.$emit('changeMusicTo', vm.music);
+                vm.active = true;
+            }
+        } else {
+            // switching from this module to another one
+            vm.active = false;
+            vm.stopTravel();
+        }
+    });
+
     vm.stopTravel = function(){
         vm.travelling = false;
         cancelInterval();
     }
     $scope.$on('switchToModule', function(switchingTo){
-        vm.stopTravel();
     });
 
     vm.toggleTravel = function(){
