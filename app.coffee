@@ -11,6 +11,7 @@ window.onbeforeunload = () ->
 `
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('audio-controls'),
         require('maneuver-screen'),
         require('game-over'),
         require('ui.bootstrap'),
@@ -29,7 +30,7 @@ var app = angular.module('the-oregon-trajectory', [
 );
 
 app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
-    vm = this;
+    var vm = this;
     vm.active_module = 'main-menu';
 
     vm.MSPF = 100;  // ms per frame
