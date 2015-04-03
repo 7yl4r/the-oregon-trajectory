@@ -1,13 +1,11 @@
 # jquery must be loaded before this...
 require('angular')
 require('fastclick')
-require('soundjs')
+require('howler')
 
 # show warning before navigating from the page
 window.onbeforeunload = () ->
     return 'You will lose your progress!'
-
-# createjs.Sound.alternateExtensions = ["mp3"]  # TODO: use this to support more browsers
 
 # "main" controller
 `
@@ -36,19 +34,15 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
 
     vm.MSPF = 100;  // ms per frame
 
-    // load sound effects
-    createjs.Sound.registerSound("assets/sound/SomethingBad.wav", "badEvent");
-
-    // load music(s)
-    createjs.Sound.registerSound("assets/sound/music/Ambience1.wav", "ambient");
-
-    // This is fired for each sound that is registered.
-    music = createjs.Sound.play("ambient");
-    music.on("complete", vm.onMusicEnd, this);
-    vm.onMusicEnd = function (){
-        // TODO: select new music
-        vm.music = createjs.Sound.play("ambient");
-    }
+    vm.music = new Howl({
+        urls: ['assets/sound/music/Ambience1/Ambience1.mp3', 'assets/sound/music/Ambience1/Ambience1.ogg'],
+        autoplay: true,
+        loop: true,
+        volume: 0.9,
+        onend: function() {
+            alert('Finished!');
+        }
+    });
 
     //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){

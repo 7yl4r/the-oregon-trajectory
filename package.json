@@ -45,8 +45,8 @@
             "depends": "angular",
             "exports": "angular.module('ngTouch').name"
         },
-        "soundjs": {
-            "exports": "createjs"
+        "howler": {
+            "exports": "Howl"
         }
     },
     "browser":{
@@ -68,6 +68,6 @@
         "ui.bootstrap": "./node_modules/angular-bootstrap/dist/ui-bootstrap.min.js",
         "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",
         "fastclick": "./node_modules/fastclick/build/fastclick.min.js",
-        "soundjs": "./lib/soundjs-0.6.0.min.js"
+        "howler": "./lib/howler.min.js"
     }
 }

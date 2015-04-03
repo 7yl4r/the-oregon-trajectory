@@ -1,6 +1,8 @@
 require('angular');
 
-var app = angular.module('header-navbar', []);
+
+var app = angular.module('header-navbar', [
+]);
 
 app.directive("navHeader", function() {
     return {
