@@ -1,5 +1,5 @@
-<div>
+<div class="container" ng-controller="youWinCtrl as winCtrl">
     You WIN!
     Nice one!
-    <button ng-click="$emit('switchToModule', 'main-menu')">return to main menu</button>
+    <button ng-click="winCtrl.mainMenu()">return to main menu</button>
 </div>

@@ -1,3 +1,9 @@
+# .wav files (b/c they are often too big for github)
+*.wav
+
+# ubuntu backup files
+*~
+
 # jetbrains
 .idea/
 

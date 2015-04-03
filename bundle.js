@@ -3,9 +3,17 @@ require('angular');
 
 require('fastclick');
 
+require('howler');
+
+window.onbeforeunload = function() {
+  return 'You will lose your progress!';
+};
+
 
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('audio-controls'),
+        require('maneuver-screen'),
         require('game-over'),
         require('ui.bootstrap'),
         require('ngTouch'),
@@ -22,11 +30,35 @@ var app = angular.module('the-oregon-trajectory', [
     }
 );
 
-app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
-    vm = this;
+app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
+    var vm = this;
     vm.active_module = 'main-menu';
 
     vm.MSPF = 100;  // ms per frame
+
+    vm.music = new Howl({
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg']
+    });
+    vm.music.play();
+
+    vm.musicVol = 0.9;
+    vm.MUSIC_FADE_TIME = 300;
+
+    vm.changeMusicTo = function(event, newMusicObj){
+        console.log('switching music to', newMusicObj, 'from', vm.music);
+        vm.music.fadeOut(0, vm.MUSIC_FADE_TIME);
+        //vm.music.stop();
+
+        newMusicObj.fadeIn(vm.musicVol, vm.MUSIC_FADE_TIME);
+        vm.music = newMusicObj;
+        // keep reference to playing music
+
+//        newMusicObj.play();
+//        vm.music.play();
+//        vm.music.fadeIn({"to":vm.musicVol, "duration":vm.MUSIC_FADE_TIME});
+    }
+    $scope.$on('changeMusicTo', vm.changeMusicTo);
+
     //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){
         // enables switching between modules
@@ -39,10 +71,10 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
         } else {
             $('.game-module').hide();
             active_element.show();
+            $("html, body").animate({ scrollTop: 0 }, "fast");
         }
     }
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
-    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
 
     vm.moduleIsActive = function(magicStr){
         // returns true if module identified by magicStr should be active currently
@@ -67,6 +99,7 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
         $scope.$broadcast('draw');
         setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
     }
+    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
     vm.scheduleDraw();  // do first draw
 }]);
 
@@ -118,7 +151,60 @@ var isOldBrowser;
 
 
 
-},{"angular":15,"app-footer":2,"fastclick":16,"game-over":4,"header-navbar":6,"main-menu":5,"ngTouch":14,"shop":8,"splash-header":10,"travel-screen":11,"ui.bootstrap":13,"you-win":12}],2:[function(require,module,exports){
+},{"angular":21,"app-footer":4,"audio-controls":5,"fastclick":22,"game-over":7,"header-navbar":10,"howler":2,"main-menu":8,"maneuver-screen":9,"ngTouch":20,"shop":12,"splash-header":14,"travel-screen":17,"ui.bootstrap":19,"you-win":18}],2:[function(require,module,exports){
+(function (global){
+;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
+/*!
+ *  howler.js v1.1.25
+ *  howlerjs.com
+ *
+ *  (c) 2013-2014, James Simpson of GoldFire Studios
+ *  goldfirestudios.com
+ *
+ *  MIT License
+ */
+!function(){var e={},t=null,n=!0,r=!1;try{"undefined"!=typeof AudioContext?t=new AudioContext:"undefined"!=typeof webkitAudioContext?t=new webkitAudioContext:n=!1}catch(i){n=!1}if(!n)if("undefined"!=typeof Audio)try{new Audio}catch(i){r=!0}else r=!0;if(n){var s=void 0===t.createGain?t.createGainNode():t.createGain();s.gain.value=1,s.connect(t.destination)}var o=function(e){this._volume=1,this._muted=!1,this.usingWebAudio=n,this.ctx=t,this.noAudio=r,this._howls=[],this._codecs=e,this.iOSAutoEnable=!0};o.prototype={volume:function(e){var t=this;if(e=parseFloat(e),e>=0&&1>=e){t._volume=e,n&&(s.gain.value=e);for(var r in t._howls)if(t._howls.hasOwnProperty(r)&&t._howls[r]._webAudio===!1)for(var i=0;i<t._howls[r]._audioNode.length;i++)t._howls[r]._audioNode[i].volume=t._howls[r]._volume*t._volume;return t}return n?s.gain.value:t._volume},mute:function(){return this._setMuted(!0),this},unmute:function(){return this._setMuted(!1),this},_setMuted:function(e){var t=this;t._muted=e,n&&(s.gain.value=e?0:t._volume);for(var r in t._howls)if(t._howls.hasOwnProperty(r)&&t._howls[r]._webAudio===!1)for(var i=0;i<t._howls[r]._audioNode.length;i++)t._howls[r]._audioNode[i].muted=e},codecs:function(e){return this._codecs[e]},_enableiOSAudio:function(){var e=this;if(!t||!e._iOSEnabled&&/iPhone|iPad|iPod/i.test(navigator.userAgent)){e._iOSEnabled=!1;var n=function(){var r=t.createBuffer(1,1,22050),i=t.createBufferSource();i.buffer=r,i.connect(t.destination),void 0===i.start?i.noteOn(0):i.start(0),setTimeout(function(){(i.playbackState===i.PLAYING_STATE||i.playbackState===i.FINISHED_STATE)&&(e._iOSEnabled=!0,e.iOSAutoEnable=!1,window.removeEventListener("touchstart",n,!1))},0)};return window.addEventListener("touchstart",n,!1),e}}};var u=null,a={};r||(u=new Audio,a={mp3:!!u.canPlayType("audio/mpeg;").replace(/^no$/,""),opus:!!u.canPlayType('audio/ogg; codecs="opus"').replace(/^no$/,""),ogg:!!u.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/,""),wav:!!u.canPlayType('audio/wav; codecs="1"').replace(/^no$/,""),aac:!!u.canPlayType("audio/aac;").replace(/^no$/,""),m4a:!!(u.canPlayType("audio/x-m4a;")||u.canPlayType("audio/m4a;")||u.canPlayType("audio/aac;")).replace(/^no$/,""),mp4:!!(u.canPlayType("audio/x-mp4;")||u.canPlayType("audio/mp4;")||u.canPlayType("audio/aac;")).replace(/^no$/,""),weba:!!u.canPlayType('audio/webm; codecs="vorbis"').replace(/^no$/,"")});var f=new o(a),l=function(e){var r=this;r._autoplay=e.autoplay||!1,r._buffer=e.buffer||!1,r._duration=e.duration||0,r._format=e.format||null,r._loop=e.loop||!1,r._loaded=!1,r._sprite=e.sprite||{},r._src=e.src||"",r._pos3d=e.pos3d||[0,0,-.5],r._volume=void 0!==e.volume?e.volume:1,r._urls=e.urls||[],r._rate=e.rate||1,r._model=e.model||null,r._onload=[e.onload||function(){}],r._onloaderror=[e.onloaderror||function(){}],r._onend=[e.onend||function(){}],r._onpause=[e.onpause||function(){}],r._onplay=[e.onplay||function(){}],r._onendTimer=[],r._webAudio=n&&!r._buffer,r._audioNode=[],r._webAudio&&r._setupAudioNode(),void 0!==t&&t&&f.iOSAutoEnable&&f._enableiOSAudio(),f._howls.push(r),r.load()};if(l.prototype={load:function(){var e=this,t=null;if(r)return void e.on("loaderror");for(var n=0;n<e._urls.length;n++){var i,s;if(e._format)i=e._format;else{if(s=e._urls[n],i=/^data:audio\/([^;,]+);/i.exec(s),i||(i=/\.([^.]+)$/.exec(s.split("?",1)[0])),!i)return void e.on("loaderror");i=i[1].toLowerCase()}if(a[i]){t=e._urls[n];break}}if(!t)return void e.on("loaderror");if(e._src=t,e._webAudio)c(e,t);else{var u=new Audio;u.addEventListener("error",function(){u.error&&4===u.error.code&&(o.noAudio=!0),e.on("loaderror",{type:u.error?u.error.code:0})},!1),e._audioNode.push(u),u.src=t,u._pos=0,u.preload="auto",u.volume=f._muted?0:e._volume*f.volume();var l=function(){e._duration=Math.ceil(10*u.duration)/10,0===Object.getOwnPropertyNames(e._sprite).length&&(e._sprite={_default:[0,1e3*e._duration]}),e._loaded||(e._loaded=!0,e.on("load")),e._autoplay&&e.play(),u.removeEventListener("canplaythrough",l,!1)};u.addEventListener("canplaythrough",l,!1),u.load()}return e},urls:function(e){var t=this;return e?(t.stop(),t._urls="string"==typeof e?[e]:e,t._loaded=!1,t.load(),t):t._urls},play:function(e,n){var r=this;return"function"==typeof e&&(n=e),e&&"function"!=typeof e||(e="_default"),r._loaded?r._sprite[e]?(r._inactiveNode(function(i){i._sprite=e;var s=i._pos>0?i._pos:r._sprite[e][0]/1e3,o=0;r._webAudio?(o=r._sprite[e][1]/1e3-i._pos,i._pos>0&&(s=r._sprite[e][0]/1e3+s)):o=r._sprite[e][1]/1e3-(s-r._sprite[e][0]/1e3);var u,a=!(!r._loop&&!r._sprite[e][2]),l="string"==typeof n?n:Math.round(Date.now()*Math.random())+"";if(function(){var t={id:l,sprite:e,loop:a};u=setTimeout(function(){!r._webAudio&&a&&r.stop(t.id).play(e,t.id),r._webAudio&&!a&&(r._nodeById(t.id).paused=!0,r._nodeById(t.id)._pos=0,r._clearEndTimer(t.id)),r._webAudio||a||r.stop(t.id),r.on("end",l)},1e3*o),r._onendTimer.push({timer:u,id:t.id})}(),r._webAudio){var c=r._sprite[e][0]/1e3,h=r._sprite[e][1]/1e3;i.id=l,i.paused=!1,d(r,[a,c,h],l),r._playStart=t.currentTime,i.gain.value=r._volume,void 0===i.bufferSource.start?i.bufferSource.noteGrainOn(0,s,o):i.bufferSource.start(0,s,o)}else{if(4!==i.readyState&&(i.readyState||!navigator.isCocoonJS))return r._clearEndTimer(l),function(){var t=r,s=e,o=n,u=i,a=function(){t.play(s,o),u.removeEventListener("canplaythrough",a,!1)};u.addEventListener("canplaythrough",a,!1)}(),r;i.readyState=4,i.id=l,i.currentTime=s,i.muted=f._muted||i.muted,i.volume=r._volume*f.volume(),setTimeout(function(){i.play()},0)}return r.on("play"),"function"==typeof n&&n(l),r}),r):("function"==typeof n&&n(),r):(r.on("load",function(){r.play(e,n)}),r)},pause:function(e){var t=this;if(!t._loaded)return t.on("play",function(){t.pause(e)}),t;t._clearEndTimer(e);var n=e?t._nodeById(e):t._activeNode();if(n)if(n._pos=t.pos(null,e),t._webAudio){if(!n.bufferSource||n.paused)return t;n.paused=!0,void 0===n.bufferSource.stop?n.bufferSource.noteOff(0):n.bufferSource.stop(0)}else n.pause();return t.on("pause"),t},stop:function(e){var t=this;if(!t._loaded)return t.on("play",function(){t.stop(e)}),t;t._clearEndTimer(e);var n=e?t._nodeById(e):t._activeNode();if(n)if(n._pos=0,t._webAudio){if(!n.bufferSource||n.paused)return t;n.paused=!0,void 0===n.bufferSource.stop?n.bufferSource.noteOff(0):n.bufferSource.stop(0)}else isNaN(n.duration)||(n.pause(),n.currentTime=0);return t},mute:function(e){var t=this;if(!t._loaded)return t.on("play",function(){t.mute(e)}),t;var n=e?t._nodeById(e):t._activeNode();return n&&(t._webAudio?n.gain.value=0:n.muted=!0),t},unmute:function(e){var t=this;if(!t._loaded)return t.on("play",function(){t.unmute(e)}),t;var n=e?t._nodeById(e):t._activeNode();return n&&(t._webAudio?n.gain.value=t._volume:n.muted=!1),t},volume:function(e,t){var n=this;if(e=parseFloat(e),e>=0&&1>=e){if(n._volume=e,!n._loaded)return n.on("play",function(){n.volume(e,t)}),n;var r=t?n._nodeById(t):n._activeNode();return r&&(n._webAudio?r.gain.value=e:r.volume=e*f.volume()),n}return n._volume},loop:function(e){var t=this;return"boolean"==typeof e?(t._loop=e,t):t._loop},sprite:function(e){var t=this;return"object"==typeof e?(t._sprite=e,t):t._sprite},pos:function(e,n){var r=this;if(!r._loaded)return r.on("load",function(){r.pos(e)}),"number"==typeof e?r:r._pos||0;e=parseFloat(e);var i=n?r._nodeById(n):r._activeNode();if(i)return e>=0?(r.pause(n),i._pos=e,r.play(i._sprite,n),r):r._webAudio?i._pos+(t.currentTime-r._playStart):i.currentTime;if(e>=0)return r;for(var s=0;s<r._audioNode.length;s++)if(r._audioNode[s].paused&&4===r._audioNode[s].readyState)return r._webAudio?r._audioNode[s]._pos:r._audioNode[s].currentTime},pos3d:function(e,t,n,r){var i=this;if(t=void 0!==t&&t?t:0,n=void 0!==n&&n?n:-.5,!i._loaded)return i.on("play",function(){i.pos3d(e,t,n,r)}),i;if(!(e>=0||0>e))return i._pos3d;if(i._webAudio){var s=r?i._nodeById(r):i._activeNode();s&&(i._pos3d=[e,t,n],s.panner.setPosition(e,t,n),s.panner.panningModel=i._model||"HRTF")}return i},fade:function(e,t,n,r,i){var s=this,o=Math.abs(e-t),u=e>t?"down":"up",a=o/.01,f=n/a;if(!s._loaded)return s.on("load",function(){s.fade(e,t,n,r,i)}),s;s.volume(e,i);for(var l=1;a>=l;l++)!function(){var e=s._volume+("up"===u?.01:-.01)*l,n=Math.round(1e3*e)/1e3,o=t;setTimeout(function(){s.volume(n,i),n===o&&r&&r()},f*l)}()},fadeIn:function(e,t,n){return this.volume(0).play().fade(0,e,t,n)},fadeOut:function(e,t,n,r){var i=this;return i.fade(i._volume,e,t,function(){n&&n(),i.pause(r),i.on("end")},r)},_nodeById:function(e){for(var t=this,n=t._audioNode[0],r=0;r<t._audioNode.length;r++)if(t._audioNode[r].id===e){n=t._audioNode[r];break}return n},_activeNode:function(){for(var e=this,t=null,n=0;n<e._audioNode.length;n++)if(!e._audioNode[n].paused){t=e._audioNode[n];break}return e._drainPool(),t},_inactiveNode:function(e){for(var t=this,n=null,r=0;r<t._audioNode.length;r++)if(t._audioNode[r].paused&&4===t._audioNode[r].readyState){e(t._audioNode[r]),n=!0;break}if(t._drainPool(),!n){var i;if(t._webAudio)i=t._setupAudioNode(),e(i);else{t.load(),i=t._audioNode[t._audioNode.length-1];var s=navigator.isCocoonJS?"canplaythrough":"loadedmetadata",o=function(){i.removeEventListener(s,o,!1),e(i)};i.addEventListener(s,o,!1)}}},_drainPool:function(){var e,t=this,n=0;for(e=0;e<t._audioNode.length;e++)t._audioNode[e].paused&&n++;for(e=t._audioNode.length-1;e>=0&&!(5>=n);e--)t._audioNode[e].paused&&(t._webAudio&&t._audioNode[e].disconnect(0),n--,t._audioNode.splice(e,1))},_clearEndTimer:function(e){for(var t=this,n=0,r=0;r<t._onendTimer.length;r++)if(t._onendTimer[r].id===e){n=r;break}var i=t._onendTimer[n];i&&(clearTimeout(i.timer),t._onendTimer.splice(n,1))},_setupAudioNode:function(){var e=this,n=e._audioNode,r=e._audioNode.length;return n[r]=void 0===t.createGain?t.createGainNode():t.createGain(),n[r].gain.value=e._volume,n[r].paused=!0,n[r]._pos=0,n[r].readyState=4,n[r].connect(s),n[r].panner=t.createPanner(),n[r].panner.panningModel=e._model||"equalpower",n[r].panner.setPosition(e._pos3d[0],e._pos3d[1],e._pos3d[2]),n[r].panner.connect(n[r]),n[r]},on:function(e,t){var n=this,r=n["_on"+e];if("function"==typeof t)r.push(t);else for(var i=0;i<r.length;i++)t?r[i].call(n,t):r[i].call(n);return n},off:function(e,t){var n=this,r=n["_on"+e],i=t?""+t:null;if(i){for(var s=0;s<r.length;s++)if(i===""+r[s]){r.splice(s,1);break}}else n["_on"+e]=[];return n},unload:function(){for(var t=this,n=t._audioNode,r=0;r<t._audioNode.length;r++)n[r].paused||(t.stop(n[r].id),t.on("end",n[r].id)),t._webAudio?n[r].disconnect(0):n[r].src="";for(r=0;r<t._onendTimer.length;r++)clearTimeout(t._onendTimer[r].timer);var i=f._howls.indexOf(t);null!==i&&i>=0&&f._howls.splice(i,1),delete e[t._src],t=null}},n)var c=function(t,n){if(n in e)return t._duration=e[n].duration,void p(t);if(/^data:[^;]+;base64,/.test(n)){for(var r=atob(n.split(",")[1]),i=new Uint8Array(r.length),s=0;s<r.length;++s)i[s]=r.charCodeAt(s);h(i.buffer,t,n)}else{var o=new XMLHttpRequest;o.open("GET",n,!0),o.responseType="arraybuffer",o.onload=function(){h(o.response,t,n)},o.onerror=function(){t._webAudio&&(t._buffer=!0,t._webAudio=!1,t._audioNode=[],delete t._gainNode,delete e[n],t.load())};try{o.send()}catch(u){o.onerror()}}},h=function(n,r,i){t.decodeAudioData(n,function(t){t&&(e[i]=t,p(r,t))},function(){r.on("loaderror")})},p=function(e,t){e._duration=t?t.duration:e._duration,0===Object.getOwnPropertyNames(e._sprite).length&&(e._sprite={_default:[0,1e3*e._duration]}),e._loaded||(e._loaded=!0,e.on("load")),e._autoplay&&e.play()},d=function(n,r,i){var s=n._nodeById(i);s.bufferSource=t.createBufferSource(),s.bufferSource.buffer=e[n._src],s.bufferSource.connect(s.panner),s.bufferSource.loop=r[0],r[0]&&(s.bufferSource.loopStart=r[1],s.bufferSource.loopEnd=r[1]+r[2]),s.bufferSource.playbackRate.value=n._rate};"function"==typeof define&&define.amd&&define(function(){return{Howler:f,Howl:l}}),"undefined"!=typeof exports&&(exports.Howler=f,exports.Howl=l),"undefined"!=typeof window&&(window.Howler=f,window.Howl=l)}();
+; browserify_shim__define__module__export__(typeof Howl != "undefined" ? Howl : window.Howl);
+
+}).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],3:[function(require,module,exports){
+var Nodule;
+
+module.exports = Nodule = (function() {
+  function Nodule($rootScope, noduleName, onEntry, onExit) {
+    this.scope = $rootScope;
+    this.name = noduleName;
+    this.onEntry = onEntry;
+    this.onExit = onExit;
+    this.isActive = false;
+    this.scope.$on('switchToModule', (function(_this) {
+      return function(event, nextModule) {
+        if (!_this.isActive) {
+          if (nextModule === _this.name) {
+            _this.isActive = true;
+            return _this.onEntry();
+          }
+        } else {
+          _this.isActive = false;
+          return _this.onExit();
+        }
+      };
+    })(this));
+  }
+
+  Nodule.prototype.onEntry = function() {};
+
+  Nodule.prototype.onExit = function() {};
+
+  return Nodule;
+
+})();
+
+
+
+},{}],4:[function(require,module,exports){
 var app;
 
 require('angular');
@@ -136,21 +222,55 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":15}],3:[function(require,module,exports){
+},{"angular":21}],5:[function(require,module,exports){
+require('angular');
+require('howler');
+
+var app = angular.module('audio-controls', []);
+
+app.directive("audioControls", function() {
+    return {
+        restrict: 'E',
+        templateUrl: "ng-modules/audioControls/audioControls.html"
+    };
+});
+
+app.controller("audioController", function(){
+    var vm = this;
+    vm.muted = false;
+
+    vm.toggleMute = function(){
+        if (vm.muted){
+            Howler.unmute();
+            vm.muted = false;
+        } else {
+            Howler.mute();
+            vm.muted = true;
+        }
+    }
+});
+
+module.exports = angular.module('audio-controls').name;
+},{"angular":21,"howler":2}],6:[function(require,module,exports){
 var Game, app;
 
 require('angular');
 
+window.TRAVEL_SPEED = 1;
+
+window.TRAVELS_PER_MOVE = 5;
+
 Game = (function() {
   function Game(gameScope) {
     this.scope = gameScope;
-    this._init();
     this.locations = {
       "ksc": 0,
-      "iss": 1000,
-      "moon": 10000,
-      "mars": 100000
+      "iss": 1500,
+      "moon": 3000,
+      "mars": 7000
     };
+    this.gameDir = "/the-oregon-trajectory";
+    this._init();
   }
 
   Game.prototype._init = function() {
@@ -158,28 +278,42 @@ Game = (function() {
     this.crewHealth = [100, 100];
     this.shipHealth = 100;
     this.rations = 0;
+    this.eatChance = 0.1;
     this.fuel = 0;
+    this.fuelExpense = 0.1;
+    this.fuelChance = 0.7;
     this.radiationChance = .005;
     this.money = 1000;
-    return this.visited = ['ksc'];
+    this.visited = ['ksc'];
+    return this.nextWaypoint = this._getStatsToNextLocation();
   };
 
   Game.prototype.travel = function() {
-    var crew_i, results;
-    this.distanceTraveled += 1;
+    var crew_i;
+    if (this.fuel >= this.fuelExpense) {
+      this.distanceTraveled += TRAVEL_SPEED;
+      if (Math.random() < this.fuelChance) {
+        this.fuel -= this.fuelExpense;
+      }
+    } else {
+      this.end();
+    }
     if (Math.random() < this.radiationChance) {
       this.irradiate();
     }
     if (this.rations < 1) {
-      results = [];
       for (crew_i in this.crewHealth) {
-        results.push(this.hurtCrew(crew_i, Math.random() * 0.6));
+        this.hurtCrew(crew_i, Math.random() * 0.6);
       }
-      return results;
     } else {
-      if (Math.random() < .01) {
-        return this.rations -= this.crewHealth.length;
+      if (Math.random() < this.eatChance) {
+        this.rations -= this.crewHealth.length;
       }
+    }
+    if (this.distanceTraveled > this.nextWaypoint.location) {
+      return this.nextWaypoint = this._getStatsToNextLocation();
+    } else {
+      return this.nextWaypoint.distance = this.nextWaypoint.location - this.distanceTraveled;
     }
   };
 
@@ -213,11 +347,57 @@ Game = (function() {
     this.scope.$broadcast('resetGame');
   };
 
+  Game.prototype.end = function() {
+    console.log('game over!');
+    this.scope.$broadcast('switchToModule', 'game-over');
+  };
+
+  Game.prototype.GODMODE = function() {
+    var BIG_NUMBER;
+    BIG_NUMBER = 99999999999;
+    this.crewHealth = [BIG_NUMBER, BIG_NUMBER];
+    this.fuel = BIG_NUMBER;
+    return window.TRAVEL_SPEED = 10;
+  };
+
+  Game.prototype._getRemainingLocations = function() {
+    var key, locDists, locNames;
+    locNames = [];
+    locDists = [];
+    for (key in this.locations) {
+      if (this.locations[key] > this.distanceTraveled) {
+        locNames.push(key);
+        locDists.push(this.locations[key]);
+      }
+    }
+    return {
+      "names": locNames,
+      "distances": locDists
+    };
+  };
+
+  Game.prototype._getStatsToNextLocation = function() {
+    var i, next, remaining;
+    remaining = this._getRemainingLocations();
+    next = {};
+    next.location = remaining.distances[0];
+    next.name = remaining.names[0];
+    for (i in remaining.distances) {
+      if (remaining.distances[i] < next.distance) {
+        next.location = remaining.distances[i];
+        next.name = remaining.names[i];
+      }
+    }
+    next.distance = next.location - this.distanceTraveled;
+    next.fuelEstimate = next.distance * this.fuelExpense * this.fuelChance / TRAVEL_SPEED;
+    next.rationEstimate = next.distance * this.eatChance * this.crewHealth.length / TRAVEL_SPEED;
+    return next;
+  };
+
   Game.prototype._calcShipHealth = function() {
     var healthSum;
     if (this.crewHealth.length < 1) {
-      console.log('game over!');
-      this.scope.$broadcast('switchToModule', 'game-over');
+      this.end();
       return;
     }
     healthSum = this.crewHealth.reduce(function(prev, current) {
@@ -236,6 +416,7 @@ app.factory('data', [
   '$rootScope', function($rootScope) {
     var game;
     game = new Game($rootScope);
+    window.game = game;
     return game;
   }
 ]);
@@ -244,7 +425,7 @@ module.exports = angular.module('game').name;
 
 
 
-},{"angular":15}],4:[function(require,module,exports){
+},{"angular":21}],7:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('game-over', []);
@@ -257,8 +438,10 @@ app.directive("gameOver", function() {
 });
 
 module.exports = angular.module('game-over').name;
-},{"angular":15}],5:[function(require,module,exports){
+},{"angular":21}],8:[function(require,module,exports){
 require('angular');
+require('howler');
+Nodule = require('nodule');
 
 var app = angular.module('main-menu', []);
 
@@ -269,18 +452,64 @@ app.directive("mainMenu", function() {
     };
 });
 
-app.controller("mainMenuController", ['data', '$scope', function(data, $scope){
+app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
     var vm = this;
+    vm.music = new Howl({
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+        loop: true
+    });
+    clickSound = new Howl({
+        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+    });
+
+    vm.onEntry = function() {
+        $scope.$emit('changeMusicTo', vm.music);
+    }
+
+    vm.nodule = new Nodule($rootScope, 'main-menu', vm.onEntry)
 
     vm.startGame = function(){
+        clickSound.play();
         data.reset();
         $scope.$emit('switchToModule', 'shop');
     }
 }]);
 
 module.exports = angular.module('main-menu').name;
-},{"angular":15}],6:[function(require,module,exports){
+},{"angular":21,"howler":2,"nodule":3}],9:[function(require,module,exports){
 require('angular');
+
+var app = angular.module('maneuver-screen', []);
+
+app.directive("maneuver-screen", function() {
+  return {
+    restrict: 'E',
+    templateUrl: "/ng-modules/maneuverScreen/maneuverScreen.html"
+  };
+});
+
+app.controller('ManeuverScreenCtrl', function($scope){
+  $scope.choices = [
+    {
+      'text': 'Take the high path',
+      'response': function(){console.log('Chose "Take the high path"')}
+    },
+    {
+      'text': 'Take the low path',
+      'response': function(){console.log('Chose "Take the low path"')}
+    }
+  ];
+
+  //background image
+
+  //title
+});
+
+module.exports = angular.module('maneuver-screen').name;
+
+},{"angular":21}],10:[function(require,module,exports){
+require('angular');
+
 
 var app = angular.module('header-navbar', []);
 
@@ -292,7 +521,7 @@ app.directive("navHeader", function() {
 });
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":15}],7:[function(require,module,exports){
+},{"angular":21}],11:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -381,7 +610,7 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":15}],8:[function(require,module,exports){
+},{"angular":21}],12:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('shop', [
@@ -403,13 +632,14 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             name: 'Rocket Fuel',
             description: "You won't get very far without this.",
             price: 2,
-            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+            image: data.gameDir + "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "fuel"
         },{
             name: 'Rations',
             description: "Not just freeze-dried ice cream.",
             price: 1,
-            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+
+            image: data.gameDir + "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "rations"
         }
     ];
@@ -450,12 +680,12 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             return "item-container-selected";
         }
         return '';
-    }
+    };
 }]);
 
 module.exports = angular.module('shop').name;
 
-},{"angular":15,"game":3,"ng-hold":7}],9:[function(require,module,exports){
+},{"angular":21,"game":6,"ng-hold":11}],13:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -502,7 +732,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":15}],10:[function(require,module,exports){
+},{"angular":21}],14:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -520,48 +750,10 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":15,"social-button-directive":9}],11:[function(require,module,exports){
-var Sprite, Tile;
+},{"angular":21,"social-button-directive":13}],15:[function(require,module,exports){
+var Sprite;
 
-require('angular');
-
-window.TRAVEL_SPEED = 1;
-
-window.TRAVELS_PER_MOVE = 5;
-
-Tile = (function() {
-  function Tile(startX, imageElement) {
-    this.x = startX;
-    this.img = imageElement;
-    this.travelCount = 0;
-  }
-
-  Tile.prototype.draw = function(ctx) {
-    ctx.drawImage(this.img, this.x, 0);
-  };
-
-  Tile.prototype.travel = function() {
-    if (this.travelCount > TRAVELS_PER_MOVE) {
-      this.x -= window.TRAVEL_SPEED;
-      return this.travelCount = 0;
-    } else {
-      return this.travelCount += 1;
-    }
-  };
-
-  Tile.prototype.getOverhang = function() {
-    return this.img.naturalWidth + this.x - window.innerWidth;
-  };
-
-  Tile.prototype.hasTravelledOffscreen = function() {
-    return (this.img.naturalWidth + this.x) < 0;
-  };
-
-  return Tile;
-
-})();
-
-Sprite = (function() {
+module.exports = Sprite = (function() {
   function Sprite(spritesheet, x, y) {
     if (x == null) {
       x = 0;
@@ -613,6 +805,56 @@ Sprite = (function() {
 })();
 
 
+
+},{}],16:[function(require,module,exports){
+var Tile;
+
+module.exports = Tile = (function() {
+  function Tile(startX, imageElement) {
+    this.x = startX;
+    this.img = imageElement;
+    this.travelCount = 0;
+  }
+
+  Tile.prototype.draw = function(ctx) {
+    ctx.drawImage(this.img, this.x, 0);
+  };
+
+  Tile.prototype.travel = function() {
+    if (this.travelCount > TRAVELS_PER_MOVE) {
+      this.x -= window.TRAVEL_SPEED;
+      return this.travelCount = 0;
+    } else {
+      return this.travelCount += 1;
+    }
+  };
+
+  Tile.prototype.getOverhang = function() {
+    return this.img.naturalWidth + this.x - window.innerWidth;
+  };
+
+  Tile.prototype.hasTravelledOffscreen = function() {
+    return (this.img.naturalWidth + this.x) < 0;
+  };
+
+  return Tile;
+
+})();
+
+
+
+},{}],17:[function(require,module,exports){
+var Nodule, Sprite, Tile;
+
+require('angular');
+
+Tile = require('./Tile.coffee');
+
+Sprite = require('./Sprite.coffee');
+
+Nodule = require('nodule');
+
+
 var app = angular.module('travel-screen', [
     require('ng-hold'),
     require('game')
@@ -625,19 +867,39 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
+app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
     var vm = this;
     vm.data = data;
     // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.shipImg = document.getElementById("player-ship");
+    vm.shipW = 150;
+    vm.shipH = 338;
+
+    vm.onEntry = function(){
+        $scope.$emit('changeMusicTo', vm.music);
+    }
+
+    vm.onExit = function(){
+        vm.stopTravel()
+    }
+
+    // nodule for handling module entry/exit and such
+    vm.nodule = new Nodule($rootScope, 'travel-screen', vm.onEntry, vm.onExit);
+
+    vm.music = new Howl({
+        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+        loop: true
+    });
+
+    var timeoutId;
 
     vm.init = function(){
         vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         vm.sprites = {}
         vm.shipY = 300;
-        vm.shipX = window.innerWidth/3;
+        vm.shipX = 0;
         vm.travelling = false;
     }
     vm.init();
@@ -645,21 +907,25 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.startTravel = function(){
         vm.travelling = true;
-        setTimeout(vm.go, TRAVEL_SPEED);
+        timeoutId = $interval(vm.go, TRAVEL_SPEED);
     }
 
     vm.go = function(){
-        if (vm.travelling){
-            vm.travel()
-            setTimeout(vm.go, TRAVEL_SPEED);
-        }  // else stop going
+        if (vm.travelling) vm.travel();
+        else if (typeof timeoutId !== 'undefined') vm.stopTravel();
+    }
+
+    // PRIVATE FUNCTION
+    var cancelInterval = function() {
+        var result = $interval.cancel(timeoutId);
+        if (result == true) timeoutId = undefined;
     }
 
     vm.stopTravel = function(){
         vm.travelling = false;
+        cancelInterval();
     }
     $scope.$on('switchToModule', function(switchingTo){
-        vm.stopTravel();
     });
 
     vm.toggleTravel = function(){
@@ -676,33 +942,50 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     }
 
     vm.travel = function(){
-        data.travel();
+        if (data.fuel >= data.fuelExpense) {
+            data.travel();
 
-        vm.tiles.forEach(function(tile){
-            tile.travel();
-        });
-
-        // remove old offscreen tiles
-        while(vm.tiles[0].hasTravelledOffscreen()){
-            vm.tiles.splice(0, 1);  // remove leftmost tile
-            console.log('tile removed');
+        // travel ship to optimal screen position
+        if (vm.shipX < vm._getIdealShipPos()){
+            vm.shipX += 1;
+            vm.data.distanceTraveled += 1
+        } else {
+            vm.shipX = vm._getIdealShipPos();
         }
 
-        // append new bg tiles if needed
-        var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
-        while (overhang < 100){
-            vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
-            overhang = vm.tiles[vm.tiles.length -1].getOverhang();
-            console.log('tile added');
-        }
+        // move the tiles
+            vm.tiles.forEach(function(tile){
+                tile.travel();
+            });
 
-        var shipW = 150;
-        for (var loc in data.locations){
-            var pos = data.locations[loc];
-            if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
-                data.visited.push(loc);
-                $scope.$emit('switchToModule', 'shop');
+            // remove old offscreen tiles
+            while(vm.tiles[0].hasTravelledOffscreen()){
+                vm.tiles.splice(0, 1);  // remove leftmost tile
+                console.log('tile removed');
             }
+
+            // append new bg tiles if needed
+            var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
+            while (overhang < 100){
+                vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
+                overhang = vm.tiles[vm.tiles.length -1].getOverhang();
+                console.log('tile added');
+            }
+
+            var shipW = 150;
+            for (var loc in data.locations){
+                var pos = data.locations[loc];
+                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+                    data.visited.push(loc);
+                    console.log('arrived at ', loc);
+                    $scope.$emit('switchToModule', 'shop');
+                }
+            }
+        }
+        // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
+        else { // end game
+            vm.stopTravel();
+            data.end();
         }
     }
 
@@ -734,7 +1017,9 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
                 vm.sprites[location].draw(vm.ctx)
             } else {
                 // get random y value and add to list of current sprites
-                vm.sprites[location] = new Sprite('/the-oregon-trajectory/assets/sprites/station_sheet.png', -1000, Math.random()*200+200);
+
+                vm.sprites[location] = new Sprite(data.gameDir + '/assets/sprites/station_sheet.png',
+                    -1000, Math.random()*200+200);
             }
             // TODO: remove sprites once we're done with them..
         }
@@ -742,7 +1027,7 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.drawLocations = function(){
         for (var loc in data.locations){
-            var pos = data.locations[loc];
+            var pos = data.locations[loc] + vm.shipX + vm.shipW/2;
             vm.drawSprite(loc, pos);
         }
     }
@@ -754,10 +1039,8 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     }
 
     vm.drawShip = function(){
-        var shipW = 150, shipH = 338;
         vm.shipY = vm.drift(vm.shipY);
-        vm.shipX = window.innerWidth/3;
-        vm.ctx.drawImage(vm.shipImg, vm.shipX-shipW/2, vm.shipY-shipH/2);
+        vm.ctx.drawImage(vm.shipImg, vm.shipX-vm.shipW/2, vm.shipY-vm.shipH/2);
     }
 
     vm.draw = function(){
@@ -768,6 +1051,10 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.drawShip();
     }
     $scope.$on('draw', vm.draw);
+
+    vm._getIdealShipPos = function(){
+        return window.innerWidth / 3
+    }
 }]);
 
 module.exports = angular.module('travel-screen').name;
@@ -775,8 +1062,10 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"angular":15,"game":3,"ng-hold":7}],12:[function(require,module,exports){
+},{"./Sprite.coffee":15,"./Tile.coffee":16,"angular":21,"game":6,"ng-hold":11,"nodule":3}],18:[function(require,module,exports){
 require('angular');
+Nodule = require('nodule');
+Howl = require('howler');
 
 var app = angular.module('you-win', []);
 
@@ -787,8 +1076,29 @@ app.directive("youWin", function() {
     };
 });
 
+app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
+    vm = this;
+    vm.music =  new Howl({
+        urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
+        loop: true
+    });
+    clickSound = new Howl({
+        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+    })
+
+    vm.onEnter = function(){
+        $scope.$emit('changeMusicTo', vm.music);
+    }
+    vm.nodule = Nodule($rootScope, 'you-win', vm.onEnter);
+
+    vm.mainMenu = function(){
+        clickSound.play();
+        $scope.$emit('switchToModule', 'main-menu');
+    }
+}]);
+
 module.exports = angular.module('you-win').name;
-},{"angular":15}],13:[function(require,module,exports){
+},{"angular":21,"howler":2,"nodule":3}],19:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -807,7 +1117,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":15}],14:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":21}],20:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -831,7 +1141,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":15}],15:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":21}],21:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -1091,7 +1401,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],16:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*

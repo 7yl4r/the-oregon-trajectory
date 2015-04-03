@@ -1,9 +1,9 @@
 <div ng-controller="travelScreenController as travelCtrl">
     <!-- todo: these images don't really _have_ to be in the html... -->
-    <img id="player-ship" src="/the-oregon-trajectory/assets/sprites/ship.png" style="display:none">
+    <img id="player-ship" ng-src="{{travelCtrl.data.gameDir}}/assets/sprites/ship.png" style="display:none">
 
-    <img id="test-bg" src="/the-oregon-trajectory/assets/backgrounds/sun_transparent.png" style="display:none">
-    <img id="bg-earth" src="/the-oregon-trajectory/assets/backgrounds/bg.png" style="display:none">
+    <img id="test-bg" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/sun_transparent.png" style="display:none">
+    <img id="bg-earth" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/bg.png" style="display:none">
 
     <div id="travel-screen-wrapper">
         <canvas id="travelCanvas" width="100%" height="600px">
@@ -22,13 +22,14 @@
                 <span class="glyphicon glyphicon-resize-horizontal"></span>
                 distance traveled: <span class="badge">{{travelCtrl.data.distanceTraveled}}</span>
             </button>
+
             <button class="btn btn-primary" type="button">
                 <span class="glyphicon glyphicon-cutlery"></span>
                 rations: <span class="badge">{{travelCtrl.data.rations}}</span>
             </button>
             <button class="btn btn-primary" type="button">
                 <span class="glyphicon glyphicon-tint"></span>
-                fuel: <span class="badge">{{travelCtrl.data.fuel}}</span>
+                fuel: <span class="badge">{{travelCtrl.data.fuel | number: 2}}</span>
             </button>
 
             <button id="travel-btn"
@@ -46,6 +47,12 @@
                 <span ng-show="!travelCtrl.travelling">
                     <span class="fui-play"></span> resume interplanetary travel
                 </span>
+            </button>
+
+            <button class="btn btn-primary" type="button">
+                <span class="glyphicon glyphicon-resize-horizontal"></span>
+                distance to next station ({{travelCtrl.data.nextWaypoint.name}}):
+                <span class="badge">{{travelCtrl.data.nextWaypoint.distance}}</span>
             </button>
         </div>
     </div>
