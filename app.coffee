@@ -35,8 +35,10 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
 
     vm.MSPF = 100;  // ms per frame
 
+    // first round of music must be started manually (I don't know why)
     vm.music = new Howl({
-        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg']
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+        loop: true
     });
     vm.music.play();
 
