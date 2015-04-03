@@ -17,6 +17,9 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
         urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
         loop: true
     });
+    clickSound = new Howl({
+        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+    });
 
     vm.onEntry = function() {
         $scope.$emit('changeMusicTo', vm.music);
@@ -25,6 +28,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
     vm.nodule = new Nodule($rootScope, 'main-menu', vm.onEntry)
 
     vm.startGame = function(){
+        clickSound.play();
         data.reset();
         $scope.$emit('switchToModule', 'shop');
     }
