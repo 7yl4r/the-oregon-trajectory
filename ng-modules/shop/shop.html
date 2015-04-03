@@ -14,9 +14,23 @@
         </div><!-- /.navbar-collapse -->
     </nav>
     <p id="date">July 1 2025</p>
+    <div class="shop-box" id="game-info">
+        <div class="flex-container">
+            <div class="info-container container-shadow">
+                <h4 class="item-name">Inventory</h4><br>
+                Fuel: {{shop.data.fuel | number: 2}}<br>
+                Rations: {{shop.data.rations}}
+            </div>
+            <div class="info-container container-shadow">
+                Distance Traveled: {{shop.data.distanceTraveled}}<br>
+                Distance to {{shop.data.nextWaypoint.name}}: {{shop.data.nextWaypoint.distance}}<br>
+                Current fuel efficiency: {{100 * (1 - shop.data.fuelExpense)}}%
+            </div>
+        </div>
+    </div>
     <div class="flex-container">
         <div class="showcase">
-            <div class="item-container active-item">
+            <div class="item-container container-shadow active-item">
                 <div class="item-contents">
                     <h4 class="item-name">{{shop.activeItem.name}}</h4>
                     <img class="item-image" ng-src="{{shop.activeItem.image}}"/><br>
@@ -26,10 +40,10 @@
                 </div>
             </div>
         </div>
-        <div class="storefront">
+        <div class="storefront shop-box">
             <div class="col-md-4 item-col" ng-repeat="item in shop.item_consumables">
                 <div class="item-outer">
-                    <div class="item-container" ng-class="shop.ifItemActive(item.name)"
+                    <div class="item-container container-shadow" ng-class="shop.ifItemActive(item.name)"
                          ng-click="shop.setActiveItem(item.name)">
                         <div class="item-contents">
                             <h4 class="item-name">{{item.name}}</h4>

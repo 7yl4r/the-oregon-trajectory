@@ -2,6 +2,7 @@ require('angular');
 
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
+Nodule = require('nodule')
 
 Randy = require('./ng-randy/ng-randy.coffee')
 
@@ -23,7 +24,7 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', 'data', '$interval', function($scope, data, $interval){
+app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
     var vm = this;
     vm.data = data;
     vm.randy = new Randy($scope);
@@ -35,6 +36,22 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
     vm.shipImg = document.getElementById("player-ship");
     vm.shipW = 150;
     vm.shipH = 338;
+
+    vm.onEntry = function(){
+        $scope.$emit('changeMusicTo', vm.music);
+    }
+
+    vm.onExit = function(){
+        vm.stopTravel()
+    }
+
+    // nodule for handling module entry/exit and such
+    vm.nodule = new Nodule($rootScope, 'travel-screen', vm.onEntry, vm.onExit);
+
+    vm.music = new Howl({
+        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+        loop: true
+    });
 
     var timeoutId;
 
@@ -69,7 +86,6 @@ app.controller("travelScreenController", ['$scope', 'data', '$interval', functio
         cancelInterval();
     }
     $scope.$on('switchToModule', function(switchingTo){
-        vm.stopTravel();
     });
 
     vm.toggleTravel = function(){
