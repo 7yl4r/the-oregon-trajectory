@@ -3,6 +3,34 @@ require('angular');
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 
+class Nodule
+    constructor: ($rootScope, noduleName, onEntry, onExit)->
+        @scope = $rootScope
+        @name = noduleName
+        @onEntry = onEntry
+        @onExit = onExit
+        @isActive = false
+
+        @scope.$on('switchToModule', (event, nextModule)=>
+            console.log('switch to nodule', @)
+            if not @isActive
+                if nextModule == @name  # if switching to this module
+                    @isActive = true
+                    @onEntry()
+            else
+                # switching from this module to another
+                @isActive = false
+                @onExit()
+        )
+
+
+    # mock functions for optional constructor args
+    onEntry: ()->
+        return
+    onExit: ()->
+        return
+
+
 # switching to javascript here...
 `
 var app = angular.module('travel-screen', [
@@ -27,7 +55,17 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     vm.shipW = 150;
     vm.shipH = 338;
 
-    vm.active = false;
+    vm.onEntry = function(){
+        $scope.$emit('changeMusicTo', vm.music);
+    }
+
+    vm.onExit = function(){
+        vm.stopTravel()
+    }
+
+    // nodule for handling module entry/exit and such
+    vm.nodule = new Nodule($rootScope, 'travel-screen', vm.onEntry, vm.onExit);
+
     vm.music = new Howl({
         urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
         loop: true
@@ -60,19 +98,6 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         var result = $interval.cancel(timeoutId);
         if (result == true) timeoutId = undefined;
     }
-
-    $rootScope.$on('switchToModule', function(event, nextModule){
-        if (!vm.active){
-            if (nextModule == 'travel-screen'){  // if switching to this module
-                $scope.$emit('changeMusicTo', vm.music);
-                vm.active = true;
-            }
-        } else {
-            // switching from this module to another one
-            vm.active = false;
-            vm.stopTravel();
-        }
-    });
 
     vm.stopTravel = function(){
         vm.travelling = false;
