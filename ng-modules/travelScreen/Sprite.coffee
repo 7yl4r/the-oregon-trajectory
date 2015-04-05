@@ -1,17 +1,32 @@
+
+
+
 module.exports = class Sprite
-    constructor: (spritesheet, x=0, y=0)->
+    constructor: (spritesheet, name, x=0, y=0)->
         # sets up new sprite using given spritesheet src centered at x & y position on canvas
         @sheet = new Image()
         @sheet.src = spritesheet
-        @h = 399
-        @w = 182
+        @setDimensions(name)
         @x = x
         @y = y
         @frame_n = 0
-        @max_frames = 4
         # for slowing animation speed
         @draws_per_frame = 50  # number of draw calls before setting new frame
         @draw_counter = 0
+
+    setDimensions: (name)->
+        # sets dimensions, max_frames, draws_per_frame based on name to match given sprite
+        switch name
+            when "station1"
+                @h = 399
+                @w = 182
+                @max_frames = 4
+                @scale = 1
+            when "ship"
+                @h = 150
+                @w = 338
+                @max_frames = 0
+                @scale = 0.6
 
     next_frame: ()->
         @frame_n += 1
@@ -25,7 +40,7 @@ module.exports = class Sprite
         ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
         x = x - @w/2
         y = y - @h/2
-        ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w, @h)
+        ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w*@scale, @h*@scale)
         @draw_counter += 1
         if @draw_counter > @draws_per_frame
             @next_frame()

@@ -21,12 +21,10 @@ app.directive("travelScreen", function() {
 app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
     var vm = this;
     vm.data = data;
-    // TODO: do these need to be set after $(document).ready()?
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
-    vm.shipImg = document.getElementById("player-ship");
-    vm.shipW = 150;
-    vm.shipH = 338;
+    vm.ship = new Sprite(data.gameDir + '/assets/sprites/ship.png',
+        "ship", 0, Math.random()*200+200);
 
     vm.onEntry = function(){
         $scope.$emit('changeMusicTo', vm.music);
@@ -50,7 +48,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         vm.sprites = {}
         vm.shipY = 300;
-        vm.shipX = 0;
+        vm.shipX = 0+vm.ship.w/2;
         vm.travelling = false;
     }
     vm.init();
@@ -123,7 +121,6 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 console.log('tile added');
             }
 
-            var shipW = 150;
             for (var loc in data.locations){
                 var pos = data.locations[loc];
                 if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
@@ -169,7 +166,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
             } else {
                 // get random y value and add to list of current sprites
                 vm.sprites[location] = new Sprite(data.gameDir + '/assets/sprites/station_sheet.png',
-                    -1000, Math.random()*200+200);
+                    "station1", -1000, Math.random()*200+200);
             }
             // TODO: remove sprites once we're done with them..
         }
@@ -177,7 +174,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.drawLocations = function(){
         for (var loc in data.locations){
-            var pos = data.locations[loc] + vm.shipX + vm.shipW/2;
+            var pos = data.locations[loc] + vm.shipX;
             vm.drawSprite(loc, pos);
         }
     }
@@ -190,7 +187,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.drawShip = function(){
         vm.shipY = vm.drift(vm.shipY);
-        vm.ctx.drawImage(vm.shipImg, vm.shipX-vm.shipW/2, vm.shipY-vm.shipH/2);
+        vm.ship.draw(vm.ctx, vm.shipX, vm.shipY)
     }
 
     vm.draw = function(){
