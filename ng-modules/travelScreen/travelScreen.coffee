@@ -3,6 +3,7 @@ require('angular');
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 Nodule = require('nodule')
+Location = require('./../Location.coffee')
 
 Randy = require('./ng-randy/ng-randy.coffee')
 
@@ -230,6 +231,8 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     $scope.$on('encounter', function(args){
         // on random encounter
         console.log('adding encounter:', args);
+        // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
+        vm.data.locations.push(new Location("test. TODO: randy.getName", 7000, "TODO args.name?"))
         // TODO: place marker off screen & add to locations?
     });
 }]);
