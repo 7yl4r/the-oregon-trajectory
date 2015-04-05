@@ -1,30 +1,8 @@
 require('angular')
+Location = require('./Location.coffee')
 
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
-
-class Location
-    constructor: (name, x, actionKey)->
-        @name = name
-        @x = x
-        @actionKey = actionKey
-
-    trigger: (args)->
-        switch @actionKey
-            when "station"
-                @_handleStationArrival(args)
-                
-    _handleStationArrival: (args)->
-        # TODO: station-specific stuff like
-        # switch @name
-        #   when "iss"
-        #       # something...
-        #   when "moon"
-        #       # something else...
-        args.$scope.$emit('switchToModule', 'shop');
-
-
-
 
 class Game
     constructor: (gameScope)->
