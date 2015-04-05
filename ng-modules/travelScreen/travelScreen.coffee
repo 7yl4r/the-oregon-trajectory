@@ -8,8 +8,8 @@ Location = require('./../Location.coffee')
 Randy = require('./ng-randy/ng-randy.coffee')
 
 MIN_TRAVELS_PER_EVENT = 1000  # min amount of travel between events
-EVENT_CONSISTENCY = 3  # affects variability in event timing. high values = more consistent timing. must be > 0
-# units of EVENT_CONSISTENCY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
+EVENT_VARIABILITY = 10  # affects consistency in event timing. high values = less consistent timing. must be > 0
+# units of EVENT_VARIABILITY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
 
 # switching to javascript here...
 `
@@ -189,6 +189,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 vm.sprites[location].draw(vm.ctx)
             } else {
                 // get random y value and add to list of current sprites
+                // TODO: use sprite based on location info
                 vm.sprites[location] = new Sprite(data.gameDir + '/assets/sprites/station_sheet.png',
                     "station1", -1000, Math.random()*200+200);
             }
@@ -232,7 +233,11 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         // on random encounter
         console.log('adding encounter:', args);
         // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
-        vm.data.locations.push(new Location("test. TODO: randy.getName", 7000, "TODO args.name?"))
+        vm.data.locations.push(new Location(
+            "test. TODO: randy.getName",
+            vm.data.distanceTraveled + window.innerWidth + 300,
+            "TODO args.name?"
+        ));
         // TODO: place marker off screen & add to locations?
     });
 }]);
