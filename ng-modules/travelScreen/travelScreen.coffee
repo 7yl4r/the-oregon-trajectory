@@ -148,7 +148,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 if (randy.roll()){
                     randyTime = 0
                 } else {
-                    randyTime = MIN_TRAVELS_PER_EVENT/EVENT_CONSISTENCY
+                    randyTime = MIN_TRAVELS_PER_EVENT/EVENT_VARIABILITY
                 }
             } else {
                 randyTime += 1
@@ -174,34 +174,27 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         return height;
     }
 
-    vm.drawSprite = function(location, Xposition){
-        // draws location if in view at global Xposition
-        var spriteW = 500;  // max sprite width (for checking when to draw)
-
+    vm.drawSprite = function(location){
+        // draws location sprite if in view at global Xposition
         // if w/in reasonable draw distance
+        var spriteW = 500;  // max sprite width (for checking when to draw)
+        var Xposition = location.x + vm.shipX;
+
+
         if (data.distanceTraveled + window.innerWidth + spriteW > Xposition    // if close enough
             && data.distanceTraveled - spriteW < Xposition                  ) { // if we haven't passed it
-            if (location in vm.sprites){  // if sprite already in current sprites
-                var rel_x = Xposition-data.distanceTraveled;
-                vm.sprites[location].x = rel_x
-                // use existing y value (add small bit of drift)
-                vm.sprites[location].y = vm.drift(vm.sprites[location].y);
-                vm.sprites[location].draw(vm.ctx)
-            } else {
-                // get random y value and add to list of current sprites
-                // TODO: use sprite based on location info
-                vm.sprites[location] = new Sprite(data.gameDir + '/assets/sprites/station_sheet.png',
-                    "station1", -1000, Math.random()*200+200);
-            }
-            // TODO: remove sprites once we're done with them..
+            location.sprite.y = vm.drift(location.sprite.y);
+            var rel_x = Xposition-data.distanceTraveled;
+            location.sprite.x = rel_x;
+            // use existing y value (add small bit of drift)
+            location.sprite.draw(vm.ctx)
         }
     }
 
     vm.drawLocations = function(){
         for (var loc_i in data.locations){
-            var pos = data.locations[loc_i].x + vm.shipX;
-            var loc = data.locations[loc_i].name
-            vm.drawSprite(loc, pos);
+
+            vm.drawSprite(data.locations[loc_i]);
         }
     }
 
@@ -234,9 +227,9 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         console.log('adding encounter:', args);
         // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
         vm.data.locations.push(new Location(
-            "test. TODO: randy.getName",
+            args.name,
             vm.data.distanceTraveled + window.innerWidth + 300,
-            "TODO args.name?"
+            args.name
         ));
         // TODO: place marker off screen & add to locations?
     });

@@ -1,6 +1,4 @@
 
-
-
 module.exports = class Sprite
     constructor: (spritesheet, name, x=0, y=0)->
         # sets up new sprite using given spritesheet src centered at x & y position on canvas
@@ -9,6 +7,7 @@ module.exports = class Sprite
         @setDimensions(name)
         @x = x
         @y = y
+        @r = 0  # rotation
         @frame_n = 0
         # for slowing animation speed
         @draws_per_frame = 50  # number of draw calls before setting new frame
@@ -27,6 +26,12 @@ module.exports = class Sprite
                 @w = 338
                 @max_frames = 0
                 @scale = 0.6
+            when "satelite-debris-1"
+                @h = 150
+                @w = 512
+                @max_frames = 0
+                @scale = 0.2 + Math.random()*0.1
+                @r = Math.random()*Math.PI*2
 
     next_frame: ()->
         @frame_n += 1
@@ -40,7 +45,13 @@ module.exports = class Sprite
         ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
         x = x - @w/2
         y = y - @h/2
-        ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w*@scale, @h*@scale)
+        if @r != 0
+            ctx.save()
+            ctx.rotate()
+            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w*@scale, @h*@scale)
+            ctx.restore()
+        else
+            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w*@scale, @h*@scale)
         @draw_counter += 1
         if @draw_counter > @draws_per_frame
             @next_frame()
