@@ -4,10 +4,10 @@ module.exports = class Sprite
         # sets up new sprite using given spritesheet src centered at x & y position on canvas
         @sheet = new Image()
         @sheet.src = spritesheet
+        @r = 0  # rotation
         @setDimensions(name)
         @x = x
         @y = y
-        @r = 0  # rotation
         @frame_n = 0
         # for slowing animation speed
         @draws_per_frame = 50  # number of draw calls before setting new frame
@@ -30,7 +30,7 @@ module.exports = class Sprite
                 @h = 150
                 @w = 512
                 @max_frames = 0
-                @scale = 0.2 + Math.random()*0.1
+                @scale = 0.3 + Math.random()*0.2
                 @r = Math.random()*Math.PI*2
 
     next_frame: ()->
@@ -43,15 +43,15 @@ module.exports = class Sprite
         # set locations to start in sprite sheet
         ssx = @frame_n * @w
         ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
-        x = x - @w/2
-        y = y - @h/2
         if @r != 0
             ctx.save()
-            ctx.rotate()
-            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w*@scale, @h*@scale)
+            ctx.translate(x,y)
+            ctx.rotate(@r)
+            ctx.drawImage(@sheet, ssx, ssy, @w, @h, -@w/2, -@h/2, @w*@scale, @h*@scale)
             ctx.restore()
         else
-            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w*@scale, @h*@scale)
+            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x-@w/2, y-@h/2, @w*@scale, @h*@scale)
+
         @draw_counter += 1
         if @draw_counter > @draws_per_frame
             @next_frame()
