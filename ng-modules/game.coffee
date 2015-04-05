@@ -3,15 +3,36 @@ require('angular')
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
+class Location
+    constructor: (name, x, actionKey)->
+        @name = name
+        @x = x
+        @actionKey = actionKey
+
+    trigger: (args)->
+        switch @actionKey
+            when "station"
+                @_handleStationArrival(args)
+                
+    _handleStationArrival: (args)->
+        # TODO: station-specific stuff like
+        # switch @name
+        #   when "iss"
+        #       # something...
+        #   when "moon"
+        #       # something else...
+        args.$scope.$emit('switchToModule', 'shop');
+
+
+
+
 class Game
     constructor: (gameScope)->
         @scope = gameScope
-        @locations = {
-            "ksc":0,
-            "iss": 1500,
-            "moon":3000,
-            "mars":7000
-        }
+        @locations = [
+            new Location("iss", 1500, "station"),
+            new Location("moon", 7000, "station")
+        ]
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
 
