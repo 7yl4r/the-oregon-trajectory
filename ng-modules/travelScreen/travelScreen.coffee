@@ -121,9 +121,11 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 console.log('tile added');
             }
 
-            for (var loc in data.locations){
-                var pos = data.locations[loc];
-                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
+            // handle arrival at stations/events
+            for (var loc_i in data.locations){
+                var pos = data.locations[loc_i].x;
+                var loc = data.locations[loc_i].name;
+                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0) {  // passing & not yet visited
                     data.visited.push(loc);
                     console.log('arrived at ', loc);
                     $scope.$emit('switchToModule', 'shop');
@@ -173,8 +175,9 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     }
 
     vm.drawLocations = function(){
-        for (var loc in data.locations){
-            var pos = data.locations[loc] + vm.shipX;
+        for (var loc_i in data.locations){
+            var pos = data.locations[loc_i].x + vm.shipX;
+            var loc = data.locations[loc_i].name
             vm.drawSprite(loc, pos);
         }
     }
