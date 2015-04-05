@@ -2,6 +2,8 @@ import os
 import fileinput
 
 CONTROLLER_TEMPLATE = """require('angular');
+Howl = require('holwer');    // for sounds (if you need them)
+Nodule = require('nodule');  // for nodule helpers
 
 var app = angular.module('{0}', []);
 
@@ -11,6 +13,16 @@ app.directive("{1}", function() {{
         templateUrl: "/ng-modules/{1}/{1}.html"
     }};
 }});
+
+app.controller("{1}Controller", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope) {{
+    var vm = this;
+    vm.nodule = new Nodule($rootScope, '{0}');
+
+    // your controller code here
+    vm.clickedTheButton = function(){{
+        alert('you clicked {0} button')
+    }}
+}}]);
 
 module.exports = angular.module('{0}').name;"""
 
@@ -77,13 +89,15 @@ hyphen_name = module_name.replace(" ", "-")
 directory = './ng-modules/'+camel_name+'/'
 print 'creating', directory
 if os.path.exists(directory):
-    print "module name already taken"
+    raise ValueError("module name already taken")
 else:
     os.makedirs(directory)
 
 print 'making html template (view) ', camel_name + '.html'
 with open(directory + camel_name + '.html', 'w') as file:
-    file.write("<div>\n\tput " + module_name + " view content here...\n</div>")
+    file.write('<div ng-controller="' + camel_name + 'Controller as ' + camel_name + 'Ctrl">\n\t'+
+               'put ' + module_name + " view content here...\n"+
+               '\t<button ng-click="' + camel_name + 'Ctrl.clickedTheButton()"></button>\n</div>')
 
 print 'making angular module ', camel_name + '.js'
 with open(directory + camel_name + '.js', 'w') as file:
