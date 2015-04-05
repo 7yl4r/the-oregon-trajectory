@@ -46,17 +46,12 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     vm.MUSIC_FADE_TIME = 300;
 
     vm.changeMusicTo = function(event, newMusicObj){
-        console.log('switching music to', newMusicObj, 'from', vm.music);
+        //console.log('switching music to', newMusicObj, 'from', vm.music);
         vm.music.fadeOut(0, vm.MUSIC_FADE_TIME);
-        //vm.music.stop();
 
         newMusicObj.fadeIn(vm.musicVol, vm.MUSIC_FADE_TIME);
-        vm.music = newMusicObj;
         // keep reference to playing music
-
-//        newMusicObj.play();
-//        vm.music.play();
-//        vm.music.fadeIn({"to":vm.musicVol, "duration":vm.MUSIC_FADE_TIME});
+        vm.music = newMusicObj;
     }
     $scope.$on('changeMusicTo', vm.changeMusicTo);
 
