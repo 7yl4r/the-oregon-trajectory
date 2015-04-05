@@ -128,7 +128,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0) {  // passing & not yet visited
                     data.visited.push(loc);
                     console.log('arrived at ', loc);
-                    $scope.$emit('switchToModule', 'shop');
+                    data.locations[loc_i].trigger({'$scope':$scope})
                 }
             }
         }

@@ -9,11 +9,20 @@ class Location
         @x = x
         @actionKey = actionKey
 
-    trigger: ()->
-        switch actionKey
-            when "shop"
-                # TODO: open shop
-                console.log('arrived at shop')
+    trigger: (args)->
+        switch @actionKey
+            when "station"
+                @_handleStationArrival(args)
+                
+    _handleStationArrival: (args)->
+        # TODO: station-specific stuff like
+        # switch @name
+        #   when "iss"
+        #       # something...
+        #   when "moon"
+        #       # something else...
+        args.$scope.$emit('switchToModule', 'shop');
+
 
 
 
@@ -21,8 +30,8 @@ class Game
     constructor: (gameScope)->
         @scope = gameScope
         @locations = [
-            new Location("iss", 1500, "shop"),
-            new Location("moon", 7000, "shop")
+            new Location("iss", 1500, "station"),
+            new Location("moon", 7000, "station")
         ]
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
