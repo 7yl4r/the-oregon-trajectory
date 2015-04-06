@@ -307,7 +307,7 @@ app = angular.module('debris-encounter', []);
 app.directive("debrisEncounter", function() {
   return {
     restrict: 'E',
-    templateUrl: "/ng-modules/debrisEncounter/debrisEncounter.html"
+    templateUrl: "the-oregon-trajectory/ng-modules/debrisEncounter/debrisEncounter.html"
   };
 });
 
