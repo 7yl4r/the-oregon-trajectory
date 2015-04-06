@@ -222,16 +222,15 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         return window.innerWidth / 3
     }
 
-    $scope.$on('encounter', function(args){
+    $scope.$on('encounter', function(event, args){
         // on random encounter
-        console.log('adding encounter:', args);
+        console.log('adding encounter:', event, args);
         // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
         vm.data.locations.push(new Location(
-            args.name,
+            args.name + '_' + args.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
-            args.name
+            event.name
         ));
-        // TODO: place marker off screen & add to locations?
     });
 }]);
 
