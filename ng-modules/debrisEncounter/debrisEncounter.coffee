@@ -35,11 +35,11 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
 
     @getCostToRendevous = ()=>
         # returns cost to rendevous with debris
-        return (parseInt(@debrisVelocity + @debrisIntersectDistance * 0.2) * 0.02)
+        return parseInt((@debrisVelocity + @debrisIntersectDistance * 0.2) * 0.02)
 
     @getCostToAvoid = ()=>
         # returns cost to avoid collision with the object with 100% certainty
-        return (parseInt(@MAX_DISTANCE*1.1 - @debrisIntersectDistance*0.2) * 0.02)
+        return parseInt((@MAX_DISTANCE*1.1 - @debrisIntersectDistance*0.2) * 0.02)
 
     @getFuelReward = ()=>
         # returns amount of fuel in the debris
