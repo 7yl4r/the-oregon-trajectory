@@ -7,7 +7,7 @@ app = angular.module('debris-encounter', [])
 app.directive("debrisEncounter", ()->
     return {
         restrict: 'E',
-        templateUrl: "the-oregon-trajectory/ng-modules/debrisEncounter/debrisEncounter.html"
+        templateUrl: "ng-modules/debrisEncounter/debrisEncounter.html"
     }
 )
 
