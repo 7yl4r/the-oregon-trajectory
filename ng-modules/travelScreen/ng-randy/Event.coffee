@@ -10,6 +10,4 @@ module.exports = class Event
 
     trigger: ()->
         @count += 1
-        console.log(@type, ':', @name, ' triggered')
-        @scope.$broadcast(@type, [@name, @args])
-# or should this be $emit?
+        @scope.$broadcast(@type, {"name":@name, "count":@count, "args":@args})

@@ -28,7 +28,7 @@ class Game
         @fuelChance = 0.7;  # chance of expending fuel per tick
 
         @radiationChance = .005  # chance of being irradiated per tick
-        @money = 1000
+        @money = 5000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
 

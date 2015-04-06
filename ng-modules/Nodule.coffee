@@ -2,8 +2,10 @@ module.exports = class Nodule
     constructor: ($rootScope, noduleName, onEntry, onExit)->
         @scope = $rootScope
         @name = noduleName
-        @onEntry = onEntry
-        @onExit = onExit
+        if onEntry?
+            @onEntry = onEntry
+        if onExit?
+            @onExit = onExit
         @isActive = false
 
         @scope.$on('switchToModule', (event, nextModule)=>

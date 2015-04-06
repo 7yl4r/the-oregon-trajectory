@@ -43,13 +43,14 @@
 
             <game-over class="game-module"></game-over>
 
+            <debris-encounter class="game-module"></debris-encounter>
+
             <div id="debug section">
                 debug tools: <br>
                 active module: {{MainCtrl.active_module}} <br>
                 <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'travel-screen')">Travel</button>
                 <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'shop')">Shop</button>
                 <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'you-win')">instaWin</button>
-                <button class="btn btn-inverse" onclick='createjs.Sound.play("badEvent")'>test sound</button>
                 <button class="btn btn-inverse" onclick='game.GODMODE()'>god mode</button>
                 <audio-controls></audio-controls>
             </div>
