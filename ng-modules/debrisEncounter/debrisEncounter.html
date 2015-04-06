@@ -4,8 +4,7 @@
 
         <ul>
             <li>differential velocity: {{debrisCtrl.debrisVelocity}}m/s</li>
-            <li>distance of encounter: {{debrisCtrl.debrisIntersectDistance}}m</li>
-            <li>certainty of trajectory: {{debrisCtrl.debrisCertainty}}</li>
+            <li>nearest encounter: {{debrisCtrl.debrisIntersectDistance}}m</li>
 
             <li>cross-sectional area: {{debrisCtrl.debrisSize}}m</li>
             <li>object density: {{debrisCtrl.debrisDensity}}kg/L</li>
@@ -17,7 +16,7 @@
                 match velocity and search the debris (fuel cost: {{debrisCtrl.rendevousCost}})
             </button></li>
             <li><button class="btn btn-inverse" ng-click="debrisCtrl.avoid()">
-                deviate course to be sure to avoid the debris
+                deviate course to be sure to avoid the debris (fuel cost: {{debrisCtrl.avoidCost}})
             </button></li>
             <li><button class="btn btn-inverse" ng-click="debrisCtrl.ignore()">
                 ignore the debris and continue on course

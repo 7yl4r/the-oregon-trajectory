@@ -12,22 +12,44 @@ app.directive("debrisEncounter", ()->
 )
 
 app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (data, $scope, $rootScope)->
+    @MAX_VELOCITY = 10000  # m/s
+    @MAX_DISTANCE = 10000  # m
+    @MAX_SIZE = 10  # m  (actual max is this # + MIN_SIZE)
+    @MIN_SIZE = .1  # m
+    @MIN_DENSITY = 10  # kg/L
+    @MAX_DENSITY = 8000  # kg/L (actual max is this # + MIN_DENSITY)
+
     @onEntry = ()=>
         @step = 'encounter'
-        # TODO: randomly generate parameters
+        # randomly generate parameters
+        @debrisVelocity = parseInt(Math.random()*@MAX_VELOCITY)
+        @debrisIntersectDistance = parseInt(Math.random() * @MAX_DISTANCE)
+        @debrisSize = parseInt(Math.random() * @MAX_SIZE + @MIN_SIZE)
+        @debrisDensity = parseInt(Math.random() * @MAX_DENSITY + @MIN_DENSITY)
+
+        @rendevousCost = @getCostToRendevous()
+        @avoidCost = @getCostToAvoid()
+        @debrisFuel = @getFuelReward()  # TODO: use debris object w/ different rewards, response text, risks, etc
 
     @nodule = new Nodule($rootScope, 'debris-encounter', @onEntry)
-    @step = 'encounter'
-    @debrisVelocity = 200
-    @debrisIntersectDistance = 300
-    @debrisSize = 3
-    @debrisDensity = 1000
-    @debrisCertainty = .9
-    # TODO: compute cost based on relative velocity
-    @rendevousCost = 10
-    @avoidCost = 5
-    # TODO: compute fuel based on size/density
-    @debrisFuel = 20
+
+    @getCostToRendevous = ()=>
+        # returns cost to rendevous with debris
+        return (parseInt(@debrisVelocity + @debrisIntersectDistance * 0.2) * 0.02)
+
+    @getCostToAvoid = ()=>
+        # returns cost to avoid collision with the object with 100% certainty
+        return (parseInt(@MAX_DISTANCE*1.1 - @debrisIntersectDistance*0.2) * 0.02)
+
+    @getFuelReward = ()=>
+        # returns amount of fuel in the debris
+        if @debrisDensity > 6000  # if too dense
+            return 0
+        else if @debrisDensity < 200  # if not dense enough
+            return 0
+        else
+            percentFuel = Math.random()*0.7  # percent of object that is fuel
+            return parseInt(@debrisSize*@debrisSize*@debrisSize*percentFuel * @debrisDensity/@MAX_DENSITY * 10)
 
     @continueTravels = ()=>
         $scope.$emit('switchToModule', 'travel-screen');
