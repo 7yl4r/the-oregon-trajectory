@@ -12,7 +12,11 @@ app.directive("debrisEncounter", ()->
 )
 
 app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (data, $scope, $rootScope)->
-    @nodule = new Nodule($rootScope, 'debris-encounter')
+    @onEntry = ()=>
+        @step = 'encounter'
+        # TODO: randomly generate parameters
+
+    @nodule = new Nodule($rootScope, 'debris-encounter', @onEntry)
     @step = 'encounter'
     @debrisVelocity = 200
     @debrisIntersectDistance = 300
@@ -35,7 +39,7 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
         if Math.random() < chanceOfCollision
             @step = 'collide'
         else
-            @continueTravels
+            @continueTravels()
 
     @avoid = ()=>
         data.fuel -= @avoidCost
