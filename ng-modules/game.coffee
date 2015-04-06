@@ -11,7 +11,7 @@ class Game
             new Location("iss", 1500, "station"),
             new Location("moon", 7000, "station")
         ]
-        @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
+        @gameDir = "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
 
     _init: ()->

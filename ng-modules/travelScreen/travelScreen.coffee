@@ -187,7 +187,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
             var rel_x = Xposition-data.distanceTraveled;
             location.sprite.x = rel_x;
             // use existing y value (add small bit of drift)
-            location.sprite.draw(vm.ctx)
+            location.sprite.draw(vm.ctx);
         }
     }
 
