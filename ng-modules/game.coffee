@@ -98,17 +98,12 @@ class Game
 
     # === "private" methods ===
     _getRemainingLocations: ()->
-        # returns obj with aligned arrays of locations & distances not yet reached
-        locNames = []
-        locDists = []
-        for key of @locations
-            if @locations[key] > @distanceTraveled
-                locNames.push(key)
-                locDists.push(@locations[key])
-        return {
-        "names": locNames,
-        "distances": locDists
-        }
+        # returns array of locations not yet reached
+        remainingLocs = []
+        for location in @locations
+            if location.x > @distanceTraveled
+                remainingLocs.push(location)
+        return remainingLocs
 
     _getStatsToNextLocation: ()->
         # returns distance, location, & name of next location as dict
@@ -124,12 +119,12 @@ class Game
 
         # get minimum of remaining locations
         next = {}
-        next.location = remaining.distances[0]
-        next.name     = remaining.names[0]
-        for i of remaining.distances
-            if remaining.distances[i] < next.distance  # assumes no equal distances
-                next.location = remaining.distances[i]
-                next.name = remaining.names[i]
+        next.location = remaining[0].x
+        next.name     = remaining[0].name
+        for i of remaining
+            if remaining[i].x < next.distance  # assumes no equal distances
+                next.location = remaining[i].x
+                next.name = remaining[i].name
 
             # calculate distance remaining before arrival
         next.distance = next.location - @distanceTraveled
