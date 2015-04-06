@@ -1,11 +1,36 @@
 
+#game-info {
+  display: block;
+  width: 50%;
+}
+
 #date {
   display: block;
+}
+
+.info-container {
+  background-color: #ECF0F1;
+  margin: 1em auto;
+  padding: 0.5em;
+  border-radius: 1ch;
+}
+
+.info-container h4 {
+  margin: 0;
+}
+
+.shop-box {
+  background-color: #e6eaeb;
+  margin: 1em;
+  box-shadow: 0 0 10em 1px #BDC3C7 inset;
+  border-radius: 1ch;
 }
 
 .flex-container {
   display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .showcase {
@@ -15,7 +40,7 @@
   flex: 0 1 auto;
   -webkit-align-self: center;
   align-self: center;
-  min-width: 25em;
+  min-width: 15em;
 }
 
 .storefront {
@@ -24,30 +49,33 @@
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
   display: inline-block;
-  background-color: #BDC3C7;
-  margin: 1em;
-  box-shadow: 0 0 10em 1px #82888c inset;
-  border-radius: 1ch;
 }
 
 .item-col {
-  min-width: 22em;
+  min-width: 10em;
+}
+
+.item-outer {
+  width: 100%;
+  margin: 0 auto;
 }
 
 .item-container {
-  width: 20em;
-  height: 20em;
-  background-color: #ECF0F1;
-  box-shadow: 0.5em 0.5em 0.2em #82888c;
-  margin: 2em;
+  width: 10em;
+  height: 10em;
+  margin: 1em auto;
   padding: 0;
   position: relative;
-  display: inline-block;
+  display: block;
   border-radius: 1ch;
 }
 
+.container-shadow {
+  background-color: #ECF0F1;
+  box-shadow: 0.5em 0.5em 0.3em #82888c;
+}
+
 .item-container-selected {
-  border: solid #76A7CE;
   box-shadow: 0 0 3em 0.5em #76A7CE;
 }
 
@@ -76,7 +104,9 @@
 
 .item-description {
   width: 100%;
-  padding: 1em;
+  font-size: 75%;
+  text-align: center;
+  padding: 0.1em;
   position: absolute;
   display: block;
   bottom: 0;

@@ -1,30 +1,46 @@
 require('angular')
+Location = require('./Location.coffee')
+
+window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
+window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
 class Game
     constructor: (gameScope)->
         @scope = gameScope
+        @locations = [
+            new Location("iss", 1500, "station"),
+            new Location("moon", 7000, "station")
+        ]
+        @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
-        @locations = {
-            "ksc":0,
-            "iss": 1000,
-            "moon":10000,
-            "mars":100000
-        }
 
     _init: ()->
         # re-initializes the game
         @distanceTraveled = 0
         @crewHealth = [100, 100]
         @shipHealth = 100
+
         @rations = 0
+        @eatChance = 0.1  # chance of eating per tick
+
         @fuel = 0
-        @radiationChance = .005
-        @money = 1000
+        @fuelExpense = 0.1;
+        @fuelChance = 0.7;  # chance of expending fuel per tick
+
+        @radiationChance = .005  # chance of being irradiated per tick
+        @money = 5000
         @visited = ['ksc']
+        @nextWaypoint = @_getStatsToNextLocation()
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
-        @distanceTraveled += 1
+        if @fuel >= @fuelExpense
+            @distanceTraveled += TRAVEL_SPEED
+            if Math.random() < @fuelChance
+                @fuel -= @fuelExpense
+        else
+            @end()
+
         if Math.random() < @radiationChance
             @irradiate()
 
@@ -32,8 +48,14 @@ class Game
             for crew_i of @crewHealth
                 @hurtCrew(crew_i, Math.random()*0.6)
         else
-            if Math.random() < .01  # if hungry
+            if Math.random() < @eatChance  # if hungry
                 @rations -= @crewHealth.length  # eat
+
+        # update next location if needed
+        if @distanceTraveled > @nextWaypoint.location
+            @nextWaypoint = @_getStatsToNextLocation()
+        else  # just update the distance
+            @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
 
     hurtCrew: (i, amnt)->
         # hurts crewmember i given amnt (and checks for death)
@@ -62,12 +84,63 @@ class Game
         @scope.$broadcast('resetGame')
         return
 
+    end: ()->
+        console.log('game over!')
+        @scope.$broadcast('switchToModule', 'game-over')
+        return
+
+    # === debug helper methods ===
+    GODMODE: ()->
+        BIG_NUMBER = 99999999999
+        @crewHealth = [BIG_NUMBER, BIG_NUMBER]
+        @fuel = BIG_NUMBER
+        window.TRAVEL_SPEED = 10
+
     # === "private" methods ===
+    _getRemainingLocations: ()->
+        # returns obj with aligned arrays of locations & distances not yet reached
+        locNames = []
+        locDists = []
+        for key of @locations
+            if @locations[key] > @distanceTraveled
+                locNames.push(key)
+                locDists.push(@locations[key])
+        return {
+        "names": locNames,
+        "distances": locDists
+        }
+
+    _getStatsToNextLocation: ()->
+        # returns distance, location, & name of next location as dict
+        # {
+        #   distance:       111,    # distance to the place
+        #   name:      "the place",
+        #   location:       333,    # absolute location of the place
+        #   fuelEstimate:   444,    # estimate of fuel to get there
+        #   rationEstimate: 555     # estimate of rations to get there
+        # }
+        # location is relative to starting position, distance is relative to current ship position
+        remaining = @_getRemainingLocations()
+
+        # get minimum of remaining locations
+        next = {}
+        next.location = remaining.distances[0]
+        next.name     = remaining.names[0]
+        for i of remaining.distances
+            if remaining.distances[i] < next.distance  # assumes no equal distances
+                next.location = remaining.distances[i]
+                next.name = remaining.names[i]
+
+            # calculate distance remaining before arrival
+        next.distance = next.location - @distanceTraveled
+        next.fuelEstimate = next.distance * @fuelExpense * @fuelChance / TRAVEL_SPEED
+        next.rationEstimate = next.distance * @eatChance * @crewHealth.length / TRAVEL_SPEED
+        return next
+
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaing crew members
         if @crewHealth.length < 1
-            console.log('game over!')
-            @scope.$broadcast('switchToModule', 'game-over')
+            @end()
             return
 
         healthSum = @crewHealth.reduce((prev,current)->
@@ -80,6 +153,7 @@ app = angular.module('game', [])
 
 app.factory('data', ['$rootScope', ($rootScope) ->
     game = new Game($rootScope)
+    window.game = game
     return game
 ])
 

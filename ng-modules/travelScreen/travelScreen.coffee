@@ -1,70 +1,15 @@
 require('angular');
 
-window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
-window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
+Tile = require('./Tile.coffee')
+Sprite = require('./Sprite.coffee')
+Nodule = require('nodule')
+Location = require('./../Location.coffee')
 
+Randy = require('./ng-randy/ng-randy.coffee')
 
-# TODO: move this to separate file and require it here
-class Tile
-    constructor: (startX, imageElement)->
-        @x = startX
-        @img = imageElement
-        @travelCount = 0
-
-    draw: (ctx)->
-        # draws the tile
-        ctx.drawImage(@img, @x, 0)
-        return
-
-    travel: ()->
-        # moves the tile 1 travel unit
-        if @travelCount > TRAVELS_PER_MOVE
-            @x -= window.TRAVEL_SPEED
-            @travelCount = 0
-        else
-            @travelCount += 1
-
-    getOverhang: ()->
-        # returns theoretical amount of tile overhanging right of screen, yet to be traveled to
-        return @img.naturalWidth + @x - window.innerWidth
-
-    hasTravelledOffscreen: ()->
-        # returns true if tile has travelled left off screen
-        return (@img.naturalWidth + @x) < 0
-
-class Sprite
-    constructor: (spritesheet, x=0, y=0)->
-        # sets up new sprite using given spritesheet src centered at x & y position on canvas
-        @sheet = new Image()
-        @sheet.src = spritesheet
-        @h = 399
-        @w = 182
-        @x = x
-        @y = y
-        @frame_n = 0
-        @max_frames = 4
-        # for slowing animation speed
-        @draws_per_frame = 50  # number of draw calls before setting new frame
-        @draw_counter = 0
-
-    next_frame: ()->
-        @frame_n += 1
-        if @frame_n > @max_frames
-            @frame_n = 0
-
-    draw: (ctx, x=@x, y=@y) ->
-        # draws a sprite centered at given location, or uses internal
-        # set locations to start in sprite sheet
-        ssx = @frame_n * @w
-        ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
-        x = x - @w/2
-        y = y - @h/2
-        ctx.drawImage(@sheet, ssx, ssy, @w, @h, x, y, @w, @h)
-        @draw_counter += 1
-        if @draw_counter > @draws_per_frame
-            @next_frame()
-            @draw_counter = 0
-
+MIN_TRAVELS_PER_EVENT = 1000  # min amount of travel between events
+EVENT_VARIABILITY = 10  # affects consistency in event timing. high values = less consistent timing. must be > 0
+# units of EVENT_VARIABILITY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
 
 # switching to javascript here...
 `
@@ -80,19 +25,40 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$scope', 'data', function($scope, data){
+app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
     var vm = this;
     vm.data = data;
-    // TODO: do these need to be set after $(document).ready()?
+    vm.randy = new Randy($scope);
+    randyTime = 0;
+    window.randy = vm.randy;  // for debug
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
-    vm.shipImg = document.getElementById("player-ship");
+    vm.ship = new Sprite(data.gameDir + '/assets/sprites/ship.png',
+        "ship", 0, Math.random()*200+200);
+
+    vm.onEntry = function(){
+        $scope.$emit('changeMusicTo', vm.music);
+    }
+
+    vm.onExit = function(){
+        vm.stopTravel()
+    }
+
+    // nodule for handling module entry/exit and such
+    vm.nodule = new Nodule($rootScope, 'travel-screen', vm.onEntry, vm.onExit);
+
+    vm.music = new Howl({
+        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+        loop: true
+    });
+
+    var timeoutId;
 
     vm.init = function(){
         vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         vm.sprites = {}
         vm.shipY = 300;
-        vm.shipX = window.innerWidth/3;
+        vm.shipX = 0+vm.ship.w/2;
         vm.travelling = false;
     }
     vm.init();
@@ -100,21 +66,25 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
 
     vm.startTravel = function(){
         vm.travelling = true;
-        setTimeout(vm.go, TRAVEL_SPEED);
+        timeoutId = $interval(vm.go, TRAVEL_SPEED);
     }
 
     vm.go = function(){
-        if (vm.travelling){
-            vm.travel()
-            setTimeout(vm.go, TRAVEL_SPEED);
-        }  // else stop going
+        if (vm.travelling) vm.travel();
+        else if (typeof timeoutId !== 'undefined') vm.stopTravel();
+    }
+
+    // PRIVATE FUNCTION
+    var cancelInterval = function() {
+        var result = $interval.cancel(timeoutId);
+        if (result == true) timeoutId = undefined;
     }
 
     vm.stopTravel = function(){
         vm.travelling = false;
+        cancelInterval();
     }
     $scope.$on('switchToModule', function(switchingTo){
-        vm.stopTravel();
     });
 
     vm.toggleTravel = function(){
@@ -131,33 +101,63 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     }
 
     vm.travel = function(){
-        data.travel();
+        if (data.fuel >= data.fuelExpense) {
+            data.travel();
 
-        vm.tiles.forEach(function(tile){
-            tile.travel();
-        });
-
-        // remove old offscreen tiles
-        while(vm.tiles[0].hasTravelledOffscreen()){
-            vm.tiles.splice(0, 1);  // remove leftmost tile
-            console.log('tile removed');
-        }
-
-        // append new bg tiles if needed
-        var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
-        while (overhang < 100){
-            vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
-            overhang = vm.tiles[vm.tiles.length -1].getOverhang();
-            console.log('tile added');
-        }
-
-        var shipW = 150;
-        for (var loc in data.locations){
-            var pos = data.locations[loc];
-            if (pos - vm.shipX - shipW/2 < data.distanceTraveled && data.visited.indexOf(loc) < 0){  // passing & not yet visited
-                data.visited.push(loc);
-                $scope.$emit('switchToModule', 'shop');
+            // move ship to optimal screen position
+            if (vm.shipX < vm._getIdealShipPos()) {
+                vm.shipX += 1;
+                vm.data.distanceTraveled += 1
+            } else {
+                vm.shipX = vm._getIdealShipPos();
             }
+
+            // move the tiles
+            vm.tiles.forEach(function (tile) {
+                tile.travel();
+            });
+
+            // remove old offscreen tiles
+            while (vm.tiles[0].hasTravelledOffscreen()) {
+                vm.tiles.splice(0, 1);  // remove leftmost tile
+                console.log('tile removed');
+            }
+
+            // append new bg tiles if needed
+            var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
+            while (overhang < 100) {
+                vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
+                overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
+                console.log('tile added');
+            }
+
+            // handle arrival at stations/events
+            for (var loc_i in data.locations){
+                var pos = data.locations[loc_i].x;
+                var loc = data.locations[loc_i].name;
+                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0) {  // passing & not yet visited
+                    data.visited.push(loc);
+                    console.log('arrived at ', loc);
+                    data.locations[loc_i].trigger({'$scope':$scope})
+                }
+            }
+
+            // handle random events
+            // TODO: if is a good time/place for an event
+            if (randyTime > MIN_TRAVELS_PER_EVENT){
+                if (randy.roll()){
+                    randyTime = 0
+                } else {
+                    randyTime = MIN_TRAVELS_PER_EVENT/EVENT_VARIABILITY
+                }
+            } else {
+                randyTime += 1
+            }
+        }
+        // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
+        else { // end game
+            vm.stopTravel();
+            data.end();
         }
     }
 
@@ -174,31 +174,27 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         return height;
     }
 
-    vm.drawSprite = function(location, Xposition){
-        // draws location if in view at global Xposition
-        var spriteW = 500;  // max sprite width (for checking when to draw)
-
+    vm.drawSprite = function(location){
+        // draws location sprite if in view at global Xposition
         // if w/in reasonable draw distance
+        var spriteW = 500;  // max sprite width (for checking when to draw)
+        var Xposition = location.x + vm.shipX;
+
+
         if (data.distanceTraveled + window.innerWidth + spriteW > Xposition    // if close enough
             && data.distanceTraveled - spriteW < Xposition                  ) { // if we haven't passed it
-            if (location in vm.sprites){  // if sprite already in current sprites
-                var rel_x = Xposition-data.distanceTraveled;
-                vm.sprites[location].x = rel_x
-                // use existing y value (add small bit of drift)
-                vm.sprites[location].y = vm.drift(vm.sprites[location].y);
-                vm.sprites[location].draw(vm.ctx)
-            } else {
-                // get random y value and add to list of current sprites
-                vm.sprites[location] = new Sprite('/the-oregon-trajectory/assets/sprites/station_sheet.png', -1000, Math.random()*200+200);
-            }
-            // TODO: remove sprites once we're done with them..
+            location.sprite.y = vm.drift(location.sprite.y);
+            var rel_x = Xposition-data.distanceTraveled;
+            location.sprite.x = rel_x;
+            // use existing y value (add small bit of drift)
+            location.sprite.draw(vm.ctx)
         }
     }
 
     vm.drawLocations = function(){
-        for (var loc in data.locations){
-            var pos = data.locations[loc];
-            vm.drawSprite(loc, pos);
+        for (var loc_i in data.locations){
+
+            vm.drawSprite(data.locations[loc_i]);
         }
     }
 
@@ -209,10 +205,8 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
     }
 
     vm.drawShip = function(){
-        var shipW = 150, shipH = 338;
         vm.shipY = vm.drift(vm.shipY);
-        vm.shipX = window.innerWidth/3;
-        vm.ctx.drawImage(vm.shipImg, vm.shipX-shipW/2, vm.shipY-shipH/2);
+        vm.ship.draw(vm.ctx, vm.shipX, vm.shipY)
     }
 
     vm.draw = function(){
@@ -223,6 +217,21 @@ app.controller("travelScreenController", ['$scope', 'data', function($scope, dat
         vm.drawShip();
     }
     $scope.$on('draw', vm.draw);
+
+    vm._getIdealShipPos = function(){
+        return window.innerWidth / 3
+    }
+
+    $scope.$on('encounter', function(event, args){
+        // on random encounter
+        console.log('adding encounter:', event, args);
+        // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
+        vm.data.locations.push(new Location(
+            args.name + '_' + args.count,
+            vm.data.distanceTraveled + window.innerWidth + 300,
+            event.name
+        ));
+    });
 }]);
 
 module.exports = angular.module('travel-screen').name;

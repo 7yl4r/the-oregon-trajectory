@@ -1,0 +1,8 @@
+<ul ng-controller="audioController as audioCtrl">
+    <li>
+        <a href="" ng-click="audioCtrl.toggleMute()">
+            <span ng-show="!audioCtrl.muted">mute</span>
+            <span ng-show="audioCtrl.muted">unmute</span>
+        </a>
+    </li>
+</ul>

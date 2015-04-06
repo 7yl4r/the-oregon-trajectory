@@ -2,13 +2,14 @@
 
 [![Join the chat at https://gitter.im/7yl4r/the-oregon-trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[University of Earth-L4's entry for NASA SpaceApps 2198 challenge - 200 years of space habitation history](https://2015.spaceappschallenge.org/challenge/asteroids-2025-2100-future-history/)
+
 Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home. Recommended for entities human-age-equivalent-rating 12 and up.
 
 ### [CLICK HERE TO PLAY!](http://7yl4r.github.io/the-oregon-trajectory/) ###
+![screenshot](http://i.imgur.com/jK6kihi.png)
 
-![launch](http://i.imgur.com/a7GD71v.png)
-
-Released: 2290
+Released: 2298
 
 Genre: Adventure, Educational, Simulation
 
@@ -20,8 +21,9 @@ Educational: Planetology, History
 
 ![map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/map-bg-med.jpg)
 
-[gameplay storyboard on google slides](https://docs.google.com/presentation/d/1ihHx87kblOmQkT12vq68Q_uwOBYdLQET56Rgdd7GUQY/edit?usp=sharing)
+[read more about it on the wiki!](https://github.com/7yl4r/the-oregon-trajectory/wiki)
 
+![launch](http://i.imgur.com/a7GD71v.png)
 -------------------------------------------------------------------------------------------------
 
 # Begin Historical Role-Play #
@@ -36,7 +38,7 @@ The "trail" will be loosely based on realistic constraints, but we'll do a bit o
  * lava tubes
  * lagrange points
 
- ![trajectory](http://i.imgur.com/owPzscY.png)
+ ![trajectory](http://i.imgur.com/ZEGio4D.png)
 
 # Dev Details #
 These are up for discussion, but here are my tentative thoughts:

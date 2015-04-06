@@ -1,6 +1,6 @@
 {
     "name": "the-oregon-trajectory",
-    "version": "0.0.3",
+    "version": "0.0.5",
     "description": "An old-timey retelling of the mass terrestrial exodus in the 21st century.",
     "bugs": {
         "url": "https://github.com/7yl4r/the-oregon-trail/issues",
@@ -44,9 +44,15 @@
         "ngTouch": {
             "depends": "angular",
             "exports": "angular.module('ngTouch').name"
+        },
+        "howler": {
+            "exports": "Howl"
         }
     },
     "browser":{
+        "debris-encounter":"./ng-modules/debrisEncounter/debrisEncounter.coffee",
+        "audio-controls": "./ng-modules/audioControls/audioControls.js",
+        "maneuver-screen": "./ng-modules/maneuverScreen/maneuverScreen.js",
         "game-over":"./ng-modules/gameOver/gameOver.js",
         "travel-screen":"./ng-modules/travelScreen/travelScreen.coffee",
         "header-navbar": "./ng-modules/navHeader/navHeader.js",
@@ -57,12 +63,14 @@
         "shop": "./ng-modules/shop/shop.js",
         "you-win": "./ng-modules/youWin/youWin.js",
         "game": "./ng-modules/game.coffee",
+        "nodule": "./ng-modules/Nodule.coffee",
 
         "ng-hold": "./ng-modules/ngHold.js",
 
         "angular": "./node_modules/angular/angular.min.js",
         "ui.bootstrap": "./node_modules/angular-bootstrap/dist/ui-bootstrap.min.js",
         "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",
-        "fastclick": "./node_modules/fastclick/build/fastclick.min.js"
+        "fastclick": "./node_modules/fastclick/build/fastclick.min.js",
+        "howler": "./lib/howler.min.js"
     }
 }

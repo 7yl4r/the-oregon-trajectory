@@ -19,13 +19,15 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             name: 'Rocket Fuel',
             description: "You won't get very far without this.",
             price: 2,
-            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+
+            image: data.gameDir + "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "fuel"
         },{
             name: 'Rations',
             description: "Not just freeze-dried ice cream.",
             price: 1,
-            image: "/the-oregon-trajectory/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
+
+            image: data.gameDir + "/assets/Flat-UI-master/img/icons/png/Infinity-Loop.png",
             key: "rations"
         }
     ];
@@ -66,7 +68,7 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
             return "item-container-selected";
         }
         return '';
-    }
+    };
 }]);
 
 module.exports = angular.module('shop').name;

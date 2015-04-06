@@ -1,11 +1,19 @@
 # jquery must be loaded before this...
 require('angular')
 require('fastclick')
+require('howler')
+
+# show warning before navigating from the page
+window.onbeforeunload = () ->
+    return 'You will lose your progress!'
 
 # "main" controller
 `
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('debris-encounter'),
+        require('audio-controls'),
+        require('maneuver-screen'),
         require('game-over'),
         require('ui.bootstrap'),
         require('ngTouch'),
@@ -22,11 +30,30 @@ var app = angular.module('the-oregon-trajectory', [
     }
 );
 
-app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
-    vm = this;
+app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
+    var vm = this;
     vm.active_module = 'main-menu';
 
     vm.MSPF = 100;  // ms per frame
+
+    vm.music = new Howl({
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg']
+    });
+    vm.music.play();
+
+    vm.musicVol = 0.9;
+    vm.MUSIC_FADE_TIME = 300;
+
+    vm.changeMusicTo = function(event, newMusicObj){
+        //console.log('switching music to', newMusicObj, 'from', vm.music);
+        vm.music.fadeOut(0, vm.MUSIC_FADE_TIME);
+
+        newMusicObj.fadeIn(vm.musicVol, vm.MUSIC_FADE_TIME);
+        // keep reference to playing music
+        vm.music = newMusicObj;
+    }
+    $scope.$on('changeMusicTo', vm.changeMusicTo);
+
     //vm.submodules = [];  // secondary modules which are also active (NYI)
     vm.switchToModule = function(event, newModuleName){
         // enables switching between modules
@@ -39,10 +66,10 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
         } else {
             $('.game-module').hide();
             active_element.show();
+            $("html, body").animate({ scrollTop: 0 }, "fast");
         }
     }
     $scope.$on('switchToModule', vm.switchToModule);  // module switching via events
-    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
 
     vm.moduleIsActive = function(magicStr){
         // returns true if module identified by magicStr should be active currently
@@ -67,6 +94,7 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal) {
         $scope.$broadcast('draw');
         setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
     }
+    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
     vm.scheduleDraw();  // do first draw
 }]);
 
