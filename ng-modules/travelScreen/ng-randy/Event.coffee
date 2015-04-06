@@ -10,6 +10,5 @@ module.exports = class Event
 
     trigger: ()->
         @count += 1
-        console.log(@type, ':', @name, ' triggered')
         @scope.$broadcast(@type, [@name, @args])
-# or should this be $emit?
+        #TODO or should this be $emit?
