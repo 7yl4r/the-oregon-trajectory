@@ -1,0 +1,52 @@
+<div class="container" ng-controller="debrisEncounterController as debrisCtrl">
+    <div ng-show="debrisCtrl.step=='encounter'">
+        your sensors indicate a near pass with some space debris incoming!
+
+        <ul>
+            <li>differential velocity: {{debrisCtrl.debrisVelocity}}m/s</li>
+            <li>distance of encounter: {{debrisCtrl.debrisIntersectDistance}}m</li>
+            <li>certainty of trajectory: {{debrisCtrl.debrisCertainty}}</li>
+
+            <li>cross-sectional area: {{debrisCtrl.debrisSize}}m</li>
+            <li>object density: {{debrisCtrl.debrisDensity}}kg/L</li>
+        </ul>
+
+        What would you like to do?
+        <ul>
+            <li><button class="btn btn-inverse" ng-click="debrisCtrl.harvest()">
+                match velocity and search the debris (fuel cost: {{debrisCtrl.rendevousCost}})
+            </button></li>
+            <li><button class="btn btn-inverse" ng-click="debrisCtrl.avoid()">
+                deviate course to be sure to avoid the debris
+            </button></li>
+            <li><button class="btn btn-inverse" ng-click="debrisCtrl.ignore()">
+                ignore the debris and continue on course
+            </button></li>
+        </ul>
+    </div>
+    <div ng-show="debrisCtrl.step=='harvest'">
+        This appears to be the remains of communications satellite.
+        The old technology is not much of use to you here, but there is a small amount of fuel on board.
+
+        <ul>
+            <li>+{{debrisCtrl.debrisFuel}} fuel</li>
+        </ul>
+
+        <li><button class="btn btn-inverse" ng-click="debrisCtrl.continueTravels()">
+            continue
+        </button></li>
+
+    </div>
+    <div ng-show="debrisCtrl.step=='collide'">
+        Plink! The crew falls silent, each wondering if they had imagined the sound. It is the sound of
+        an astronaut's nightmare, the metallic ping as something...
+        Clank! This time it was unmistakable, something has just struck your ship's hull.
+        High velocity collisions can slice through ship hulls like butter.
+        You have gotten very lucky this time though, it seems. The crew remains on edge for the next hour,
+        but further inspection shows no damage to your ship.
+        <li><button class="btn btn-inverse" ng-click="debrisCtrl.continueTravels()">
+            continue
+        </button></li>
+
+    </div>
+</div

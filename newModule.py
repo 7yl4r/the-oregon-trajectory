@@ -2,7 +2,7 @@ import os
 import fileinput
 
 CONTROLLER_TEMPLATE = """require('angular');
-Howl = require('holwer');    // for sounds (if you need them)
+Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 
 var app = angular.module('{0}', []);

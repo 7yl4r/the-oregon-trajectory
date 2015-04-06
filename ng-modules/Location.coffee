@@ -13,7 +13,7 @@ module.exports = class Location
                 @_handleStationArrival(args)
             when "encounter"
                 console.log('arrived at encounter', @)
-                alert('arrived at procedurally generated encounter!')
+                args.$scope.$emit('switchToModule', 'debris-encounter')
 
     _handleStationArrival: (args)->
         # TODO: station-specific stuff like
