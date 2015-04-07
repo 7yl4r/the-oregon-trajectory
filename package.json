@@ -1,77 +1,75 @@
 {
-    "name": "the-oregon-trajectory",
-    "version": "0.0.5",
-    "description": "An old-timey retelling of the mass terrestrial exodus in the 21st century.",
-    "bugs": {
-        "url": "https://github.com/7yl4r/the-oregon-trail/issues",
-        "email": "murray.tylar@gmail.com"
+  "name": "the-oregon-trajectory",
+  "version": "0.0.5",
+  "description": "An old-timey retelling of the mass terrestrial exodus in the 21st century.",
+  "bugs": {
+    "url": "https://github.com/7yl4r/the-oregon-trail/issues",
+    "email": "murray.tylar@gmail.com"
+  },
+  "contributors": [
+    "https://github.com/7yl4r/the-oregon-trajectory/graphs/contributors"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/7yl4r/the-oregon-trajectory.git"
+  },
+  "dependencies": {
+    "coffee-script": "~1.4.0",
+    "less": "~1.7.5",
+    "browserify": "~9.0.3",
+    "browserify-shim": "~3.8.3",
+    "angular": "~1.3.14",
+    "fastclick": "~0.6.7",
+    "angular-bootstrap": "~0.12.0",
+    "angular-touch": "~1.3.14",
+    "coffeeify": "~1.0.0",
+    "jquery": "~2.1.3"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "fastclick": {
+      "exports": "FastClick"
     },
-    "contributors": [
-        "https://github.com/7yl4r/the-oregon-trajectory/graphs/contributors"
-    ],
-    "repository" : {
-        "type" : "git",
-        "url" : "https://github.com/7yl4r/the-oregon-trajectory.git"
+    "angular": {
+      "exports": "angular"
     },
-    "dependencies": {
-        "coffee-script": "~1.4.0",
-        "less": "~1.7.5",
-        "browserify": "~9.0.3",
-        "browserify-shim": "~3.8.3",
-        "angular": "~1.3.14",
-        "fastclick": "~0.6.7",
-        "angular-bootstrap": "~0.12.0",
-        "angular-touch": "~1.3.14",
-        "coffeeify": "~1.0.0",
-        "jquery": "~2.1.3"
+    "ui.bootstrap": {
+      "depends": "angular",
+      "exports": "angular.module('ui.bootstrap').name"
     },
-    "browserify": {
-        "transform": [
-            "browserify-shim"
-        ]
+    "ngTouch": {
+      "depends": "angular",
+      "exports": "angular.module('ngTouch').name"
     },
-    "browserify-shim": {
-        "fastclick": {
-            "exports": "FastClick"
-        },
-        "angular": {
-            "exports": "angular"
-        },
-        "ui.bootstrap": {
-            "depends": "angular",
-            "exports": "angular.module('ui.bootstrap').name"
-        },
-        "ngTouch": {
-            "depends": "angular",
-            "exports": "angular.module('ngTouch').name"
-        },
-        "howler": {
-            "exports": "Howl"
-        }
-    },
-    "browser":{
-        "example-module":"./ng-modules/exampleModule/exampleModule.js",
-        "debris-encounter":"./ng-modules/debrisEncounter/debrisEncounter.coffee",
-        "audio-controls": "./ng-modules/audioControls/audioControls.js",
-        "maneuver-screen": "./ng-modules/maneuverScreen/maneuverScreen.js",
-        "game-over":"./ng-modules/gameOver/gameOver.js",
-        "travel-screen":"./ng-modules/travelScreen/travelScreen.coffee",
-        "header-navbar": "./ng-modules/navHeader/navHeader.js",
-        "splash-header": "./ng-modules/splashHeader/splashHeader.js",
-        "app-footer": "./ng-modules/appFooter/appFooter.coffee",
-        "social-button-directive": "./ng-modules/socialButtons/socialButtons.js",
-        "main-menu": "./ng-modules/mainMenu/mainMenu.js",
-        "shop": "./ng-modules/shop/shop.js",
-        "you-win": "./ng-modules/youWin/youWin.js",
-        "game": "./ng-modules/game.coffee",
-        "nodule": "./ng-modules/Nodule.coffee",
-
-        "ng-hold": "./ng-modules/ngHold.js",
-
-        "angular": "./node_modules/angular/angular.min.js",
-        "ui.bootstrap": "./node_modules/angular-bootstrap/dist/ui-bootstrap.min.js",
-        "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",
-        "fastclick": "./node_modules/fastclick/build/fastclick.min.js",
-        "howler": "./lib/howler.min.js"
+    "howler": {
+      "exports": "Howl"
     }
+  },
+  "browser": {
+    "example-module": "./ng-modules/exampleModule/exampleModule.js",
+    "debris-encounter": "./ng-modules/debrisEncounter/debrisEncounter.coffee",
+    "audio-controls": "./ng-modules/audioControls/audioControls.js",
+    "maneuver-screen": "./ng-modules/maneuverScreen/maneuverScreen.js",
+    "game-over": "./ng-modules/gameOver/gameOver.js",
+    "travel-screen": "./ng-modules/travelScreen/travelScreen.coffee",
+    "header-navbar": "./ng-modules/navHeader/navHeader.js",
+    "splash-header": "./ng-modules/splashHeader/splashHeader.js",
+    "app-footer": "./ng-modules/appFooter/appFooter.coffee",
+    "social-button-directive": "./ng-modules/socialButtons/socialButtons.js",
+    "main-menu": "./ng-modules/mainMenu/mainMenu.js",
+    "shop": "./ng-modules/shop/shop.js",
+    "you-win": "./ng-modules/youWin/youWin.js",
+    "game": "./ng-modules/game.coffee",
+    "nodule": "./ng-modules/Nodule.coffee",
+    "ng-hold": "./ng-modules/ngHold.js",
+    "angular": "./node_modules/angular/angular.min.js",
+    "ui.bootstrap": "./node_modules/angular-bootstrap/dist/ui-bootstrap.min.js",
+    "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",
+    "fastclick": "./node_modules/fastclick/build/fastclick.min.js",
+    "howler": "./lib/howler.min.js"
+  }
 }
