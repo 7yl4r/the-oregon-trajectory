@@ -50,6 +50,7 @@
         }
     },
     "browser":{
+        "example-module":"./ng-modules/exampleModule/exampleModule.js",
         "debris-encounter":"./ng-modules/debrisEncounter/debrisEncounter.coffee",
         "audio-controls": "./ng-modules/audioControls/audioControls.js",
         "maneuver-screen": "./ng-modules/maneuverScreen/maneuverScreen.js",
