@@ -3,7 +3,8 @@ Howl = require('howler')
 
 var app = angular.module('shop', [
     require('ng-hold'),
-    require('game')
+    require('game'),
+    require('game-btn')
 ]);
 
 app.directive("shop", function() {
