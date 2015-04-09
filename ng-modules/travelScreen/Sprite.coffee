@@ -32,6 +32,11 @@ module.exports = class Sprite
                 @max_frames = 0
                 @scale = 0.3 + Math.random()*0.2
                 @r = Math.random()*Math.PI*2
+            when "maneuver-node"
+                @h = 100
+                @w = 140
+                @max_frames = 5
+                @scale = 1
 
     next_frame: ()->
         @frame_n += 1

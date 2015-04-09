@@ -2,7 +2,9 @@ require('angular');
 require('howler');
 Nodule = require('nodule');
 
-var app = angular.module('main-menu', []);
+var app = angular.module('main-menu', [
+    require('game-btn')
+]);
 
 app.directive("mainMenu", function() {
     return {

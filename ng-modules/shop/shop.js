@@ -1,8 +1,10 @@
 require('angular');
+Howl = require('howler')
 
 var app = angular.module('shop', [
     require('ng-hold'),
-    require('game')
+    require('game'),
+    require('game-btn')
 ]);
 
 app.directive("shop", function() {
@@ -69,6 +71,14 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
         }
         return '';
     };
+
+    this.toSpace = function(){
+        var sound = new Howl({
+            urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+        });
+        sound.play();
+        $scope.$emit('switchToModule', 'travel-screen');
+    }
 }]);
 
 module.exports = angular.module('shop').name;

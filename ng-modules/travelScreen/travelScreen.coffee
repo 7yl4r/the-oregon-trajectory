@@ -15,7 +15,8 @@ EVENT_VARIABILITY = 10  # affects consistency in event timing. high values = les
 `
 var app = angular.module('travel-screen', [
     require('ng-hold'),
-    require('game')
+    require('game'),
+    require('game-btn')
 ]);
 
 app.directive("travelScreen", function() {

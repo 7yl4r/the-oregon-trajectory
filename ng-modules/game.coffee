@@ -4,12 +4,34 @@ Location = require('./Location.coffee')
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
+MOON_DIST_PIX = 33000
+MOON_DIST_AU  = 0.003
+PIX_2_AU = MOON_DIST_AU/MOON_DIST_PIX
+AU_2_PIX = MOON_DIST_PIX/MOON_DIST_AU
+
+DIST_ISS         = 1000
+DIST_MOON_MANU   = parseInt(DIST_ISS + .0015*AU_2_PIX)
+DIST_MOON        = parseInt(DIST_MOON_MANU + .0015*AU_2_PIX)
+DIST_MARS_MANU   = parseInt(DIST_MOON + 1.9608*AU_2_PIX)
+DIST_MARS        = parseInt(DIST_MARS_MANU + 1.9608*AU_2_PIX)
+DIST_CERES_MANU  = parseInt(DIST_MARS + 1.6243*AU_2_PIX)
+DIST_CERES       = parseInt(DIST_CERES_MANU + 1.6243*AU_2_PIX)
+DIST_EUROPA_MANU = parseInt(DIST_CERES + 3.2486*AU_2_PIX)
+DIST_EUROPA      = parseInt(DIST_EUROPA_MANU + 3.2486*AU_2_PIX)
+
 class Game
     constructor: (gameScope)->
         @scope = gameScope
         @locations = [
-            new Location("iss", 1500, "station"),
-            new Location("moon", 7000, "station")
+            new Location("iss", DIST_ISS, "station"),
+            new Location("moon-maneuver", DIST_MOON_MANU, "maneuver"),
+            new Location("moon", DIST_MOON, "station"),
+            new Location("mars-maneuver", DIST_MARS_MANU, "maneuver"),
+            new Location("mars", DIST_MARS, "station"),
+            new Location("ceres-maneuver", DIST_CERES_MANU, "maneuver"),
+            new Location("ceres", DIST_CERES, "station"),
+            new Location("europa-maneuver", DIST_EUROPA_MANU, "maneuver"),
+            new Location("europa", DIST_EUROPA, "station")
         ]
         @gameDir = "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
@@ -98,17 +120,12 @@ class Game
 
     # === "private" methods ===
     _getRemainingLocations: ()->
-        # returns obj with aligned arrays of locations & distances not yet reached
-        locNames = []
-        locDists = []
-        for key of @locations
-            if @locations[key] > @distanceTraveled
-                locNames.push(key)
-                locDists.push(@locations[key])
-        return {
-        "names": locNames,
-        "distances": locDists
-        }
+        # returns array of locations not yet reached
+        remainingLocs = []
+        for location in @locations
+            if location.x > @distanceTraveled
+                remainingLocs.push(location)
+        return remainingLocs
 
     _getStatsToNextLocation: ()->
         # returns distance, location, & name of next location as dict
@@ -124,12 +141,12 @@ class Game
 
         # get minimum of remaining locations
         next = {}
-        next.location = remaining.distances[0]
-        next.name     = remaining.names[0]
-        for i of remaining.distances
-            if remaining.distances[i] < next.distance  # assumes no equal distances
-                next.location = remaining.distances[i]
-                next.name = remaining.names[i]
+        next.location = remaining[0].x
+        next.name     = remaining[0].name
+        for i of remaining
+            if remaining[i].x < next.distance  # assumes no equal distances
+                next.location = remaining[i].x
+                next.name = remaining[i].name
 
             # calculate distance remaining before arrival
         next.distance = next.location - @distanceTraveled

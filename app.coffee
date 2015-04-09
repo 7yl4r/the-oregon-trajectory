@@ -11,6 +11,7 @@ window.onbeforeunload = () ->
 `
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('example-module'),
         require('debris-encounter'),
         require('audio-controls'),
         require('maneuver-screen'),
@@ -36,8 +37,10 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
 
     vm.MSPF = 100;  // ms per frame
 
+    // first round of music must be started manually (I don't know why)
     vm.music = new Howl({
-        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg']
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+        loop: true
     });
     vm.music.play();
 
