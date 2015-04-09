@@ -6,7 +6,7 @@ var app = angular.module('game-btn', []);
 app.directive("gameBtn", function() {
     return {
         restrict: 'AE',
-        templateUrl: "/ng-modules/gameBtn/gameBtn.html",
+        templateUrl: "/the-oregon-trajectory/ng-modules/gameBtn/gameBtn.html",
         transclude: true, // transclusion instructs angular to embed the original content from the DOM into the resultant output
         scope: {
             text:'@'

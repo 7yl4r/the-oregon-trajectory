@@ -8,7 +8,7 @@ var app = angular.module('example-module', []);
 app.directive("exampleModule", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/exampleModule/exampleModule.html"
+        templateUrl: "/the-oregon-trajectory/ng-modules/exampleModule/exampleModule.html"
     };
 });
 
