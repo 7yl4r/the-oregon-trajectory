@@ -12,6 +12,7 @@ window.onbeforeunload = function() {
 
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('example-module'),
         require('debris-encounter'),
         require('audio-controls'),
         require('maneuver-screen'),
@@ -37,8 +38,10 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
 
     vm.MSPF = 100;  // ms per frame
 
+    // first round of music must be started manually (I don't know why)
     vm.music = new Howl({
-        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg']
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+        loop: true
     });
     vm.music.play();
 
@@ -147,7 +150,7 @@ var isOldBrowser;
 
 
 
-},{"angular":25,"app-footer":5,"audio-controls":6,"debris-encounter":7,"fastclick":26,"game-over":9,"header-navbar":12,"howler":2,"main-menu":10,"maneuver-screen":11,"ngTouch":24,"shop":14,"splash-header":16,"travel-screen":21,"ui.bootstrap":23,"you-win":22}],2:[function(require,module,exports){
+},{"angular":27,"app-footer":5,"audio-controls":6,"debris-encounter":7,"example-module":8,"fastclick":28,"game-over":11,"header-navbar":14,"howler":2,"main-menu":12,"maneuver-screen":13,"ngTouch":26,"shop":16,"splash-header":18,"travel-screen":23,"ui.bootstrap":25,"you-win":24}],2:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!
@@ -198,6 +201,8 @@ module.exports = Location = (function() {
         return new Sprite('assets/sprites/station_sheet.png', "station1", -1000, Math.random() * 200 + 200);
       case "encounter":
         return new Sprite('assets/sprites/debris-satellite.png', "satelite-debris-1", -1000, Math.random() * 200 + 200);
+      case "maneuver":
+        return new Sprite('assets/sprites/maneuver-node/sprites.png', "maneuver-node", -1000, 300);
     }
   };
 
@@ -207,7 +212,7 @@ module.exports = Location = (function() {
 
 
 
-},{"./travelScreen/Sprite.coffee":17}],4:[function(require,module,exports){
+},{"./travelScreen/Sprite.coffee":19}],4:[function(require,module,exports){
 var Nodule;
 
 module.exports = Nodule = (function() {
@@ -264,7 +269,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":25}],6:[function(require,module,exports){
+},{"angular":27}],6:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -293,7 +298,7 @@ app.controller("audioController", function(){
 });
 
 module.exports = angular.module('audio-controls').name;
-},{"angular":25,"howler":2}],7:[function(require,module,exports){
+},{"angular":27,"howler":2}],7:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -334,12 +339,12 @@ app.controller("debrisEncounterController", [
     this.nodule = new Nodule($rootScope, 'debris-encounter', this.onEntry);
     this.getCostToRendevous = (function(_this) {
       return function() {
-        return parseInt(_this.debrisVelocity + _this.debrisIntersectDistance * 0.2) * 0.02;
+        return parseInt((_this.debrisVelocity + _this.debrisIntersectDistance * 0.2) * 0.02);
       };
     })(this);
     this.getCostToAvoid = (function(_this) {
       return function() {
-        return parseInt(_this.MAX_DISTANCE * 1.1 - _this.debrisIntersectDistance * 0.2) * 0.02;
+        return parseInt((_this.MAX_DISTANCE * 1.1 - _this.debrisIntersectDistance * 0.2) * 0.02);
       };
     })(this);
     this.getFuelReward = (function(_this) {
@@ -390,8 +395,45 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":25,"howler":2,"nodule":4}],8:[function(require,module,exports){
-var Game, Location, app;
+},{"angular":27,"howler":2,"nodule":4}],8:[function(require,module,exports){
+require('angular');
+Nodule = require('nodule');  // for nodule helpers
+
+// init the angular app
+var app = angular.module('example-module', []);
+
+// set up the "directive" to connect html view to this
+app.directive("exampleModule", function() {
+    return {
+        restrict: 'E',
+        templateUrl: "/the-oregon-trajectory/ng-modules/exampleModule/exampleModule.html"
+    };
+});
+
+// set up the actual controller
+app.controller("exampleController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+    // use vm (short for "virtual model") to keep a reference
+    var vm = this;
+    vm.exampleProperty = "before entry";
+
+    vm.onEnter = function(){
+        // runs when the module is brought into player view
+        vm.exampleProperty = "after entry";
+    }
+
+    // nodule helps attach init. and teardown functions to events (and a few other things)
+    vm.nodule = new Nodule($rootScope, 'example-module', vm.onEntry);
+
+    vm.buttonClick = function(){
+        // this function is triggered by the button
+        vm.exampleProperty = "after click"
+    }
+}]);
+
+// this is needed to connect with the main app.
+module.exports = angular.module('example-module').name;
+},{"angular":27,"nodule":4}],9:[function(require,module,exports){
+var AU_2_PIX, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, Game, Location, MOON_DIST_AU, MOON_DIST_PIX, PIX_2_AU, app;
 
 require('angular');
 
@@ -401,10 +443,36 @@ window.TRAVEL_SPEED = 1;
 
 window.TRAVELS_PER_MOVE = 5;
 
+MOON_DIST_PIX = 33000;
+
+MOON_DIST_AU = 0.003;
+
+PIX_2_AU = MOON_DIST_AU / MOON_DIST_PIX;
+
+AU_2_PIX = MOON_DIST_PIX / MOON_DIST_AU;
+
+DIST_ISS = 1000;
+
+DIST_MOON_MANU = parseInt(DIST_ISS + .0015 * AU_2_PIX);
+
+DIST_MOON = parseInt(DIST_MOON_MANU + .0015 * AU_2_PIX);
+
+DIST_MARS_MANU = parseInt(DIST_MOON + 1.9608 * AU_2_PIX);
+
+DIST_MARS = parseInt(DIST_MARS_MANU + 1.9608 * AU_2_PIX);
+
+DIST_CERES_MANU = parseInt(DIST_MARS + 1.6243 * AU_2_PIX);
+
+DIST_CERES = parseInt(DIST_CERES_MANU + 1.6243 * AU_2_PIX);
+
+DIST_EUROPA_MANU = parseInt(DIST_CERES + 3.2486 * AU_2_PIX);
+
+DIST_EUROPA = parseInt(DIST_EUROPA_MANU + 3.2486 * AU_2_PIX);
+
 Game = (function() {
   function Game(gameScope) {
     this.scope = gameScope;
-    this.locations = [new Location("iss", 1500, "station"), new Location("moon", 7000, "station")];
+    this.locations = [new Location("iss", DIST_ISS, "station"), new Location("moon-maneuver", DIST_MOON_MANU, "maneuver"), new Location("moon", DIST_MOON, "station"), new Location("mars-maneuver", DIST_MARS_MANU, "maneuver"), new Location("mars", DIST_MARS, "station"), new Location("ceres-maneuver", DIST_CERES_MANU, "maneuver"), new Location("ceres", DIST_CERES, "station"), new Location("europa-maneuver", DIST_EUROPA_MANU, "maneuver"), new Location("europa", DIST_EUROPA, "station")];
     this.gameDir = "/the-oregon-trajectory";
     this._init();
   }
@@ -497,31 +565,28 @@ Game = (function() {
   };
 
   Game.prototype._getRemainingLocations = function() {
-    var key, locDists, locNames;
-    locNames = [];
-    locDists = [];
-    for (key in this.locations) {
-      if (this.locations[key] > this.distanceTraveled) {
-        locNames.push(key);
-        locDists.push(this.locations[key]);
+    var j, len, location, ref, remainingLocs;
+    remainingLocs = [];
+    ref = this.locations;
+    for (j = 0, len = ref.length; j < len; j++) {
+      location = ref[j];
+      if (location.x > this.distanceTraveled) {
+        remainingLocs.push(location);
       }
     }
-    return {
-      "names": locNames,
-      "distances": locDists
-    };
+    return remainingLocs;
   };
 
   Game.prototype._getStatsToNextLocation = function() {
     var i, next, remaining;
     remaining = this._getRemainingLocations();
     next = {};
-    next.location = remaining.distances[0];
-    next.name = remaining.names[0];
-    for (i in remaining.distances) {
-      if (remaining.distances[i] < next.distance) {
-        next.location = remaining.distances[i];
-        next.name = remaining.names[i];
+    next.location = remaining[0].x;
+    next.name = remaining[0].name;
+    for (i in remaining) {
+      if (remaining[i].x < next.distance) {
+        next.location = remaining[i].x;
+        next.name = remaining[i].name;
       }
     }
     next.distance = next.location - this.distanceTraveled;
@@ -561,7 +626,35 @@ module.exports = angular.module('game').name;
 
 
 
-},{"./Location.coffee":3,"angular":25}],9:[function(require,module,exports){
+},{"./Location.coffee":3,"angular":27}],10:[function(require,module,exports){
+require('angular');
+require('howler');
+
+var app = angular.module('game-btn', []);
+
+app.directive("gameBtn", function() {
+    return {
+        restrict: 'AE',
+        templateUrl: "/the-oregon-trajectory/ng-modules/gameBtn/gameBtn.html",
+        transclude: true, // transclusion instructs angular to embed the original content from the DOM into the resultant output
+        scope: {
+            text:'@'
+        },
+        link: function($scope, $el, $attr){
+
+        }
+    };
+});
+
+app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
+    var vm = this;
+    vm.clickSound = new Howl({
+        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+    });
+}]);
+
+module.exports = angular.module('game-btn').name;
+},{"angular":27,"howler":2}],11:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('game-over', []);
@@ -574,12 +667,14 @@ app.directive("gameOver", function() {
 });
 
 module.exports = angular.module('game-over').name;
-},{"angular":25}],10:[function(require,module,exports){
+},{"angular":27}],12:[function(require,module,exports){
 require('angular');
 require('howler');
 Nodule = require('nodule');
 
-var app = angular.module('main-menu', []);
+var app = angular.module('main-menu', [
+    require('game-btn')
+]);
 
 app.directive("mainMenu", function() {
     return {
@@ -612,7 +707,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
 }]);
 
 module.exports = angular.module('main-menu').name;
-},{"angular":25,"howler":2,"nodule":4}],11:[function(require,module,exports){
+},{"angular":27,"game-btn":10,"howler":2,"nodule":4}],13:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -643,7 +738,7 @@ app.controller('ManeuverScreenCtrl', function($scope){
 
 module.exports = angular.module('maneuver-screen').name;
 
-},{"angular":25}],12:[function(require,module,exports){
+},{"angular":27}],14:[function(require,module,exports){
 require('angular');
 
 
@@ -657,7 +752,7 @@ app.directive("navHeader", function() {
 });
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":25}],13:[function(require,module,exports){
+},{"angular":27}],15:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -746,12 +841,14 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":25}],14:[function(require,module,exports){
+},{"angular":27}],16:[function(require,module,exports){
 require('angular');
+Howl = require('howler')
 
 var app = angular.module('shop', [
     require('ng-hold'),
-    require('game')
+    require('game'),
+    require('game-btn')
 ]);
 
 app.directive("shop", function() {
@@ -818,11 +915,19 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
         }
         return '';
     };
+
+    this.toSpace = function(){
+        var sound = new Howl({
+            urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+        });
+        sound.play();
+        $scope.$emit('switchToModule', 'travel-screen');
+    }
 }]);
 
 module.exports = angular.module('shop').name;
 
-},{"angular":25,"game":8,"ng-hold":13}],15:[function(require,module,exports){
+},{"angular":27,"game":9,"game-btn":10,"howler":2,"ng-hold":15}],17:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -869,7 +974,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":25}],16:[function(require,module,exports){
+},{"angular":27}],18:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -887,7 +992,7 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":25,"social-button-directive":15}],17:[function(require,module,exports){
+},{"angular":27,"social-button-directive":17}],19:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
@@ -927,6 +1032,11 @@ module.exports = Sprite = (function() {
         this.max_frames = 0;
         this.scale = 0.3 + Math.random() * 0.2;
         return this.r = Math.random() * Math.PI * 2;
+      case "maneuver-node":
+        this.h = 100;
+        this.w = 140;
+        this.max_frames = 5;
+        return this.scale = 1;
     }
   };
 
@@ -969,7 +1079,7 @@ module.exports = Sprite = (function() {
 
 
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var Tile;
 
 module.exports = Tile = (function() {
@@ -1006,7 +1116,7 @@ module.exports = Tile = (function() {
 
 
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Event;
 
 module.exports = Event = (function() {
@@ -1035,7 +1145,7 @@ module.exports = Event = (function() {
 
 
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var Event, Randy;
 
 Event = require('./Event.coffee');
@@ -1113,7 +1223,7 @@ module.exports = Randy = (function() {
 
 
 
-},{"./Event.coffee":19}],21:[function(require,module,exports){
+},{"./Event.coffee":21}],23:[function(require,module,exports){
 var EVENT_VARIABILITY, Location, MIN_TRAVELS_PER_EVENT, Nodule, Randy, Sprite, Tile;
 
 require('angular');
@@ -1135,7 +1245,8 @@ EVENT_VARIABILITY = 10;
 
 var app = angular.module('travel-screen', [
     require('ng-hold'),
-    require('game')
+    require('game'),
+    require('game-btn')
 ]);
 
 app.directive("travelScreen", function() {
@@ -1359,7 +1470,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"./../Location.coffee":3,"./Sprite.coffee":17,"./Tile.coffee":18,"./ng-randy/ng-randy.coffee":20,"angular":25,"game":8,"ng-hold":13,"nodule":4}],22:[function(require,module,exports){
+},{"./../Location.coffee":3,"./Sprite.coffee":19,"./Tile.coffee":20,"./ng-randy/ng-randy.coffee":22,"angular":27,"game":9,"game-btn":10,"ng-hold":15,"nodule":4}],24:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -1395,7 +1506,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $sco
 }]);
 
 module.exports = angular.module('you-win').name;
-},{"angular":25,"howler":2,"nodule":4}],23:[function(require,module,exports){
+},{"angular":27,"howler":2,"nodule":4}],25:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -1414,7 +1525,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":25}],24:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":27}],26:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -1438,7 +1549,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":25}],25:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":27}],27:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -1698,7 +1809,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
