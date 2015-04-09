@@ -32,3 +32,6 @@ module.exports = class Location
             when "encounter"
                 return new Sprite('assets/sprites/debris-satellite.png',
                     "satelite-debris-1", -1000, Math.random()*200+200);
+            when "maneuver"
+                return new Sprite('assets/sprites/maneuver.png',
+                    "maneuver-node", -1000, 300);
