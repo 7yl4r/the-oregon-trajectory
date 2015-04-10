@@ -35,14 +35,16 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.activeItem = this.item_consumables[0];
 
     this.buy = function(item){
-        if (item.price <= data.money){
+        var amt = parseInt(document.getElementById(item.key).value);
+        var total = amt * item.price;
+        if (total <= data.money){
             // for consumables:
             if (typeof item.key !== 'undefined') {
-                this.data[item.key] += 1
+                this.data[item.key] += amt;
             } else {
                 // TODO: apply item some other way
             }
-            this.data.money -= item.price;
+            this.data.money -= total;
         } else {
             ; // not enough money to buy!
         }
