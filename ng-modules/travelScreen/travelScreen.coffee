@@ -230,15 +230,17 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         return window.innerWidth / 3
     }
 
-    $scope.$on('encounter', function(event, args){
+    $scope.$on('encounter', function(ngEvent, event){
         // on random encounter
-        console.log('adding encounter:', event, args);
+        // NOTE: ngEvent here is the angular event, "event" is the ng-randy event... (sorry for confuzzlation)
+        console.log('adding encounter:', ngEvent, event);
         // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
         vm.data.locations.push(new Location(
-            args.name + '_' + args.count,
+            event.name + '_' + event.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
-            event.name,
-            args.doAction
+            ngEvent.name,
+            event.doAction,
+            event.sprite
         ));
     });
 }]);

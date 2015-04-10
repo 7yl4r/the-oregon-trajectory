@@ -27,6 +27,7 @@ module.exports = class Location
         #       # something else...
         args.$scope.$emit('switchToModule', 'shop')
 
+    # TODO: remove this method and actionKey attribute, sprites should be passed inTo the location now...
     _getSpriteForAction: (key)->
         switch key
             when "station"

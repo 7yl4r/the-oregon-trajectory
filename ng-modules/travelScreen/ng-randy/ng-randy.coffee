@@ -58,8 +58,8 @@ module.exports = class Randy
                     "args": {
                         "moduleName": "debris-encounter"
                     }
-                }
-                # TODO: "sprite":"getRandomDebrisSprite"
+                },
+                "sprite":"randomDebris"
             },{
                 "type": "encounter",
                 "name": "micro-meteroid",
@@ -70,12 +70,20 @@ module.exports = class Randy
                     "args": {
                         "text": "CLINK! Did you hear that?!? ... ... ... Probably nothing."
                     }
-                }
+                },
+                "sprite": "randomAsteroid"
             },{
                 "type": "encounter",
                 "name": "trading-post",
                 "criteria":{},
-                "chance": 0.5
+                "chance": 0.5,
+                "triggeredAction": {
+                    "function": "alert",
+                    "args": {
+                        "text": "hey look, a station... I sure wish some programmers would implement something for that..."
+                    }
+                },
+                "sprite":"randomStation"
             }
         ]
 
