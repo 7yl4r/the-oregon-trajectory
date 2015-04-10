@@ -2,7 +2,9 @@ require('angular')
 Howl = require('howler')    # for sounds (if you need them)
 Nodule = require('nodule')  # for nodule helpers
 
-app = angular.module('debris-encounter', [])
+app = angular.module('debris-encounter', [
+    require('game-btn')
+])
 
 app.directive("debrisEncounter", ()->
     return {

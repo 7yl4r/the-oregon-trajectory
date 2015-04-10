@@ -22,16 +22,21 @@ DIST_EUROPA      = parseInt(DIST_EUROPA_MANU + 3.2486*AU_2_PIX)
 class Game
     constructor: (gameScope)->
         @scope = gameScope
+
+        # TODO: move this...
+        shopFunc = ()=>
+            @scope.$broadcast('switchToModule', 'shop')
+
         @locations = [
-            new Location("iss", DIST_ISS, "station"),
+            new Location("iss", DIST_ISS, "station", shopFunc),
             new Location("moon-maneuver", DIST_MOON_MANU, "maneuver"),
-            new Location("moon", DIST_MOON, "station"),
+            new Location("moon", DIST_MOON, "station", shopFunc),
             new Location("mars-maneuver", DIST_MARS_MANU, "maneuver"),
-            new Location("mars", DIST_MARS, "station"),
+            new Location("mars", DIST_MARS, "station", shopFunc),
             new Location("ceres-maneuver", DIST_CERES_MANU, "maneuver"),
-            new Location("ceres", DIST_CERES, "station"),
+            new Location("ceres", DIST_CERES, "station", shopFunc),
             new Location("europa-maneuver", DIST_EUROPA_MANU, "maneuver"),
-            new Location("europa", DIST_EUROPA, "station")
+            new Location("europa", DIST_EUROPA, "station", shopFunc)
         ]
         @gameDir = "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
@@ -53,6 +58,14 @@ class Game
         @money = 5000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
+        # nextWaypoint looks like:
+        # {
+        #   distance:       111,    # distance to the place
+        #   name:      "the place",
+        #   location:       333,    # absolute location of the place
+        #   fuelEstimate:   444,    # estimate of fuel to get there
+        #   rationEstimate: 555     # estimate of rations to get there
+        # }
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values

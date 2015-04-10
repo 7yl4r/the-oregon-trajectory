@@ -30,6 +30,7 @@
 #        ' ; ' ' ; ' ' ' ; ' ' ; + ; ' ; ; ; ' ; ' ' '`
 
 Event = require('./Event.coffee')
+EventList = require('./EventList.js')
 
 module.exports = class Randy
     # main class for handling random events
@@ -45,25 +46,15 @@ module.exports = class Randy
     _loadEventsFromFile: (file)->
         # loads array of events from a single file
         # TODO: get this json from files
-        eventArray = [
-            {
-                "type": "encounter",
-                "name": "space-junk",
-                "criteria": {
-                    "locations": ['earth']
-                },
-                "chance": 0.5
-            },{
-                "type": "encounter",
-                "name": "micro-meteroid",
-                "criteria":{},
-                "chance": 0.5
-            }
-        ]
+        eventArray = EventList
 
         for event in eventArray
             new_event = new Event(event, @scope)
             @events.push(new_event)
+
+    # TODO: setLocation: ()->
+    #    # modifies chance of events in event list based on given location
+    #    # TODO
 
     roll: ()->
         # :returns: true if event was triggered, else false

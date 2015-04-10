@@ -1,21 +1,34 @@
 
 module.exports = class Sprite
-    constructor: (spritesheet, name, x=0, y=0)->
+    constructor: (spritesheet, nameOrJSON, x=0, y=0)->
         # sets up new sprite using given spritesheet src centered at x & y position on canvas
+        # :y: y-value of sprite or 'random' which will set a randomized height in the game window
+        # :nameOrJSON: name used to set dimensions or else JSON object containing dimensions in following form:
+        #       {
+        #           h:64    # height of sprite
+        #           w:63    # width of sprite
+        #           max_frame: 1    # highest frame number (counting starts @ 0), defaults to 0
+        #           scale: 0.5      # scale of sprite display defaults to 1. use "random" to set random btwn 10-100%
+        #           r: 3.1415       # rotation of sprite in radians (defaults to 0) (use "random" to set random rotation)
+        #       }
         @sheet = new Image()
         @sheet.src = spritesheet
         @r = 0  # rotation
-        @setDimensions(name)
+        @setDimensions(nameOrJSON)
+        if y == 'random'
+            @y = Math.random()*200.0+200.0
+        else
+            @y = y
         @x = x
-        @y = y
         @frame_n = 0
         # for slowing animation speed
         @draws_per_frame = 50  # number of draw calls before setting new frame
         @draw_counter = 0
 
-    setDimensions: (name)->
+    setDimensions: (nameOrJSON)->
         # sets dimensions, max_frames, draws_per_frame based on name to match given sprite
-        switch name
+        # TODO: these should be read from a json file given with each sprite
+        switch nameOrJSON
             when "station1"
                 @h = 399
                 @w = 182
@@ -37,6 +50,23 @@ module.exports = class Sprite
                 @w = 140
                 @max_frames = 5
                 @scale = 1
+            else
+                # else JSON is given
+                @h = nameOrJSON.h
+                @w = nameOrJSON.w
+                @max_frames = nameOrJSON.max_frame or 0
+
+                if nameOrJSON.scale == "random"
+                    @scale = Math.random()*0.9+0.1
+                else
+                    @scale = nameOrJSON.scale or 1
+
+                if nameOrJSON.r == "random"
+                    @r = Math.PI*2.0*Math.random()
+                else
+                    @r = nameOrJSON.r or 0
+                    
+                return
 
     next_frame: ()->
         @frame_n += 1

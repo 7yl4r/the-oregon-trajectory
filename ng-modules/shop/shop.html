@@ -52,7 +52,7 @@
                         <!-- NOTE: ng-hold interval is longer for more $$$ items -->
                         <button ng-click="shop.buy(item)"
                                 ng-hold="shop.buy(item)"
-                                ng-hold-interval="100*item.price"
+                                ng-hold-interval="20*item.price"
                                 class="btn btn-inverse item-buy">
                             {{item.price | currency}}
                         </button>

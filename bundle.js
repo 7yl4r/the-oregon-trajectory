@@ -12,6 +12,7 @@ window.onbeforeunload = function() {
 
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('trader'),
         require('example-module'),
         require('debris-encounter'),
         require('audio-controls'),
@@ -150,7 +151,7 @@ var isOldBrowser;
 
 
 
-},{"angular":27,"app-footer":5,"audio-controls":6,"debris-encounter":7,"example-module":8,"fastclick":28,"game-over":11,"header-navbar":14,"howler":2,"main-menu":12,"maneuver-screen":13,"ngTouch":26,"shop":16,"splash-header":18,"travel-screen":23,"ui.bootstrap":25,"you-win":24}],2:[function(require,module,exports){
+},{"angular":29,"app-footer":5,"audio-controls":6,"debris-encounter":7,"example-module":8,"fastclick":30,"game-over":11,"header-navbar":14,"howler":2,"main-menu":12,"maneuver-screen":13,"ngTouch":28,"shop":16,"splash-header":18,"trader":19,"travel-screen":25,"ui.bootstrap":27,"you-win":26}],2:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!
@@ -174,21 +175,29 @@ var Location, Sprite;
 Sprite = require('./travelScreen/Sprite.coffee');
 
 module.exports = Location = (function() {
-  function Location(name, x, actionKey) {
+  function Location(name, x, actionKey, trigger, sprite) {
+    if (trigger == null) {
+      trigger = void 0;
+    }
+    if (sprite == null) {
+      sprite = void 0;
+    }
     this.name = name;
     this.x = x;
     this.actionKey = actionKey;
-    this.sprite = this._getSpriteForAction(actionKey);
+    if (sprite != null) {
+      this.sprite = sprite;
+    } else {
+      this.sprite = this._getSpriteForAction(actionKey);
+    }
+    if (trigger != null) {
+      this.trigger = trigger;
+    }
   }
 
   Location.prototype.trigger = function(args) {
-    switch (this.actionKey) {
-      case "station":
-        return this._handleStationArrival(args);
-      case "encounter":
-        console.log('arrived at encounter', this);
-        return args.$scope.$emit('switchToModule', 'debris-encounter');
-    }
+    console.log('arrived at event', this);
+    return console.log('you really ought to set an event trigger for this location');
   };
 
   Location.prototype._handleStationArrival = function(args) {
@@ -198,9 +207,7 @@ module.exports = Location = (function() {
   Location.prototype._getSpriteForAction = function(key) {
     switch (key) {
       case "station":
-        return new Sprite('assets/sprites/station_sheet.png', "station1", -1000, Math.random() * 200 + 200);
-      case "encounter":
-        return new Sprite('assets/sprites/debris-satellite.png', "satelite-debris-1", -1000, Math.random() * 200 + 200);
+        return new Sprite('assets/sprites/station_sheet.png', "station1", -1000, 'random');
       case "maneuver":
         return new Sprite('assets/sprites/maneuver-node/sprites.png', "maneuver-node", -1000, 300);
     }
@@ -212,7 +219,7 @@ module.exports = Location = (function() {
 
 
 
-},{"./travelScreen/Sprite.coffee":19}],4:[function(require,module,exports){
+},{"./travelScreen/Sprite.coffee":20}],4:[function(require,module,exports){
 var Nodule;
 
 module.exports = Nodule = (function() {
@@ -269,7 +276,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":27}],6:[function(require,module,exports){
+},{"angular":29}],6:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -298,7 +305,7 @@ app.controller("audioController", function(){
 });
 
 module.exports = angular.module('audio-controls').name;
-},{"angular":27,"howler":2}],7:[function(require,module,exports){
+},{"angular":29,"howler":2}],7:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -307,7 +314,7 @@ Howl = require('howler');
 
 Nodule = require('nodule');
 
-app = angular.module('debris-encounter', []);
+app = angular.module('debris-encounter', [require('game-btn')]);
 
 app.directive("debrisEncounter", function() {
   return {
@@ -395,7 +402,7 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":27,"howler":2,"nodule":4}],8:[function(require,module,exports){
+},{"angular":29,"game-btn":10,"howler":2,"nodule":4}],8:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -432,7 +439,7 @@ app.controller("exampleController", ['data', '$scope', '$rootScope', function(da
 
 // this is needed to connect with the main app.
 module.exports = angular.module('example-module').name;
-},{"angular":27,"nodule":4}],9:[function(require,module,exports){
+},{"angular":29,"nodule":4}],9:[function(require,module,exports){
 var AU_2_PIX, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, Game, Location, MOON_DIST_AU, MOON_DIST_PIX, PIX_2_AU, app;
 
 require('angular');
@@ -471,8 +478,14 @@ DIST_EUROPA = parseInt(DIST_EUROPA_MANU + 3.2486 * AU_2_PIX);
 
 Game = (function() {
   function Game(gameScope) {
+    var shopFunc;
     this.scope = gameScope;
-    this.locations = [new Location("iss", DIST_ISS, "station"), new Location("moon-maneuver", DIST_MOON_MANU, "maneuver"), new Location("moon", DIST_MOON, "station"), new Location("mars-maneuver", DIST_MARS_MANU, "maneuver"), new Location("mars", DIST_MARS, "station"), new Location("ceres-maneuver", DIST_CERES_MANU, "maneuver"), new Location("ceres", DIST_CERES, "station"), new Location("europa-maneuver", DIST_EUROPA_MANU, "maneuver"), new Location("europa", DIST_EUROPA, "station")];
+    shopFunc = (function(_this) {
+      return function() {
+        return _this.scope.$broadcast('switchToModule', 'shop');
+      };
+    })(this);
+    this.locations = [new Location("iss", DIST_ISS, "station", shopFunc), new Location("moon-maneuver", DIST_MOON_MANU, "maneuver"), new Location("moon", DIST_MOON, "station", shopFunc), new Location("mars-maneuver", DIST_MARS_MANU, "maneuver"), new Location("mars", DIST_MARS, "station", shopFunc), new Location("ceres-maneuver", DIST_CERES_MANU, "maneuver"), new Location("ceres", DIST_CERES, "station", shopFunc), new Location("europa-maneuver", DIST_EUROPA_MANU, "maneuver"), new Location("europa", DIST_EUROPA, "station", shopFunc)];
     this.gameDir = "/the-oregon-trajectory";
     this._init();
   }
@@ -626,7 +639,7 @@ module.exports = angular.module('game').name;
 
 
 
-},{"./Location.coffee":3,"angular":27}],10:[function(require,module,exports){
+},{"./Location.coffee":3,"angular":29}],10:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -654,7 +667,7 @@ app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(da
 }]);
 
 module.exports = angular.module('game-btn').name;
-},{"angular":27,"howler":2}],11:[function(require,module,exports){
+},{"angular":29,"howler":2}],11:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('game-over', []);
@@ -667,7 +680,7 @@ app.directive("gameOver", function() {
 });
 
 module.exports = angular.module('game-over').name;
-},{"angular":27}],12:[function(require,module,exports){
+},{"angular":29}],12:[function(require,module,exports){
 require('angular');
 require('howler');
 Nodule = require('nodule');
@@ -707,7 +720,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
 }]);
 
 module.exports = angular.module('main-menu').name;
-},{"angular":27,"game-btn":10,"howler":2,"nodule":4}],13:[function(require,module,exports){
+},{"angular":29,"game-btn":10,"howler":2,"nodule":4}],13:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -738,7 +751,7 @@ app.controller('ManeuverScreenCtrl', function($scope){
 
 module.exports = angular.module('maneuver-screen').name;
 
-},{"angular":27}],14:[function(require,module,exports){
+},{"angular":29}],14:[function(require,module,exports){
 require('angular');
 
 
@@ -752,7 +765,7 @@ app.directive("navHeader", function() {
 });
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":27}],15:[function(require,module,exports){
+},{"angular":29}],15:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -841,7 +854,7 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":27}],16:[function(require,module,exports){
+},{"angular":29}],16:[function(require,module,exports){
 require('angular');
 Howl = require('howler')
 
@@ -927,7 +940,7 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
 
 module.exports = angular.module('shop').name;
 
-},{"angular":27,"game":9,"game-btn":10,"howler":2,"ng-hold":15}],17:[function(require,module,exports){
+},{"angular":29,"game":9,"game-btn":10,"howler":2,"ng-hold":15}],17:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -974,7 +987,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":27}],18:[function(require,module,exports){
+},{"angular":29}],18:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -992,11 +1005,85 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":27,"social-button-directive":17}],19:[function(require,module,exports){
+},{"angular":29,"social-button-directive":17}],19:[function(require,module,exports){
+var Howl, Nodule, app;
+
+require('angular');
+
+Howl = require('howler');
+
+Nodule = require('nodule');
+
+app = angular.module('trader', [require('game-btn')]);
+
+app.directive("trader", function() {
+  return {
+    restrict: 'E',
+    templateUrl: "/ng-modules/trader/trader.html"
+  };
+});
+
+app.controller("traderController", [
+  'data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+    this.data = data;
+    this.onEntry = (function(_this) {
+      return function() {
+        _this.tradeOptions = _this.getRandomTradeOptions();
+        return _this.stationName = _this.getRandomName();
+      };
+    })(this);
+    this.nodule = new Nodule($rootScope, 'trader', this.onEntry);
+    this.getRandomTradeOptions = (function(_this) {
+      return function() {
+        return [
+          {
+            text: "we've got plenty of food to go around",
+            summary: "trade 100 fuel for 1000 food",
+            action: function() {
+              _this.data.fuel -= 100;
+              return _this.data.rations += 1000;
+            }
+          }, {
+            text: "we could use a little fuel for orbital corrections",
+            summary: "trade 100 fuel for 1000 spacecoin",
+            action: function() {
+              _this.data.fuel -= 100;
+              return _this.data.money += 1000;
+            }
+          }
+        ];
+      };
+    })(this);
+    this.getRandomName = (function(_this) {
+      return function() {
+        var names;
+        names = ["station alpha", "station omega", "Hal 1001", "New Florida", "Solice", "LaGrange's Range", "Newton-town", "Hubble's Hangout", "A1803f", "0000001000100101", "station 1337", "The Enterprise", "The Cosmodonut"];
+        return _this.stationName = names[Math.floor(Math.random() * myArray.length)];
+      };
+    })(this);
+    this.selectOption = (function(_this) {
+      return function(option) {
+        option.action();
+        return _this.leave();
+      };
+    })(this);
+    return this.leave = (function(_this) {
+      return function() {
+        return $scope.$emit('switchToModule', 'travel-screen');
+      };
+    })(this);
+  }
+]);
+
+module.exports = angular.module('trader').name;
+
+
+
+},{"angular":29,"game-btn":10,"howler":2,"nodule":4}],20:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
-  function Sprite(spritesheet, name, x, y) {
+  function Sprite(spritesheet, nameOrJSON, x, y) {
     if (x == null) {
       x = 0;
     }
@@ -1006,16 +1093,20 @@ module.exports = Sprite = (function() {
     this.sheet = new Image();
     this.sheet.src = spritesheet;
     this.r = 0;
-    this.setDimensions(name);
+    this.setDimensions(nameOrJSON);
+    if (y === 'random') {
+      this.y = Math.random() * 200.0 + 200.0;
+    } else {
+      this.y = y;
+    }
     this.x = x;
-    this.y = y;
     this.frame_n = 0;
     this.draws_per_frame = 50;
     this.draw_counter = 0;
   }
 
-  Sprite.prototype.setDimensions = function(name) {
-    switch (name) {
+  Sprite.prototype.setDimensions = function(nameOrJSON) {
+    switch (nameOrJSON) {
       case "station1":
         this.h = 399;
         this.w = 182;
@@ -1037,6 +1128,20 @@ module.exports = Sprite = (function() {
         this.w = 140;
         this.max_frames = 5;
         return this.scale = 1;
+      default:
+        this.h = nameOrJSON.h;
+        this.w = nameOrJSON.w;
+        this.max_frames = nameOrJSON.max_frame || 0;
+        if (nameOrJSON.scale === "random") {
+          this.scale = Math.random() * 0.9 + 0.1;
+        } else {
+          this.scale = nameOrJSON.scale || 1;
+        }
+        if (nameOrJSON.r === "random") {
+          this.r = Math.PI * 2.0 * Math.random();
+        } else {
+          this.r = nameOrJSON.r || 0;
+        }
     }
   };
 
@@ -1079,7 +1184,7 @@ module.exports = Sprite = (function() {
 
 
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Tile;
 
 module.exports = Tile = (function() {
@@ -1116,27 +1221,109 @@ module.exports = Tile = (function() {
 
 
 
-},{}],21:[function(require,module,exports){
-var Event;
+},{}],22:[function(require,module,exports){
+var Event, Sprite;
+
+Sprite = require('../Sprite.coffee');
 
 module.exports = Event = (function() {
+  var SPRITE_TYPES, TRIGGER_ACTIONS;
+
+  TRIGGER_ACTIONS = {
+    switchModule: "switchToModule",
+    alert: "alert"
+  };
+
+  SPRITE_TYPES = {
+    randomDebris: "randomDebris",
+    randomStation: "randomStation",
+    randomAsteroid: "randomAsteroid"
+  };
+
   function Event(eventJSON, $scope) {
-    this.type = eventJSON.type;
+    this.scope = $scope;
     this.name = eventJSON.name;
     this.criteria = eventJSON.criteria;
     this.chance = eventJSON.chance;
-    this.args = eventJSON.args;
     this.count = 0;
-    this.scope = $scope;
+    this.setTriggerFunction(eventJSON.triggeredAction);
+    this.sprite = this.getSprite(eventJSON.sprite);
   }
+
+  Event.prototype.setTriggerFunction = function(actionJSON) {
+    var args, func;
+    if (actionJSON != null) {
+      func = actionJSON["function"];
+      args = actionJSON.args;
+      switch (func) {
+        case TRIGGER_ACTIONS.switchModule:
+          this.doAction = (function(_this) {
+            return function() {
+              return _this.scope.$emit('switchToModule', args.moduleName);
+            };
+          })(this);
+          break;
+        case TRIGGER_ACTIONS.alert:
+          this.doAction = (function(_this) {
+            return function() {
+              return alert(args.text);
+            };
+          })(this);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  Event.prototype.getSprite = function(spriteKey) {
+    var dimensions, fname, n, n_asteroids;
+    this.spriteKey = spriteKey;
+    switch (spriteKey) {
+      case SPRITE_TYPES.randomDebris:
+        return new Sprite('assets/sprites/debris-satellite.png', "satelite-debris-1", -1000, 'random');
+      case SPRITE_TYPES.randomStation:
+        return new Sprite('assets/sprites/randomStation/' + Math.round(Math.random() * 17.0) + '.png', {
+          w: 439,
+          h: 400,
+          scale: "random",
+          r: "random"
+        }, -1000, 'random');
+      case SPRITE_TYPES.randomAsteroid:
+        if (Math.random() < .05) {
+          fname = 'assets/sprites/asteroids/p0.png';
+          dimensions = {
+            w: 149,
+            h: 185
+          };
+        } else {
+          n_asteroids = 1.0;
+          n = Math.round(Math.random() * n_asteroids);
+          switch (n) {
+            case 0:
+              dimensions = {
+                w: 400,
+                h: 300
+              };
+              break;
+            case 1:
+              dimensions = {
+                w: 642,
+                h: 632
+              };
+          }
+          fname = 'assets/sprites/asteroids/' + n + '.png';
+        }
+        dimensions.r = "random";
+        dimensions.scale = "random";
+        return new Sprite(fname, dimensions, -1000, 'random');
+    }
+  };
 
   Event.prototype.trigger = function() {
     this.count += 1;
-    return this.scope.$broadcast(this.type, {
-      "name": this.name,
-      "count": this.count,
-      "args": this.args
-    });
+    this.scope.$broadcast("encounter", this);
+    return this.sprite = this.getSprite(this.spriteKey);
   };
 
   return Event;
@@ -1145,10 +1332,70 @@ module.exports = Event = (function() {
 
 
 
-},{}],22:[function(require,module,exports){
-var Event, Randy;
+},{"../Sprite.coffee":20}],23:[function(require,module,exports){
+/*
+
+This file contains the list of in-travel random events.
+Feel free to add your own events, I'll try and explain the syntax a bit here:
+Each event is an object encapsulated by {}, so it looks like this:
+{
+    "type": "watevs",
+    "name": "my-event",
+}
+Here is a breakdown of the event attributes:
+    * name - a unique name for your event.
+    * chance - the chance of encountering your event at each event point (imagine all other events are not there)
+    * triggeredAction - (see ./Event.coffee setTriggerFunction() for details)
+        * function - key for function to be fired when your event is activated
+        * args - arguments to pass to the activation function
+    * sprite - key used to set the sprite (see ./Event.coffee getSprite() for details)
+    * criteria - NOT YET IMPLEMENTED, feel free to leave this out for now
+ */
+
+module.exports = [
+    {
+        "name": "space-junk",
+        "criteria": {
+            "locations": ['earth']
+        },
+        "chance": 0.4,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "debris-encounter"
+            }
+        },
+        "sprite":"randomDebris"
+    },{
+        "name": "micro-meteroid",
+        "criteria":{},
+        "chance": 0.6,
+        "triggeredAction": {
+            "function": "alert",
+            "args": {
+                "text": "CLINK! Did you hear that?!? ... ... ... Probably nothing."
+            }
+        },
+        "sprite": "randomAsteroid"
+    },{
+        "name": "trading-post",
+        "criteria":{},
+        "chance": 0.2,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "trader"
+            }
+        },
+        "sprite":"randomStation"
+    }
+];
+},{}],24:[function(require,module,exports){
+var Event, EventList, Randy;
 
 Event = require('./Event.coffee');
+
+EventList = require('./EventList.js');
 
 module.exports = Randy = (function() {
   function Randy($scope, eventsFile) {
@@ -1163,21 +1410,7 @@ module.exports = Randy = (function() {
 
   Randy.prototype._loadEventsFromFile = function(file) {
     var event, eventArray, i, len, new_event, results;
-    eventArray = [
-      {
-        "type": "encounter",
-        "name": "space-junk",
-        "criteria": {
-          "locations": ['earth']
-        },
-        "chance": 0.5
-      }, {
-        "type": "encounter",
-        "name": "micro-meteroid",
-        "criteria": {},
-        "chance": 0.5
-      }
-    ];
+    eventArray = EventList;
     results = [];
     for (i = 0, len = eventArray.length; i < len; i++) {
       event = eventArray[i];
@@ -1223,7 +1456,7 @@ module.exports = Randy = (function() {
 
 
 
-},{"./Event.coffee":21}],23:[function(require,module,exports){
+},{"./Event.coffee":22,"./EventList.js":23}],25:[function(require,module,exports){
 var EVENT_VARIABILITY, Location, MIN_TRAVELS_PER_EVENT, Nodule, Randy, Sprite, Tile;
 
 require('angular');
@@ -1265,7 +1498,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.ship = new Sprite(data.gameDir + '/assets/sprites/ship.png',
-        "ship", 0, Math.random()*200+200);
+        "ship", 0, 'random');
 
     vm.onEntry = function(){
         $scope.$emit('changeMusicTo', vm.music);
@@ -1328,6 +1561,13 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.getNextTile = function(xpos){
         // if distance travelled to destination big enough, append destination tile, else use filler
+        var tileWidth = 5000;
+        if (data.nextWaypoint.distance < tileWidth/2 ){
+            // TODO: return planet tile
+        } else {
+            // TODO: return filler tile
+        }
+        // TODO: remove this:
         return new Tile(xpos, document.getElementById("test-bg"));
     }
 
@@ -1453,14 +1693,17 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         return window.innerWidth / 3
     }
 
-    $scope.$on('encounter', function(event, args){
+    $scope.$on('encounter', function(ngEvent, event){
         // on random encounter
-        console.log('adding encounter:', event, args);
+        // NOTE: ngEvent here is the angular event, "event" is the ng-randy event... (sorry for confuzzlation)
+        console.log('adding encounter:', ngEvent, event);
         // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
         vm.data.locations.push(new Location(
-            args.name + '_' + args.count,
+            event.name + '_' + event.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
-            event.name
+            ngEvent.name,
+            event.doAction,
+            event.sprite
         ));
     });
 }]);
@@ -1470,7 +1713,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"./../Location.coffee":3,"./Sprite.coffee":19,"./Tile.coffee":20,"./ng-randy/ng-randy.coffee":22,"angular":27,"game":9,"game-btn":10,"ng-hold":15,"nodule":4}],24:[function(require,module,exports){
+},{"./../Location.coffee":3,"./Sprite.coffee":20,"./Tile.coffee":21,"./ng-randy/ng-randy.coffee":24,"angular":29,"game":9,"game-btn":10,"ng-hold":15,"nodule":4}],26:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -1506,7 +1749,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $sco
 }]);
 
 module.exports = angular.module('you-win').name;
-},{"angular":27,"howler":2,"nodule":4}],25:[function(require,module,exports){
+},{"angular":29,"howler":2,"nodule":4}],27:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -1525,7 +1768,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":27}],26:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":29}],28:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -1549,7 +1792,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":27}],27:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":29}],29:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -1809,7 +2052,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
