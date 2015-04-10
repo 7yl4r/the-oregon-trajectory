@@ -1,19 +1,22 @@
 Sprite = require('./travelScreen/Sprite.coffee')
 
 module.exports = class Location
-    constructor: (name, x, actionKey)->
+    constructor: (name, x, actionKey, trigger=undefined, sprite=undefined)->
         @name = name
         @x = x
         @actionKey = actionKey
-        @sprite = @_getSpriteForAction(actionKey)
+        if sprite?
+            @sprite = sprite
+        else
+            @sprite = @_getSpriteForAction(actionKey)
+
+        if trigger?
+            @trigger = trigger
+        # else just logs
 
     trigger: (args)->
-        switch @actionKey
-            when "station"
-                @_handleStationArrival(args)
-            when "encounter"
-                console.log('arrived at encounter', @)
-                args.$scope.$emit('switchToModule', 'debris-encounter')
+        console.log('arrived at event', @)
+        console.log('you really ought to set an event trigger for this location')
 
     _handleStationArrival: (args)->
         # TODO: station-specific stuff like

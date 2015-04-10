@@ -98,6 +98,13 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.getNextTile = function(xpos){
         // if distance travelled to destination big enough, append destination tile, else use filler
+        var tileWidth = 5000;
+        if (data.nextWaypoint.distance < tileWidth/2 ){
+            // TODO: return planet tile
+        } else {
+            // TODO: return filler tile
+        }
+        // TODO: remove this:
         return new Tile(xpos, document.getElementById("test-bg"));
     }
 
@@ -230,7 +237,8 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         vm.data.locations.push(new Location(
             args.name + '_' + args.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
-            event.name
+            event.name,
+            args.doAction
         ));
     });
 }]);

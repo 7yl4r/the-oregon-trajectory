@@ -52,10 +52,28 @@ module.exports = class Randy
                 "criteria": {
                     "locations": ['earth']
                 },
-                "chance": 0.5
+                "chance": 0.5,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "debris-encounter"
+                    }
+                }
+                # TODO: "sprite":"getRandomDebrisSprite"
             },{
                 "type": "encounter",
                 "name": "micro-meteroid",
+                "criteria":{},
+                "chance": 0.5,
+                "triggeredAction": {
+                    "function": "alert",
+                    "args": {
+                        "text": "CLINK! Did you hear that?!? ... ... ... Probably nothing."
+                    }
+                }
+            },{
+                "type": "encounter",
+                "name": "trading-post",
                 "criteria":{},
                 "chance": 0.5
             }
@@ -64,6 +82,10 @@ module.exports = class Randy
         for event in eventArray
             new_event = new Event(event, @scope)
             @events.push(new_event)
+
+    # TODO: setLocation: ()->
+    #    # modifies chance of events in event list based on given location
+    #    # TODO
 
     roll: ()->
         # :returns: true if event was triggered, else false
