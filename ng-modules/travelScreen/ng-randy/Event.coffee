@@ -48,15 +48,40 @@ module.exports = class Event
                                   "satelite-debris-1", -1000, 'random');
             when SPRITE_TYPES.randomStation
                 return new Sprite('assets/sprites/randomStation/' + Math.round(Math.random()*17) + '.png',
-                                  'station1', -1000, 'random')
+                    {
+                        w:439,
+                        h:400,
+                        scale: "random",
+                        r: "random"
+                    },
+                    -1000,
+                    'random'
+                )
             when SPRITE_TYPES.randomAsteroid
-                if Math.random() > .05  # 5% chance of potato asteroid
+                if Math.random() < .05  # 5% chance of potato asteroid
                     fname = 'assets/sprites/asteroids/p0.png'
+                    dimensions = {
+                        w:149,
+                        h:185,
+                    }
                 else
                     n_asteroids = 1  # +1
-                    fname = 'assets/sprites/asteroids/' + Math.round(Math.random()*n_asteroids) + '.png'
-                return new Sprite(fname,
-                                  'station1', -1000, 'random')
+                    n = Math.round(Math.random()*n_asteroids)
+                    switch n
+                        when 0
+                            dimensions = {
+                                w:149,
+                                h:185
+                            }
+                        when 1
+                            dimensions = {
+                                w:642,
+                                h:632
+                            }
+                    fname = 'assets/sprites/asteroids/' + n + '.png'
+                dimensions.r = "random"
+                dimensions.scale = "random"
+                return new Sprite(fname, dimensions, -1000, 'random')
 
     trigger: ()->
         @count += 1
