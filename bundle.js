@@ -1019,7 +1019,7 @@ app = angular.module('trader', [require('game-btn')]);
 app.directive("trader", function() {
   return {
     restrict: 'E',
-    templateUrl: "the-oregon-trajectory/ng-modules/trader/trader.html"
+    templateUrl: "ng-modules/trader/trader.html"
   };
 });
 
