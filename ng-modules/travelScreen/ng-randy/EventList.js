@@ -47,9 +47,9 @@ module.exports = [
         "criteria":{},
         "chance": 0.2,
         "triggeredAction": {
-            "function": "alert",
+            "function": "switchToModule",
             "args": {
-                "text": "hey look, a station... I sure wish some programmers would implement something for that..."
+                "moduleName": "trader"
             }
         },
         "sprite":"randomStation"

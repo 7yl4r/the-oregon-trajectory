@@ -1,6 +1,6 @@
 {
   "name": "the-oregon-trajectory",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "An old-timey retelling of the mass terrestrial exodus in the 21st century.",
   "bugs": {
     "url": "https://github.com/7yl4r/the-oregon-trail/issues",
@@ -50,6 +50,7 @@
     }
   },
   "browser": {
+    "trader": "./ng-modules/trader/trader.coffee",
     "example-module": "./ng-modules/exampleModule/exampleModule.js",
     "game-btn": "./ng-modules/gameBtn/gameBtn.js",
     "debris-encounter": "./ng-modules/debrisEncounter/debrisEncounter.coffee",
