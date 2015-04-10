@@ -1,5 +1,6 @@
 require('angular');
-Howl = require('howler')
+Howl = require('howler');
+Nodule = require('nodule');
 
 var app = angular.module('shop', [
     require('ng-hold'),
@@ -14,7 +15,8 @@ app.directive("shop", function() {
     };
 });
 
-app.controller("ShopController", ['$scope', 'data', function($scope, data){
+app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scope, $rootScope, data){
+
     this.data = data;
     this.item_consumables = [
         {
@@ -37,14 +39,20 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
     this.activeItem = this.item_consumables[0];
 
     this.buy = function(item){
-        if (item.price <= data.money){
+        var amt = parseInt(document.getElementById(item.key).value);
+        var total = amt * item.price;
+        if (total <= data.money){
             // for consumables:
             if (typeof item.key !== 'undefined') {
-                this.data[item.key] += 1
+                this.data[item.key] += amt;
             } else {
                 // TODO: apply item some other way
             }
-            this.data.money -= item.price;
+            this.data.money -= total;
+            var sound = new Howl({
+                urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+            });
+            sound.play();
         } else {
             ; // not enough money to buy!
         }
@@ -78,7 +86,70 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
         });
         sound.play();
         $scope.$emit('switchToModule', 'travel-screen');
-    }
+    };
+
+    this.onEntry = function() {
+        var greetingsOgg = [];
+        greetingsOgg.push("assets/sound/effects/shop/F1BePrepared.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F1EverythingYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F1Hey.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F1StockUp.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F1WhatDoYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F1WhatDoYouWant.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F1BePrepared.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F2EverythingYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F2Hey.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F2StockUp.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F2WhatDoYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/F2WhatDoYouWant.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M1BePrepared.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M1EverythingYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M1Hey.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M1StockUp.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M1WhatDoYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M1WhatDoYouWant.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M2BePrepared.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M2EverythingYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M2Hey.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M2StockUp.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M2WhatDoYouNeed.ogg");
+        greetingsOgg.push("assets/sound/effects/shop/M2WhatDoYouWant.ogg");
+
+        var greetingsMP3 = [];
+        greetingsMP3.push("assets/sound/effects/shop/F1BePrepared.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F1EverythingYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F1Hey.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F1StockUp.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F1WhatDoYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F1WhatDoYouWant.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F1BePrepared.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F2EverythingYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F2Hey.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F2StockUp.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F2WhatDoYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/F2WhatDoYouWant.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M1BePrepared.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M1EverythingYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M1Hey.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M1StockUp.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M1WhatDoYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M1WhatDoYouWant.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M2BePrepared.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M2EverythingYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M2Hey.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M2StockUp.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M2WhatDoYouNeed.mp3");
+        greetingsMP3.push("assets/sound/effects/shop/M2WhatDoYouWant.mp3");
+
+        var rand = Math.random();
+        var index = Math.floor(rand * (greetingsOgg.length - 1));
+        var sound = new Howl({
+            urls: [greetingsOgg[index], greetingsMP3[index]]
+        });
+        sound.play();
+    };
+
+    this.nodule = new Nodule($rootScope, 'shop', this.onEntry);
 }]);
 
 module.exports = angular.module('shop').name;

@@ -54,7 +54,7 @@ app.controller("traderController", ['data', '$scope', '$rootScope', (data, $scop
             "The Enterprise",
             "The Cosmodonut"
         ]
-        @stationName = names[Math.floor(Math.random() * myArray.length)];
+        @stationName = names[Math.floor(Math.random() * names.length)];
 
     @selectOption = (option)=>
         option.action()
