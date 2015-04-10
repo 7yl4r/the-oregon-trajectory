@@ -16,7 +16,7 @@ module.exports = class Sprite
         @r = 0  # rotation
         @setDimensions(nameOrJSON)
         if y == 'random'
-            @y = Math.random()*200+200
+            @y = Math.random()*200.0+200.0
         else
             @y = y
         @x = x
@@ -62,11 +62,11 @@ module.exports = class Sprite
                     @scale = nameOrJSON.scale or 1
 
                 if nameOrJSON.r == "random"
-                    @r = Math.PI*2*Math.random()
+                    @r = Math.PI*2.0*Math.random()
                 else
                     @r = nameOrJSON.r or 0
-
-        return
+                    
+                return
 
     next_frame: ()->
         @frame_n += 1

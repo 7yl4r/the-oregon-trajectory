@@ -47,7 +47,7 @@ module.exports = class Event
                 return new Sprite('assets/sprites/debris-satellite.png',
                                   "satelite-debris-1", -1000, 'random');
             when SPRITE_TYPES.randomStation
-                return new Sprite('assets/sprites/randomStation/' + Math.round(Math.random()*17) + '.png',
+                return new Sprite('assets/sprites/randomStation/' + Math.round(Math.random()*17.0) + '.png',
                     {
                         w:439,
                         h:400,
@@ -65,13 +65,13 @@ module.exports = class Event
                         h:185,
                     }
                 else
-                    n_asteroids = 1  # +1
+                    n_asteroids = 1.0  # +1
                     n = Math.round(Math.random()*n_asteroids)
                     switch n
                         when 0
                             dimensions = {
-                                w:149,
-                                h:185
+                                w:400,
+                                h:300
                             }
                         when 1
                             dimensions = {
