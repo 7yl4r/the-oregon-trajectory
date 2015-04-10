@@ -42,6 +42,7 @@ module.exports = class Event
         # :returns: (random) sprite object of type specified
         #            OR just Sprite from given filename
         # TODO: move attributes set in sprite class using keys "station1, satelite-debris-1, etc, to here?
+        @spriteKey = spriteKey  # save this for later
         switch spriteKey
             when SPRITE_TYPES.randomDebris
                 return new Sprite('assets/sprites/debris-satellite.png',
@@ -86,3 +87,4 @@ module.exports = class Event
     trigger: ()->
         @count += 1
         @scope.$broadcast(@type, @)
+        @sprite = @getSprite(@spriteKey)  # re-get sprite to re-randomize
