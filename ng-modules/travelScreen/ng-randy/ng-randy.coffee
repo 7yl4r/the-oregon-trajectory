@@ -30,6 +30,7 @@
 #        ' ; ' ' ; ' ' ' ; ' ' ; + ; ' ; ; ; ' ; ' ' '`
 
 Event = require('./Event.coffee')
+EventList = require('./EventList.js')
 
 module.exports = class Randy
     # main class for handling random events
@@ -45,47 +46,7 @@ module.exports = class Randy
     _loadEventsFromFile: (file)->
         # loads array of events from a single file
         # TODO: get this json from files
-        eventArray = [
-            {
-                "type": "encounter",
-                "name": "space-junk",
-                "criteria": {
-                    "locations": ['earth']
-                },
-                "chance": 0.4,
-                "triggeredAction": {
-                    "function": "switchToModule",
-                    "args": {
-                        "moduleName": "debris-encounter"
-                    }
-                },
-                "sprite":"randomDebris"
-            },{
-                "type": "encounter",
-                "name": "micro-meteroid",
-                "criteria":{},
-                "chance": 0.6,
-                "triggeredAction": {
-                    "function": "alert",
-                    "args": {
-                        "text": "CLINK! Did you hear that?!? ... ... ... Probably nothing."
-                    }
-                },
-                "sprite": "randomAsteroid"
-            },{
-                "type": "encounter",
-                "name": "trading-post",
-                "criteria":{},
-                "chance": 0.2,
-                "triggeredAction": {
-                    "function": "alert",
-                    "args": {
-                        "text": "hey look, a station... I sure wish some programmers would implement something for that..."
-                    }
-                },
-                "sprite":"randomStation"
-            }
-        ]
+        eventArray = EventList
 
         for event in eventArray
             new_event = new Event(event, @scope)

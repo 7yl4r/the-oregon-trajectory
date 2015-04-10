@@ -13,7 +13,6 @@ module.exports = class Event
 
     constructor: (eventJSON, $scope)->
         @scope = $scope
-        @type = eventJSON.type
         @name = eventJSON.name
         @criteria = eventJSON.criteria
         @chance = eventJSON.chance
@@ -86,5 +85,5 @@ module.exports = class Event
 
     trigger: ()->
         @count += 1
-        @scope.$broadcast(@type, @)
+        @scope.$broadcast("encounter", @)
         @sprite = @getSprite(@spriteKey)  # re-get sprite to re-randomize
