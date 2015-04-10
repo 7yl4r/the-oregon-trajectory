@@ -1,5 +1,6 @@
 require('angular');
-Howl = require('howler')
+Howl = require('howler');
+Nodule = require('nodule');
 
 var app = angular.module('shop', [
     require('ng-hold'),
@@ -14,7 +15,8 @@ app.directive("shop", function() {
     };
 });
 
-app.controller("ShopController", ['$scope', 'data', function($scope, data){
+app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scope, $rootScope, data){
+
     this.data = data;
     this.item_consumables = [
         {
@@ -45,6 +47,10 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
                 // TODO: apply item some other way
             }
             this.data.money -= total;
+            var sound = new Howl({
+                urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+            });
+            sound.play();
         } else {
             ; // not enough money to buy!
         }
@@ -78,7 +84,44 @@ app.controller("ShopController", ['$scope', 'data', function($scope, data){
         });
         sound.play();
         $scope.$emit('switchToModule', 'travel-screen');
-    }
+    };
+
+    this.onEntry = function() {
+        var greetings = [];
+        greetings.push("assets/sound/effects/shop/F1BePrepared.wav");
+        greetings.push("assets/sound/effects/shop/F1EverythingYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/F1Hey.wav");
+        greetings.push("assets/sound/effects/shop/F1StockUp.wav");
+        greetings.push("assets/sound/effects/shop/F1WhatDoYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/F1WhatDoYouWant.wav");
+        greetings.push("assets/sound/effects/shop/F1BePrepared.wav");
+        greetings.push("assets/sound/effects/shop/F2EverythingYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/F2Hey.wav");
+        greetings.push("assets/sound/effects/shop/F2StockUp.wav");
+        greetings.push("assets/sound/effects/shop/F2WhatDoYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/F2WhatDoYouWant.wav");
+        greetings.push("assets/sound/effects/shop/M1BePrepared.wav");
+        greetings.push("assets/sound/effects/shop/M1EverythingYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/M1Hey.wav");
+        greetings.push("assets/sound/effects/shop/M1StockUp.wav");
+        greetings.push("assets/sound/effects/shop/M1WhatDoYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/M1WhatDoYouWant.wav");
+        greetings.push("assets/sound/effects/shop/M2BePrepared.wav");
+        greetings.push("assets/sound/effects/shop/M2EverythingYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/M2Hey.wav");
+        greetings.push("assets/sound/effects/shop/M2StockUp.wav");
+        greetings.push("assets/sound/effects/shop/M2WhatDoYouNeed.wav");
+        greetings.push("assets/sound/effects/shop/M2WhatDoYouWant.wav");
+
+        var rand = Math.random();
+        var index = Math.floor(rand * (greetings.length - 1));
+        var sound = new Howl({
+            urls: [greetings[index]]
+        });
+        sound.play();
+    };
+
+    this.nodule = new Nodule($rootScope, 'shop', this.onEntry);
 }]);
 
 module.exports = angular.module('shop').name;
