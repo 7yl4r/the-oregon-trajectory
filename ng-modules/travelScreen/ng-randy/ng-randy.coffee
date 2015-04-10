@@ -52,7 +52,7 @@ module.exports = class Randy
                 "criteria": {
                     "locations": ['earth']
                 },
-                "chance": 0.5,
+                "chance": 0.4,
                 "triggeredAction": {
                     "function": "switchToModule",
                     "args": {
@@ -64,7 +64,7 @@ module.exports = class Randy
                 "type": "encounter",
                 "name": "micro-meteroid",
                 "criteria":{},
-                "chance": 0.5,
+                "chance": 0.6,
                 "triggeredAction": {
                     "function": "alert",
                     "args": {
@@ -76,7 +76,7 @@ module.exports = class Randy
                 "type": "encounter",
                 "name": "trading-post",
                 "criteria":{},
-                "chance": 0.5,
+                "chance": 0.2,
                 "triggeredAction": {
                     "function": "alert",
                     "args": {
