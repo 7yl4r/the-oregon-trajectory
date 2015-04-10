@@ -35,7 +35,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.ship = new Sprite(data.gameDir + '/assets/sprites/ship.png',
-        "ship", 0, Math.random()*200+200);
+        "ship", 0, 'random');
 
     vm.onEntry = function(){
         $scope.$emit('changeMusicTo', vm.music);

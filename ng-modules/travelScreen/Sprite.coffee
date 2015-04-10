@@ -2,12 +2,16 @@
 module.exports = class Sprite
     constructor: (spritesheet, name, x=0, y=0)->
         # sets up new sprite using given spritesheet src centered at x & y position on canvas
+        # :y: y-value of sprite or 'random' which will set a randomized height in the game window
         @sheet = new Image()
         @sheet.src = spritesheet
         @r = 0  # rotation
         @setDimensions(name)
+        if y == 'random'
+            @y = Math.random()*200+200
+        else
+            @y = y
         @x = x
-        @y = y
         @frame_n = 0
         # for slowing animation speed
         @draws_per_frame = 50  # number of draw calls before setting new frame
@@ -15,6 +19,7 @@ module.exports = class Sprite
 
     setDimensions: (name)->
         # sets dimensions, max_frames, draws_per_frame based on name to match given sprite
+        # TODO: these should be read from a json file given with each sprite
         switch name
             when "station1"
                 @h = 399

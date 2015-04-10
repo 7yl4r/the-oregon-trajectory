@@ -32,10 +32,10 @@ module.exports = class Location
         switch key
             when "station"
                 return new Sprite('assets/sprites/station_sheet.png',
-                    "station1", -1000, Math.random()*200+200)
+                    "station1", -1000, 'random')
             when "encounter"
                 return new Sprite('assets/sprites/debris-satellite.png',
-                    "satelite-debris-1", -1000, Math.random()*200+200);
+                    "satelite-debris-1", -1000, 'random');
             when "maneuver"
                 return new Sprite('assets/sprites/maneuver-node/sprites.png',
                     "maneuver-node", -1000, 300);

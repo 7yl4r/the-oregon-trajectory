@@ -43,15 +43,12 @@ module.exports = class Event
         #            OR just Sprite from given filename
         # TODO: move attributes set in sprite class using keys "station1, satelite-debris-1, etc, to here?
         switch spriteKey
-            when "station"
-                return new Sprite('assets/sprites/station_sheet.png',
-                                  "station1", -1000, Math.random()*200+200)
             when SPRITE_TYPES.randomDebris
                 return new Sprite('assets/sprites/debris-satellite.png',
-                                  "satelite-debris-1", -1000, Math.random()*200+200);
+                                  "satelite-debris-1", -1000, 'random');
             when SPRITE_TYPES.randomStation
                 return new Sprite('assets/sprites/randomStation/' + Math.round(Math.random()*17) + '.png',
-                                  'station1', -1000, Math.random()*200+200)
+                                  'station1', -1000, 'random')
             when SPRITE_TYPES.randomAsteroid
                 if Math.random() > .05  # 5% chance of potato asteroid
                     fname = 'assets/sprites/asteroids/p0.png'
@@ -59,10 +56,7 @@ module.exports = class Event
                     n_asteroids = 1  # +1
                     fname = 'assets/sprites/asteroids/' + Math.round(Math.random()*n_asteroids) + '.png'
                 return new Sprite(fname,
-                                  'station1', -1000, Math.random()*200+200)
-            when "maneuver"
-                return new Sprite('assets/sprites/maneuver-node/sprites.png',
-                    "maneuver-node", -1000, 300);
+                                  'station1', -1000, 'random')
 
     trigger: ()->
         @count += 1
