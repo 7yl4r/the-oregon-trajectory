@@ -8,8 +8,13 @@ Each event is an object encapsulated by {}, so it looks like this:
     "name": "my-event",
 }
 Here is a breakdown of the event attributes:
-    * name -
-
+    * name - a unique name for your event.
+    * chance - the chance of encountering your event at each event point (imagine all other events are not there)
+    * triggeredAction - (see ./Event.coffee setTriggerFunction() for details)
+        * function - key for function to be fired when your event is activated
+        * args - arguments to pass to the activation function
+    * sprite - key used to set the sprite (see ./Event.coffee getSprite() for details)
+    * criteria - NOT YET IMPLEMENTED, feel free to leave this out for now
  */
 
 module.exports = [
