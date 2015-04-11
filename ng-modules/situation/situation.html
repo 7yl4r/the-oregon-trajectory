@@ -5,7 +5,7 @@
         {{step.question}}
         <ul>
             <li ng-repeat="choice in step.choices">
-							<game-btn ng-click="situationCtrl.choose(choice)">
+							<game-btn ng-click="choose(choice)">
                 {{choice.name}}
             	</game-btn>
 						</li>

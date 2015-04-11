@@ -16,52 +16,23 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
 
     var vm = this;
     vm.nodule = new Nodule($rootScope, 'situation', function(dialog) {
-        console.log("onEntry", arguments);
-        if (!dialog) {
-          dialog = {
-            initial: {
-                story:"starting out with <b>rocks</b>",
-                question: "what do you do?",
-                choices:[
-                    {
-                        name:"do think B",
-                        next:"thingA"
-                    },
-                    {
-                        name:"do thing A",
-                        next:function() {
-                          alert('well done!');
-                        }
-                    }
-                ]
-            },
-            thingA: {
-                story: "good so far",
-                choices: [
-                  {
-                    name: "retry",
-                    next: "initial"
-                  }
-                ]
-            }
-          };
-        }
-
-        vm.dialog = dialog;
-        vm.prepareStep('initial');
+        $scope.dialog = dialog;
+        $scope.prepareStep('initial');
     });
 
-    vm.prepareStep = function(step) {
-        vm.currentStep = step;
-        $scope.step = vm.dialog[step];
-        $scope.step.story = $sce.trustAsHtml($scope.step.story);
+    $scope.prepareStep = function(step) {
+        console.log('preparing ', step, $scope.dialog);
+        $scope.currentStep = step;
+        if ($scope.dialog && $scope.dialog[step]) {
+          $scope.step = $scope.dialog[step];
+          $scope.step.story = $sce.trustAsHtml($scope.step.story);
+        }
     };
 
     // your controller code here
-    vm.choose = function(choice){
-        console.log('choosen ', choice);
+    $scope.choose = function(choice){
         if (typeof choice.next === 'string') {
-          vm.prepareStep(choice.next);
+          $scope.prepareStep(choice.next);
         } else if (typeof choice.next === 'function') {
           choice.next();
         } else {

@@ -29,6 +29,25 @@
         <!-- main menu needed here for init -->
         <main-menu class="game-module" style="display:none"></main-menu>
         situation test: <br> <situation></situation>
+
+        <button class"btn btn-inverse" ng-click='$emit("switchToModule", "situation", {
+          initial:{
+            story: "starting out with <b>rocks</b>",
+            question: "what to do?",
+            choices: [
+                {name: "do think B", next:"thingB"},
+                {name: "do thing A", next:"thingA"}
+            ]
+          },
+          thingA: {
+            story: "alerting A...",
+            choices: [{name: "continue", next: "initial"}]
+          },
+          thingB: {
+            story: "rebooting B...",
+            choices: [{name: "retry", next: "initial"}]
+          }
+        })'>Begin</button>
     </div>
 
 </div><!-- /.main -->
