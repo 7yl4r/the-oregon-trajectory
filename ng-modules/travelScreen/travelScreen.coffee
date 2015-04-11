@@ -109,7 +109,6 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 || data.nextWaypoint.name == 'europa'
             ){
                 img = document.getElementById(data.nextWaypoint.name);
-            }
             } else {
                 // filler
                 img = document.getElementById("filler");
