@@ -36,6 +36,10 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     }
 
     vm.create = function() {
+      var w=vm.game.width;
+      var h=vm.game.height;
+      var rnd=vm.game.rnd.integerInRange.bind(vm.game.rnd);
+
       //  This will run in Canvas mode, so let's gain a little speed and display
       vm.game.renderer.clearBeforeRender = false;
       vm.game.renderer.roundPixels = true;
@@ -57,23 +61,36 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       vm.bullets.setAll('anchor.y', 0.5);
 
       //  Our player ship
-      vm.sprite = vm.game.add.sprite(vm.game.width/3, vm.game.height/2, 'ship');
+      vm.sprite = vm.game.add.sprite(
+        rnd(w/10.0, w/3.0),
+        rnd(h/10.0, h*9/10.0),
+        'ship');
       vm.sprite.anchor.set(3.0/5.0, 0.5);
-      vm.sprite.scale.set(0.5, 0.5);
-
-      //  and its physics settings
+      vm.sprite.scale.set(0.25, 0.25);
       vm.game.physics.enable(vm.sprite, Phaser.Physics.ARCADE);
-
-      vm.sprite.body.drag.set(0);
       vm.sprite.body.maxVelocity.set(200);
+      vm.sprite.rotation = vm.game.physics.arcade.moveToXY(vm.sprite, w,
+        rnd(h/10.0, h*9/10.00),
+        rnd(w/60.0, w/90.0));
 
-      // vm.asteroid = vm.game.add.sprite(vm.game.width*2/3, vm.game.height/2, 'a1')
+      // the asteroid
+      vm.asteroid = vm.game.add.sprite(
+        rnd(w*2/3.0, w*9/10.0),
+        rnd(h/10.0, h*9/10.0),
+        'a3');
+      vm.asteroid.anchor.set(0.5, 0.5);
+      vm.asteroid.scale.set(0.5, 0.5);
+      vm.asteroid.rotateAngle = vm.game.rnd.integerInRange(-2, 2);
+      vm.game.physics.enable(vm.asteroid, Phaser.Physics.ARCADE);
+      vm.game.physics.arcade.moveToXY(vm.asteroid, 0,
+        rnd(h/10.0, h*9/10.00),
+        rnd(w/60.0, w/90.0));
 
       // asteroids
       vm.asteroids = vm.game.add.group();
-      vm.asteroids.enableBody = true;
-      vm.asteroids.physicsBodyType = Phaser.Physics.ARCADE;
-      vm.createAsteroids();
+      // vm.asteroids.enableBody = true;
+      // vm.asteroids.physicsBodyType = Phaser.Physics.ARCADE;
+      // vm.createAsteroids();
 
       //  Game input
       vm.cursors = vm.game.input.keyboard.createCursorKeys();
@@ -81,43 +98,32 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     }
 
     vm.update = function() {
-      if (vm.cursors.up.isDown)
-      {
+      if (vm.cursors.up.isDown) {
           vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
-      }
-      else
-      {
+      } else {
           vm.sprite.body.acceleration.set(0);
       }
 
-      if (vm.cursors.left.isDown)
-      {
-          vm.sprite.body.angularVelocity = -300;
-      }
-      else if (vm.cursors.right.isDown)
-      {
-          vm.sprite.body.angularVelocity = 300;
-      }
-      else
-      {
+      if (vm.cursors.left.isDown) {
+          vm.sprite.body.angularVelocity = -100;
+      } else if (vm.cursors.right.isDown) {
+          vm.sprite.body.angularVelocity = 100;
+      } else {
           vm.sprite.body.angularVelocity = 0;
       }
 
-      if (vm.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-      {
+      if (vm.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
           vm.fireBullet();
       }
 
       vm.screenWrap(vm.sprite);
 
-      vm.bullets.forEachExists(vm.screenWrap, this);
+      // vm.bullets.forEachExists(vm.screenWrap, this);
 
-      vm.asteroids.forEachExists(function (item) {
-              item.x += item.moveX;
-              item.y += item.moveY;
-              item.angle += item.rotateAngle;
-              vm.screenWrap(item);
-          });
+      (function (item) {
+          item.angle += item.rotateAngle;
+          vm.screenWrap(item);
+      })(vm.asteroid);
 
       vm.game.physics.arcade.overlap(vm.bullets, vm.asteroids, null, function(bullet, asteroid){
           if (!bullet.alive || !asteroid.alive) return;
