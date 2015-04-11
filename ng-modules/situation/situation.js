@@ -15,28 +15,51 @@ app.directive("situation", function() {
 app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', function(data, $scope, $rootScope, $sce) {
 
     var vm = this;
-    vm.nodule = new Nodule($rootScope, 'situation', function() {
+    vm.nodule = new Nodule($rootScope, 'situation', function(dialog) {
         console.log("onEntry", arguments);
-        if (!arguments) {
-          vm.dialogTree = {
-
-          }
+        if (!dialog) {
+          dialog = {
+            initial: {
+                story:"starting out with <b>rocks</b>",
+                question: "what do you do?",
+                choices:[
+                    {
+                        name:"do think B",
+                        next:"thingA"
+                    },
+                    {
+                        name:"do thing A",
+                        next:function() {
+                          alert('well done!');
+                        }
+                    }
+                ]
+            },
+            thingA: {
+                story: "good so far",
+                choices: [
+                  {
+                    name: "retry",
+                    next: "initial"
+                  }
+                ]
+            }
+          };
         }
+
+        vm.dialog = dialog;
+        vm.prepareStep('initial');
     });
 
-    $scope.step = {
-      story: $sce.trustAsHtml("<h1>You're here</h1>"),
-      question: "What do you do know, luke?",
-      options: [
-        {name: "fight"},
-        {name: "run"},
-        {name: "surrender"},
-      ],
-    }
+    vm.prepareStep = function(step) {
+        vm.currentStep = step;
+        $scope.step = vm.dialog[step];
+        $scope.step.story = $sce.trustAsHtml($scope.step.story);
+    };
 
     // your controller code here
-    vm.clickedTheButton = function(){
-        alert('you clicked situation button')
+    vm.choose = function(choice){
+        alert('you choose '+choice.name);
     }
 }]);
 
