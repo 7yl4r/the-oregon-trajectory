@@ -200,7 +200,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
                 bullet.lifespan = 2000;
                 bullet.rotation = vm.sprite.rotation;
                 vm.game.physics.arcade.velocityFromRotation(vm.sprite.rotation, 400, bullet.body.velocity);
-                bulletTime = vm.game.time.now + 50;
+                vm.bulletTime = vm.game.time.now + 250;
             }
         }
     }
