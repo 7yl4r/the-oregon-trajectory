@@ -98,25 +98,24 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.getNextTile = function(xpos){
         // if distance travelled to destination big enough, append destination tile, else use filler
-        var tileWidth = 5000;  // estimated width (should be close to avg)
-        var img = new Image()
-        if (data.nextWaypoint.distance < tileWidth/2 ){
+        var halfTileWidth = 1000*TRAVELS_PER_MOVE;  // estimated width (should be close to avg) (in moves)
+        if (data.nextWaypoint.distance < halfTileWidth ){
+            console.log(data.nextWaypoint);
             // TODO: return relevant location tile
             if (data.nextWaypoint.name == 'moon'){
-                img.src = "assets/backgrounds/moon-background.png"
-                return new Tile(xpos, img);
+                img = document.getElementById("moon");
             } else if (data.nextWaypoint.name == 'mars'){
-                img.src = "assets/backgrounds/jupiter-float.png"
+                img = document.getElementById("mars");
             } else {
                 // filler
-                img.src = "assets/backgrounds/jupiter-float.png"
+                img = document.getElementById("filler");
             }
         } else {
             // filler
-            img.src = "assets/backgrounds/jupiter-float.png"
+            img = document.getElementById("filler");
         }
-        // return filler tile
-        return new Tile(xpos, img));
+        // return tile
+        return new Tile(xpos, img);
     }
 
     vm.travel = function(){
@@ -148,6 +147,9 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
                 overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
                 console.log('tile added');
+                if (vm.tiles.length > 100){
+                    throw new Error('too many tiles!');
+                }
             }
 
             // handle arrival at stations/events
