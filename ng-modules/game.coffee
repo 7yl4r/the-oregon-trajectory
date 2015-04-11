@@ -4,12 +4,39 @@ Location = require('./Location.coffee')
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
+MOON_DIST_PIX = 33000
+MOON_DIST_AU  = 0.003
+PIX_2_AU = MOON_DIST_AU/MOON_DIST_PIX
+AU_2_PIX = MOON_DIST_PIX/MOON_DIST_AU
+
+DIST_ISS         = 1000
+DIST_MOON_MANU   = parseInt(DIST_ISS + .0015*AU_2_PIX)
+DIST_MOON        = parseInt(DIST_MOON_MANU + .0015*AU_2_PIX)
+DIST_MARS_MANU   = parseInt(DIST_MOON + 1.9608*AU_2_PIX)
+DIST_MARS        = parseInt(DIST_MARS_MANU + 1.9608*AU_2_PIX)
+DIST_CERES_MANU  = parseInt(DIST_MARS + 1.6243*AU_2_PIX)
+DIST_CERES       = parseInt(DIST_CERES_MANU + 1.6243*AU_2_PIX)
+DIST_EUROPA_MANU = parseInt(DIST_CERES + 3.2486*AU_2_PIX)
+DIST_EUROPA      = parseInt(DIST_EUROPA_MANU + 3.2486*AU_2_PIX)
+
 class Game
     constructor: (gameScope)->
         @scope = gameScope
+
+        # TODO: move this...
+        shopFunc = ()=>
+            @scope.$broadcast('switchToModule', 'shop')
+
         @locations = [
-            new Location("iss", 1500, "station"),
-            new Location("moon", 7000, "station")
+            new Location("iss", DIST_ISS, "station", shopFunc),
+            new Location("moon-maneuver", DIST_MOON_MANU, "maneuver"),
+            new Location("moon", DIST_MOON, "station", shopFunc),
+            new Location("mars-maneuver", DIST_MARS_MANU, "maneuver"),
+            new Location("mars", DIST_MARS, "station", shopFunc),
+            new Location("ceres-maneuver", DIST_CERES_MANU, "maneuver"),
+            new Location("ceres", DIST_CERES, "station", shopFunc),
+            new Location("europa-maneuver", DIST_EUROPA_MANU, "maneuver"),
+            new Location("europa", DIST_EUROPA, "station", shopFunc)
         ]
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
@@ -31,6 +58,14 @@ class Game
         @money = 5000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
+        # nextWaypoint looks like:
+        # {
+        #   distance:       111,    # distance to the place
+        #   name:      "the place",
+        #   location:       333,    # absolute location of the place
+        #   fuelEstimate:   444,    # estimate of fuel to get there
+        #   rationEstimate: 555     # estimate of rations to get there
+        # }
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values

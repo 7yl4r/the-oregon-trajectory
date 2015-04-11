@@ -35,7 +35,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
     vm.ship = new Sprite(data.gameDir + '/assets/sprites/ship.png',
-        "ship", 0, Math.random()*200+200);
+        "ship", 0, 'random');
 
     vm.onEntry = function(){
         $scope.$emit('changeMusicTo', vm.music);
@@ -98,6 +98,13 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.getNextTile = function(xpos){
         // if distance travelled to destination big enough, append destination tile, else use filler
+        var tileWidth = 5000;
+        if (data.nextWaypoint.distance < tileWidth/2 ){
+            // TODO: return planet tile
+        } else {
+            // TODO: return filler tile
+        }
+        // TODO: remove this:
         return new Tile(xpos, document.getElementById("test-bg"));
     }
 
@@ -223,14 +230,17 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         return window.innerWidth / 3
     }
 
-    $scope.$on('encounter', function(event, args){
+    $scope.$on('encounter', function(ngEvent, event){
         // on random encounter
-        console.log('adding encounter:', event, args);
+        // NOTE: ngEvent here is the angular event, "event" is the ng-randy event... (sorry for confuzzlation)
+        console.log('adding encounter:', ngEvent, event);
         // TODO: wrap this in data.addLocation method which checks that no locations are too near each other
         vm.data.locations.push(new Location(
-            args.name + '_' + args.count,
+            event.name + '_' + event.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
-            event.name
+            ngEvent.name,
+            event.doAction,
+            event.sprite
         ));
     });
 }]);

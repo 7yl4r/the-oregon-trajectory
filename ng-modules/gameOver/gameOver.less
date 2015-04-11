@@ -41,6 +41,7 @@
 }
 
 @-webkit-keyframes spin {
+<<<<<<< HEAD
   0%   { -webkit-transform: rotate(360deg) translate(0em, 0em);}
   15%   { -webkit-transform: rotate(180) translate(1em, 1em);}
   30% { -webkit-transform: rotate(180deg) translate(2em, -3em);}
@@ -64,4 +65,17 @@
   70% { -webkit-transform: rotate(-360deg) translate(0em, 0em);}
   85% { -webkit-transform: rotate(-180deg) translate(1em, -2em);}
   100% { -webkit-transform: rotate(-180deg) translate(0em, 0em);}
+=======
+  100% { -webkit-transform: rotate(360deg); }
+}
+@-moz-keyframes spin {
+  100% { -moz-transform: rotate(360deg); }
+}
+@keyframes spin {
+  100% {
+    -moz-transform:rotate(360deg);
+    -o-transform:rotate(360deg);
+    transform:rotate(360deg);
+  }
+>>>>>>> 9610ef6204bd0781fe71e40c89dd08fa45906ed5
 }

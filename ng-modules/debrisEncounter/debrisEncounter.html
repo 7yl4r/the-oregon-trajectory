@@ -12,15 +12,15 @@
 
         What would you like to do?
         <ul>
-            <li><button class="btn btn-inverse" ng-click="debrisCtrl.harvest()">
+            <li><game-btn ng-click="debrisCtrl.harvest()">
                 match velocity and search the debris (fuel cost: {{debrisCtrl.rendevousCost}})
-            </button></li>
-            <li><button class="btn btn-inverse" ng-click="debrisCtrl.avoid()">
+            </game-btn></li>
+            <li><game-btn ng-click="debrisCtrl.avoid()">
                 deviate course to be sure to avoid the debris (fuel cost: {{debrisCtrl.avoidCost}})
-            </button></li>
-            <li><button class="btn btn-inverse" ng-click="debrisCtrl.ignore()">
+            </game-btn></li>
+            <li><game-btn ng-click="debrisCtrl.ignore()">
                 ignore the debris and continue on course
-            </button></li>
+            </game-btn></li>
         </ul>
     </div>
     <div ng-show="debrisCtrl.step=='harvest'">
@@ -31,9 +31,9 @@
             <li>+{{debrisCtrl.debrisFuel}} fuel</li>
         </ul>
 
-        <li><button class="btn btn-inverse" ng-click="debrisCtrl.continueTravels()">
+        <li><game-btn ng-click="debrisCtrl.continueTravels()">
             continue
-        </button></li>
+        </game-btn></li>
 
     </div>
     <div ng-show="debrisCtrl.step=='collide'">
@@ -43,9 +43,9 @@
         High velocity collisions can slice through ship hulls like butter.
         You have gotten very lucky this time though, it seems. The crew remains on edge for the next hour,
         but further inspection shows no damage to your ship.
-        <li><button class="btn btn-inverse" ng-click="debrisCtrl.continueTravels()">
+        <li><game-btn ng-click="debrisCtrl.continueTravels()">
             continue
-        </button></li>
+        </game-btn></li>
 
     </div>
-</div
+</div>
