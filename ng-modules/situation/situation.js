@@ -15,9 +15,17 @@ app.directive("situation", function() {
 app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', function(data, $scope, $rootScope, $sce) {
 
     var vm = this;
-    vm.nodule = new Nodule($rootScope, 'situation', function(dialog) {
+    vm.nodule = new Nodule($rootScope, 'situation', function(dialog, currentStep) {
         $scope.dialog = dialog;
-        $scope.prepareStep('initial');
+        $scope.currentStep = currentStep || 'initial';
+    });
+
+    $scope.$watch('currentStep', function(step) {
+        $scope.prepareStep(step);
+    });
+
+    $scope.$watch('dialog', function() {
+        $scope.prepareStep($scope.currentStep);
     });
 
     $scope.prepareStep = function(step) {
@@ -26,13 +34,16 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
         if ($scope.dialog && $scope.dialog[step]) {
           $scope.step = $scope.dialog[step];
           $scope.step.story = $sce.trustAsHtml($scope.step.story);
+        } else {
+          console.error('missing step in dialog definition', $scope.step, $scope.dialog);
+          $scope.step = {};
         }
     };
 
     // your controller code here
     $scope.choose = function(choice){
         if (typeof choice.next === 'string') {
-          $scope.prepareStep(choice.next);
+          $scope.currentStep = choice.next;
         } else if (typeof choice.next === 'function') {
           choice.next();
         } else {
