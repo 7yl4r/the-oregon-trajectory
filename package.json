@@ -50,6 +50,7 @@
     }
   },
   "browser": {
+    "situation": "./ng-modules/situation/situation.js",
     "trader": "./ng-modules/trader/trader.coffee",
     "example-module": "./ng-modules/exampleModule/exampleModule.js",
     "game-btn": "./ng-modules/gameBtn/gameBtn.js",

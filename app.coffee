@@ -11,6 +11,7 @@ window.onbeforeunload = () ->
 `
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('situation'),
         require('trader'),
         require('example-module'),
         require('debris-encounter'),
