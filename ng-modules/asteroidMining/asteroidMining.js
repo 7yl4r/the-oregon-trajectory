@@ -37,7 +37,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
     vm.create = function() {
       //  This will run in Canvas mode, so let's gain a little speed and display
-      vm.game.renderer.clearBeforeRender = true;
+      vm.game.renderer.clearBeforeRender = false;
       vm.game.renderer.roundPixels = true;
 
       //  We need arcade physics
