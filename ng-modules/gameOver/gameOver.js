@@ -40,7 +40,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $sco
 app.controller("gameOverCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
   vm = this;
   vm.music =  new Howl({
-    urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
+    urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
     loop: true
   });
   clickSound = new Howl({
