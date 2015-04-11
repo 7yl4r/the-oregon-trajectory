@@ -1,4 +1,14 @@
 <div ng-controller="situationController as situationCtrl">
-	put situation view content here...
-	<button ng-click="situationCtrl.clickedTheButton()"></button>
+    <div>
+        <div ng-bind-html="step.story"></div>
+
+        {{step.question}}
+        <ul>
+            <li ng-repeat="option in step.options">
+							<game-btn ng-click="situationCtrl.choose(option)">
+                {{option.name}}
+            	</game-btn>
+						</li>
+        </ul>
+    </div>
 </div>
