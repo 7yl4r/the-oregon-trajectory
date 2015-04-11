@@ -17,6 +17,8 @@ Here is a breakdown of the event attributes:
     * criteria - NOT YET IMPLEMENTED, feel free to leave this out for now
  */
 
+PHANTOM_SIGNAL = require("./situations/phantomSignal.coffee");
+
 module.exports = [
     {
         "name": "space-junk",
@@ -53,5 +55,16 @@ module.exports = [
             }
         },
         "sprite":"randomStation"
+    },{
+        "name": "phantom-signal",
+        "criteria":{},
+        "chance": .01,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": PHANTOM_SIGNAL
+            }
+        }
     }
 ];

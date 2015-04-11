@@ -29,7 +29,7 @@ module.exports = class Event
             switch func
                 when TRIGGER_ACTIONS.switchModule
                     @doAction = ()=>
-                        @scope.$emit('switchToModule', args.moduleName)
+                        @scope.$emit('switchToModule', args.moduleName, args.moduleArgs)
                 when TRIGGER_ACTIONS.alert
                     @doAction = ()=>
                         alert(args.text)

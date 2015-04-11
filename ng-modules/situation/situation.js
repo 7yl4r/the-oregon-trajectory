@@ -19,6 +19,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
         $scope.dialog = dialog;
         $scope.currentStep = currentStep || 'initial';
     });
+    vm.data = data;
 
     $scope.$watch('currentStep', function(step) {
         $scope.prepareStep(step);
@@ -40,12 +41,11 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
         }
     };
 
-    // your controller code here
     $scope.choose = function(choice){
         if (typeof choice.next === 'string') {
           $scope.currentStep = choice.next;
         } else if (typeof choice.next === 'function') {
-          choice.next();
+          choice.next(vm.data);
         } else {
           alert("can't handle next of type "+(typeof choice.next)+" and value "+choice.next);
         }
