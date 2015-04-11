@@ -32,26 +32,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
     vm.startGame = function(){
         clickSound.play();
         data.reset();
-        $scope.$emit('switchToModule', 'situation', {
-          initial:{
-            story: "starting out with <b>rocks</b>",
-            question: "what to do?",
-            choices: [
-                {name: "do think B", next:"thingB"},
-                {name: "do thing A", next:"thingA"}
-            ]
-          },
-          thingA: {
-            story: "alerting A...",
-            choices: [{name: "continue", next: function(){
-              $scope.$emit('switchToModule', 'shop');
-            }}]
-          },
-          thingB: {
-            story: "rebooting B...",
-            choices: [{name: "retry", next: "initial"}]
-          }
-        });
+        $scope.$emit('switchToModule', 'shop');
     }
 }]);
 
