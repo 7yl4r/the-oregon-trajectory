@@ -15,65 +15,67 @@
   width: 48%;
 }
 
-.image-2 img {
+.spaceman img {
   position: absolute;
-  top: 60%;
-  left: 5%;
+  top: 25%;
+  left: 7%;
 }
 
-.image-3 img {
+.spaceman-2 img {
   position: absolute;
-  top: 55%;
-  left: 25%;
-
+  top: 70%;
+  left: 60%;
 }
 
-.image img {
+.spaceman-3 img {
+  position: absolute;
+  top: 65%;
+  left: 20%;
+}
+
+.spacecraft img {
   position: absolute;
   top: 35%;
-  left: 15%;
+  left: 8%;
   width: 35%;
 }
 
-.image-2 {
-  -webkit-animation: spin 45s infinite linear;
-  animation: spin 45s infinite linear;
+.spaceman {
+  -webkit-animation: spin 8s infinite linear;
+  animation: spin 8s infinite linear;
 }
 
 @-webkit-keyframes spin {
-
-  0%   { -webkit-transform: rotate(360deg) translate(0em, 0em);}
-  15%   { -webkit-transform: rotate(180) translate(1em, 1em);}
-  30% { -webkit-transform: rotate(180deg) translate(2em, -3em);}
-  55% { -webkit-transform: rotate(180deg) translate(1em, -3em);}
-  70% { -webkit-transform: rotate(360deg) translate(0em, 0em);}
-  85% { -webkit-transform: rotate(180deg) translate(1em, -2em);}
-  100% { -webkit-transform: rotate(180deg) translate(0em, 0em);}
+  100% { -webkit-transform: rotate(360deg)}
 }
 
-
-.image-3 {
-  -webkit-animation: float 45s infinite linear;
+.spaceman-2 {
+  -webkit-animation: float-right 45s infinite linear;
   animation: float 45s infinite linear;
 }
 
-@-webkit-keyframes float {
-  0%   { -webkit-transform: rotate(-180deg) translate(0em, 0em);}
-  15%   { -webkit-transform: rotate(-180) translate(1em, 1em);}
-  30% { -webkit-transform: rotate(-180deg) translate(2em, -3em);}
-  55% { -webkit-transform: rotate(-180deg) translate(1em, -3em);}
-  70% { -webkit-transform: rotate(-360deg) translate(0em, 0em);}
-  85% { -webkit-transform: rotate(-180deg) translate(1em, -2em);}
-  100% { -webkit-transform: rotate(-180deg) translate(0em, 0em);}
-  100% { -webkit-transform: rotate(360deg); }
+@-webkit-keyframes float-right {
+  0%   { -webkit-transform: rotate(180deg) translate(-3em, -3em);}
+  15%   { -webkit-transform: rotate(360) translate(-1em, -1em);}
+  30% { -webkit-transform: rotate(90deg) translate(2em, -6em);}
+  55% { -webkit-transform: rotate(180deg) translate(1em, -3em);}
+  70% { -webkit-transform: rotate(360deg) translate(-3em, -1em);}
+  85% { -webkit-transform: rotate(180deg) translate(1em, -2em);}
+  100% { -webkit-transform: rotate(90deg) translate(1em, 4em);}
 }
-@-moz-keyframes spin {
-  100% { -moz-transform: rotate(360deg); }
+
+
+.spaceman-3 {
+  -webkit-animation: float-left 45s infinite linear;
+  animation: float 45s infinite linear;
 }
-@keyframes spin {
-  100% {
-    -moz-transform:rotate(360deg);
-    -o-transform:rotate(360deg);
-    transform:rotate(360deg);
-  }
+
+@-webkit-keyframes float-left {
+  0%   { -webkit-transform: rotate(-360deg) translate(-5em, -5em);}
+  15%   { -webkit-transform: rotate(-180) translate(0em, 0em);}
+  30% { -webkit-transform: rotate(-90deg) translate(-1em, -1em);}
+  55% { -webkit-transform: rotate(-180deg) translate(0em, 0em);}
+  70% { -webkit-transform: rotate(-360deg) translate(0em, -2em);}
+  85% { -webkit-transform: rotate(-180deg) translate(1em, -em);}
+  100% { -webkit-transform: rotate(-90deg) translate(-2em, 0em);}
 }
