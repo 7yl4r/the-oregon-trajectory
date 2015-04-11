@@ -50,6 +50,7 @@
     }
   },
   "browser": {
+    "asteroid-mining": "./ng-modules/asteroidMining/asteroidMining.js",
     "situation": "./ng-modules/situation/situation.js",
     "trader": "./ng-modules/trader/trader.coffee",
     "example-module": "./ng-modules/exampleModule/exampleModule.js",
