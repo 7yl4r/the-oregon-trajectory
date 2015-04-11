@@ -59,7 +59,14 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
 
     // your controller code here
     vm.choose = function(choice){
-        alert('you choose '+choice.name);
+        console.log('choosen ', choice);
+        if (typeof choice.next === 'string') {
+          vm.prepareStep(choice.next);
+        } else if (typeof choice.next === 'function') {
+          choice.next();
+        } else {
+          alert("can't handle next of type "+(typeof choice.next)+" and value "+choice.next);
+        }
     }
 }]);
 
