@@ -98,14 +98,25 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.getNextTile = function(xpos){
         // if distance travelled to destination big enough, append destination tile, else use filler
-        var tileWidth = 5000;
+        var tileWidth = 5000;  // estimated width (should be close to avg)
+        var img = new Image()
         if (data.nextWaypoint.distance < tileWidth/2 ){
-            // TODO: return planet tile
+            // TODO: return relevant location tile
+            if (data.nextWaypoint.name == 'moon'){
+                img.src = "assets/backgrounds/moon-background.png"
+                return new Tile(xpos, img);
+            } else if (data.nextWaypoint.name == 'mars'){
+                img.src = "assets/backgrounds/jupiter-float.png"
+            } else {
+                // filler
+                img.src = "assets/backgrounds/jupiter-float.png"
+            }
         } else {
-            // TODO: return filler tile
+            // filler
+            img.src = "assets/backgrounds/jupiter-float.png"
         }
-        // TODO: remove this:
-        return new Tile(xpos, document.getElementById("test-bg"));
+        // return filler tile
+        return new Tile(xpos, img));
     }
 
     vm.travel = function(){
