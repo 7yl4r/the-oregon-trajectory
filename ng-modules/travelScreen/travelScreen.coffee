@@ -102,10 +102,14 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         if (data.nextWaypoint.distance < halfTileWidth ){
             console.log(data.nextWaypoint);
             // TODO: return relevant location tile
-            if (data.nextWaypoint.name == 'moon'){
-                img = document.getElementById("moon");
-            } else if (data.nextWaypoint.name == 'mars'){
-                img = document.getElementById("mars");
+            if (data.nextWaypoint.name == 'moon'
+                || data.nextWaypoint.name == 'mars'
+                || data.nextWaypoint.name == 'ceres'
+                || data.nextWaypoint.name == 'jupiter'
+                || data.nextWaypoint.name == 'europa'
+            ){
+                img = document.getElementById(data.nextWaypoint.name);
+            }
             } else {
                 // filler
                 img = document.getElementById("filler");
