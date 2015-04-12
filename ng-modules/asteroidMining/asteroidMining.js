@@ -8,7 +8,7 @@ var app = angular.module('asteroid-mining', []);
 app.directive("asteroidMining", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/asteroidMining/asteroidMining.html"
+        templateUrl: "ng-modules/asteroidMining/asteroidMining.html"
     };
 });
 
@@ -27,12 +27,12 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
     vm.preload = function() {
 
-      // vm.game.load.image('a1', '/assets/sprites/asteroids/0.png');
-      // vm.game.load.image('a2', '/assets/sprites/asteroids/1.png');
-      vm.game.load.image('a3', '/assets/sprites/asteroids/p0.png');
-      vm.game.load.image('space', '/assets/backgrounds/milky_way_bg.png');
+      // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
+      // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
+      vm.game.load.image('a3', 'assets/sprites/asteroids/p0.png');
+      vm.game.load.image('space', 'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
-      vm.game.load.image('ship', '/assets/sprites/ship-nothrust.png');
+      vm.game.load.image('ship', 'assets/sprites/ship-nothrust.png');
 
     }
 
