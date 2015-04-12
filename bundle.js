@@ -153,7 +153,7 @@ var isOldBrowser;
 
 
 
-},{"angular":34,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":36,"game-over":14,"header-navbar":17,"howler":2,"main-menu":15,"maneuver-screen":16,"ngTouch":33,"shop":19,"situation":20,"splash-header":22,"trader":23,"travel-screen":30,"ui.bootstrap":32,"you-win":31}],2:[function(require,module,exports){
+},{"angular":41,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":43,"game-over":14,"header-navbar":17,"howler":2,"main-menu":15,"maneuver-screen":16,"ngTouch":40,"shop":19,"situation":21,"splash-header":23,"trader":24,"travel-screen":37,"ui.bootstrap":39,"you-win":38}],2:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!
@@ -213,6 +213,11 @@ module.exports = Location = (function() {
         return new Sprite('assets/sprites/station_sheet.png', "station1", -1000, 'random');
       case "maneuver":
         return new Sprite('assets/sprites/maneuver-node/sprites.png', "maneuver-node", -1000, 300);
+      default:
+        return new Sprite('assets/sprites/spec.png', {
+          w: 3,
+          h: 3
+        }, 0, "random");
     }
   };
 
@@ -222,7 +227,7 @@ module.exports = Location = (function() {
 
 
 
-},{"./travelScreen/Sprite.coffee":24}],4:[function(require,module,exports){
+},{"./travelScreen/Sprite.coffee":25}],4:[function(require,module,exports){
 var Nodule,
   slice = [].slice;
 
@@ -282,7 +287,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":34}],6:[function(require,module,exports){
+},{"angular":41}],6:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -651,7 +656,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
 
 module.exports = angular.module('asteroid-mining').name;
 
-},{"angular":34,"howler":2,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":4,"phaser":37}],7:[function(require,module,exports){
+},{"angular":41,"howler":2,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":4,"phaser":44}],7:[function(require,module,exports){
 module.exports = function (stats, callback) {
   return {
     state_exit: {
@@ -718,7 +723,7 @@ app.controller("audioController", function(){
 });
 
 module.exports = angular.module('audio-controls').name;
-},{"angular":34,"howler":2}],10:[function(require,module,exports){
+},{"angular":41,"howler":2}],10:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -815,7 +820,7 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":34,"game-btn":13,"howler":2,"nodule":4}],11:[function(require,module,exports){
+},{"angular":41,"game-btn":13,"howler":2,"nodule":4}],11:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -852,7 +857,7 @@ app.controller("exampleController", ['data', '$scope', '$rootScope', function(da
 
 // this is needed to connect with the main app.
 module.exports = angular.module('example-module').name;
-},{"angular":34,"nodule":4}],12:[function(require,module,exports){
+},{"angular":41,"nodule":4}],12:[function(require,module,exports){
 var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, app;
 
 require('angular');
@@ -930,9 +935,9 @@ Game = (function() {
     this.crewHealth = [100, 100];
     this.shipHealth = 100;
     this.rations = 0;
-    this.eatChance = 0.1;
+    this.eatChance = 0.05;
     this.fuel = 0;
-    this.fuelExpense = 0.1;
+    this.fuelExpense = 0.05;
     this.fuelChance = 0.7;
     this.miningFuelExpenseThrust = this.fuelExpense * this.fuelChance * 0.25;
     this.miningFuelExpenseRotate = this.miningFuelExpenseThrust * 0.1;
@@ -941,7 +946,7 @@ Game = (function() {
     this.miningFuelPerPartMax = 5;
     this.miningCreditsPerPartMin = 2;
     this.miningCreditsPerPartMax = 8;
-    this.radiationChance = .005;
+    this.radiationChance = .0005;
     this.money = 5000;
     this.visited = ['ksc'];
     return this.nextWaypoint = this._getStatsToNextLocation();
@@ -1086,7 +1091,7 @@ module.exports = angular.module('game').name;
 
 
 
-},{"./Location.coffee":3,"angular":34}],13:[function(require,module,exports){
+},{"./Location.coffee":3,"angular":41}],13:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -1114,7 +1119,7 @@ app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(da
 }]);
 
 module.exports = angular.module('game-btn').name;
-},{"angular":34,"howler":2}],14:[function(require,module,exports){
+},{"angular":41,"howler":2}],14:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -1174,7 +1179,7 @@ app.controller("gameOverCtrl", [ '$rootScope', '$scope', function($rootScope, $s
 
 module.exports = angular.module('game-over').name;
 
-},{"angular":34,"howler":2,"nodule":4}],15:[function(require,module,exports){
+},{"angular":41,"howler":2,"nodule":4}],15:[function(require,module,exports){
 require('angular');
 require('howler');
 Nodule = require('nodule');
@@ -1211,11 +1216,15 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
         data.reset();
         $scope.$emit('switchToModule', 'shop');
     }
+
+    vm.learnAbout = function() {
+        $scope.$emit('switchToModule', 'situation', require('learn-about-trajectory'));
+    }
 }]);
 
 module.exports = angular.module('main-menu').name;
 
-},{"angular":34,"game-btn":13,"howler":2,"nodule":4}],16:[function(require,module,exports){
+},{"angular":41,"game-btn":13,"howler":2,"learn-about-trajectory":20,"nodule":4}],16:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -1246,7 +1255,7 @@ app.controller('ManeuverScreenCtrl', function($scope){
 
 module.exports = angular.module('maneuver-screen').name;
 
-},{"angular":34}],17:[function(require,module,exports){
+},{"angular":41}],17:[function(require,module,exports){
 require('angular');
 
 
@@ -1260,7 +1269,7 @@ app.directive("navHeader", function() {
 });
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":34}],18:[function(require,module,exports){
+},{"angular":41}],18:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -1349,7 +1358,7 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":34}],19:[function(require,module,exports){
+},{"angular":41}],19:[function(require,module,exports){
 require('angular');
 Howl = require('howler');
 Nodule = require('nodule');
@@ -1516,7 +1525,42 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scop
 
 module.exports = angular.module('shop').name;
 
-},{"angular":34,"game":12,"game-btn":13,"howler":2,"ng-hold":18,"nodule":4}],20:[function(require,module,exports){
+},{"angular":41,"game":12,"game-btn":13,"howler":2,"ng-hold":18,"nodule":4}],20:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: "<h3>Oregon Trajectory Info</h3> The year is 2050 and you are tasked with a mission called Oregon, named after the Oregon Trail of the 1800s, to go to Jupiter’s moon Europa. NASA scientists discovered that Europa has signs of water and organic molecules such as methane. They believe life is under the surface of Europa and you’re going to find it!",
+    choices: [
+      {
+        name: "Continue",
+        next: "step2"
+      }
+    ]
+  },
+  step2: {
+    story: "<h3>Oregon Trajectory info (cont)</h3> Since the discovery of the potential for life on Europa, NASA has been ramping up it’s capabilities to get humans out of Earth’s orbit. This all started in the mid 2020’s with the development of the Space Launch System and with NASA’s Asteroid Redirect Mission to identify, capture and redirect a near-Earth asteroid to a stable orbit around the moon.",
+    choices: [
+      {
+        name: "Continue",
+        next: "step3"
+      }
+    ]
+  },
+  step3: {
+    story: "<h3>Oregon Trajectory info (cont)</h3> The Asteroid Redirect Mission (ARM) helped develop new technologies and hardware to reach these near-Earth asteroids. These technologies also made their way to the private space industry where companies were interested in mining these asteroids for metals that are rare on Earth. This was the start of a new age where astronauts were regularly traveling out of Earth’s orbit.",
+    choices: [
+      {
+        name: "Continue",
+        next: function(gamedata) {
+          return gamedata.scope.$broadcast('switchToModule', 'main-menu');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],21:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -1573,7 +1617,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
 
 module.exports = angular.module('situation').name;
 
-},{"angular":34,"howler":2,"nodule":4}],21:[function(require,module,exports){
+},{"angular":41,"howler":2,"nodule":4}],22:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -1620,7 +1664,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":34}],22:[function(require,module,exports){
+},{"angular":41}],23:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -1638,7 +1682,7 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":34,"social-button-directive":21}],23:[function(require,module,exports){
+},{"angular":41,"social-button-directive":22}],24:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -1712,7 +1756,7 @@ module.exports = angular.module('trader').name;
 
 
 
-},{"angular":34,"game-btn":13,"howler":2,"nodule":4}],24:[function(require,module,exports){
+},{"angular":41,"game-btn":13,"howler":2,"nodule":4}],25:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
@@ -1804,7 +1848,7 @@ module.exports = Sprite = (function() {
     ssy = 0;
     if (this.r !== 0) {
       ctx.save();
-      ctx.translate(x + this.w / 2, y + this.w / 2);
+      ctx.translate(x + this.w / 2 * this.scale, y + this.w / 2 * this.scale);
       ctx.rotate(this.r);
       ctx.drawImage(this.sheet, ssx, ssy, this.w, this.h, -this.w / 2 * this.scale, -this.h / 2 * this.scale, this.w * this.scale, this.h * this.scale);
       ctx.restore();
@@ -1824,7 +1868,7 @@ module.exports = Sprite = (function() {
 
 
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var Tile;
 
 module.exports = Tile = (function() {
@@ -1861,7 +1905,7 @@ module.exports = Tile = (function() {
 
 
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var Event, Sprite;
 
 Sprite = require('../Sprite.coffee');
@@ -1984,7 +2028,7 @@ module.exports = Event = (function() {
 
 
 
-},{"../Sprite.coffee":24}],27:[function(require,module,exports){
+},{"../Sprite.coffee":25}],28:[function(require,module,exports){
 /*
 
 This file contains the list of in-travel random events.
@@ -2005,6 +2049,11 @@ Here is a breakdown of the event attributes:
  */
 
 PHANTOM_SIGNAL = require("./situations/phantomSignal.coffee");
+PHANTOM_SIGNAL2 = require("./situations/phantomSignal2.coffee");
+MEDICINE = require("./situations/medicine.coffee");
+MEDICINE2 = require("./situations/medicine2.coffee");
+SOLAR_FLARE = require("./situations/solarFlare.coffee");
+SOLAR_FLARE2 = require("./situations/solarFlare2.coffee");
 
 module.exports = [
     {
@@ -2045,7 +2094,7 @@ module.exports = [
     },{
         "name": "phantom-signal",
         "criteria":{},
-        "chance": .01,
+        "chance": .1,
         "triggeredAction": {
             "function": "switchToModule",
             "args": {
@@ -2053,9 +2102,75 @@ module.exports = [
                 "moduleArgs": PHANTOM_SIGNAL
             }
         }
+    },{
+        "name": "medicine",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": MEDICINE
+            }
+        }
+    },{
+        "name": "solar-flare",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": SOLAR_FLARE
+            }
+        }
+    },{
+        "name": "phantom-signal-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": PHANTOM_SIGNAL2
+            }
+        }
+    },{
+        "name": "medicine-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": MEDICINE2
+            }
+        }
+    },{
+        "name": "solar-flare-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": SOLAR_FLARE2
+            }
+        }
+    },{
+        "name": "solar-flare-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": require("./situations/repairs.coffee")
+            }
+        }
     }
 ];
-},{"./situations/phantomSignal.coffee":29}],28:[function(require,module,exports){
+},{"./situations/medicine.coffee":30,"./situations/medicine2.coffee":31,"./situations/phantomSignal.coffee":32,"./situations/phantomSignal2.coffee":33,"./situations/repairs.coffee":34,"./situations/solarFlare.coffee":35,"./situations/solarFlare2.coffee":36}],29:[function(require,module,exports){
 var Event, EventList, Randy;
 
 Event = require('./Event.coffee');
@@ -2121,7 +2236,93 @@ module.exports = Randy = (function() {
 
 
 
-},{"./Event.coffee":26,"./EventList.js":27}],29:[function(require,module,exports){
+},{"./Event.coffee":27,"./EventList.js":28}],30:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: " As you speed along towards your next destination you come across a science ship investigating the effects of long term spaceflight on human health, and they’d like to examine your crew! <br><br> After almost a century of humans traveling in space (it is the 2050s, anyway!), the ill-effects of space travel on human health have been well documented. Many of the technological advances that we enjoy in medicine came out of the space program (lightweight wheelchairs, CAT and MRI scans, implantable pacemakers, and radiation therapy, to name a few! <br><br> The research collected by this team could help future colonists and even people back home on Earth – but it will cost x fuel and x food to participate in the study.",
+    question: "What do you do?",
+    choices: [
+      {
+        name: "We should do what we can to help, right?",
+        next: "oldShip"
+      }, {
+        name: "We don’t have time to participate in a study, the mission is more important.",
+        next: "wonder"
+      }
+    ]
+  },
+  oldShip: {
+    story: " The team from the other ship studies your crew and gains new insight into the effects of long term spaceflight on human health. They give you 300 fuel and 400 food as a reward for helping them further their knowledge.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel += 300;
+          gameData.food += 400;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  },
+  wonder: {
+    story: " You decided not to participate in the study. You leave the science team behind you, knowing that there will be many other volunteers following in your footsteps in the coming months.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],31:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: " As you continue towards your next destination you’re contacted by a small corporate vessel doing research into the effects of long term spaceflight on mental health, and they’d like to examine your crew! <br><br> The research team offers fuel, food and credits in return for participating in the study, and will share any results with you once the study is finished.",
+    question: "What do you do?",
+    choices: [
+      {
+        name: "Participate in the study",
+        next: "oldShip"
+      }, {
+        name: "We don’t have time to participate in a study, the mission is more important.",
+        next: "wonder"
+      }
+    ]
+  },
+  oldShip: {
+    story: " The team from the other ship comes aboard and studies your crew’s behavior and health for a short period of time – and make surprising discoveries unrelated to mental health! Instead, they discover a new way to combat blindness, one of the most common health issues related to space travel. <br><br> In addition, you receive 430 fuel and 400 food for participating in the study!",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel += 430;
+          gameData.food += 400;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  },
+  wonder: {
+    story: " You decided not to participate in the study. You leave the ship behind you, knowing that there will be many other volunteers following in your footsteps in the coming months.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],32:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
@@ -2164,7 +2365,181 @@ module.exports = {
 
 
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: " As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
+    question: "What do you do?",
+    choices: [
+      {
+        name: "Investigate the signal",
+        next: "oldShip"
+      }, {
+        name: "Ignore the signal and continue on your current path",
+        next: "wonder"
+      }
+    ]
+  },
+  oldShip: {
+    story: "It wasn’t background radiation at all – it’s a small ship! They’ve been trying to signal for help for almost a week. They give you all 500 of their food and 1000 fuel in exchange for a ride to the next station.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel += 500;
+          gameData.food += 1000;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  },
+  wonder: {
+    story: "You decide to continue on your way without investigating the signal, but you always wonder what was out there.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],34:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: "Your ship has taken a beating during the course of your journey, and your crew has decided to do some quick repairs that should hold until you get to your next destination. While the repair team does its work, the rest of the crew takes some much needed time to rest, relax and share memories of home none of you may never see again. *pop* *pop* *ping* <br><br> At first everyone inside the ship panics, worrying that the hull has begun to buckle – but you breathe a sigh of relief when you realize it’s just a tether coming loose… Wait. <br><br> A safety tether? Like the one the crew uses to stay attached to the ship outside during repairs! <br><br> Astronauts have a SAFER (Simplified Aid for EVA Rescue) device built into their suits to help them stay close to the ship if a tether breaks, but you'll have to be very careful about how you proceed to recapture your free-floating crew.",
+    question: "What do you do?",
+    choices: [
+      {
+        name: "You can’t put a cost on human lives, we’ll do anything to save our crew!",
+        next: "saveCrew"
+      }, {
+        name: "It’s too risky, we have to put the safety of the mission first. They’ll have to try and get back to the ship on their own.",
+        next: "sadTimes"
+      }
+    ]
+  },
+  saveCrew: {
+    story: "You successfully rescued all of your crew, but you lost 50 fuel and 100 food in the process.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel -= 50;
+          gameData.food -= 100;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  },
+  sadTimes: {
+    story: "Your stranded crew members were unable to get back to the ship in time, and have sunk into the inky blackness of space. The crew mourns this terrible loss, and you quietly resume your journey. You always ask yourself if you could have done something differently.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],35:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: " You and your crew are running an important experiment that will take another 5 hours to complete, but you’ve received a space weather report warning of an impending proton storm. Proton storms, also known as “solar particle events”, happen when particles emitted by the sun during coronal mass ejects and solar flares are pushed out into space. <br><br>Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn off your equipment and stop your experiment until after the storm passes in a few hours, but your chief science officer believes that you’re on the edge of a breakthrough.",
+    question: "What do you do?",
+    choices: [
+      {
+        name: "Stop the experiment, you can always try again later.",
+        next: "stopexperiment"
+      }, {
+        name: " This experiment is too important to stop! We’ll just have to hope the rewards outweigh the risk…",
+        next: "wonder"
+      }
+    ]
+  },
+  stopexperiment: {
+    story: " You and your crew emerge from the shielded pod safe and sound. You try to rerun your experiment, but fail because you only had enough materials to run the experiment once, and have to chalk this one up to experience. Better luck next time!",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel += 5;
+          gameData.food += 5;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  },
+  wonder: {
+    story: " You and your crew emerge from the shielded pod many hours later, long after your experiment should have been finished. Amazingly enough you didn’t lose any data and your equipment is undamaged – and you’ve made an amazing new discovery about proton storms, too!",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel += 400;
+          gameData.food += 200;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],36:[function(require,module,exports){
+module.exports = {
+  initial: {
+    story: " You and your crew are observing a unique phenomena in space when you receive a space weather report warning of an impending proton storm caused by solar winds. Proton storms can bombard humans with damaging radiation, can destroy solar collector efficiency and damage sensitive equipment. <br><br> Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn shield your equipment as best you can and enter the pod until after the storm passes in a few hours, but your chief science officer believes that this may be the only opportunity to observe this special event.",
+    question: "What do you do?",
+    choices: [
+      {
+        name: "Shield your equipment and head for the pod, you can always try again later.",
+        next: "abandonthread"
+      }, {
+        name: "Ignore the signal and continue on your current path",
+        next: "wonder"
+      }
+    ]
+  },
+  abandonthread: {
+    story: " The solar storm lasted for only an hour, and all of your crew emerges from the shielded pod ready to resume your observations. Your equipment suffered no damage and you’re able to capture some much-needed data!",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          gameData.fuel += 300;
+          gameData.food += 200;
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  },
+  wonder: {
+    story: " The proton storm lasted many hours, and when you and your crew emerge from the pod you find a good deal of your equipment malfunctioning, worse yet any data you captured was lost during the storm. Better luck next time!",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
+  }
+};
+
+
+
+},{}],37:[function(require,module,exports){
 var EVENT_VARIABILITY, Location, MIN_TRAVELS_PER_EVENT, Nodule, Randy, Sprite, Tile;
 
 require('angular');
@@ -2443,7 +2818,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"./../Location.coffee":3,"./Sprite.coffee":24,"./Tile.coffee":25,"./ng-randy/ng-randy.coffee":28,"angular":34,"game":12,"game-btn":13,"ng-hold":18,"nodule":4}],31:[function(require,module,exports){
+},{"./../Location.coffee":3,"./Sprite.coffee":25,"./Tile.coffee":26,"./ng-randy/ng-randy.coffee":29,"angular":41,"game":12,"game-btn":13,"ng-hold":18,"nodule":4}],38:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -2480,7 +2855,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $sco
 
 module.exports = angular.module('you-win').name;
 
-},{"angular":34,"howler":2,"nodule":4}],32:[function(require,module,exports){
+},{"angular":41,"howler":2,"nodule":4}],39:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -2499,7 +2874,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":34}],33:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":41}],40:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -2523,7 +2898,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":34}],34:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":41}],41:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -2783,7 +3158,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],35:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2843,7 +3218,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],36:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -2879,7 +3254,7 @@ FastClick.notNeeded=function(a){var c,b;if("undefined"===typeof window.ontouchst
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],37:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 (function (process,global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /* Phaser v2.3.0 - http://phaser.io - @photonstorm - (c) 2015 Photon Storm Ltd. */
@@ -2908,4 +3283,4 @@ m>this.game.width&&(m=this.game.width),n>this.game.height&&(n=this.game.height);
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":35}]},{},[1]);
+},{"_process":42}]},{},[1]);

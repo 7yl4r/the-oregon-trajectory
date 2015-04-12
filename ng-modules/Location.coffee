@@ -37,3 +37,6 @@ module.exports = class Location
             when "maneuver"
                 return new Sprite('assets/sprites/maneuver-node/sprites.png',
                     "maneuver-node", -1000, 300);
+
+            else
+                return new Sprite('assets/sprites/spec.png', {w:3, h:3}, 0, "random");

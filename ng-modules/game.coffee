@@ -61,10 +61,10 @@ class Game
         @shipHealth = 100
 
         @rations = 0
-        @eatChance = 0.1  # chance of eating per tick
+        @eatChance = 0.05  # chance of eating per tick
 
         @fuel = 0
-        @fuelExpense = 0.1; # main thruster during normal gameplay
+        @fuelExpense = 0.05; # main thruster during normal gameplay
         @fuelChance = 0.7;  # chance of expending fuel per tick
 
         @miningFuelExpenseThrust = @fuelExpense*@fuelChance*0.25; # asteroid mining main thruster throttle
@@ -76,7 +76,7 @@ class Game
         @miningCreditsPerPartMax = 8
 
 
-        @radiationChance = .005  # chance of being irradiated per tick
+        @radiationChance = .0005  # chance of being irradiated per tick
         @money = 5000
         @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
