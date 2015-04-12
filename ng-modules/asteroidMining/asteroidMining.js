@@ -101,7 +101,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$fi
         'a3');
       vm.asteroid.anchor.set(0.5, 0.5);
       vm.asteroid.scale.set(0.5, 0.5);
-      vm.asteroid.rotateAngle = vm.game.rnd.integerInRange(-2, 2);
+      vm.asteroid.rotateAngle = vm.game.rnd.realInRange(-2, 2);
       vm.game.physics.enable(vm.asteroid, Phaser.Physics.ARCADE);
       vm.game.physics.arcade.moveToXY(vm.asteroid, 0,
         rnd(h/10.0, h*9/10.00),
@@ -169,7 +169,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$fi
               var projectile = vm.parts.getFirstExists(false);
               if (projectile) {
                   projectile.reset(bullet.x, bullet.y);
-                  projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation) + asteroid.rotateAngle;
+                  projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation)
+                    + asteroid.rotateAngle
+                    + vm.game.rnd.realInRange(-Math.PI/4, Math.PI/4);
                   vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
               }
 
@@ -187,7 +189,6 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$fi
               vm.stats.crash = true;
               vm.stats.credits = 0;
               vm.stats.fuel = 0;
-              // TODO: data.fuel, data.health, data.food -= ?
               vm.exitModule('crash');
           });
         }
