@@ -35,6 +35,11 @@ class Game
         shopFunc = ()=>
             @scope.$broadcast('switchToModule', 'shop')
 
+        @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
+        @_init()  # initializes params
+
+    _init: ()->
+        # re-initializes the game
         @locations = [
             new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc),
             new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"),
@@ -46,11 +51,7 @@ class Game
             new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"),
             new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", shopFunc)
         ]
-        @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
-        @_init()  # initializes params
-
-    _init: ()->
-        # re-initializes the game
+        
         @distanceTraveled = 0
         @displayDistanceTraveled = 0
         @crewHealth = [100, 100]
