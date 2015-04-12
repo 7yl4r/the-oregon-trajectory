@@ -330,7 +330,15 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$fi
           game.fuel = vm.calcFuel();
           game.money = vm.calcCredits()
         }
-        $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
+
+        var dialog = require('mining-dialog');
+        var r = "state_"+reason;
+        var d = dialog(vm.stats, function(){
+          $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
+        });
+        $scope.$apply(function($scope) {
+          $scope.$emit('switchToModule', 'situation', d, r);
+        });
     }
 }]);
 
