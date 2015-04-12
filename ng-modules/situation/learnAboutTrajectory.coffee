@@ -44,7 +44,8 @@ module.exports = {
         choices: [
             {
                 name: "Continue",
-                next: () -> game.scope.$emit('switchToModule', 'main-menu')
+                next: (gamedata) ->
+                  gamedata.scope.$broadcast('switchToModule', 'main-menu')
             }
         ]
     }
