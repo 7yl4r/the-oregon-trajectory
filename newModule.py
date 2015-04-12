@@ -11,7 +11,7 @@ var app = angular.module('{0}', []);
 app.directive("{1}", function() {{
     return {{
         restrict: 'E',
-        templateUrl: "/ng-modules/{1}/{1}.html"
+        templateUrl: "ng-modules/{1}/{1}.html"
     }};
 }});
 
