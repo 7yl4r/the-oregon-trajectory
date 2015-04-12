@@ -26,18 +26,18 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
     vm.preload = function() {
 
-      vm.game.load.image('a1', 'http://examples.phaser.io/assets/games/asteroids/asteroid1.jpg');
-      vm.game.load.image('a2', 'http://examples.phaser.io/assets/games/asteroids/asteroid2.jpg');
-      vm.game.load.image('a3', 'http://examples.phaser.io/assets/games/asteroids/asteroid3.jpg');
-      vm.game.load.image('space', 'http://examples.phaser.io/assets/skies/deep-space.jpg');
+      // vm.game.load.image('a1', '/assets/sprites/asteroids/0.png');
+      // vm.game.load.image('a2', '/assets/sprites/asteroids/1.png');
+      vm.game.load.image('a3', '/assets/sprites/asteroids/p0.png');
+      vm.game.load.image('space', '/assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
-      vm.game.load.image('ship', 'http://examples.phaser.io/assets/games/asteroids/ship.png');
+      vm.game.load.image('ship', '/assets/sprites/ship-nothrust.png');
 
     }
 
     vm.create = function() {
       //  This will run in Canvas mode, so let's gain a little speed and display
-      vm.game.renderer.clearBeforeRender = true;
+      vm.game.renderer.clearBeforeRender = false;
       vm.game.renderer.roundPixels = true;
 
       //  We need arcade physics
@@ -57,8 +57,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       vm.bullets.setAll('anchor.y', 0.5);
 
       //  Our player ship
-      vm.sprite = vm.game.add.sprite(300, 300, 'ship');
-      vm.sprite.anchor.set(0.5);
+      vm.sprite = vm.game.add.sprite(vm.game.width/3, vm.game.height/2, 'ship');
+      vm.sprite.anchor.set(3.0/5.0, 0.5);
+      vm.sprite.scale.set(0.5, 0.5);
 
       //  and its physics settings
       vm.game.physics.enable(vm.sprite, Phaser.Physics.ARCADE);
@@ -66,16 +67,12 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       vm.sprite.body.drag.set(0);
       vm.sprite.body.maxVelocity.set(200);
 
+      // vm.asteroid = vm.game.add.sprite(vm.game.width*2/3, vm.game.height/2, 'a1')
 
       // asteroids
       vm.asteroids = vm.game.add.group();
       vm.asteroids.enableBody = true;
       vm.asteroids.physicsBodyType = Phaser.Physics.ARCADE;
-
-
-      vm.asteroids.createMultiple(3, 'a1');
-      vm.asteroids.createMultiple(3, 'a2');
-      vm.asteroids.createMultiple(3, 'a3');
       vm.createAsteroids();
 
       //  Game input
@@ -130,7 +127,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     }
 
     vm.createAsteroids = function() {
-        for (var enemyIndex = 0; enemyIndex < 9; enemyIndex++) {
+        for (var enemyIndex = 0; enemyIndex < 5; enemyIndex++) {
             var indexEntry = vm.game.rnd.integerInRange(0, 3),
                 x, y;
             switch (indexEntry) {
@@ -160,7 +157,8 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
                     break;
             }
 
-            var enemy = vm.asteroids.create(x, y, "a" + vm.game.rnd.integerInRange(1, 3));
+            var enemy = vm.asteroids.create(x, y, "a3");
+            enemy.scale = { x: 0.5, y: 0.5 };
             enemy.moveX = vm.game.rnd.integerInRange(-2, 2);
             while (enemy.moveX == 0) {
                 enemy.moveX = vm.game.rnd.integerInRange(-2, 2);
@@ -191,14 +189,14 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
             if (bullet)
             {
-                bullet.reset(vm.sprite.body.x + 16, vm.sprite.body.y + 16);
+                var pos = vm.sprite.toGlobal(vm.sprite.anchor);
+                bullet.reset(pos.x, pos.y);
                 bullet.lifespan = 2000;
                 bullet.rotation = vm.sprite.rotation;
                 vm.game.physics.arcade.velocityFromRotation(vm.sprite.rotation, 400, bullet.body.velocity);
                 bulletTime = vm.game.time.now + 50;
             }
         }
-
     }
 
     vm.screenWrap = function(sprite) {

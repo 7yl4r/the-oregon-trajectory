@@ -83,6 +83,9 @@ module.exports = class Event
                 dimensions.scale = "random"
                 return new Sprite(fname, dimensions, -1000, 'random')
 
+            else
+                return new Sprite('assets/sprites/spec.png', {w:3,h:3,r:0,scale:1}, -1000, 'random')
+
     trigger: ()->
         @count += 1
         @scope.$broadcast("encounter", @)
