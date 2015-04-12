@@ -126,5 +126,16 @@ module.exports = [
                 "moduleArgs": SOLAR_FLARE2
             }
         }
+    },{
+        "name": "solar-flare-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": require("./situations/repairs.coffee")
+            }
+        }
     }
 ];
