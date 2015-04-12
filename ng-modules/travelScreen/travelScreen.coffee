@@ -208,7 +208,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         if (data.distanceTraveled + window.innerWidth + spriteW > Xposition    // if close enough
             && data.distanceTraveled - spriteW < Xposition                  ) { // if we haven't passed it
             location.sprite.y = vm.drift(location.sprite.y);
-            location.sprite.r += locations.sprite.spin;
+            location.sprite.r += location.sprite.spin;
             var rel_x = Xposition-data.distanceTraveled;
             location.sprite.x = rel_x;
             // use existing y value (add small bit of drift)
