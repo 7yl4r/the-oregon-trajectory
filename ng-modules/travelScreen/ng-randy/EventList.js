@@ -58,7 +58,7 @@ module.exports = [
     },{
         "name": "phantom-signal",
         "criteria":{},
-        "chance": .01,
+        "chance": .05,
         "triggeredAction": {
             "function": "switchToModule",
             "args": {

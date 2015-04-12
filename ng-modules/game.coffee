@@ -51,7 +51,7 @@ class Game
             new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"),
             new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", shopFunc)
         ]
-        
+
         @distanceTraveled = 0
         @displayDistanceTraveled = 0
         @crewHealth = [100, 100]
