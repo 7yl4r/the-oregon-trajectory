@@ -16,7 +16,7 @@
                 </div>
             </div>
             <game-btn>
-                <span class="glyphicon glyphicon-resize-horizontal"></span>distance traveled: <span class="badge">{{travelCtrl.data.distanceTraveled}}</span>
+                <span class="glyphicon glyphicon-resize-horizontal"></span>distance traveled: <span class="badge">{{travelCtrl.data.displayDistanceTraveled}}</span>
             </game-btn>
 
             <game-btn>
@@ -46,7 +46,7 @@
             <game-btn>
                 <span class="glyphicon glyphicon-resize-horizontal"></span>
                 distance to next station ({{travelCtrl.data.nextWaypoint.name}}):
-                <span class="badge">{{travelCtrl.data.nextWaypoint.distance}}</span>
+                <span class="badge">{{travelCtrl.data.nextWaypoint.displayDistance}}</span>
             </game-btn>
         </div>
     </div>
