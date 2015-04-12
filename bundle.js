@@ -290,10 +290,12 @@ Phaser = require('phaser');
 
 var app = angular.module('asteroid-mining', []);
 
+var baseUrl = location.host == '7yl4r.github.io' ? '/the-oregon-trajectory/' : '/';
+
 app.directive("asteroidMining", function() {
     return {
         restrict: 'E',
-        templateUrl: "ng-modules/asteroidMining/asteroidMining.html"
+        templateUrl: baseUrl+"ng-modules/asteroidMining/asteroidMining.html"
     };
 });
 
@@ -314,10 +316,10 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
       // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
       // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
-      vm.game.load.image('a3', 'assets/sprites/asteroids/p0.png');
-      vm.game.load.image('space', 'assets/backgrounds/milky_way_bg.png');
+      vm.game.load.image('a3', baseUrl+'assets/sprites/asteroids/p0.png');
+      vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
-      vm.game.load.image('ship', 'assets/sprites/ship-nothrust.png');
+      vm.game.load.image('ship', baseUrl+'assets/sprites/ship-nothrust.png');
 
     }
 
@@ -2346,7 +2348,7 @@ module.exports = angular.module('you-win').name;
 },{"angular":32,"howler":2,"nodule":4}],30:[function(require,module,exports){
 (function (global){
 
-; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
+; require("/home/groupsky/src/the-oregon-trajectory/node_modules/angular/angular.min.js");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
  * angular-bootstrap
@@ -2362,10 +2364,10 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":32}],31:[function(require,module,exports){
+},{"/home/groupsky/src/the-oregon-trajectory/node_modules/angular/angular.min.js":32}],31:[function(require,module,exports){
 (function (global){
 
-; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
+; require("/home/groupsky/src/the-oregon-trajectory/node_modules/angular/angular.min.js");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
  AngularJS v1.3.15
@@ -2386,7 +2388,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":32}],32:[function(require,module,exports){
+},{"/home/groupsky/src/the-oregon-trajectory/node_modules/angular/angular.min.js":32}],32:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
