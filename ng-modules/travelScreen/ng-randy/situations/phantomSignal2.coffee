@@ -15,15 +15,15 @@ module.exports = {
   },
   oldShip: {
     story: "It wasn’t background radiation at all – it’s a small ship! They’ve been trying to signal for help for almost a week. They give you all 500 of their food and 1000 fuel in exchange for a ride to the next station.",
-choices: [
-  {
-    name: "continue",
-    next: (gameData)->
-      gameData.fuel += 500
-      gameData.food += 1000
-      gameData.scope.$broadcast('switchToModule', 'travel-screen')
-  }
-]
+    choices: [
+      {
+        name: "continue",
+        next: (gameData)->
+          gameData.fuel += 500
+          gameData.food += 1000
+          gameData.scope.$broadcast('switchToModule', 'travel-screen')
+      }
+    ]
 },
 wonder: {
   story: "You decide to continue on your way without investigating the signal, but you always wonder what was out there.",
