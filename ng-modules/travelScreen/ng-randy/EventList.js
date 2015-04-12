@@ -18,6 +18,11 @@ Here is a breakdown of the event attributes:
  */
 
 PHANTOM_SIGNAL = require("./situations/phantomSignal.coffee");
+PHANTOM_SIGNAL2 = require("./situations/phantomSignal2.coffee");
+MEDICINE = require("./situations/medicine.coffee");
+MEDICINE2 = require("./situations/medicine2.coffee");
+SOLAR_FLARE = require("./situations/solarFlare.coffee");
+SOLAR_FLARE2 = require("./situations/solarFlare2.coffee");
 
 module.exports = [
     {
@@ -58,12 +63,78 @@ module.exports = [
     },{
         "name": "phantom-signal",
         "criteria":{},
-        "chance": .01,
+        "chance": .1,
         "triggeredAction": {
             "function": "switchToModule",
             "args": {
                 "moduleName": "situation",
                 "moduleArgs": PHANTOM_SIGNAL
+            }
+        }
+    },{
+        "name": "medicine",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": MEDICINE
+            }
+        }
+    },{
+        "name": "solar-flare",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": SOLAR_FLARE
+            }
+        }
+    },{
+        "name": "phantom-signal-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": PHANTOM_SIGNAL2
+            }
+        }
+    },{
+        "name": "medicine-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": MEDICINE2
+            }
+        }
+    },{
+        "name": "solar-flare-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": SOLAR_FLARE2
+            }
+        }
+    },{
+        "name": "solar-flare-two",
+        "criteria":{},
+        "chance": .1,
+        "triggeredAction": {
+            "function": "switchToModule",
+            "args": {
+                "moduleName": "situation",
+                "moduleArgs": require("./situations/repairs.coffee")
             }
         }
     }

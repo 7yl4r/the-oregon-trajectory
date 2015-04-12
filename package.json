@@ -54,6 +54,7 @@
     }
   },
   "browser": {
+    "learn-about-trajectory": "./ng-modules/situation/learnAboutTrajectory.coffee",
     "asteroid-mining": "./ng-modules/asteroidMining/asteroidMining.js",
     "mining-dialog-start": "./ng-modules/asteroidMining/dialogStart.js",
     "mining-dialog-finish": "./ng-modules/asteroidMining/dialogFinish.js",
