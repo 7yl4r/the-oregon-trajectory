@@ -46,7 +46,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
         secondary_fuel: 0,
         bullets: 0,
         parts: 0,
-        crash: false
+        crash: false,
+        fuel: 0,
+        credits: 0
       }
 
       var w=vm.game.width;
@@ -177,13 +179,14 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
           vm.game.physics.arcade.overlap(vm.parts, vm.sprite, null, function (sprite, projectile) {
               if (!projectile.alive) return;
 
-              vm.stats.parts++;
-              // TODO: data.fuel, data.money += ?
+              vm.partCatch(projectile);
               projectile.kill();
           });
 
           vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function (sprite, asteroid) {
               vm.stats.crash = true;
+              vm.stats.credits = 0;
+              vm.stats.fuel = 0;
               // TODO: data.fuel, data.health, data.food -= ?
               vm.exitModule('crash');
           });
@@ -297,14 +300,34 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.debug.body(vm.asteroid);
       // vm.parts.forEachExists(vm.game.debug.body, vm.game.debug);
 
-      vm.game.debug.text('fuel spent: ' + (vm.stats.main_fuel*3 + vm.stats.secondary_fuel), 32, 32);
-      vm.game.debug.text('bullets spent: ' + vm.stats.bullets, 32, 64);
-      vm.game.debug.text('parts caught: ' + vm.stats.parts, 32, 96);
+      vm.game.debug.text('fuel: ' + vm.calcFuel(), 32, 32);
+      vm.game.debug.text('credits: ' + vm.calcCredits(), 32, 96);
+    }
+
+    vm.calcFuel = function() {
+      return game.fuel
+        + vm.stats.fuel
+        - vm.stats.main_fuel*game.miningFuelExpenseThrust
+        - vm.stats.secondary_fuel*game.miningFuelExpenseRotate
+        - vm.stats.bullets*game.miningFuelExpenseFiringBullet
+    }
+
+    vm.calcCredits = function() {
+      return game.money
+        + vm.stats.credits
+    }
+
+    vm.partCatch = function() {
+      var rnd = vm.game.rnd.integerInRange.bind(vm.game.rnd);
+      vm.stats.parts++;
+      vm.stats.fuel += rnd(game.miningFuelPerPartMin, game.miningFuelPerPartMax);
+      vm.stats.credits += rnd(game.miningCreditsPerPartMin, game.miningCreditsPerPartMax);
     }
 
     vm.exitModule = function(reason){
         vm.game.destroy();
-        vm.game = null;
+        game.fuel = vm.calcFuel();
+        game.money = vm.calcCredits()
         $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
     }
 }]);

@@ -60,8 +60,17 @@ class Game
         @eatChance = 0.1  # chance of eating per tick
 
         @fuel = 0
-        @fuelExpense = 0.1;
+        @fuelExpense = 0.1; # main thruster during normal gameplay
         @fuelChance = 0.7;  # chance of expending fuel per tick
+
+        @miningFuelExpenseThrust = @fuelExpense*@fuelChance*0.25; # asteroid mining main thruster throttle
+        @miningFuelExpenseRotate = @miningFuelExpenseThrust*0.1; # asteroid mining rotating the ship left/right
+        @miningFuelExpenseFiringBullet = @miningFuelExpenseRotate*0.001; # firing a bullet
+        @miningFuelPerPartMin = 0
+        @miningFuelPerPartMax = 5
+        @miningCreditsPerPartMin = 2
+        @miningCreditsPerPartMax = 8
+
 
         @radiationChance = .005  # chance of being irradiated per tick
         @money = 5000
