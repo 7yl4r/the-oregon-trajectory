@@ -55,7 +55,8 @@ module.exports = class Event
                         w:439,
                         h:400,
                         scale: "random",
-                        r: "random"
+                        r: "random",
+                        spin: .001
                     },
                     -1000,
                     'random'
