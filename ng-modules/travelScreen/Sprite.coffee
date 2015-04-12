@@ -13,7 +13,8 @@ module.exports = class Sprite
         #       }
         @sheet = new Image()
         @sheet.src = spritesheet
-        @r = 0  # rotation
+        @r = 0  # rotation position
+        @spin = 0  # rotation speed
         @setDimensions(nameOrJSON)
         if y == 'random'
             @y = Math.random()*200.0+200.0
@@ -45,6 +46,7 @@ module.exports = class Sprite
                 @max_frames = 0
                 @scale = 0.3 + Math.random()*0.2
                 @r = Math.random()*Math.PI*2
+                @spin = Math.random()*Math.PI*0.2  # max of pi/5
             when "maneuver-node"
                 @h = 100
                 @w = 140
@@ -66,6 +68,10 @@ module.exports = class Sprite
                 else
                     @r = nameOrJSON.r or 0
                     
+                if nameOrJSON.spin == "random"
+                    @spin = Math.random()*Math.PI*0.2  # max of pi/5
+                else 
+                    @spin = nameOrJSON.spin or 0
                 return
 
     next_frame: ()->
