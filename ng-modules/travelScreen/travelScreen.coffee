@@ -217,8 +217,11 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.drawLocations = function(){
         for (var loc_i in data.locations){
-
-            vm.drawSprite(data.locations[loc_i]);
+            try {
+                vm.drawSprite(data.locations[loc_i]);
+            } catch (err){
+                console.log(loc_i, 'of', data.locations.length, data.locations[loc_i]);
+            }
         }
     }
 
@@ -254,6 +257,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         vm.data.locations.push(new Location(
             event.name + '_' + event.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
+            0,
             ngEvent.name,
             event.doAction,
             event.sprite

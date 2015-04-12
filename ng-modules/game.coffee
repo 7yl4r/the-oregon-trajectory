@@ -31,15 +31,14 @@ class Game
     constructor: (gameScope)->
         @scope = gameScope
 
-        # TODO: move this...
-        shopFunc = ()=>
-            @scope.$broadcast('switchToModule', 'shop')
-
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
 
     _init: ()->
         # re-initializes the game
+        # TODO: move this...
+        shopFunc = ()=>
+            @scope.$broadcast('switchToModule', 'shop')
         @locations = [
             new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc),
             new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"),

@@ -38,9 +38,9 @@ module.exports = [
         "criteria":{},
         "chance": 0.6,
         "triggeredAction": {
-            "function": "alert",
+            "function": "switchToModule",
             "args": {
-                "text": "CLINK! Did you hear that?!? ... ... ... Probably nothing."
+                "moduleName": "asteroid-mining"
             }
         },
         "sprite": "randomAsteroid"
@@ -58,7 +58,7 @@ module.exports = [
     },{
         "name": "phantom-signal",
         "criteria":{},
-        "chance": .05,
+        "chance": .01,
         "triggeredAction": {
             "function": "switchToModule",
             "args": {

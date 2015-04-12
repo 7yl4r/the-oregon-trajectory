@@ -23,7 +23,7 @@ module.exports = class Event
     setTriggerFunction: (actionJSON)->
         # converts given json function & args description into actual function which is assigned to @doAction
         # :returns: true if action is set, false if not
-        if actionJSON?
+        if typeof actionJSON == 'object'
             func = actionJSON.function
             args = actionJSON.args
             switch func
@@ -33,6 +33,9 @@ module.exports = class Event
                 when TRIGGER_ACTIONS.alert
                     @doAction = ()=>
                         alert(args.text)
+            return true
+        else if typeof actionJSON == 'function'
+            @doAction = actionJSON
             return true
         else
             return false

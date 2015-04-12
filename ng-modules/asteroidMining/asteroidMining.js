@@ -1,6 +1,7 @@
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
+Phaser = require('phaser');
 
 var app = angular.module('asteroid-mining', []);
 
@@ -106,71 +107,78 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     }
 
     vm.update = function() {
-      if (vm.cursors.up.isDown) {
-          vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
-      } else {
-          vm.sprite.body.acceleration.set(0);
-      }
-
-      if (vm.cursors.left.isDown) {
-          vm.sprite.body.angularVelocity = -100;
-      } else if (vm.cursors.right.isDown) {
-          vm.sprite.body.angularVelocity = 100;
-      } else {
-          vm.sprite.body.angularVelocity = 0;
-      }
-
-      if (vm.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-          vm.fireBullet();
-      }
-
-      // TODO check for out of screen
-      if (vm.screenKill(vm.sprite)) {
-          alert('You broke out of orbit!');
-      }
-
-      // vm.bullets.forEachExists(vm.screenKill, this);
-
-      vm.parts.forEachExists(vm.screenKill, this);
-
-      (function (item) {
-          item.angle += item.rotateAngle;
-          // TODO: check for out of screen
-          if (vm.screenKill(item)) {
-            alert('The asteroid excaped!');
-          };
-      })(vm.asteroid);
-
-      vm.game.physics.arcade.overlap(vm.bullets, vm.asteroids, null, function(bullet, asteroid){
-          if (!bullet.alive || !asteroid.alive) return;
-          bullet.kill();
-          asteroid.kill();
-      });
-
-      vm.game.physics.arcade.overlap(vm.bullets, vm.asteroid, null, function(asteroid, bullet) {
-          if (!bullet.alive) return;
-
-          var projectile = vm.parts.getFirstExists(false);
-          if (projectile) {
-              projectile.reset(bullet.x, bullet.y);
-              projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation)+asteroid.rotateAngle;
-              vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
+        if (vm.nodule.isActive) {
+          if (vm.cursors.up.isDown) {
+              vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
+          } else {
+              vm.sprite.body.acceleration.set(0);
           }
 
-          bullet.kill();
-      });
+          if (vm.cursors.left.isDown) {
+              vm.sprite.body.angularVelocity = -100;
+          } else if (vm.cursors.right.isDown) {
+              vm.sprite.body.angularVelocity = 100;
+          } else {
+              vm.sprite.body.angularVelocity = 0;
+          }
 
-      vm.game.physics.arcade.overlap(vm.parts, vm.sprite, null, function(sprite, projectile) {
-          if (!projectile.alive) return;
+          if (vm.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+              vm.fireBullet();
+          }
 
-          alert('you cought a part of the asteroid!');
+          // TODO check for out of screen
+          if (vm.screenKill(vm.sprite)) {
+              alert('You broke out of orbit!');
+              vm.exitModule();
+          }
 
-          projectile.kill();
-      });
+          // vm.bullets.forEachExists(vm.screenKill, this);
 
-      vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function(sprite, asteroid) {
-          alert('you crashed in to the asteroid!');
-      });
+          vm.parts.forEachExists(vm.screenKill, this);
+
+          (function (item) {
+              item.angle += item.rotateAngle;
+              // TODO: check for out of screen
+              if (vm.screenKill(item)) {
+                  alert('The asteroid excaped!');
+                  vm.exitModule();
+              }
+              ;
+          })(vm.asteroid);
+
+          vm.game.physics.arcade.overlap(vm.bullets, vm.asteroids, null, function (bullet, asteroid) {
+              if (!bullet.alive || !asteroid.alive) return;
+              bullet.kill();
+              asteroid.kill();
+          });
+
+          vm.game.physics.arcade.overlap(vm.bullets, vm.asteroid, null, function (asteroid, bullet) {
+              if (!bullet.alive) return;
+
+              var projectile = vm.parts.getFirstExists(false);
+              if (projectile) {
+                  projectile.reset(bullet.x, bullet.y);
+                  projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation) + asteroid.rotateAngle;
+                  vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
+              }
+
+              bullet.kill();
+          });
+
+          vm.game.physics.arcade.overlap(vm.parts, vm.sprite, null, function (sprite, projectile) {
+              if (!projectile.alive) return;
+
+              alert('you cought a part of the asteroid!');
+              // TODO: data.fuel, data.money += ?
+              projectile.kill();
+          });
+
+          vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function (sprite, asteroid) {
+              alert('you crashed in to the asteroid!');
+              // TODO: data.fuel, data.health, data.food -= ?
+              vm.exitModule();
+          });
+        }
     }
 
     vm.createAsteroids = function() {
@@ -273,6 +281,10 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.debug.spriteInfo(vm.asteroid, 32, 132);
       // vm.game.debug.text('ship.velocity: ' + vm.sprite.body.velocity, 32, 250);
       // vm.game.debug.text('aster.velocity: ' + vm.asteroid.body.velocity, 32, 300);
+    }
+
+    vm.exitModule = function(){
+        $scope.$emit('switchToModule', 'travel-screen');
     }
 }]);
 
