@@ -6,7 +6,7 @@ var app = angular.module('header-navbar', []);
 app.directive("navHeader", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/navHeader/navHeader.html"
+        templateUrl: "ng-modules/navHeader/navHeader.html"
     };
 });
 

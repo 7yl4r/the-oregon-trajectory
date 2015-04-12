@@ -8,7 +8,7 @@ var app = angular.module('situation', [
 app.directive("situation", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/situation/situation.html"
+        templateUrl: "ng-modules/situation/situation.html"
     };
 });
 

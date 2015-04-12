@@ -274,7 +274,7 @@ app = angular.module('app-footer', []);
 app.directive("appFooter", function() {
   return {
     restrict: 'E',
-    templateUrl: "/the-oregon-trajectory/ng-modules/appFooter/appFooter.html"
+    templateUrl: "ng-modules/appFooter/appFooter.html"
   };
 });
 
@@ -712,7 +712,7 @@ var app = angular.module('example-module', []);
 app.directive("exampleModule", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/exampleModule/exampleModule.html"
+        templateUrl: "ng-modules/exampleModule/exampleModule.html"
     };
 });
 
@@ -969,7 +969,7 @@ var app = angular.module('game-btn', []);
 app.directive("gameBtn", function() {
     return {
         restrict: 'AE',
-        templateUrl: "/the-oregon-trajectory/ng-modules/gameBtn/gameBtn.html",
+        templateUrl: "ng-modules/gameBtn/gameBtn.html",
         transclude: true, // transclusion instructs angular to embed the original content from the DOM into the resultant output
         scope: {
             text:'@'
@@ -1097,7 +1097,7 @@ var app = angular.module('maneuver-screen', []);
 app.directive("maneuver-screen", function() {
   return {
     restrict: 'E',
-    templateUrl: "/ng-modules/maneuverScreen/maneuverScreen.html"
+    templateUrl: "ng-modules/maneuverScreen/maneuverScreen.html"
   };
 });
 
@@ -1129,7 +1129,7 @@ var app = angular.module('header-navbar', []);
 app.directive("navHeader", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/navHeader/navHeader.html"
+        templateUrl: "ng-modules/navHeader/navHeader.html"
     };
 });
 
@@ -1237,7 +1237,7 @@ var app = angular.module('shop', [
 app.directive("shop", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/shop/shop.html"
+        templateUrl: "ng-modules/shop/shop.html"
     };
 });
 
@@ -1401,7 +1401,7 @@ var app = angular.module('situation', [
 app.directive("situation", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/situation/situation.html"
+        templateUrl: "ng-modules/situation/situation.html"
     };
 });
 
@@ -1460,7 +1460,7 @@ app.controller("trustyUrl", ['$sce', '$scope', function($sce, $scope) {
 app.directive("socialButtons", function() {
     return {
         restrict: 'AE',
-        templateUrl: "/the-oregon-trajectory/ng-modules/socialButtons/socialButtons.html",
+        templateUrl: "ng-modules/socialButtons/socialButtons.html",
         scope: {
             ghForkBtn:'@',
             ghWatchBtn:'@',
@@ -1507,7 +1507,7 @@ var app = angular.module(
 app.directive("splashHeader", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/splashHeader/splashHeader.html"
+        templateUrl: "ng-modules/splashHeader/splashHeader.html"
     };
 });
 
@@ -2058,7 +2058,7 @@ var app = angular.module('travel-screen', [
 app.directive("travelScreen", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/travelScreen/travelScreen.html"
+        templateUrl: "ng-modules/travelScreen/travelScreen.html"
     };
 });
 

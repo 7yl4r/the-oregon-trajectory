@@ -5,7 +5,7 @@ var app = angular.module('maneuver-screen', []);
 app.directive("maneuver-screen", function() {
   return {
     restrict: 'E',
-    templateUrl: "/ng-modules/maneuverScreen/maneuverScreen.html"
+    templateUrl: "ng-modules/maneuverScreen/maneuverScreen.html"
   };
 });
 

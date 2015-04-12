@@ -10,7 +10,7 @@ var app = angular.module(
 app.directive("splashHeader", function() {
     return {
         restrict: 'E',
-        templateUrl: "/the-oregon-trajectory/ng-modules/splashHeader/splashHeader.html"
+        templateUrl: "ng-modules/splashHeader/splashHeader.html"
     };
 });
 
