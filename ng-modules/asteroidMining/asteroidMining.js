@@ -14,9 +14,31 @@ app.directive("asteroidMining", function() {
     };
 });
 
+app.directive("asteroidMiningGame", function() {
+    return {
+        restrict: 'E',
+        templateUrl: baseUrl+"ng-modules/asteroidMining/asteroidMiningGame.html"
+    };
+});
+
 app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+
+    new Nodule($rootScope, 'asteroid-mining', function(){
+        var dialog = require('mining-dialog-start');
+        var d = dialog(vm.stats, function(){
+          $scope.$emit('switchToModule', 'asteroid-mining-game');
+        }, function(){
+          $scope.$emit('switchToModule', 'travel-screen');
+        });
+        $scope.$emit('switchToModule', 'situation', d);
+    });
+
+}]);
+
+app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
+
     var vm = this;
-    vm.nodule = new Nodule($rootScope, 'asteroid-mining', function(){
+    vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
       if (vm.game) {
         vm.game.destroy();
       }
@@ -46,7 +68,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
         secondary_fuel: 0,
         bullets: 0,
         parts: 0,
-        crash: false
+        crash: false,
+        fuel: 0,
+        credits: 0
       }
 
       var w=vm.game.width;
@@ -99,7 +123,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
         'a3');
       vm.asteroid.anchor.set(0.5, 0.5);
       vm.asteroid.scale.set(0.5, 0.5);
-      vm.asteroid.rotateAngle = vm.game.rnd.integerInRange(-2, 2);
+      vm.asteroid.rotateAngle = vm.game.rnd.realInRange(-2, 2);
       vm.game.physics.enable(vm.asteroid, Phaser.Physics.ARCADE);
       vm.game.physics.arcade.moveToXY(vm.asteroid, 0,
         rnd(h/10.0, h*9/10.00),
@@ -167,7 +191,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
               var projectile = vm.parts.getFirstExists(false);
               if (projectile) {
                   projectile.reset(bullet.x, bullet.y);
-                  projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation) + asteroid.rotateAngle;
+                  projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation)
+                    + asteroid.rotateAngle
+                    + vm.game.rnd.realInRange(-Math.PI/4, Math.PI/4);
                   vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
               }
 
@@ -177,14 +203,14 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
           vm.game.physics.arcade.overlap(vm.parts, vm.sprite, null, function (sprite, projectile) {
               if (!projectile.alive) return;
 
-              vm.stats.parts++;
-              // TODO: data.fuel, data.money += ?
+              vm.partCatch(projectile);
               projectile.kill();
           });
 
           vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function (sprite, asteroid) {
               vm.stats.crash = true;
-              // TODO: data.fuel, data.health, data.food -= ?
+              vm.stats.credits = 0;
+              vm.stats.fuel = 0;
               vm.exitModule('crash');
           });
         }
@@ -297,15 +323,44 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.debug.body(vm.asteroid);
       // vm.parts.forEachExists(vm.game.debug.body, vm.game.debug);
 
-      vm.game.debug.text('fuel spent: ' + (vm.stats.main_fuel*3 + vm.stats.secondary_fuel), 32, 32);
-      vm.game.debug.text('bullets spent: ' + vm.stats.bullets, 32, 64);
-      vm.game.debug.text('parts caught: ' + vm.stats.parts, 32, 96);
+      vm.game.debug.text('fuel: ' + $filter('number')(vm.calcFuel(), 2), 32, 32);
+      vm.game.debug.text('credits: ' + vm.calcCredits(), 32, 96);
+    }
+
+    vm.calcFuel = function() {
+      return game.fuel
+        + vm.stats.fuel
+        - vm.stats.main_fuel*game.miningFuelExpenseThrust
+        - vm.stats.secondary_fuel*game.miningFuelExpenseRotate
+        - vm.stats.bullets*game.miningFuelExpenseFiringBullet
+    }
+
+    vm.calcCredits = function() {
+      return game.money
+        + vm.stats.credits
+    }
+
+    vm.partCatch = function() {
+      var rnd = vm.game.rnd.integerInRange.bind(vm.game.rnd);
+      vm.stats.parts++;
+      vm.stats.fuel += rnd(game.miningFuelPerPartMin, game.miningFuelPerPartMax);
+      vm.stats.credits += rnd(game.miningCreditsPerPartMin, game.miningCreditsPerPartMax);
     }
 
     vm.exitModule = function(reason){
-        vm.game.destroy();
-        vm.game = null;
-        $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
+        if (vm.game) {
+          game.fuel = vm.calcFuel();
+          game.money = vm.calcCredits()
+        }
+
+        var dialog = require('mining-dialog-finish');
+        var r = "state_"+reason;
+        var d = dialog(vm.stats, function(){
+          $scope.$emit('switchToModule', 'travel-screen');
+        });
+        $scope.$apply(function($scope) {
+          $scope.$emit('switchToModule', 'situation', d, r);
+        });
     }
 }]);
 
