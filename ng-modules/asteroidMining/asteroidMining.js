@@ -32,6 +32,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
       // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
       vm.game.load.image('a3', baseUrl+'assets/sprites/asteroids/p0.png');
+      vm.game.load.image('a-small', baseUrl+'assets/sprites/asteroids/p0-small.png');
       vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
       vm.game.load.image('ship', baseUrl+'assets/sprites/ship-nothrust.png');
@@ -65,11 +66,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       vm.parts = vm.game.add.group();
       vm.parts.enableBody = true;
       vm.parts.physicsBodyType = Phaser.Physics.ARCADE;
-      vm.parts.createMultiple(60, 'a3');
+      vm.parts.createMultiple(60, 'a-small');
       vm.parts.setAll('anchor.x', 0.5);
       vm.parts.setAll('anchor.y', 0.5);
-      vm.parts.setAll('scale.x', 0.05);
-      vm.parts.setAll('scale.y', 0.05);
 
       //  Our player ship
       vm.sprite = vm.game.add.sprite(
@@ -283,6 +282,11 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.debug.spriteInfo(vm.asteroid, 32, 132);
       // vm.game.debug.text('ship.velocity: ' + vm.sprite.body.velocity, 32, 250);
       // vm.game.debug.text('aster.velocity: ' + vm.asteroid.body.velocity, 32, 300);
+      // vm.game.debug.body(vm.sprite);
+      // vm.game.debug.body(vm.asteroid);
+      // vm.bullets.forEachExists(vm.game.debug.body, vm.game.debug);
+      // vm.game.debug.body(vm.asteroid);
+      // vm.parts.forEachExists(vm.game.debug.body, vm.game.debug);
     }
 
     vm.exitModule = function(){
