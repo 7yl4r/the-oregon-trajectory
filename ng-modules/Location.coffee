@@ -1,9 +1,10 @@
 Sprite = require('./travelScreen/Sprite.coffee')
 
 module.exports = class Location
-    constructor: (name, x, actionKey, trigger=undefined, sprite=undefined)->
+    constructor: (name, x, xdot, actionKey, trigger=undefined, sprite=undefined)->
         @name = name
         @x = x
+        @xdot = xdot
         @actionKey = actionKey
         if sprite?
             @sprite = sprite
