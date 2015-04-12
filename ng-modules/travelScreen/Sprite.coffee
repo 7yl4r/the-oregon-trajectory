@@ -44,9 +44,9 @@ module.exports = class Sprite
                 @h = 150
                 @w = 512
                 @max_frames = 0
-                @scale = 0.3 + Math.random()*0.2
+                @scale = 0.3 + Math.random()*0.02
                 @r = Math.random()*Math.PI*2
-                @spin = Math.random()*Math.PI*0.2  # max of pi/5
+                @spin = Math.random()*Math.PI*0.005  # max of pi/50
             when "maneuver-node"
                 @h = 100
                 @w = 140
@@ -69,7 +69,7 @@ module.exports = class Sprite
                     @r = nameOrJSON.r or 0
                     
                 if nameOrJSON.spin == "random"
-                    @spin = Math.random()*Math.PI*0.2  # max of pi/5
+                    @spin = Math.random()*Math.PI*0.005  # max of pi/50
                 else 
                     @spin = nameOrJSON.spin or 0
                 return
@@ -86,12 +86,12 @@ module.exports = class Sprite
         ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
         if @r != 0
             ctx.save()
-            ctx.translate(x,y)
+            ctx.translate(x+@w/2,y+@w/2)
             ctx.rotate(@r)
-            ctx.drawImage(@sheet, ssx, ssy, @w, @h, -@w/2, -@h/2, @w*@scale, @h*@scale)
+            ctx.drawImage(@sheet, ssx, ssy, @w, @h, -@w/2*@scale, -@h/2*@scale, @w*@scale, @h*@scale)
             ctx.restore()
         else
-            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x-@w/2, y-@h/2, @w*@scale, @h*@scale)
+            ctx.drawImage(@sheet, ssx, ssy, @w, @h, x-@w/2*@scale, y-@h/2*@scale, @w*@scale, @h*@scale)
 
         @draw_counter += 1
         if @draw_counter > @draws_per_frame
