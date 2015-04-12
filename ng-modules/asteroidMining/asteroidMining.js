@@ -153,7 +153,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
           var projectile = vm.parts.getFirstExists(false);
           if (projectile) {
               projectile.reset(bullet.x, bullet.y);
-              projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation);
+              projectile.rotation = Phaser.Math.reverseAngle(bullet.rotation)+asteroid.rotateAngle;
               vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
           }
 
@@ -166,6 +166,10 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
           alert('you cought a part of the asteroid!');
 
           projectile.kill();
+      });
+
+      vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function(sprite, asteroid) {
+          alert('you crashed in to the asteroid!');
       });
     }
 
