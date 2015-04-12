@@ -590,7 +590,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     vm.exitModule = function(reason){
         vm.game.destroy();
         vm.game = null;
-        $scope.$emit('switchToModule', 'travel-screen', reason, stats);
+        $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
     }
 }]);
 
