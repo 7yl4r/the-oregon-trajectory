@@ -7,7 +7,7 @@ var app = angular.module('game-over', []);
 app.directive("gameOver", function() {
   return {
     restrict: 'E',
-    templateUrl: "/ng-modules/gameOver/gameOver.html"
+    templateUrl: "ng-modules/gameOver/gameOver.html"
   };
 });
 

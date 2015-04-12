@@ -10,7 +10,7 @@ app.controller("trustyUrl", ['$sce', '$scope', function($sce, $scope) {
 app.directive("socialButtons", function() {
     return {
         restrict: 'AE',
-        templateUrl: "/ng-modules/socialButtons/socialButtons.html",
+        templateUrl: "ng-modules/socialButtons/socialButtons.html",
         scope: {
             ghForkBtn:'@',
             ghWatchBtn:'@',

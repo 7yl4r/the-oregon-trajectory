@@ -22,7 +22,7 @@ var app = angular.module('travel-screen', [
 app.directive("travelScreen", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/travelScreen/travelScreen.html"
+        templateUrl: "ng-modules/travelScreen/travelScreen.html"
     };
 });
 

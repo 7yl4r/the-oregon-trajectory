@@ -9,7 +9,7 @@ app = angular.module('trader', [
 app.directive("trader", () ->
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/trader/trader.html"
+        templateUrl: "ng-modules/trader/trader.html"
     }
 )
 

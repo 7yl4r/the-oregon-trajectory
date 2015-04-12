@@ -7,7 +7,7 @@ var app = angular.module('you-win', []);
 app.directive("youWin", function() {
     return {
         restrict: 'E',
-        templateUrl: "/ng-modules/youWin/youWin.html"
+        templateUrl: "ng-modules/youWin/youWin.html"
     };
 });
 
