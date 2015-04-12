@@ -326,9 +326,10 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$fi
     }
 
     vm.exitModule = function(reason){
-        vm.game.destroy();
-        game.fuel = vm.calcFuel();
-        game.money = vm.calcCredits()
+        if (vm.game) {
+          game.fuel = vm.calcFuel();
+          game.money = vm.calcCredits()
+        }
         $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
     }
 }]);
