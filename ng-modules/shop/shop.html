@@ -22,8 +22,8 @@
                 Rations: {{shop.data.rations}}
             </div>
             <div class="info-container container-shadow">
-                Distance Traveled: {{shop.data.distanceTraveled}}<br>
-                Distance to {{shop.data.nextWaypoint.name}}: {{shop.data.nextWaypoint.distance}}<br>
+                Distance Traveled: {{shop.data.displayDistanceTraveled}}<br>
+                Distance to {{shop.data.nextWaypoint.name}}: {{shop.data.nextWaypoint.displayDistance}}<br>
                 Current fuel efficiency: {{100 * (1 - shop.data.fuelExpense)}}%
             </div>
         </div>

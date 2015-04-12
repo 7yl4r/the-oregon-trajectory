@@ -82,7 +82,7 @@ class Game
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
             @distanceTraveled += TRAVEL_SPEED
-            @displayDistanceTraveled += TRAVEL_SPEED * @nextWaypoint.travelRate
+            @displayDistanceTraveled += Math.round(TRAVEL_SPEED * @nextWaypoint.travelRate)
             if Math.random() < @fuelChance
                 @fuel -= @fuelExpense
         else
@@ -103,7 +103,7 @@ class Game
             @nextWaypoint = @_getStatsToNextLocation()
         else  # just update the distance
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
-            @nextWaypoint.displayDistance = @nextWaypoint.distance * @nextWaypoint.travelRate
+            @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance * @nextWaypoint.travelRate)
 
     hurtCrew: (i, amnt)->
         # hurts crewmember i given amnt (and checks for death)
@@ -179,7 +179,7 @@ class Game
 
             # calculate distance remaining before arrival
         next.distance = next.location - @distanceTraveled
-        next.displayDistance = next.distance * next.travelRate
+        next.displayDistance = Math.round(next.distance * next.travelRate)
         next.fuelEstimate = next.distance * @fuelExpense * @fuelChance / TRAVEL_SPEED
         next.rationEstimate = next.distance * @eatChance * @crewHealth.length / TRAVEL_SPEED
         return next
