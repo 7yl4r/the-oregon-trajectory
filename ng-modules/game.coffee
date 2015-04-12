@@ -39,6 +39,8 @@ class Game
         # TODO: move this...
         shopFunc = ()=>
             @scope.$broadcast('switchToModule', 'shop')
+        winFunc = ()=>
+            @scope.$broadcast('switchToModule', 'you-win')
         @locations = [
             new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc),
             new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"),
@@ -48,7 +50,9 @@ class Game
             new Location("ceres-maneuver", DIST_CERES_MANU, PIX_2_AU_CERES, "maneuver"),
             new Location("ceres", DIST_CERES, PIX_2_AU_CERES, "station", shopFunc),
             new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"),
-            new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", shopFunc)
+            new Location("jupiter", DIST_EUROPA-DIST_MOON, PIX_2_AU_EUROPA-PIX_2_AU_MOON, "maneuver"),
+            new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", winFunc)
+            new Location("END_OF_UNIVERSE", DIST_EUROPA+DIST_ISS, PIX_2_AU_EUROPA+PIX_2_AU_ISS, "maneuver")
         ]
 
         @distanceTraveled = 0
