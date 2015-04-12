@@ -25,10 +25,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       });
     });
 
-    vm.bulletTime = 0;
-
     vm.preload = function() {
-
       // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
       // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
       vm.game.load.image('a3', baseUrl+'assets/sprites/asteroids/p0.png');
@@ -40,6 +37,15 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     }
 
     vm.create = function() {
+      vm.bulletTime = 0;
+      vm.stats = {
+        main_fuel: 0,
+        secondary_fuel: 0,
+        bullets: 0,
+        parts: 0,
+        crash: false
+      }
+
       var w=vm.game.width;
       var h=vm.game.height;
       var rnd=vm.game.rnd.integerInRange.bind(vm.game.rnd);
@@ -111,14 +117,17 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
         if (vm.nodule.isActive) {
           if (vm.cursors.up.isDown) {
               vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
+              vm.stats.main_fuel++;
           } else {
               vm.sprite.body.acceleration.set(0);
           }
 
           if (vm.cursors.left.isDown) {
               vm.sprite.body.angularVelocity = -100;
+              vm.stats.secondary_fuel++;
           } else if (vm.cursors.right.isDown) {
               vm.sprite.body.angularVelocity = 100;
+              vm.stats.secondary_fuel++;
           } else {
               vm.sprite.body.angularVelocity = 0;
           }
@@ -127,10 +136,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
               vm.fireBullet();
           }
 
-          // TODO check for out of screen
           if (vm.screenKill(vm.sprite)) {
-              alert('You broke out of orbit!');
-              vm.exitModule();
+              // alert('You broke out of orbit!');
+              vm.exitModule('exit');
           }
 
           // vm.bullets.forEachExists(vm.screenKill, this);
@@ -139,12 +147,9 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
           (function (item) {
               item.angle += item.rotateAngle;
-              // TODO: check for out of screen
               if (vm.screenKill(item)) {
-                  alert('The asteroid excaped!');
-                  vm.exitModule();
+                  vm.exitModule('end');
               }
-              ;
           })(vm.asteroid);
 
           vm.game.physics.arcade.overlap(vm.bullets, vm.asteroids, null, function (bullet, asteroid) {
@@ -169,15 +174,15 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
           vm.game.physics.arcade.overlap(vm.parts, vm.sprite, null, function (sprite, projectile) {
               if (!projectile.alive) return;
 
-              alert('you cought a part of the asteroid!');
+              vm.stats.parts++;
               // TODO: data.fuel, data.money += ?
               projectile.kill();
           });
 
           vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function (sprite, asteroid) {
-              alert('you crashed in to the asteroid!');
+              vm.stats.crash = true;
               // TODO: data.fuel, data.health, data.food -= ?
-              vm.exitModule();
+              vm.exitModule(crash);
           });
         }
     }
@@ -251,6 +256,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
                 bullet.rotation = vm.sprite.rotation;
                 vm.game.physics.arcade.velocityFromRotation(vm.sprite.rotation, 400, bullet.body.velocity);
                 vm.bulletTime = vm.game.time.now + 250;
+                vm.stats.bullets++;
             }
         }
     }
@@ -287,10 +293,14 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.bullets.forEachExists(vm.game.debug.body, vm.game.debug);
       // vm.game.debug.body(vm.asteroid);
       // vm.parts.forEachExists(vm.game.debug.body, vm.game.debug);
+
+      vm.game.debug.text('fuel spent: ' + vm.stats.main_fuel*3 + vm.stats.secondary_fuel, 32, 32);
+      vm.game.debug.text('bullets spent: ' + vm.stats.bullets, 32, 64);
+      vm.game.debug.text('parts caught: ' + vm.stats.parts, 32, 96);
     }
 
-    vm.exitModule = function(){
-        $scope.$emit('switchToModule', 'travel-screen');
+    vm.exitModule = function(reason){
+        $scope.$emit('switchToModule', 'travel-screen', reason, stats);
     }
 }]);
 
