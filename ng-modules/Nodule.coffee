@@ -8,11 +8,11 @@ module.exports = class Nodule
             @onExit = onExit
         @isActive = false
 
-        @scope.$on('switchToModule', (event, nextModule)=>
+        @scope.$on('switchToModule', (event, nextModule, args...)=>
             if not @isActive
                 if nextModule == @name  # if switching to this module
                     @isActive = true
-                    @onEntry()
+                    @onEntry args...
             else
                 # switching from this module to another
                 @isActive = false

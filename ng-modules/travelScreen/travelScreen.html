@@ -1,7 +1,12 @@
 <div ng-controller="travelScreenController as travelCtrl">
     <!-- todo: these images don't really _have_ to be in the html... -->
-    <img id="test-bg" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/sun_transparent.png" style="display:none">
+    <img id="filler" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/filler.png" style="display:none">
     <img id="bg-earth" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/bg.png" style="display:none">
+    <img id="moon" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/moon.png" style="display:none">
+    <img id="mars" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/mars.png" style="display:none">
+    <img id="ceres" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/ceres.png" style="display:none">
+    <img id="jupiter" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/jupiter.png" style="display:none">
+    <img id="europa" ng-src="{{travelCtrl.data.gameDir}}/assets/backgrounds/europa.png" style="display:none">
 
     <div id="travel-screen-wrapper">
         <canvas id="travelCanvas" width="100%" height="600px">
@@ -16,7 +21,7 @@
                 </div>
             </div>
             <game-btn>
-                <span class="glyphicon glyphicon-resize-horizontal"></span>distance traveled: <span class="badge">{{travelCtrl.data.distanceTraveled}}</span>
+                <span class="glyphicon glyphicon-resize-horizontal"></span>distance traveled: <span class="badge">{{travelCtrl.data.displayDistanceTraveled}}</span>
             </game-btn>
 
             <game-btn>
@@ -46,7 +51,7 @@
             <game-btn>
                 <span class="glyphicon glyphicon-resize-horizontal"></span>
                 distance to next station ({{travelCtrl.data.nextWaypoint.name}}):
-                <span class="badge">{{travelCtrl.data.nextWaypoint.distance}}</span>
+                <span class="badge">{{travelCtrl.data.nextWaypoint.displayDistance}}</span>
             </game-btn>
         </div>
     </div>
