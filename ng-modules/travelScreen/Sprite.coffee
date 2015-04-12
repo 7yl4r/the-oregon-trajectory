@@ -46,7 +46,7 @@ module.exports = class Sprite
                 @max_frames = 0
                 @scale = 0.3 + Math.random()*0.02
                 @r = Math.random()*Math.PI*2
-                @spin = Math.random()*Math.PI*0.005  # max of pi/50
+                @spin = Math.random()*Math.PI*0.003  # max of pi/50
             when "maneuver-node"
                 @h = 100
                 @w = 140
@@ -69,7 +69,7 @@ module.exports = class Sprite
                     @r = nameOrJSON.r or 0
                     
                 if nameOrJSON.spin == "random"
-                    @spin = Math.random()*Math.PI*0.005  # max of pi/50
+                    @spin = Math.random()*Math.PI*0.003  # max of pi/50
                 else 
                     @spin = nameOrJSON.spin or 0
                 return
