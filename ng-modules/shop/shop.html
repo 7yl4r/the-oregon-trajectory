@@ -22,38 +22,40 @@
                 Rations: {{shop.data.rations}}
             </div>
             <div class="info-container container-shadow">
-                Distance Traveled: {{shop.data.distanceTraveled}}<br>
-                Distance to {{shop.data.nextWaypoint.name}}: {{shop.data.nextWaypoint.distance}}<br>
+                Distance Traveled: {{shop.data.displayDistanceTraveled}}<br>
+                Distance to {{shop.data.nextWaypoint.name}}: {{shop.data.nextWaypoint.displayDistance}}<br>
                 Current fuel efficiency: {{100 * (1 - shop.data.fuelExpense)}}%
             </div>
         </div>
     </div>
     <div class="flex-container">
         <div class="showcase">
-            <div class="item-container container-shadow active-item">
+            <div class="activeItem-container container-shadow active-item">
                 <div class="item-contents">
                     <h4 class="item-name">{{shop.activeItem.name}}</h4>
                     <img class="item-image" ng-src="{{shop.activeItem.image}}"/><br>
-                </div>
-                <div class="item-description">
-                    {{shop.activeItem.description}}<br>
+                    <div class="item-description">
+                        {{shop.activeItem.description}}<br>
+                    </div>
+                    <div class="input-group">
+                            <span class="input-group-addon" style="line-height: 20%">
+                                {{shop.activeItem.price | currency}} x</span>
+                        <input type="text" id="{{shop.activeItem.key}}" class="form-control input-sm" placeholder="amount"/>
+                    </div>
+                    <button class="btn btn-inverse item-buy" ng-click="shop.buy()">Trade</button>
                 </div>
             </div>
         </div>
-        <div class="storefront shop-box">
-            <div class="col-md-4 item-col" ng-repeat="item in shop.item_consumables">
-                <div class="item-outer">
-                    <div class="item-container container-shadow" ng-class="shop.ifItemActive(item.name)"
-                         ng-click="shop.setActiveItem(item.name)">
-                        <div class="item-contents">
-                            <h4 class="item-name">{{item.name}}</h4>
-                            <img class="item-image" ng-src="{{item.image}}"/><br>
-                        </div>
-                        <div class="input-group item-buy" style="position: absolute">
-                            <span class="input-group-addon btn-default btn-sm"
-                                  ng-click="shop.buy(item)" style="line-height: 20%">
-                                {{item.price | currency}}</span>
-                            <input type="text" id="{{item.key}}" class="form-control input-sm" placeholder="amount"/>
+        <div class="storefront">
+            <div class="shop-box" id="store-display">
+                <div class="col-md-4 item-col" ng-repeat="item in shop.item_consumables">
+                    <div class="item-outer">
+                        <div class="item-container container-shadow" ng-class="shop.ifItemActive(item.name)"
+                             ng-click="shop.setActiveItem(item.name)">
+                            <div class="item-contents">
+                                <h4 class="item-name">{{item.name}}</h4>
+                                <img class="item-image" ng-src="{{item.image}}"/>
+                            </div>
                         </div>
                     </div>
                 </div>

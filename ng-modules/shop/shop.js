@@ -38,23 +38,33 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scop
     this.tab = 1;
     this.activeItem = this.item_consumables[0];
 
-    this.buy = function(item){
-        var amt = parseInt(document.getElementById(item.key).value);
-        var total = amt * item.price;
-        if (total <= data.money){
-            // for consumables:
-            if (typeof item.key !== 'undefined') {
-                this.data[item.key] += amt;
-            } else {
-                // TODO: apply item some other way
+    this.buy = function(){
+        var amt = parseInt(document.getElementById(this.activeItem.key).value);
+        var total = amt * this.activeItem.price;
+
+        if (typeof this.activeItem.key !== 'undefined') {
+            var stored = this.data[this.activeItem.key];
+            if (amt < 0 && stored > 0) {
+                // selling
+                this.data[this.activeItem.key] += amt;
+                this.data.money -= total;
+                var sound = new Howl({
+                    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+                });
+                sound.play();
             }
-            this.data.money -= total;
-            var sound = new Howl({
-                urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-            });
-            sound.play();
-        } else {
-            ; // not enough money to buy!
+            else if (total <= data.money && amt > 0) {
+                // buying
+                this.data[this.activeItem.key] += amt;
+                this.data.money -= total;
+                var sound = new Howl({
+                    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+                });
+                sound.play();
+            }
+            else {
+                console.log("ERROR: Not enough money or resources!");
+            }
         }
     };
 

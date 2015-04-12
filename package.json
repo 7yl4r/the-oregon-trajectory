@@ -1,6 +1,6 @@
 {
   "name": "the-oregon-trajectory",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "An old-timey retelling of the mass terrestrial exodus in the 21st century.",
   "bugs": {
     "url": "https://github.com/7yl4r/the-oregon-trail/issues",
@@ -23,7 +23,8 @@
     "angular-bootstrap": "~0.12.0",
     "angular-touch": "~1.3.14",
     "coffeeify": "~1.0.0",
-    "jquery": "~2.1.3"
+    "jquery": "~2.1.3",
+    "phaser": "~2.3.0"
   },
   "browserify": {
     "transform": [
@@ -47,9 +48,14 @@
     },
     "howler": {
       "exports": "Howl"
+    },
+    "phaser": {
+      "exports": "Phaser"
     }
   },
   "browser": {
+    "asteroid-mining": "./ng-modules/asteroidMining/asteroidMining.js",
+    "situation": "./ng-modules/situation/situation.js",
     "trader": "./ng-modules/trader/trader.coffee",
     "example-module": "./ng-modules/exampleModule/exampleModule.js",
     "game-btn": "./ng-modules/gameBtn/gameBtn.js",
@@ -72,6 +78,7 @@
     "ui.bootstrap": "./node_modules/angular-bootstrap/dist/ui-bootstrap.min.js",
     "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",
     "fastclick": "./node_modules/fastclick/build/fastclick.min.js",
-    "howler": "./lib/howler.min.js"
+    "howler": "./lib/howler.min.js",
+    "phaser": "./node_modules/phaser/build/custom/phaser-arcade-physics.min.js"
   }
 }

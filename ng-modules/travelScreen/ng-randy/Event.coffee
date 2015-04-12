@@ -23,16 +23,19 @@ module.exports = class Event
     setTriggerFunction: (actionJSON)->
         # converts given json function & args description into actual function which is assigned to @doAction
         # :returns: true if action is set, false if not
-        if actionJSON?
+        if typeof actionJSON == 'object'
             func = actionJSON.function
             args = actionJSON.args
             switch func
                 when TRIGGER_ACTIONS.switchModule
                     @doAction = ()=>
-                        @scope.$emit('switchToModule', args.moduleName)
+                        @scope.$emit('switchToModule', args.moduleName, args.moduleArgs)
                 when TRIGGER_ACTIONS.alert
                     @doAction = ()=>
                         alert(args.text)
+            return true
+        else if typeof actionJSON == 'function'
+            @doAction = actionJSON
             return true
         else
             return false
@@ -82,6 +85,9 @@ module.exports = class Event
                 dimensions.r = "random"
                 dimensions.scale = "random"
                 return new Sprite(fname, dimensions, -1000, 'random')
+
+            else
+                return new Sprite('assets/sprites/spec.png', {w:3,h:3,r:0,scale:1}, -1000, 'random')
 
     trigger: ()->
         @count += 1

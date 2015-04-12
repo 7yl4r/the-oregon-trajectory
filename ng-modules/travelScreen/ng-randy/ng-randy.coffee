@@ -78,7 +78,7 @@ module.exports = class Randy
         most_novel_event = {count: Number.MAX_VALUE}  # to track of the most novel event triggered
         trigger = false
         for event in @events
-            if die > event.chance
+            if die < event.chance
                 trigger = true
                 if event.count < 1  # if never seen this event
                     event.trigger()

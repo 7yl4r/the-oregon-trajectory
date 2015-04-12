@@ -98,14 +98,27 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.getNextTile = function(xpos){
         // if distance travelled to destination big enough, append destination tile, else use filler
-        var tileWidth = 5000;
-        if (data.nextWaypoint.distance < tileWidth/2 ){
-            // TODO: return planet tile
+        var halfTileWidth = 1000*TRAVELS_PER_MOVE;  // estimated width (should be close to avg) (in moves)
+        if (data.nextWaypoint.distance < halfTileWidth ){
+            console.log(data.nextWaypoint);
+            // TODO: return relevant location tile
+            if (data.nextWaypoint.name == 'moon'
+                || data.nextWaypoint.name == 'mars'
+                || data.nextWaypoint.name == 'ceres'
+                || data.nextWaypoint.name == 'jupiter'
+                || data.nextWaypoint.name == 'europa'
+            ){
+                img = document.getElementById(data.nextWaypoint.name);
+            } else {
+                // filler
+                img = document.getElementById("filler");
+            }
         } else {
-            // TODO: return filler tile
+            // filler
+            img = document.getElementById("filler");
         }
-        // TODO: remove this:
-        return new Tile(xpos, document.getElementById("test-bg"));
+        // return tile
+        return new Tile(xpos, img);
     }
 
     vm.travel = function(){
@@ -137,6 +150,9 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
                 vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
                 overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
                 console.log('tile added');
+                if (vm.tiles.length > 100){
+                    throw new Error('too many tiles!');
+                }
             }
 
             // handle arrival at stations/events
@@ -201,8 +217,11 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.drawLocations = function(){
         for (var loc_i in data.locations){
-
-            vm.drawSprite(data.locations[loc_i]);
+            try {
+                vm.drawSprite(data.locations[loc_i]);
+            } catch (err){
+                console.log(loc_i, 'of', data.locations.length, data.locations[loc_i]);
+            }
         }
     }
 
@@ -238,6 +257,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         vm.data.locations.push(new Location(
             event.name + '_' + event.count,
             vm.data.distanceTraveled + window.innerWidth + 300,
+            0,
             ngEvent.name,
             event.doAction,
             event.sprite

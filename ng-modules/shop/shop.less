@@ -26,6 +26,10 @@
   border-radius: 1ch;
 }
 
+#store-display {
+  height: 12em;
+}
+
 .flex-container {
   display: -webkit-flex;
   display: flex;
@@ -70,6 +74,16 @@
   border-radius: 1ch;
 }
 
+
+.activeItem-container {
+  width: 10em;
+  margin: 1em auto;
+  padding: 0;
+  position: relative;
+  display: block;
+  border-radius: 1ch;
+}
+
 .container-shadow {
   background-color: #ECF0F1;
   box-shadow: 0.5em 0.5em 0.3em #82888c;
@@ -81,6 +95,7 @@
 
 .item-contents {
   margin: 0 auto;
+  display: table;
 }
 
 .item-name {
@@ -98,8 +113,6 @@
 .item-buy {
   width: 100%;
   margin: 0 auto;
-  position: absolute;
-  bottom: 0;
 }
 
 .item-description {
@@ -107,7 +120,5 @@
   font-size: 75%;
   text-align: center;
   padding: 0.1em;
-  position: absolute;
   display: block;
-  bottom: 0;
 }
