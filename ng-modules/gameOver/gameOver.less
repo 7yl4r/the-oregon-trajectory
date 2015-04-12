@@ -40,6 +40,18 @@
   width: 35%;
 }
 
+.spacecraft {
+  -webkit-animation: jump 10s infinite linear;
+  animation: jump 20s infinite linear;
+}
+
+@-webkit-keyframes jump {
+  0%   { -webkit-transform: translate(0em, 0em);}
+  50% { -webkit-transform: translate(0em, -3em);}
+  75% { -webkit-transform: translate(0em, 3em);}
+  100% { -webkit-transform: translate(0em, -1.5em);}
+}
+
 .spaceman {
   -webkit-animation: spin 8s infinite linear;
   animation: spin 8s infinite linear;
