@@ -14,7 +14,7 @@ app.directive("asteroidMining", function() {
     };
 });
 
-app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
     var vm = this;
     vm.nodule = new Nodule($rootScope, 'asteroid-mining', function(){
       if (vm.game) {
@@ -300,7 +300,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.debug.body(vm.asteroid);
       // vm.parts.forEachExists(vm.game.debug.body, vm.game.debug);
 
-      vm.game.debug.text('fuel: ' + vm.calcFuel(), 32, 32);
+      vm.game.debug.text('fuel: ' + $filter('number')(vm.calcFuel(), 2), 32, 32);
       vm.game.debug.text('credits: ' + vm.calcCredits(), 32, 96);
     }
 
