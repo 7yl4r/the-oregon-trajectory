@@ -39,6 +39,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     vm.onEntry = function(){
         $scope.$emit('changeMusicTo', vm.music);
+        vm.startTravel();
     }
 
     vm.onExit = function(){

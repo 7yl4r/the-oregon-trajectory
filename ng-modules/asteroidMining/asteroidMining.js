@@ -14,9 +14,31 @@ app.directive("asteroidMining", function() {
     };
 });
 
-app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
+app.directive("asteroidMiningGame", function() {
+    return {
+        restrict: 'E',
+        templateUrl: baseUrl+"ng-modules/asteroidMining/asteroidMiningGame.html"
+    };
+});
+
+app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+
+    new Nodule($rootScope, 'asteroid-mining', function(){
+        var dialog = require('mining-dialog-start');
+        var d = dialog(vm.stats, function(){
+          $scope.$emit('switchToModule', 'asteroid-mining-game');
+        }, function(){
+          $scope.$emit('switchToModule', 'travel-screen');
+        });
+        $scope.$emit('switchToModule', 'situation', d);
+    });
+
+}]);
+
+app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
+
     var vm = this;
-    vm.nodule = new Nodule($rootScope, 'asteroid-mining', function(){
+    vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
       if (vm.game) {
         vm.game.destroy();
       }
@@ -330,7 +352,15 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', '$fi
           game.fuel = vm.calcFuel();
           game.money = vm.calcCredits()
         }
-        $scope.$emit('switchToModule', 'travel-screen', reason, vm.stats);
+
+        var dialog = require('mining-dialog-finish');
+        var r = "state_"+reason;
+        var d = dialog(vm.stats, function(){
+          $scope.$emit('switchToModule', 'travel-screen');
+        });
+        $scope.$apply(function($scope) {
+          $scope.$emit('switchToModule', 'situation', d, r);
+        });
     }
 }]);
 
