@@ -34,6 +34,10 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
         data.reset();
         $scope.$emit('switchToModule', 'shop');
     }
+
+    vm.learnAbout = function() {
+        $scope.$emit('switchToModule', 'situation', require('learn-about-trajectory'));
+    }
 }]);
 
 module.exports = angular.module('main-menu').name;
