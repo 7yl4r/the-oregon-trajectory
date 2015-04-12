@@ -84,6 +84,7 @@ module.exports = class Event
                     fname = 'assets/sprites/asteroids/' + n + '.png'
                 dimensions.r = "random"
                 dimensions.scale = "random"
+                dimensions.spin = "random"
                 return new Sprite(fname, dimensions, -1000, 'random')
 
             else
