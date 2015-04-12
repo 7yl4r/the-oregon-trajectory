@@ -17,6 +17,9 @@ app.directive("asteroidMining", function() {
 app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
     var vm = this;
     vm.nodule = new Nodule($rootScope, 'asteroid-mining', function(){
+      if (vm.game) {
+        vm.game.destroy();
+      }
       vm.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'asteroid-mining-content', {
         preload: vm.preload,
         create: vm.create,
@@ -182,7 +185,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
           vm.game.physics.arcade.overlap(vm.asteroid, vm.sprite, null, function (sprite, asteroid) {
               vm.stats.crash = true;
               // TODO: data.fuel, data.health, data.food -= ?
-              vm.exitModule(crash);
+              vm.exitModule('crash');
           });
         }
     }
@@ -300,6 +303,8 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
     }
 
     vm.exitModule = function(reason){
+        vm.game.destroy();
+        vm.game = null;
         $scope.$emit('switchToModule', 'travel-screen', reason, stats);
     }
 }]);
