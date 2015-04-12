@@ -297,7 +297,7 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
       // vm.game.debug.body(vm.asteroid);
       // vm.parts.forEachExists(vm.game.debug.body, vm.game.debug);
 
-      vm.game.debug.text('fuel spent: ' + vm.stats.main_fuel*3 + vm.stats.secondary_fuel, 32, 32);
+      vm.game.debug.text('fuel spent: ' + (vm.stats.main_fuel*3 + vm.stats.secondary_fuel), 32, 32);
       vm.game.debug.text('bullets spent: ' + vm.stats.bullets, 32, 64);
       vm.game.debug.text('parts caught: ' + vm.stats.parts, 32, 96);
     }
