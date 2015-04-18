@@ -3,7 +3,9 @@ require('howler');
 Nodule = require('nodule');
 
 var app = angular.module('main-menu', [
-    require('game-btn')
+    require('game-btn'),
+    require('game'),
+    require('score')
 ]);
 
 app.directive("mainMenu", function() {
@@ -13,7 +15,7 @@ app.directive("mainMenu", function() {
     };
 });
 
-app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
+app.controller("mainMenuController", ['leaderboard', 'data', '$scope', '$rootScope', function(leaderboard, data, $scope, $rootScope){
     var vm = this;
     vm.music = new Howl({
         urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
@@ -37,6 +39,15 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
 
     vm.learnAbout = function() {
         $scope.$emit('switchToModule', 'situation', require('learn-about-trajectory'));
+    }
+
+    vm.showLeaderboard = function(){
+        leaderboard.passTopScoresTo(function(scores){
+            scores.forEach(function(score){
+                console.log(score.name, ':', score.score);
+            });
+            alert('coming soon!');
+        });
     }
 }]);
 
