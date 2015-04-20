@@ -27,11 +27,11 @@ app.factory('leaderboard', ['$http', function($http) {
     board.getDefaultScores = function(){
         return [
             {
-                "name":"7yl4r",
-                "score":"101",
+                "name":"groupsky",
+                "score":"912937859",
                 "seconds":"0",
                 "text":null,
-                "date":"4/18/2015 5:05:23 PM"
+                "date":"4/18/2015 5:06:07 PM"
             },{
                 "name":"terpin",
                 "score":"72072344",
@@ -39,26 +39,8 @@ app.factory('leaderboard', ['$http', function($http) {
                 "text":null,
                 "date":"4/18/2015 5:05:39 PM"
             },{
-                "name":"bearikson",
-                "score":"234",
-                "seconds":"0",
-                "text":null,
-                "date":"4/18/2015 5:06:07 PM"
-            },{
-                "name":"anita",
-                "score":"5515",
-                "seconds":"0",
-                "text":null,
-                "date":"4/18/2015 5:06:07 PM"
-            },{
-                "name":"groupsky",
-                "score":"912937859",
-                "seconds":"0",
-                "text":null,
-                "date":"4/18/2015 5:06:07 PM"
-            },{
-                "name":"jesus_vidal",
-                "score":"834",
+                "name":"Ben Nubbin",
+                "score":"78921",
                 "seconds":"0",
                 "text":null,
                 "date":"4/18/2015 5:06:07 PM"
@@ -69,17 +51,35 @@ app.factory('leaderboard', ['$http', function($http) {
                 "text":null,
                 "date":"4/18/2015 5:06:07 PM"
             },{
+                "name":"anita",
+                "score":"5515",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
                 "name":"jrodManU",
                 "score":"426",
                 "seconds":"0",
                 "text":null,
                 "date":"4/18/2015 5:06:07 PM"
             },{
-                "name":"Ben Nubbin",
-                "score":"78921",
+                "name":"jesus_vidal",
+                "score":"834",
                 "seconds":"0",
                 "text":null,
                 "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"bearikson",
+                "score":"234",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"7yl4r",
+                "score":"101",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:05:23 PM"
             }
         ];
     }
@@ -88,10 +88,12 @@ app.factory('leaderboard', ['$http', function($http) {
     // gets top scores and passes the json to callback when ready
         var scores;
         if (board.supports_html5_storage()){
-            scores = JSON.parse(localStorage[board.STORAGE_KEY]);
-            if (typeof scores === 'undefined'){
+            scores = localStorage[board.STORAGE_KEY];
+            if (scores === undefined){
                 scores = board.getDefaultScores();
                 localStorage[board.STORAGE_KEY] = JSON.stringify(scores);
+            } else {
+                scores = JSON.parse(scores);
             }
         } else {
             scores = board.getDefaultScores();

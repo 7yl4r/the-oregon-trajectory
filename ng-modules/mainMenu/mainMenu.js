@@ -4,8 +4,7 @@ Nodule = require('nodule');
 
 var app = angular.module('main-menu', [
     require('game-btn'),
-    require('game'),
-    require('score')
+    require('game')
 ]);
 
 app.directive("mainMenu", function() {
@@ -15,7 +14,7 @@ app.directive("mainMenu", function() {
     };
 });
 
-app.controller("mainMenuController", ['leaderboard', 'data', '$scope', '$rootScope', function(leaderboard, data, $scope, $rootScope){
+app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
     var vm = this;
     vm.music = new Howl({
         urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
@@ -42,12 +41,16 @@ app.controller("mainMenuController", ['leaderboard', 'data', '$scope', '$rootSco
     }
 
     vm.showLeaderboard = function(){
+        $scope.$emit('switchToModule', 'leaderboard');
+
+        /* TODO: move this into ng-modules/leaderboard
         leaderboard.passTopScoresTo(function(scores){
             scores.forEach(function(score){
                 console.log(score.name, ':', score.score);
             });
             alert('coming soon!');
         });
+        */
     }
 }]);
 
