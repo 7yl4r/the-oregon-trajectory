@@ -18,10 +18,12 @@ app.controller("shipCustomizerController", ['data', '$scope', '$rootScope', (dat
         {
             file: data.gameDir+'/assets/sprites/ship.png',
             name: "ship",
+            description: "designed by jrodmanu"
         }
         ,{
             file: data.gameDir+'/assets/sprites/ship_jesus.png',
-            name: "ship-jesus"
+            name: "ship-jesus",
+            description: "based in part on the orion capsule..."
         }
     ]
     @selectedShip = @shipOptions[0]

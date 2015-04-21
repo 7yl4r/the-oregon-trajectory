@@ -4,10 +4,31 @@
   width:100%;
 }
 
-.ship-option:hover{
-  box-shadow: 0 0 1em 0.5em #76A7CE;
+.selected-ship{
+  box-shadow: 0 0 3em 0.5em #76A7CE;
 }
 
-.selected-ship{
-  box-shadow: 0 0 3em 0.5em #76A700;
+.ship-option{
+  padding:5em;
+}
+
+/*
+.click-to-choose{
+  left: 0;
+  position:absolute;
+  text-align:center;
+  top: 20%;
+  width: 100%
+}
+*/
+
+/* on-hover animation*/
+.ship-option:hover {
+  -webkit-filter: hue-rotate(360deg);
+
+  -webkit-transition: all 3s linear;
+  -moz-transition: all 3s linear;
+  -o-transition: all 3s linear;
+  -ms-transition: all 3s linear;
+  transition: all 3s linear;
 }

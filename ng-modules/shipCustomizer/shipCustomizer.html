@@ -1,14 +1,23 @@
-<div ng-controller="shipCustomizerController as shipCustomCtrl">
+<div ng-controller="shipCustomizerController as shipCustomCtrl" class="container">
     <h3>customize your ship</h3>
 	Crew Vehicle Base:
-    <ul class="row">
-        <li class="col-md-3 ship-option"
-            ng-repeat="ship in shipCustomCtrl.shipOptions"
-            ng-click="shipCustomCtrl.pickShip(ship)"
-            ng-class="{'selected-ship':ship.selected}">
-            {{ship.name}} <br>
-            <img class="ship-sprite" src="{{ship.file}}"/>
-        </li>
-    </ul>
+    <div class="row ship-choices">
+        <div class="col-md-3 ship-option"
+            ng-repeat="ship in shipCustomCtrl.shipOptions">
+            <figure class="tile"
+                ng-click="shipCustomCtrl.pickShip(ship)"
+                ng-class="{'selected-ship':ship.selected}"
+            >
+                <div class="image">
+                    <img class="ship-sprite" src="{{ship.file}}"/>
+                    <!--<span class="click-to-choose">click to choose</span>-->
+                </div>
+                <figcaption>
+                    <h3>{{ship.name}}</h3>
+                    <span class="ship-desc">{{ship.description}}</span>
+                </figcaption>
+            </figure>
+        </div>
+    </div>
 	<button ng-click="shipCustomCtrl.done()">continue</button>
 </div>
