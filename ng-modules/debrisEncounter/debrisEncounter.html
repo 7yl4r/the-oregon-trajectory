@@ -21,7 +21,45 @@
             <li><game-btn ng-click="debrisCtrl.ignore()">
                 ignore the debris and continue on course
             </game-btn></li>
+            <li><game-btn ng-click="debrisCtrl.help()">
+                ask for advice
+            </game-btn></li>
         </ul>
+    </div>
+    <div ng-show="debrisCtrl.step=='help'">
+        <div class="row">
+            <div class="col-md-3">
+                <img src="{{debrisCtrl.dir+'/img/debris-field.jpg'}}" width="100%"/>
+            </div>
+            <div class="col-md-9">
+                <p>
+                    Space debris is the collection of defunct objects in orbit. This includes spent rocket stages, old satellites and fragments from disintegration, erosion and collisions. This junk might include valuable materials, but can also be very dangerous.
+                </p>
+                <p>
+                    The size and density along with the relative velocity reported by your sensors should give some indication of how dangerous this encounter could be, and the estimated nearest encounter indicates the chance of collision. The nearer we pass, the greater chance of an impact.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <img src="{{debrisCtrl.dir+'/img/sandblasted.jpg'}}" width="100%"/>
+                <p>
+                    Most space debris is small and impacts cause only erosive damage, similar to sandblasting. Ballistic shielding is used to protect the majority of your spacecraft from this debris, but not all parts of the spacecraft can be protected in this manner; solar panels and optical devices such as telescopes or star trackers are subject to constant wear from debris and micrometeoroids.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <img src="{{debrisCtrl.dir+'/img/impact.jpg'}}" width="100%"/>
+                <p>
+                    Due to the potentially large relative velocity of impact, risk from space debris larger than 10 cm is substantial, and spacecraft should maneuver to avoid a collision.
+                </p>
+            </div>
+            <div class="col-md-12">
+                <p>
+                    If the debris is substantial enough to warrant full investigation by your crew, you can rendezvous with the debris and attempt to re-purpose useful materials. The density and size of the debris should help you determine what you might find. Keep in mind that interplanetary space has only a few particles per cm^3 (very nearly 0kg/m^3), and a solid chunk of steel has a density of about 8000kg/m^3.
+                </p>
+            </div>
+        </div>
+        <li><game-btn ng-click="debrisCtrl.step='encounter'">
+            continue
+        </game-btn></li>
     </div>
     <div ng-show="debrisCtrl.step=='harvest'">
         This appears to be the remains of communications satellite.
