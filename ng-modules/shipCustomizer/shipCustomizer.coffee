@@ -17,13 +17,19 @@ app.controller("shipCustomizerController", ['data', '$scope', '$rootScope', (dat
     @shipOptions = [
         {
             file: data.gameDir+'/assets/sprites/ship.png',
-            name: "ship",
-            description: "designed by jrodmanu"
+            name: "J-R0D manned crew capsule U",
+            spriteSpecs: "ship",
+            description: "this rocket gained popularity amongst space pioneers for it's unique red ceramic powder coat."
         }
         ,{
             file: data.gameDir+'/assets/sprites/ship_jesus.png',
-            name: "ship-jesus",
-            description: "based in part on the orion capsule..."
+            name: "jesus's modified Orion mk3",
+            spriteSpecs:{
+                h: 150,
+                w: 270,
+                scale: 0.6
+            },
+            description: "based in part on the Orion capsule, this consumer craft takes a modular approach to craft design."
         }
     ]
     @selectedShip = @shipOptions[0]
@@ -36,7 +42,7 @@ app.controller("shipCustomizerController", ['data', '$scope', '$rootScope', (dat
         # this function is triggered by the button
         @selectedShip.selected = false
         ship.selected = true
-        data.ship = new Sprite(ship.file, ship.name, 0, 'random');
+        data.ship.setSheet(ship.file, ship.spriteSpecs);
         @selectedShip = ship
 
     @done = ()=>

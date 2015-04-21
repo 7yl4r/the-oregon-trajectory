@@ -57,7 +57,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('a-small', baseUrl+'assets/sprites/asteroids/p0-small.png');
       vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
-      vm.game.load.image('ship', baseUrl+'assets/sprites/ship-nothrust.png');
+      vm.game.load.image('ship', data.ship.sheet.src);
 
     }
 
