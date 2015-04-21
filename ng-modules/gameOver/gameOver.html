@@ -1,9 +1,9 @@
-<div class="gameOver container ng-scope" ng-controller="gameOverCtrl as gameOverCtrl">
+<div class="gameover ng-scope" ng-controller="gameOverCtrl as gameOverCtrl">
 
 	<div class="image-container">
-		<img src="https://raw.githubusercontent.com/7yl4r/the-oregon-trajectory/master/assets/backgrounds/gameover.png" ng-src="https://raw.githubusercontent.com/7yl4r/the-oregon-trajectory/master/assets/backgrounds/gameover.png">
+		<img ng-src="{{gameOverCtrl.data.gameDir}}/assets/backgrounds/gameover.png">
 	</div>
-		<li class="text">
+		<li class="game-over-text">
 			<br>
 			All of the people in your crew have died.
 
@@ -13,26 +13,24 @@
 
 			<br>
 		</li>
-<span class="spacecraft">
-<img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/sprites/ship-nothrust.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/sprites/ship-nothrust.png?raw=true">
-</span>
+    <span class="spacecraft">
+        <img ng-src="{{gameOverCtrl.data.ship.sheet.src}}">
+    </span>
 
-<br>
-<span class="spaceman">
-<img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true">
-</span>
+    <br>
 
-<span class="spaceman-2">
-	<img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true">
-</span>
+    <span class="spaceman">
+        <img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true">
+    </span>
+    <span class="spaceman-2">
+        <img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true">
+    </span>
+    <span class="spaceman-3">
+        <img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true">
+    </span>
 
-<span class="spaceman-3">
-	<img ng-src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true" src="https://github.com/7yl4r/the-oregon-trajectory/blob/master/assets/characters/Z2_sprite.png?raw=true">
-</span>
-	<br>
-
-
+    <br>
 
   <button class="btn btn-primary ng-click-active" ng-click="$emit('switchToModule', 'main-menu')"> Click here to start a new adventure </button>
 
-	</div>
+</div>
