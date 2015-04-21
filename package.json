@@ -54,6 +54,7 @@
     }
   },
   "browser": {
+    "ship-customizer": "./ng-modules/shipCustomizer/shipCustomizer.coffee",
     "leaderboard": "./ng-modules/leaderboard/leaderboard.js",
     "learn-about-trajectory": "./ng-modules/situation/learnAboutTrajectory.coffee",
     "asteroid-mining": "./ng-modules/asteroidMining/asteroidMining.js",

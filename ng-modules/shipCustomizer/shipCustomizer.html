@@ -1,0 +1,14 @@
+<div ng-controller="shipCustomizerController as shipCustomCtrl">
+    <h3>customize your ship</h3>
+	Crew Vehicle Base:
+    <ul class="row">
+        <li class="col-md-3 ship-option"
+            ng-repeat="ship in shipCustomCtrl.shipOptions"
+            ng-click="shipCustomCtrl.pickShip(ship)"
+            ng-class="{'selected-ship':ship.selected}">
+            {{ship.name}} <br>
+            <img class="ship-sprite" src="{{ship.file}}"/>
+        </li>
+    </ul>
+	<button ng-click="shipCustomCtrl.done()">continue</button>
+</div>
