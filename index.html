@@ -54,8 +54,8 @@
 
             <leaderboard class="game-module"></leaderboard>
 
-            <!--
-            <div id="debug section">
+
+            <div id="debug-section" style="display:none">
                 debug tools: <br>
                 active module: {{MainCtrl.active_module}} <br>
                 <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'travel-screen')">Travel</button>
@@ -64,7 +64,7 @@
                 <button class="btn btn-inverse" onclick='game.GODMODE()'>god mode</button>
                 <audio-controls></audio-controls>
             </div>
-            -->
+
         </div><!-- /.container -->
 
     </div><!-- /.main -->
@@ -78,4 +78,5 @@
 
 </body>
 <app-footer></app-footer>
+<span class="glyphicon glyphicon-qrcode" onclick="$('#debug-section').toggle()" style="width:3em; display:block; margin-left: auto; margin-right: auto;"></span>
 </html>

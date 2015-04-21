@@ -154,7 +154,6 @@ class Game
         BIG_NUMBER = 99999999999
         @crewHealth = [BIG_NUMBER, BIG_NUMBER]
         @fuel = BIG_NUMBER
-        window.TRAVEL_SPEED = 10
 
     # === "private" methods ===
     _getRemainingLocations: ()->
