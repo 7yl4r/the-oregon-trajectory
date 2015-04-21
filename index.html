@@ -54,15 +54,21 @@
 
             <leaderboard class="game-module"></leaderboard>
 
+            <audio-controls></audio-controls>
 
             <div id="debug-section" style="display:none">
                 debug tools: <br>
                 active module: {{MainCtrl.active_module}} <br>
-                <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'travel-screen')">Travel</button>
-                <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'shop')">Shop</button>
-                <button class="btn btn-inverse" ng-click="$emit('switchToModule', 'you-win')">instaWin</button>
-                <button class="btn btn-inverse" onclick='game.GODMODE()'>god mode</button>
-                <audio-controls></audio-controls>
+
+                switch to module
+                <input id='module-choice' ng-model="moduleChoice" type="text"/>
+                <button ng-click="$emit('switchToModule', moduleChoice)">go</button><br>
+
+                force event
+                <input id='event-choice' ng-model="eventChoice" type="text"/>
+                <button ng-click="$broadcast('forceEvent', eventChoice)">go</button><br>
+
+                <button onclick='game.GODMODE()'>god mode</button>
             </div>
 
         </div><!-- /.container -->
