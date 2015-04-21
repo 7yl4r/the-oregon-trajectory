@@ -21,6 +21,8 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
     @MIN_DENSITY = 10  # kg/L
     @MAX_DENSITY = 8000  # kg/L (actual max is this # + MIN_DENSITY)
 
+    @dir = data.gameDir+'/ng-modules/debrisEncounter'
+
     @onEntry = ()=>
         @step = 'encounter'
         # randomly generate parameters
@@ -73,6 +75,8 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
         @step = 'harvest'
         data.fuel += @debrisFuel
 
+    @help = ()=>
+        @step = 'help'
 ])
 
 module.exports = angular.module('debris-encounter').name

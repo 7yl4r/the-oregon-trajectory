@@ -43,6 +43,14 @@ module.exports = class Randy
             # TODO: this should do nothing, but we're loading for testing
             @_loadEventsFromFile("NOT_A_FILE.json")
 
+        @scope.$on('forceEvent', (evt, name)=>
+            for event in @events
+                if event.name == name
+                    return event.trigger()
+            # else
+            throw new Error("Butterflies have no concern for such (eventName:" + name + ") things. Now I'm gonna go find myself some butterfly poon.")
+        )
+
     _loadEventsFromFile: (file)->
         # loads array of events from a single file
         # TODO: get this json from files

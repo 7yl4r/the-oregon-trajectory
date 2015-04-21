@@ -3,7 +3,8 @@ require('howler');
 Nodule = require('nodule');
 
 var app = angular.module('main-menu', [
-    require('game-btn')
+    require('game-btn'),
+    require('game')
 ]);
 
 app.directive("mainMenu", function() {
@@ -37,6 +38,19 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
 
     vm.learnAbout = function() {
         $scope.$emit('switchToModule', 'situation', require('learn-about-trajectory'));
+    }
+
+    vm.showLeaderboard = function(){
+        $scope.$emit('switchToModule', 'leaderboard');
+
+        /* TODO: move this into ng-modules/leaderboard
+        leaderboard.passTopScoresTo(function(scores){
+            scores.forEach(function(score){
+                console.log(score.name, ':', score.score);
+            });
+            alert('coming soon!');
+        });
+        */
     }
 }]);
 
