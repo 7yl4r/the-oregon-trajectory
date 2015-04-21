@@ -12,6 +12,8 @@ window.onbeforeunload = function() {
 
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('ship-customizer'),
+        require('leaderboard'),
         require('asteroid-mining'),
         require('situation'),
         require('trader'),
@@ -153,7 +155,7 @@ var isOldBrowser;
 
 
 
-},{"angular":41,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":43,"game-over":14,"header-navbar":17,"howler":2,"main-menu":15,"maneuver-screen":16,"ngTouch":40,"shop":19,"situation":21,"splash-header":23,"trader":24,"travel-screen":37,"ui.bootstrap":39,"you-win":38}],2:[function(require,module,exports){
+},{"angular":44,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":46,"game-over":14,"header-navbar":18,"howler":2,"leaderboard":15,"main-menu":16,"maneuver-screen":17,"ngTouch":43,"ship-customizer":21,"shop":22,"situation":24,"splash-header":26,"trader":27,"travel-screen":40,"ui.bootstrap":42,"you-win":41}],2:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!
@@ -227,7 +229,7 @@ module.exports = Location = (function() {
 
 
 
-},{"./travelScreen/Sprite.coffee":25}],4:[function(require,module,exports){
+},{"./travelScreen/Sprite.coffee":28}],4:[function(require,module,exports){
 var Nodule,
   slice = [].slice;
 
@@ -287,7 +289,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":41}],6:[function(require,module,exports){
+},{"angular":44}],6:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -347,7 +349,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('a-small', baseUrl+'assets/sprites/asteroids/p0-small.png');
       vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
-      vm.game.load.image('ship', baseUrl+'assets/sprites/ship-nothrust.png');
+      vm.game.load.image('ship', data.ship.sheet.src);
 
     }
 
@@ -656,7 +658,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
 
 module.exports = angular.module('asteroid-mining').name;
 
-},{"angular":41,"howler":2,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":4,"phaser":44}],7:[function(require,module,exports){
+},{"angular":44,"howler":2,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":4,"phaser":47}],7:[function(require,module,exports){
 module.exports = function (stats, callback) {
   return {
     state_exit: {
@@ -684,7 +686,7 @@ module.exports = function (stats, callback) {
 module.exports = function (stats, startCb, continueCb) {
   return {
     initial: {
-      story: "You discovered an asteroid",
+      story: "You are nearing an asteroid. You can rendezvous with the asteroid and attempt to break off and collect pieces of regolith for reprocessing, or continue on your current trajectory.",
       question: "What do you want to do?",
       choices: [
         {name: "Mine for resources", next:startCb},
@@ -723,7 +725,7 @@ app.controller("audioController", function(){
 });
 
 module.exports = angular.module('audio-controls').name;
-},{"angular":41,"howler":2}],10:[function(require,module,exports){
+},{"angular":44,"howler":2}],10:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -749,6 +751,7 @@ app.controller("debrisEncounterController", [
     this.MIN_SIZE = .1;
     this.MIN_DENSITY = 10;
     this.MAX_DENSITY = 8000;
+    this.dir = data.gameDir + '/ng-modules/debrisEncounter';
     this.onEntry = (function(_this) {
       return function() {
         _this.step = 'encounter';
@@ -807,10 +810,15 @@ app.controller("debrisEncounterController", [
         return _this.continueTravels();
       };
     })(this);
-    return this.harvest = (function(_this) {
+    this.harvest = (function(_this) {
       return function() {
         _this.step = 'harvest';
         return data.fuel += _this.debrisFuel;
+      };
+    })(this);
+    return this.help = (function(_this) {
+      return function() {
+        return _this.step = 'help';
       };
     })(this);
   }
@@ -820,7 +828,7 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":41,"game-btn":13,"howler":2,"nodule":4}],11:[function(require,module,exports){
+},{"angular":44,"game-btn":13,"howler":2,"nodule":4}],11:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -857,12 +865,14 @@ app.controller("exampleController", ['data', '$scope', '$rootScope', function(da
 
 // this is needed to connect with the main app.
 module.exports = angular.module('example-module').name;
-},{"angular":41,"nodule":4}],12:[function(require,module,exports){
-var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, app;
+},{"angular":44,"nodule":4}],12:[function(require,module,exports){
+var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Sprite, app;
 
 require('angular');
 
 Location = require('./Location.coffee');
+
+Sprite = require('./travelScreen/Sprite.coffee');
 
 window.TRAVEL_SPEED = 1;
 
@@ -915,6 +925,7 @@ Game = (function() {
     this.scope = gameScope;
     this.gameDir = "/the-oregon-trajectory";
     this._init();
+    this.ship = new Sprite(this.gameDir + '/assets/sprites/ship.png', "ship", 0, 'random');
   }
 
   Game.prototype._init = function() {
@@ -934,9 +945,9 @@ Game = (function() {
     this.displayDistanceTraveled = 0;
     this.crewHealth = [100, 100];
     this.shipHealth = 100;
-    this.rations = 0;
+    this.rations = 500;
     this.eatChance = 0.05;
-    this.fuel = 0;
+    this.fuel = 500;
     this.fuelExpense = 0.05;
     this.fuelChance = 0.7;
     this.miningFuelExpenseThrust = this.fuelExpense * this.fuelChance * 0.25;
@@ -1022,8 +1033,7 @@ Game = (function() {
     var BIG_NUMBER;
     BIG_NUMBER = 99999999999;
     this.crewHealth = [BIG_NUMBER, BIG_NUMBER];
-    this.fuel = BIG_NUMBER;
-    return window.TRAVEL_SPEED = 10;
+    return this.fuel = BIG_NUMBER;
   };
 
   Game.prototype._getRemainingLocations = function() {
@@ -1091,7 +1101,7 @@ module.exports = angular.module('game').name;
 
 
 
-},{"./Location.coffee":3,"angular":41}],13:[function(require,module,exports){
+},{"./Location.coffee":3,"./travelScreen/Sprite.coffee":28,"angular":44}],13:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -1119,7 +1129,7 @@ app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(da
 }]);
 
 module.exports = angular.module('game-btn').name;
-},{"angular":41,"howler":2}],14:[function(require,module,exports){
+},{"angular":44,"howler":2}],14:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -1133,31 +1143,9 @@ app.directive("gameOver", function() {
   };
 });
 
-app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
+app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', function($rootScope, $scope, data){
   vm = this;
-  vm.music =  new Howl({
-    urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
-    loop: true
-  });
-  clickSound = new Howl({
-    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-  })
-
-  vm.onEnter = function(){
-    $scope.$emit('changeMusicTo', vm.music);
-  }
-  vm.nodule = Nodule($rootScope, 'you-win', vm.onEnter);
-
-  vm.mainMenu = function(){
-    clickSound.play();
-    $scope.$emit('switchToModule', 'main-menu');
-  }
-}]);
-
-
-
-app.controller("gameOverCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
-  vm = this;
+  vm.data = data;
   vm.music =  new Howl({
     urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
     loop: true
@@ -1179,13 +1167,56 @@ app.controller("gameOverCtrl", [ '$rootScope', '$scope', function($rootScope, $s
 
 module.exports = angular.module('game-over').name;
 
-},{"angular":41,"howler":2,"nodule":4}],15:[function(require,module,exports){
+},{"angular":44,"howler":2,"nodule":4}],15:[function(require,module,exports){
+require('angular');
+Howl = require('howler');    // for sounds (if you need them)
+Nodule = require('nodule');  // for nodule helpers
+
+var app = angular.module('leaderboard', [
+    require('score')
+]);
+
+app.directive("leaderboard", function() {
+    return {
+        restrict: 'E',
+        templateUrl: "ng-modules/leaderboard/leaderboard.html"
+    };
+});
+
+app.controller("leaderboardController", ['leaderboard', 'data', '$scope', '$rootScope', function(leaderboard, data, $scope, $rootScope) {
+    var vm = this;
+
+    vm.onEntry = function(){
+        vm.updateScores()
+    }
+    vm.nodule = new Nodule($rootScope, 'leaderboard', vm.onEntry);
+    vm.scores = [{name:'test', score:'1234'}];
+
+    vm.updateScores = function(){
+        leaderboard.passTopScoresTo(function(scores){
+            vm.scores = scores;
+            //scores.forEach(function(score){
+            //    console.log(score.name, ':', score.score);
+            //});
+            //alert('coming soon!');
+        });
+    }
+
+    // your controller code here
+    vm.clickedTheButton = function(){
+        $scope.$emit('switchToModule', 'main-menu');
+    }
+}]);
+
+module.exports = angular.module('leaderboard').name;
+},{"angular":44,"howler":2,"nodule":4,"score":20}],16:[function(require,module,exports){
 require('angular');
 require('howler');
 Nodule = require('nodule');
 
 var app = angular.module('main-menu', [
-    require('game-btn')
+    require('game-btn'),
+    require('game')
 ]);
 
 app.directive("mainMenu", function() {
@@ -1214,17 +1245,30 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
     vm.startGame = function(){
         clickSound.play();
         data.reset();
-        $scope.$emit('switchToModule', 'shop');
+        $scope.$emit('switchToModule', 'ship-customizer');
     }
 
     vm.learnAbout = function() {
         $scope.$emit('switchToModule', 'situation', require('learn-about-trajectory'));
     }
+
+    vm.showLeaderboard = function(){
+        $scope.$emit('switchToModule', 'leaderboard');
+
+        /* TODO: move this into ng-modules/leaderboard
+        leaderboard.passTopScoresTo(function(scores){
+            scores.forEach(function(score){
+                console.log(score.name, ':', score.score);
+            });
+            alert('coming soon!');
+        });
+        */
+    }
 }]);
 
 module.exports = angular.module('main-menu').name;
 
-},{"angular":41,"game-btn":13,"howler":2,"learn-about-trajectory":20,"nodule":4}],16:[function(require,module,exports){
+},{"angular":44,"game":12,"game-btn":13,"howler":2,"learn-about-trajectory":23,"nodule":4}],17:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -1255,11 +1299,13 @@ app.controller('ManeuverScreenCtrl', function($scope){
 
 module.exports = angular.module('maneuver-screen').name;
 
-},{"angular":41}],17:[function(require,module,exports){
+},{"angular":44}],18:[function(require,module,exports){
 require('angular');
 
 
-var app = angular.module('header-navbar', []);
+var app = angular.module('header-navbar', [
+    require('game')
+]);
 
 app.directive("navHeader", function() {
     return {
@@ -1268,8 +1314,16 @@ app.directive("navHeader", function() {
     };
 });
 
+app.controller("headerController", ['$http', 'data', function($http, data) {
+    var vm = this;
+    vm.version = '0.0.0';
+    $http.get(data.gameDir+'/package.json').success(function(data, status, headers, config){
+        vm.version = data.version;
+    });
+}]);
+
 module.exports = angular.module('header-navbar').name;
-},{"angular":41}],18:[function(require,module,exports){
+},{"angular":44,"game":12}],19:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -1358,7 +1412,179 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":41}],19:[function(require,module,exports){
+},{"angular":44}],20:[function(require,module,exports){
+
+require('angular')
+
+app = angular.module('score', [])
+
+app.config(function($httpProvider) {
+    //Enable cross domain calls
+    $httpProvider.defaults.useXDomain = true;
+
+    //Remove the header used to identify ajax call  that would prevent CORS from working
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+});
+
+app.factory('leaderboard', ['$http', function($http) {
+    var board = {
+        STORAGE_KEY: "oregon-traj-highscores"
+    }
+
+    board.supports_html5_storage = function() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    board.getDefaultScores = function(){
+        return [
+            {
+                "name":"groupsky",
+                "score":"912937859",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"terpin",
+                "score":"72072344",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:05:39 PM"
+            },{
+                "name":"Ben Nubbin",
+                "score":"78921",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"jharrisonmusic",
+                "score":"7515",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"anita",
+                "score":"5515",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"jrodManU",
+                "score":"426",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"jesus_vidal",
+                "score":"834",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"bearikson",
+                "score":"234",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:06:07 PM"
+            },{
+                "name":"7yl4r",
+                "score":"101",
+                "seconds":"0",
+                "text":null,
+                "date":"4/18/2015 5:05:23 PM"
+            }
+        ];
+    }
+
+    board.passTopScoresTo = function(callback){
+    // gets top scores and passes the json to callback when ready
+        var scores;
+        if (board.supports_html5_storage()){
+            scores = localStorage[board.STORAGE_KEY];
+            if (scores === undefined){
+                scores = board.getDefaultScores();
+                localStorage[board.STORAGE_KEY] = JSON.stringify(scores);
+            } else {
+                scores = JSON.parse(scores);
+            }
+        } else {
+            scores = board.getDefaultScores();
+        }
+
+        callback(scores);
+        // using dreamlo: (fails due to XSS issue) TODO: use this
+        //KEY = "544ebd896e51b60d48cd5fa3";
+        //$http.get("http://dreamlo.com/lb/"+KEY+"/json-dec").success(callback);
+    }
+    return board
+}]);
+
+module.exports = angular.module('score').name
+
+},{"angular":44}],21:[function(require,module,exports){
+var Nodule, Sprite, app;
+
+require('angular');
+
+Nodule = require('nodule');
+
+Sprite = require('../travelScreen/Sprite.coffee');
+
+app = angular.module('ship-customizer', [require('game')]);
+
+app.directive("shipCustomizer", function() {
+  return {
+    restrict: 'E',
+    templateUrl: "ng-modules/shipCustomizer/shipCustomizer.html"
+  };
+});
+
+app.controller("shipCustomizerController", [
+  'data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+    this.shipOptions = [
+      {
+        file: data.gameDir + '/assets/sprites/ship.png',
+        name: "J-R0D manned crew capsule U",
+        spriteSpecs: "ship",
+        description: "this rocket gained popularity amongst space pioneers for it's unique red ceramic powder coat."
+      }, {
+        file: data.gameDir + '/assets/sprites/ship_jesus.png',
+        name: "jesus's modified Orion mk3",
+        spriteSpecs: {
+          h: 150,
+          w: 270,
+          scale: 0.6
+        },
+        description: "based in part on the Orion capsule, this consumer craft takes a modular approach to craft design."
+      }
+    ];
+    this.selectedShip = this.shipOptions[0];
+    this.selectedShip.selected = true;
+    this.nodule = new Nodule($rootScope, 'ship-customizer');
+    this.pickShip = (function(_this) {
+      return function(ship) {
+        _this.selectedShip.selected = false;
+        ship.selected = true;
+        data.ship.setSheet(ship.file, ship.spriteSpecs);
+        return _this.selectedShip = ship;
+      };
+    })(this);
+    return this.done = (function(_this) {
+      return function() {
+        return $scope.$emit('switchToModule', 'travel-screen');
+      };
+    })(this);
+  }
+]);
+
+module.exports = angular.module('ship-customizer').name;
+
+
+
+},{"../travelScreen/Sprite.coffee":28,"angular":44,"game":12,"nodule":4}],22:[function(require,module,exports){
 require('angular');
 Howl = require('howler');
 Nodule = require('nodule');
@@ -1525,7 +1751,7 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scop
 
 module.exports = angular.module('shop').name;
 
-},{"angular":41,"game":12,"game-btn":13,"howler":2,"ng-hold":18,"nodule":4}],20:[function(require,module,exports){
+},{"angular":44,"game":12,"game-btn":13,"howler":2,"ng-hold":19,"nodule":4}],23:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "<h3>Oregon Trajectory Info</h3> The year is 2050 and you are tasked with a mission called Oregon, named after the Oregon Trail of the 1800s, to go to Jupiter’s moon Europa. NASA scientists discovered that Europa has signs of water and organic molecules such as methane. They believe life is under the surface of Europa and you’re going to find it!",
@@ -1560,7 +1786,7 @@ module.exports = {
 
 
 
-},{}],21:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -1617,7 +1843,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
 
 module.exports = angular.module('situation').name;
 
-},{"angular":41,"howler":2,"nodule":4}],22:[function(require,module,exports){
+},{"angular":44,"howler":2,"nodule":4}],25:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -1664,7 +1890,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":41}],23:[function(require,module,exports){
+},{"angular":44}],26:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -1682,7 +1908,7 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":41,"social-button-directive":22}],24:[function(require,module,exports){
+},{"angular":44,"social-button-directive":25}],27:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -1756,7 +1982,7 @@ module.exports = angular.module('trader').name;
 
 
 
-},{"angular":41,"game-btn":13,"howler":2,"nodule":4}],25:[function(require,module,exports){
+},{"angular":44,"game-btn":13,"howler":2,"nodule":4}],28:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
@@ -1767,23 +1993,27 @@ module.exports = Sprite = (function() {
     if (y == null) {
       y = 0;
     }
-    this.sheet = new Image();
-    this.sheet.src = spritesheet;
+    this.setSheet(spritesheet, nameOrJSON);
     this.r = 0;
     this.spin = 0;
-    this.setDimensions(nameOrJSON);
     if (y === 'random') {
       this.y = Math.random() * 200.0 + 200.0;
     } else {
       this.y = y;
     }
     this.x = x;
-    this.frame_n = 0;
-    this.draws_per_frame = 50;
-    this.draw_counter = 0;
   }
 
+  Sprite.prototype.setSheet = function(spritesheet, nameOrJSON) {
+    this.sheet = new Image();
+    this.sheet.src = spritesheet;
+    this.frame_n = 0;
+    return this.setDimensions(nameOrJSON);
+  };
+
   Sprite.prototype.setDimensions = function(nameOrJSON) {
+    this.draws_per_frame = 50;
+    this.draw_counter = 0;
     switch (nameOrJSON) {
       case "station1":
         this.h = 399;
@@ -1868,7 +2098,7 @@ module.exports = Sprite = (function() {
 
 
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var Tile;
 
 module.exports = Tile = (function() {
@@ -1905,7 +2135,7 @@ module.exports = Tile = (function() {
 
 
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var Event, Sprite;
 
 Sprite = require('../Sprite.coffee');
@@ -2028,7 +2258,7 @@ module.exports = Event = (function() {
 
 
 
-},{"../Sprite.coffee":25}],28:[function(require,module,exports){
+},{"../Sprite.coffee":28}],31:[function(require,module,exports){
 /*
 
 This file contains the list of in-travel random events.
@@ -2170,7 +2400,7 @@ module.exports = [
         }
     }
 ];
-},{"./situations/medicine.coffee":30,"./situations/medicine2.coffee":31,"./situations/phantomSignal.coffee":32,"./situations/phantomSignal2.coffee":33,"./situations/repairs.coffee":34,"./situations/solarFlare.coffee":35,"./situations/solarFlare2.coffee":36}],29:[function(require,module,exports){
+},{"./situations/medicine.coffee":33,"./situations/medicine2.coffee":34,"./situations/phantomSignal.coffee":35,"./situations/phantomSignal2.coffee":36,"./situations/repairs.coffee":37,"./situations/solarFlare.coffee":38,"./situations/solarFlare2.coffee":39}],32:[function(require,module,exports){
 var Event, EventList, Randy;
 
 Event = require('./Event.coffee');
@@ -2186,6 +2416,19 @@ module.exports = Randy = (function() {
     } else {
       this._loadEventsFromFile("NOT_A_FILE.json");
     }
+    this.scope.$on('forceEvent', (function(_this) {
+      return function(evt, name) {
+        var event, i, len, ref;
+        ref = _this.events;
+        for (i = 0, len = ref.length; i < len; i++) {
+          event = ref[i];
+          if (event.name === name) {
+            return event.trigger();
+          }
+        }
+        throw new Error("Butterflies have no concern for such (eventName:" + name + ") things. Now I'm gonna go find myself some butterfly poon.");
+      };
+    })(this));
   }
 
   Randy.prototype._loadEventsFromFile = function(file) {
@@ -2236,7 +2479,7 @@ module.exports = Randy = (function() {
 
 
 
-},{"./Event.coffee":27,"./EventList.js":28}],30:[function(require,module,exports){
+},{"./Event.coffee":30,"./EventList.js":31}],33:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you speed along towards your next destination you come across a science ship investigating the effects of long term spaceflight on human health, and they’d like to examine your crew! <br><br> After almost a century of humans traveling in space (it is the 2050s, anyway!), the ill-effects of space travel on human health have been well documented. Many of the technological advances that we enjoy in medicine came out of the space program (lightweight wheelchairs, CAT and MRI scans, implantable pacemakers, and radiation therapy, to name a few! <br><br> The research collected by this team could help future colonists and even people back home on Earth – but it will cost x fuel and x food to participate in the study.",
@@ -2279,7 +2522,7 @@ module.exports = {
 
 
 
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you continue towards your next destination you’re contacted by a small corporate vessel doing research into the effects of long term spaceflight on mental health, and they’d like to examine your crew! <br><br> The research team offers fuel, food and credits in return for participating in the study, and will share any results with you once the study is finished.",
@@ -2322,7 +2565,7 @@ module.exports = {
 
 
 
-},{}],32:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
@@ -2365,7 +2608,7 @@ module.exports = {
 
 
 
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
@@ -2408,7 +2651,7 @@ module.exports = {
 
 
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "Your ship has taken a beating during the course of your journey, and your crew has decided to do some quick repairs that should hold until you get to your next destination. While the repair team does its work, the rest of the crew takes some much needed time to rest, relax and share memories of home none of you may never see again. *pop* *pop* *ping* <br><br> At first everyone inside the ship panics, worrying that the hull has begun to buckle – but you breathe a sigh of relief when you realize it’s just a tether coming loose… Wait. <br><br> A safety tether? Like the one the crew uses to stay attached to the ship outside during repairs! <br><br> Astronauts have a SAFER (Simplified Aid for EVA Rescue) device built into their suits to help them stay close to the ship if a tether breaks, but you'll have to be very careful about how you proceed to recapture your free-floating crew.",
@@ -2451,7 +2694,7 @@ module.exports = {
 
 
 
-},{}],35:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " You and your crew are running an important experiment that will take another 5 hours to complete, but you’ve received a space weather report warning of an impending proton storm. Proton storms, also known as “solar particle events”, happen when particles emitted by the sun during coronal mass ejects and solar flares are pushed out into space. <br><br>Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn off your equipment and stop your experiment until after the storm passes in a few hours, but your chief science officer believes that you’re on the edge of a breakthrough.",
@@ -2496,7 +2739,7 @@ module.exports = {
 
 
 
-},{}],36:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " You and your crew are observing a unique phenomena in space when you receive a space weather report warning of an impending proton storm caused by solar winds. Proton storms can bombard humans with damaging radiation, can destroy solar collector efficiency and damage sensitive equipment. <br><br> Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn shield your equipment as best you can and enter the pod until after the storm passes in a few hours, but your chief science officer believes that this may be the only opportunity to observe this special event.",
@@ -2539,7 +2782,7 @@ module.exports = {
 
 
 
-},{}],37:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var EVENT_VARIABILITY, Location, MIN_TRAVELS_PER_EVENT, Nodule, Randy, Sprite, Tile;
 
 require('angular');
@@ -2580,8 +2823,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     window.randy = vm.randy;  // for debug
     vm.canvasElement = document.getElementById("travelCanvas");
     vm.ctx = vm.canvasElement.getContext("2d");
-    vm.ship = new Sprite(data.gameDir + '/assets/sprites/ship.png',
-        "ship", 0, 'random');
+    vm.ship = data.ship;
 
     vm.onEntry = function(){
         $scope.$emit('changeMusicTo', vm.music);
@@ -2818,7 +3060,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"./../Location.coffee":3,"./Sprite.coffee":25,"./Tile.coffee":26,"./ng-randy/ng-randy.coffee":29,"angular":41,"game":12,"game-btn":13,"ng-hold":18,"nodule":4}],38:[function(require,module,exports){
+},{"./../Location.coffee":3,"./Sprite.coffee":28,"./Tile.coffee":29,"./ng-randy/ng-randy.coffee":32,"angular":44,"game":12,"game-btn":13,"ng-hold":19,"nodule":4}],41:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -2855,7 +3097,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $sco
 
 module.exports = angular.module('you-win').name;
 
-},{"angular":41,"howler":2,"nodule":4}],39:[function(require,module,exports){
+},{"angular":44,"howler":2,"nodule":4}],42:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -2874,7 +3116,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":41}],40:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":44}],43:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -2898,7 +3140,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":41}],41:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":44}],44:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -3158,7 +3400,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],42:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3218,7 +3460,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],43:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -3254,7 +3496,7 @@ FastClick.notNeeded=function(a){var c,b;if("undefined"===typeof window.ontouchst
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],44:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (process,global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /* Phaser v2.3.0 - http://phaser.io - @photonstorm - (c) 2015 Photon Storm Ltd. */
@@ -3283,4 +3525,4 @@ m>this.game.width&&(m=this.game.width),n>this.game.height&&(n=this.game.height);
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":42}]},{},[1]);
+},{"_process":45}]},{},[1]);

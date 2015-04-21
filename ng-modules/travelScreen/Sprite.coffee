@@ -11,24 +11,31 @@ module.exports = class Sprite
         #           scale: 0.5      # scale of sprite display defaults to 1. use "random" to set random btwn 10-100%
         #           r: 3.1415       # rotation of sprite in radians (defaults to 0) (use "random" to set random rotation)
         #       }
-        @sheet = new Image()
-        @sheet.src = spritesheet
+        @setSheet(spritesheet, nameOrJSON)
         @r = 0  # rotation position
         @spin = 0  # rotation speed
-        @setDimensions(nameOrJSON)
         if y == 'random'
             @y = Math.random()*200.0+200.0
         else
             @y = y
         @x = x
+
+    setSheet: (spritesheet, nameOrJSON)->
+        # sets sprite object to new sprite (so that old references are retained)
+        @sheet = new Image()
+        @sheet.src = spritesheet
         @frame_n = 0
-        # for slowing animation speed
-        @draws_per_frame = 50  # number of draw calls before setting new frame
-        @draw_counter = 0
+        @setDimensions(nameOrJSON)
+
 
     setDimensions: (nameOrJSON)->
         # sets dimensions, max_frames, draws_per_frame based on name to match given sprite
         # TODO: these should be read from a json file given with each sprite
+
+        # for slowing animation speed
+        @draws_per_frame = 50  # number of draw calls before setting new frame
+        @draw_counter = 0
+
         switch nameOrJSON
             when "station1"
                 @h = 399

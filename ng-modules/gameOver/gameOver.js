@@ -11,31 +11,9 @@ app.directive("gameOver", function() {
   };
 });
 
-app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
+app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', function($rootScope, $scope, data){
   vm = this;
-  vm.music =  new Howl({
-    urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
-    loop: true
-  });
-  clickSound = new Howl({
-    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-  })
-
-  vm.onEnter = function(){
-    $scope.$emit('changeMusicTo', vm.music);
-  }
-  vm.nodule = Nodule($rootScope, 'you-win', vm.onEnter);
-
-  vm.mainMenu = function(){
-    clickSound.play();
-    $scope.$emit('switchToModule', 'main-menu');
-  }
-}]);
-
-
-
-app.controller("gameOverCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
-  vm = this;
+  vm.data = data;
   vm.music =  new Howl({
     urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
     loop: true

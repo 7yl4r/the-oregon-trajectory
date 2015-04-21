@@ -33,7 +33,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
     vm.startGame = function(){
         clickSound.play();
         data.reset();
-        $scope.$emit('switchToModule', 'shop');
+        $scope.$emit('switchToModule', 'ship-customizer');
     }
 
     vm.learnAbout = function() {

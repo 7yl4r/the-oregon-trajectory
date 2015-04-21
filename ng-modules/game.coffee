@@ -1,5 +1,6 @@
 require('angular')
 Location = require('./Location.coffee')
+Sprite = require('./travelScreen/Sprite.coffee')
 
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
@@ -34,6 +35,8 @@ class Game
         @gameDir = "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
 
+        @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random');
+
     _init: ()->
         # re-initializes the game
         # TODO: move this...
@@ -60,10 +63,10 @@ class Game
         @crewHealth = [100, 100]
         @shipHealth = 100
 
-        @rations = 0
+        @rations = 500
         @eatChance = 0.05  # chance of eating per tick
 
-        @fuel = 0
+        @fuel = 500
         @fuelExpense = 0.05; # main thruster during normal gameplay
         @fuelChance = 0.7;  # chance of expending fuel per tick
 
