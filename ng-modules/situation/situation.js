@@ -34,9 +34,18 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
         $scope.currentStep = step;
         if ($scope.dialog && $scope.dialog[step]) {
           $scope.step = $scope.dialog[step];
-          $scope.step.story = $sce.trustAsHtml($scope.step.story);
+          try {
+              $scope.step.story = $sce.trustAsHtml($scope.step.story);
+          } catch (err){
+              if (err.name == "Error"){
+                // ?probably? attempt to trust non-string  TODO: better way to detect this?
+                console.warn('non-string err (no big deal (probably)): ', err);
+              } else {
+                  throw err;
+              }
+          }
         } else {
-          console.error('missing step in dialog definition', $scope.step, $scope.dialog);
+          console.warn('missing step in dialog definition', $scope.step, $scope.dialog);
           $scope.step = {};
         }
     };
