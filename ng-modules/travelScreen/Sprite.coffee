@@ -94,7 +94,7 @@ module.exports = class Sprite
         ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
         if @r != 0
             ctx.save()
-            ctx.translate(x+@w/2*@scale,y+@w/2*@scale)
+            ctx.translate(x,y)
             ctx.rotate(@r)
             ctx.drawImage(@sheet, ssx, ssy, @w, @h, -@w/2*@scale, -@h/2*@scale, @w*@scale, @h*@scale)
             ctx.restore()
