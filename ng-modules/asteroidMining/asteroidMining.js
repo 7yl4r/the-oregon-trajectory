@@ -50,6 +50,9 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       });
     });
 
+    vm.asteroidSize = 0.5;
+    vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
+
     vm.preload = function() {
       // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
       // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
@@ -122,7 +125,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         rnd(h/10.0, h*9/10.0),
         'a3');
       vm.asteroid.anchor.set(0.5, 0.5);
-      vm.asteroid.scale.set(0.5, 0.5);
+      vm.asteroid.scale.set(vm.asteroidSize, vm.asteroidSize);
       vm.asteroid.rotateAngle = vm.game.rnd.realInRange(-2, 2);
       vm.game.physics.enable(vm.asteroid, Phaser.Physics.ARCADE);
       vm.game.physics.arcade.moveToXY(vm.asteroid, 0,
@@ -185,6 +188,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
               asteroid.kill();
           });
 
+          // hit the asteroid & break off a piece
           vm.game.physics.arcade.overlap(vm.bullets, vm.asteroid, null, function (asteroid, bullet) {
               if (!bullet.alive) return;
 
@@ -195,6 +199,11 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
                     + asteroid.rotateAngle
                     + vm.game.rnd.realInRange(-Math.PI/4, Math.PI/4);
                   vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
+              }
+              vm.asteroidSize -= vm.ASTEROID_SHRINK;
+              vm.asteroid.scale.set(vm.asteroidSize, vm.asteroidSize);
+              if (vm.asteroidSize <= 0){
+                  vm.exitModule('depleted');
               }
 
               bullet.kill();

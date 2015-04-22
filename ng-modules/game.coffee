@@ -2,6 +2,10 @@ require('angular')
 Location = require('./Location.coffee')
 Sprite = require('./travelScreen/Sprite.coffee')
 
+# stations:
+iss = require('../assets/stations/iss/spriteSpec.js')
+temp_marker = require('../assets/stations/marker1/spriteSpec.js')
+
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
@@ -18,7 +22,7 @@ PIX_2_AU_MARS   = MARS_DIST_AU/DIST_PIX * 2 * AU_2_KM
 PIX_2_AU_CERES  = CERES_DIST_AU/DIST_PIX * 2 * AU_2_KM
 PIX_2_AU_EUROPA = EUROPA_DIST_AU/DIST_PIX * 2 * AU_2_KM
 
-DIST_ISS         = 1000
+DIST_ISS         = 2000
 DIST_MOON_MANU   = parseInt(DIST_ISS + DIST_PIX/2)
 DIST_MOON        = parseInt(DIST_MOON_MANU + DIST_PIX/2)
 DIST_MARS_MANU   = parseInt(DIST_MOON + DIST_PIX/2)
@@ -45,17 +49,71 @@ class Game
         winFunc = ()=>
             @scope.$broadcast('switchToModule', 'you-win')
         @locations = [
-            new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc),
-            new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"),
-            new Location("moon", DIST_MOON, PIX_2_AU_MOON, "station", shopFunc),
-            new Location("mars-maneuver", DIST_MARS_MANU, PIX_2_AU_MARS, "maneuver"),
-            new Location("mars", DIST_MARS, PIX_2_AU_MARS, "station", shopFunc),
-            new Location("ceres-maneuver", DIST_CERES_MANU, PIX_2_AU_CERES, "maneuver"),
-            new Location("ceres", DIST_CERES, PIX_2_AU_CERES, "station", shopFunc),
-            new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"),
-            new Location("jupiter", DIST_EUROPA-DIST_MOON, PIX_2_AU_EUROPA-PIX_2_AU_MOON, "maneuver"),
-            new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", winFunc)
-            new Location("END_OF_UNIVERSE", DIST_EUROPA+DIST_ISS, PIX_2_AU_EUROPA+PIX_2_AU_ISS, "maneuver")
+            new Location("iss",
+                DIST_ISS,
+                PIX_2_AU_ISS,
+                "station",
+                shopFunc,
+                new Sprite(@gameDir+iss.sheet, iss.dimensions, -1000, 'random')
+            ),
+            new Location("moon-maneuver",
+                DIST_MOON_MANU,
+                PIX_2_AU_MOON,
+                "maneuver"
+            ),
+            new Location("moon",
+                DIST_MOON,
+                PIX_2_AU_MOON,
+                "station",
+                shopFunc,
+                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
+            ),
+            new Location("mars-maneuver",
+                DIST_MARS_MANU,
+                PIX_2_AU_MARS,
+                "maneuver"
+            ),
+            new Location("mars",
+                DIST_MARS,
+                PIX_2_AU_MARS,
+                "station",
+                shopFunc,
+                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
+            ),
+            new Location("ceres-maneuver",
+                DIST_CERES_MANU,
+                PIX_2_AU_CERES,
+                "maneuver"
+            ),
+            new Location("ceres",
+                DIST_CERES,
+                PIX_2_AU_CERES,
+                "station",
+                shopFunc,
+                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
+            ),
+            new Location("europa-maneuver",
+                DIST_EUROPA_MANU,
+                PIX_2_AU_EUROPA,
+                "maneuver"
+            ),
+            new Location("jupiter",
+                DIST_EUROPA-DIST_MOON,
+                PIX_2_AU_EUROPA-PIX_2_AU_MOON,
+                "maneuver"
+            ),
+            new Location("europa",
+                DIST_EUROPA,
+                PIX_2_AU_EUROPA,
+                "station",
+                winFunc,
+                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
+            )
+            new Location("END_OF_UNIVERSE",
+                DIST_EUROPA+DIST_ISS,
+                PIX_2_AU_EUROPA+PIX_2_AU_ISS,
+                "maneuver"
+            )
         ]
 
         @distanceTraveled = 0
