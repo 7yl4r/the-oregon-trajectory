@@ -41,7 +41,7 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     var vm = this;
     vm.active_module = 'main-menu';
 
-    vm.MSPF = 100;  // ms per frame
+    vm.MSPF = 50;  // ms per frame
 
     // first round of music must be started manually (I don't know why)
     vm.music = new Howl({
@@ -155,7 +155,26 @@ var isOldBrowser;
 
 
 
-},{"angular":44,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":46,"game-over":14,"header-navbar":18,"howler":2,"leaderboard":15,"main-menu":16,"maneuver-screen":17,"ngTouch":43,"ship-customizer":21,"shop":22,"situation":24,"splash-header":26,"trader":27,"travel-screen":40,"ui.bootstrap":42,"you-win":41}],2:[function(require,module,exports){
+},{"angular":46,"app-footer":7,"asteroid-mining":8,"audio-controls":11,"debris-encounter":12,"example-module":13,"fastclick":48,"game-over":16,"header-navbar":20,"howler":4,"leaderboard":17,"main-menu":18,"maneuver-screen":19,"ngTouch":45,"ship-customizer":23,"shop":24,"situation":26,"splash-header":28,"trader":29,"travel-screen":42,"ui.bootstrap":44,"you-win":43}],2:[function(require,module,exports){
+module.exports = {
+    sheet: '/assets/stations/iss/sheet.png',
+    dimensions: {
+        h: 150,
+        w: 400,
+        max_frame: 0,
+        r:0.8
+    }
+}
+},{}],3:[function(require,module,exports){
+module.exports = {
+    sheet: '/assets/stations/marker1/sheet.png',
+    dimensions: {
+        h: 399,
+        w: 182,
+        max_frame: 4
+    }
+}
+},{}],4:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!
@@ -173,7 +192,7 @@ var isOldBrowser;
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var Location, Sprite;
 
 Sprite = require('./travelScreen/Sprite.coffee');
@@ -212,7 +231,7 @@ module.exports = Location = (function() {
   Location.prototype._getSpriteForAction = function(key) {
     switch (key) {
       case "station":
-        return new Sprite('assets/sprites/station_sheet.png', "station1", -1000, 'random');
+        return new Sprite('assets/stations/marker1/spritesheet.png', "station1", -1000, 'random');
       case "maneuver":
         return new Sprite('assets/sprites/maneuver-node/sprites.png', "maneuver-node", -1000, 300);
       default:
@@ -229,7 +248,7 @@ module.exports = Location = (function() {
 
 
 
-},{"./travelScreen/Sprite.coffee":28}],4:[function(require,module,exports){
+},{"./travelScreen/Sprite.coffee":30}],6:[function(require,module,exports){
 var Nodule,
   slice = [].slice;
 
@@ -271,7 +290,7 @@ module.exports = Nodule = (function() {
 
 
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var app;
 
 require('angular');
@@ -289,7 +308,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":44}],6:[function(require,module,exports){
+},{"angular":46}],8:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -341,6 +360,9 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         render: vm.render
       });
     });
+
+    vm.asteroidSize = 0.5;
+    vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
 
     vm.preload = function() {
       // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
@@ -414,7 +436,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         rnd(h/10.0, h*9/10.0),
         'a3');
       vm.asteroid.anchor.set(0.5, 0.5);
-      vm.asteroid.scale.set(0.5, 0.5);
+      vm.asteroid.scale.set(vm.asteroidSize, vm.asteroidSize);
       vm.asteroid.rotateAngle = vm.game.rnd.realInRange(-2, 2);
       vm.game.physics.enable(vm.asteroid, Phaser.Physics.ARCADE);
       vm.game.physics.arcade.moveToXY(vm.asteroid, 0,
@@ -477,6 +499,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
               asteroid.kill();
           });
 
+          // hit the asteroid & break off a piece
           vm.game.physics.arcade.overlap(vm.bullets, vm.asteroid, null, function (asteroid, bullet) {
               if (!bullet.alive) return;
 
@@ -487,6 +510,11 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
                     + asteroid.rotateAngle
                     + vm.game.rnd.realInRange(-Math.PI/4, Math.PI/4);
                   vm.game.physics.arcade.velocityFromRotation(projectile.rotation, 200, projectile.body.velocity);
+              }
+              vm.asteroidSize -= vm.ASTEROID_SHRINK;
+              vm.asteroid.scale.set(vm.asteroidSize, vm.asteroidSize);
+              if (vm.asteroidSize <= 0){
+                  vm.exitModule('depleted');
               }
 
               bullet.kill();
@@ -658,31 +686,36 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
 
 module.exports = angular.module('asteroid-mining').name;
 
-},{"angular":44,"howler":2,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":4,"phaser":47}],7:[function(require,module,exports){
+},{"angular":46,"howler":4,"mining-dialog-finish":9,"mining-dialog-start":10,"nodule":6,"phaser":49}],9:[function(require,module,exports){
+
+
 module.exports = function (stats, callback) {
-  return {
-    state_exit: {
-      story: "You got too far from the asteroid and broke orbit. You finish with <strong>"+stats.credits+"</strong> credits and <strong>"+stats.fuel+"</strong> fuel. Better luck next time!",
-      choices: [
+    var conclusion = "You are finishing with <strong>"+stats.credits+"</strong> credits and <strong>"+stats.fuel+"</strong> fuel. Better luck next time!";
+    var continueChoice = [
         {name: "Continue", next:callback}
-      ]
+    ]
+
+    return {
+    state_exit: {
+      story: "You got too far from the asteroid and broke orbit. " + conclusion,
+      choices: continueChoice
     },
     state_end: {
-      story: "The asteroid got away. You are finishing with <strong>"+stats.credits+"</strong> credits and <strong>"+stats.fuel+"</strong> fuel. Better luck next time!",
-      choices: [
-        {name: "Continue", next:callback}
-      ]
+      story: "The asteroid got away. " + conclusion,
+      choices: continueChoice
     },
     state_crash: {
-      story: "You got too close to the asteroid and damaged your ship. You are finishing with <strong>"+stats.credits+"</strong> credits and <strong>"+stats.fuel+"</strong> fuel. Better luck next time!",      
-      choices: [
-        {name: "Continue", next:callback}
-      ]
+      story: "You got too close to the asteroid and damaged your ship. " + conclusion,
+      choices: continueChoice
+    },
+    state_depleted: {
+      story: "This asteroid has been depleted of resources. " + conclusion,
+       choices: continueChoice
     }
   }
 }
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = function (stats, startCb, continueCb) {
   return {
     initial: {
@@ -696,7 +729,7 @@ module.exports = function (stats, startCb, continueCb) {
   }
 }
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -725,7 +758,7 @@ app.controller("audioController", function(){
 });
 
 module.exports = angular.module('audio-controls').name;
-},{"angular":44,"howler":2}],10:[function(require,module,exports){
+},{"angular":46,"howler":4}],12:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -828,7 +861,7 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":44,"game-btn":13,"howler":2,"nodule":4}],11:[function(require,module,exports){
+},{"angular":46,"game-btn":15,"howler":4,"nodule":6}],13:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -865,14 +898,18 @@ app.controller("exampleController", ['data', '$scope', '$rootScope', function(da
 
 // this is needed to connect with the main app.
 module.exports = angular.module('example-module').name;
-},{"angular":44,"nodule":4}],12:[function(require,module,exports){
-var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Sprite, app;
+},{"angular":46,"nodule":6}],14:[function(require,module,exports){
+var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Sprite, app, iss, temp_marker;
 
 require('angular');
 
 Location = require('./Location.coffee');
 
 Sprite = require('./travelScreen/Sprite.coffee');
+
+iss = require('../assets/stations/iss/spriteSpec.js');
+
+temp_marker = require('../assets/stations/marker1/spriteSpec.js');
 
 window.TRAVEL_SPEED = 1;
 
@@ -902,7 +939,7 @@ PIX_2_AU_CERES = CERES_DIST_AU / DIST_PIX * 2 * AU_2_KM;
 
 PIX_2_AU_EUROPA = EUROPA_DIST_AU / DIST_PIX * 2 * AU_2_KM;
 
-DIST_ISS = 1000;
+DIST_ISS = 2000;
 
 DIST_MOON_MANU = parseInt(DIST_ISS + DIST_PIX / 2);
 
@@ -940,7 +977,7 @@ Game = (function() {
         return _this.scope.$broadcast('switchToModule', 'you-win');
       };
     })(this);
-    this.locations = [new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc), new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"), new Location("moon", DIST_MOON, PIX_2_AU_MOON, "station", shopFunc), new Location("mars-maneuver", DIST_MARS_MANU, PIX_2_AU_MARS, "maneuver"), new Location("mars", DIST_MARS, PIX_2_AU_MARS, "station", shopFunc), new Location("ceres-maneuver", DIST_CERES_MANU, PIX_2_AU_CERES, "maneuver"), new Location("ceres", DIST_CERES, PIX_2_AU_CERES, "station", shopFunc), new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"), new Location("jupiter", DIST_EUROPA - DIST_MOON, PIX_2_AU_EUROPA - PIX_2_AU_MOON, "maneuver"), new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", winFunc), new Location("END_OF_UNIVERSE", DIST_EUROPA + DIST_ISS, PIX_2_AU_EUROPA + PIX_2_AU_ISS, "maneuver")];
+    this.locations = [new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc, new Sprite(this.gameDir + iss.sheet, iss.dimensions, -1000, 'random')), new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"), new Location("moon", DIST_MOON, PIX_2_AU_MOON, "station", shopFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("mars-maneuver", DIST_MARS_MANU, PIX_2_AU_MARS, "maneuver"), new Location("mars", DIST_MARS, PIX_2_AU_MARS, "station", shopFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("ceres-maneuver", DIST_CERES_MANU, PIX_2_AU_CERES, "maneuver"), new Location("ceres", DIST_CERES, PIX_2_AU_CERES, "station", shopFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"), new Location("jupiter", DIST_EUROPA - DIST_MOON, PIX_2_AU_EUROPA - PIX_2_AU_MOON, "maneuver"), new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", winFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("END_OF_UNIVERSE", DIST_EUROPA + DIST_ISS, PIX_2_AU_EUROPA + PIX_2_AU_ISS, "maneuver")];
     this.distanceTraveled = 0;
     this.displayDistanceTraveled = 0;
     this.crewHealth = [100, 100];
@@ -1101,7 +1138,7 @@ module.exports = angular.module('game').name;
 
 
 
-},{"./Location.coffee":3,"./travelScreen/Sprite.coffee":28,"angular":44}],13:[function(require,module,exports){
+},{"../assets/stations/iss/spriteSpec.js":2,"../assets/stations/marker1/spriteSpec.js":3,"./Location.coffee":5,"./travelScreen/Sprite.coffee":30,"angular":46}],15:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -1129,7 +1166,7 @@ app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(da
 }]);
 
 module.exports = angular.module('game-btn').name;
-},{"angular":44,"howler":2}],14:[function(require,module,exports){
+},{"angular":46,"howler":4}],16:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -1167,7 +1204,7 @@ app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', function($rootS
 
 module.exports = angular.module('game-over').name;
 
-},{"angular":44,"howler":2,"nodule":4}],15:[function(require,module,exports){
+},{"angular":46,"howler":4,"nodule":6}],17:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -1209,7 +1246,7 @@ app.controller("leaderboardController", ['leaderboard', 'data', '$scope', '$root
 }]);
 
 module.exports = angular.module('leaderboard').name;
-},{"angular":44,"howler":2,"nodule":4,"score":20}],16:[function(require,module,exports){
+},{"angular":46,"howler":4,"nodule":6,"score":22}],18:[function(require,module,exports){
 require('angular');
 require('howler');
 Nodule = require('nodule');
@@ -1268,7 +1305,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
 
 module.exports = angular.module('main-menu').name;
 
-},{"angular":44,"game":12,"game-btn":13,"howler":2,"learn-about-trajectory":23,"nodule":4}],17:[function(require,module,exports){
+},{"angular":46,"game":14,"game-btn":15,"howler":4,"learn-about-trajectory":25,"nodule":6}],19:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -1299,7 +1336,7 @@ app.controller('ManeuverScreenCtrl', function($scope){
 
 module.exports = angular.module('maneuver-screen').name;
 
-},{"angular":44}],18:[function(require,module,exports){
+},{"angular":46}],20:[function(require,module,exports){
 require('angular');
 
 
@@ -1323,7 +1360,7 @@ app.controller("headerController", ['$http', 'data', function($http, data) {
 }]);
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":44,"game":12}],19:[function(require,module,exports){
+},{"angular":46,"game":14}],21:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -1412,7 +1449,7 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":44}],20:[function(require,module,exports){
+},{"angular":46}],22:[function(require,module,exports){
 
 require('angular')
 
@@ -1524,7 +1561,7 @@ app.factory('leaderboard', ['$http', function($http) {
 
 module.exports = angular.module('score').name
 
-},{"angular":44}],21:[function(require,module,exports){
+},{"angular":46}],23:[function(require,module,exports){
 var Nodule, Sprite, app;
 
 require('angular');
@@ -1533,7 +1570,7 @@ Nodule = require('nodule');
 
 Sprite = require('../travelScreen/Sprite.coffee');
 
-app = angular.module('ship-customizer', [require('game')]);
+app = angular.module('ship-customizer', [require('game'), require('game-btn')]);
 
 app.directive("shipCustomizer", function() {
   return {
@@ -1584,7 +1621,7 @@ module.exports = angular.module('ship-customizer').name;
 
 
 
-},{"../travelScreen/Sprite.coffee":28,"angular":44,"game":12,"nodule":4}],22:[function(require,module,exports){
+},{"../travelScreen/Sprite.coffee":30,"angular":46,"game":14,"game-btn":15,"nodule":6}],24:[function(require,module,exports){
 require('angular');
 Howl = require('howler');
 Nodule = require('nodule');
@@ -1751,7 +1788,7 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scop
 
 module.exports = angular.module('shop').name;
 
-},{"angular":44,"game":12,"game-btn":13,"howler":2,"ng-hold":19,"nodule":4}],23:[function(require,module,exports){
+},{"angular":46,"game":14,"game-btn":15,"howler":4,"ng-hold":21,"nodule":6}],25:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "<h3>Oregon Trajectory Info</h3> The year is 2050 and you are tasked with a mission called Oregon, named after the Oregon Trail of the 1800s, to go to Jupiter’s moon Europa. NASA scientists discovered that Europa has signs of water and organic molecules such as methane. They believe life is under the surface of Europa and you’re going to find it!",
@@ -1786,7 +1823,7 @@ module.exports = {
 
 
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 require('angular');
 Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
@@ -1823,9 +1860,18 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
         $scope.currentStep = step;
         if ($scope.dialog && $scope.dialog[step]) {
           $scope.step = $scope.dialog[step];
-          $scope.step.story = $sce.trustAsHtml($scope.step.story);
+          try {
+              $scope.step.story = $sce.trustAsHtml($scope.step.story);
+          } catch (err){
+              if (err.name == "Error"){
+                // ?probably? attempt to trust non-string  TODO: better way to detect this?
+                console.warn('non-string err (no big deal (probably)): ', err);
+              } else {
+                  throw err;
+              }
+          }
         } else {
-          console.error('missing step in dialog definition', $scope.step, $scope.dialog);
+          console.warn('missing step in dialog definition', $scope.step, $scope.dialog);
           $scope.step = {};
         }
     };
@@ -1843,7 +1889,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
 
 module.exports = angular.module('situation').name;
 
-},{"angular":44,"howler":2,"nodule":4}],25:[function(require,module,exports){
+},{"angular":46,"howler":4,"nodule":6}],27:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -1890,7 +1936,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":44}],26:[function(require,module,exports){
+},{"angular":46}],28:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -1908,7 +1954,7 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":44,"social-button-directive":25}],27:[function(require,module,exports){
+},{"angular":46,"social-button-directive":27}],29:[function(require,module,exports){
 var Howl, Nodule, app;
 
 require('angular');
@@ -1982,7 +2028,7 @@ module.exports = angular.module('trader').name;
 
 
 
-},{"angular":44,"game-btn":13,"howler":2,"nodule":4}],28:[function(require,module,exports){
+},{"angular":46,"game-btn":15,"howler":4,"nodule":6}],30:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
@@ -2098,7 +2144,7 @@ module.exports = Sprite = (function() {
 
 
 
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 var Tile;
 
 module.exports = Tile = (function() {
@@ -2135,7 +2181,7 @@ module.exports = Tile = (function() {
 
 
 
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var Event, Sprite;
 
 Sprite = require('../Sprite.coffee');
@@ -2258,7 +2304,7 @@ module.exports = Event = (function() {
 
 
 
-},{"../Sprite.coffee":28}],31:[function(require,module,exports){
+},{"../Sprite.coffee":30}],33:[function(require,module,exports){
 /*
 
 This file contains the list of in-travel random events.
@@ -2400,7 +2446,7 @@ module.exports = [
         }
     }
 ];
-},{"./situations/medicine.coffee":33,"./situations/medicine2.coffee":34,"./situations/phantomSignal.coffee":35,"./situations/phantomSignal2.coffee":36,"./situations/repairs.coffee":37,"./situations/solarFlare.coffee":38,"./situations/solarFlare2.coffee":39}],32:[function(require,module,exports){
+},{"./situations/medicine.coffee":35,"./situations/medicine2.coffee":36,"./situations/phantomSignal.coffee":37,"./situations/phantomSignal2.coffee":38,"./situations/repairs.coffee":39,"./situations/solarFlare.coffee":40,"./situations/solarFlare2.coffee":41}],34:[function(require,module,exports){
 var Event, EventList, Randy;
 
 Event = require('./Event.coffee');
@@ -2479,7 +2525,7 @@ module.exports = Randy = (function() {
 
 
 
-},{"./Event.coffee":30,"./EventList.js":31}],33:[function(require,module,exports){
+},{"./Event.coffee":32,"./EventList.js":33}],35:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you speed along towards your next destination you come across a science ship investigating the effects of long term spaceflight on human health, and they’d like to examine your crew! <br><br> After almost a century of humans traveling in space (it is the 2050s, anyway!), the ill-effects of space travel on human health have been well documented. Many of the technological advances that we enjoy in medicine came out of the space program (lightweight wheelchairs, CAT and MRI scans, implantable pacemakers, and radiation therapy, to name a few! <br><br> The research collected by this team could help future colonists and even people back home on Earth – but it will cost x fuel and x food to participate in the study.",
@@ -2522,7 +2568,7 @@ module.exports = {
 
 
 
-},{}],34:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you continue towards your next destination you’re contacted by a small corporate vessel doing research into the effects of long term spaceflight on mental health, and they’d like to examine your crew! <br><br> The research team offers fuel, food and credits in return for participating in the study, and will share any results with you once the study is finished.",
@@ -2565,7 +2611,7 @@ module.exports = {
 
 
 
-},{}],35:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
@@ -2608,7 +2654,7 @@ module.exports = {
 
 
 
-},{}],36:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
@@ -2651,7 +2697,7 @@ module.exports = {
 
 
 
-},{}],37:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "Your ship has taken a beating during the course of your journey, and your crew has decided to do some quick repairs that should hold until you get to your next destination. While the repair team does its work, the rest of the crew takes some much needed time to rest, relax and share memories of home none of you may never see again. *pop* *pop* *ping* <br><br> At first everyone inside the ship panics, worrying that the hull has begun to buckle – but you breathe a sigh of relief when you realize it’s just a tether coming loose… Wait. <br><br> A safety tether? Like the one the crew uses to stay attached to the ship outside during repairs! <br><br> Astronauts have a SAFER (Simplified Aid for EVA Rescue) device built into their suits to help them stay close to the ship if a tether breaks, but you'll have to be very careful about how you proceed to recapture your free-floating crew.",
@@ -2694,7 +2740,7 @@ module.exports = {
 
 
 
-},{}],38:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " You and your crew are running an important experiment that will take another 5 hours to complete, but you’ve received a space weather report warning of an impending proton storm. Proton storms, also known as “solar particle events”, happen when particles emitted by the sun during coronal mass ejects and solar flares are pushed out into space. <br><br>Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn off your equipment and stop your experiment until after the storm passes in a few hours, but your chief science officer believes that you’re on the edge of a breakthrough.",
@@ -2739,7 +2785,7 @@ module.exports = {
 
 
 
-},{}],39:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " You and your crew are observing a unique phenomena in space when you receive a space weather report warning of an impending proton storm caused by solar winds. Proton storms can bombard humans with damaging radiation, can destroy solar collector efficiency and damage sensitive equipment. <br><br> Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn shield your equipment as best you can and enter the pod until after the storm passes in a few hours, but your chief science officer believes that this may be the only opportunity to observe this special event.",
@@ -2782,7 +2828,7 @@ module.exports = {
 
 
 
-},{}],40:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var EVENT_VARIABILITY, Location, MIN_TRAVELS_PER_EVENT, Nodule, Randy, Sprite, Tile;
 
 require('angular');
@@ -3060,7 +3106,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"./../Location.coffee":3,"./Sprite.coffee":28,"./Tile.coffee":29,"./ng-randy/ng-randy.coffee":32,"angular":44,"game":12,"game-btn":13,"ng-hold":19,"nodule":4}],41:[function(require,module,exports){
+},{"./../Location.coffee":5,"./Sprite.coffee":30,"./Tile.coffee":31,"./ng-randy/ng-randy.coffee":34,"angular":46,"game":14,"game-btn":15,"ng-hold":21,"nodule":6}],43:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
@@ -3097,7 +3143,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $sco
 
 module.exports = angular.module('you-win').name;
 
-},{"angular":44,"howler":2,"nodule":4}],42:[function(require,module,exports){
+},{"angular":46,"howler":4,"nodule":6}],44:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -3116,7 +3162,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":44}],43:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":46}],45:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -3140,7 +3186,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":44}],44:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":46}],46:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -3393,14 +3439,14 @@ s=h.ngOptions,w=!1,v,m=!1,F=A(W.createElement("option")),E=A(W.createElement("op
 d.parent(),n=k.data("$selectController")||k.parent().data("$selectController");n&&n.databound||(n=c);f?a.$watch(f,function(a,c){e.$set("value",a);c!==a&&n.removeOption(c);n.addOption(a,d)}):n.addOption(e.value,d);d.on("$destroy",function(){n.removeOption(e.value)})}}}}],Xd=ea({restrict:"E",terminal:!1}),Bc=function(){return{restrict:"A",require:"?ngModel",link:function(a,c,d,e){e&&(d.required=!0,e.$validators.required=function(a,c){return!d.required||!e.$isEmpty(c)},d.$observe("required",function(){e.$validate()}))}}},
 Ac=function(){return{restrict:"A",require:"?ngModel",link:function(a,c,d,e){if(e){var f,g=d.ngPattern||d.pattern;d.$observe("pattern",function(a){C(a)&&0<a.length&&(a=new RegExp("^"+a+"$"));if(a&&!a.test)throw R("ngPattern")("noregexp",g,a,wa(c));f=a||t;e.$validate()});e.$validators.pattern=function(a){return e.$isEmpty(a)||x(f)||f.test(a)}}}}},Dc=function(){return{restrict:"A",require:"?ngModel",link:function(a,c,d,e){if(e){var f=-1;d.$observe("maxlength",function(a){a=aa(a);f=isNaN(a)?-1:a;e.$validate()});
 e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}},Cc=function(){return{restrict:"A",require:"?ngModel",link:function(a,c,d,e){if(e){var f=0;d.$observe("minlength",function(a){f=aa(a)||0;e.$validate()});e.$validators.minlength=function(a,c){return e.$isEmpty(c)||c.length>=f}}}}};Q.angular.bootstrap?console.log("WARNING: Tried to load angular more than once."):(Nd(),Pd(ca),A(W).ready(function(){Jd(W,uc)}))})(window,document);!window.angular.$$csp()&&window.angular.element(document).find("head").prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
-//# sourceMappingURL=angular.min.js.map
+//# sourceMappingURL=node_modules/angular/angular.min.js.map
 
 ; browserify_shim__define__module__export__(typeof angular != "undefined" ? angular : window.angular);
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3460,7 +3506,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -3496,7 +3542,7 @@ FastClick.notNeeded=function(a){var c,b;if("undefined"===typeof window.ontouchst
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function (process,global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /* Phaser v2.3.0 - http://phaser.io - @photonstorm - (c) 2015 Photon Storm Ltd. */
@@ -3519,10 +3565,10 @@ this.parent.target[a]=Array.isArray(d)?this.interpolationFunction.call(this.inte
 },preUpdate:function(){this.p2&&this.p2.preUpdate(),this.box2d&&this.box2d.preUpdate()},update:function(){this.p2&&this.p2.update(),this.box2d&&this.box2d.update()},setBoundsToWorld:function(){this.arcade&&this.arcade.setBoundsToWorld(),this.ninja&&this.ninja.setBoundsToWorld(),this.p2&&this.p2.setBoundsToWorld(),this.box2d&&this.box2d.setBoundsToWorld()},clear:function(){this.p2&&this.p2.clear(),this.box2d&&this.box2d.clear()},reset:function(){this.p2&&this.p2.reset(),this.box2d&&this.box2d.reset()},destroy:function(){this.p2&&this.p2.destroy(),this.box2d&&this.box2d.destroy(),this.arcade=null,this.ninja=null,this.p2=null,this.box2d=null}},c.Physics.prototype.constructor=c.Physics,c.Physics.Arcade=function(a){this.game=a,this.gravity=new c.Point,this.bounds=new c.Rectangle(0,0,a.world.width,a.world.height),this.checkCollision={up:!0,down:!0,left:!0,right:!0},this.maxObjects=10,this.maxLevels=4,this.OVERLAP_BIAS=4,this.forceX=!1,this.sortDirection=c.Physics.Arcade.LEFT_RIGHT,this.skipQuadTree=!0,this.isPaused=!1,this.quadTree=new c.QuadTree(this.game.world.bounds.x,this.game.world.bounds.y,this.game.world.bounds.width,this.game.world.bounds.height,this.maxObjects,this.maxLevels),this._total=0,this.setBoundsToWorld()},c.Physics.Arcade.prototype.constructor=c.Physics.Arcade,c.Physics.Arcade.SORT_NONE=0,c.Physics.Arcade.LEFT_RIGHT=1,c.Physics.Arcade.RIGHT_LEFT=2,c.Physics.Arcade.TOP_BOTTOM=3,c.Physics.Arcade.BOTTOM_TOP=4,c.Physics.Arcade.prototype={setBounds:function(a,b,c,d){this.bounds.setTo(a,b,c,d)},setBoundsToWorld:function(){this.bounds.setTo(this.game.world.bounds.x,this.game.world.bounds.y,this.game.world.bounds.width,this.game.world.bounds.height)},enable:function(a,b){"undefined"==typeof b&&(b=!0);var d=1;if(Array.isArray(a))for(d=a.length;d--;)a[d]instanceof c.Group?this.enable(a[d].children,b):(this.enableBody(a[d]),b&&a[d].hasOwnProperty("children")&&a[d].children.length>0&&this.enable(a[d],!0));else a instanceof c.Group?this.enable(a.children,b):(this.enableBody(a),b&&a.hasOwnProperty("children")&&a.children.length>0&&this.enable(a.children,!0))},enableBody:function(a){a.hasOwnProperty("body")&&null===a.body&&(a.body=new c.Physics.Arcade.Body(a))},updateMotion:function(a){var b=this.computeVelocity(0,a,a.angularVelocity,a.angularAcceleration,a.angularDrag,a.maxAngular)-a.angularVelocity;a.angularVelocity+=b,a.rotation+=a.angularVelocity*this.game.time.physicsElapsed,a.velocity.x=this.computeVelocity(1,a,a.velocity.x,a.acceleration.x,a.drag.x,a.maxVelocity.x),a.velocity.y=this.computeVelocity(2,a,a.velocity.y,a.acceleration.y,a.drag.y,a.maxVelocity.y)},computeVelocity:function(a,b,c,d,e,f){return"undefined"==typeof f&&(f=1e4),1===a&&b.allowGravity?c+=(this.gravity.x+b.gravity.x)*this.game.time.physicsElapsed:2===a&&b.allowGravity&&(c+=(this.gravity.y+b.gravity.y)*this.game.time.physicsElapsed),d?c+=d*this.game.time.physicsElapsed:e&&(e*=this.game.time.physicsElapsed,c-e>0?c-=e:0>c+e?c+=e:c=0),c>f?c=f:-f>c&&(c=-f),c},overlap:function(a,b,c,d,e){if(c=c||null,d=d||null,e=e||c,this._total=0,!Array.isArray(a)&&Array.isArray(b))for(var f=0;f<b.length;f++)this.collideHandler(a,b[f],c,d,e,!0);else if(Array.isArray(a)&&!Array.isArray(b))for(var f=0;f<a.length;f++)this.collideHandler(a[f],b,c,d,e,!0);else if(Array.isArray(a)&&Array.isArray(b))for(var f=0;f<a.length;f++)for(var g=0;g<b.length;g++)this.collideHandler(a[f],b[g],c,d,e,!0);else this.collideHandler(a,b,c,d,e,!0);return this._total>0},collide:function(a,b,c,d,e){if(c=c||null,d=d||null,e=e||c,this._total=0,!Array.isArray(a)&&Array.isArray(b))for(var f=0;f<b.length;f++)this.collideHandler(a,b[f],c,d,e,!1);else if(Array.isArray(a)&&!Array.isArray(b))for(var f=0;f<a.length;f++)this.collideHandler(a[f],b,c,d,e,!1);else if(Array.isArray(a)&&Array.isArray(b))for(var f=0;f<a.length;f++)for(var g=0;g<b.length;g++)this.collideHandler(a[f],b[g],c,d,e,!1);else this.collideHandler(a,b,c,d,e,!1);return this._total>0},sort:function(a){this.sortDirection===c.Physics.Arcade.LEFT_RIGHT?a._hash.sort(function(a,b){return a.body&&b.body?a.body.x-b.body.x:-1}):this.sortDirection===c.Physics.Arcade.RIGHT_LEFT?a._hash.sort(function(a,b){return a.body&&b.body?b.body.x-a.body.x:-1}):this.sortDirection===c.Physics.Arcade.TOP_BOTTOM?a._hash.sort(function(a,b){return a.body&&b.body?a.body.y-b.body.y:-1}):this.sortDirection===c.Physics.Arcade.BOTTOM_TOP&&a._hash.sort(function(a,b){return a.body&&b.body?b.body.y-a.body.y:-1})},collideHandler:function(a,b,d,e,f,g){return"undefined"==typeof b&&a.physicsType===c.GROUP?(this.sort(a),void this.collideGroupVsSelf(a,d,e,f,g)):void(a&&b&&a.exists&&b.exists&&(this.sortDirection!==c.Physics.Arcade.SORT_NONE&&(a.physicsType===c.GROUP&&this.sort(a),b.physicsType===c.GROUP&&this.sort(b)),a.physicsType===c.SPRITE?b.physicsType===c.SPRITE?this.collideSpriteVsSprite(a,b,d,e,f,g):b.physicsType===c.GROUP?this.collideSpriteVsGroup(a,b,d,e,f,g):b.physicsType===c.TILEMAPLAYER&&this.collideSpriteVsTilemapLayer(a,b,d,e,f):a.physicsType===c.GROUP?b.physicsType===c.SPRITE?this.collideSpriteVsGroup(b,a,d,e,f,g):b.physicsType===c.GROUP?this.collideGroupVsGroup(a,b,d,e,f,g):b.physicsType===c.TILEMAPLAYER&&this.collideGroupVsTilemapLayer(a,b,d,e,f,g):a.physicsType===c.TILEMAPLAYER&&(b.physicsType===c.SPRITE?this.collideSpriteVsTilemapLayer(b,a,d,e,f,g):b.physicsType===c.GROUP&&this.collideGroupVsTilemapLayer(b,a,d,e,f,g))))},collideSpriteVsSprite:function(a,b,c,d,e,f){return a.body&&b.body?(this.separate(a.body,b.body,d,e,f)&&(c&&c.call(e,a,b),this._total++),!0):!1},collideSpriteVsGroup:function(a,b,d,e,f,g){if(0!==b.length&&a.body)if(this.skipQuadTree||a.body.skipQuadTree){for(var h=0;h<b._hash.length;h++)if(b._hash[h]&&b._hash[h].exists&&b._hash[h].body){if(this.sortDirection===c.Physics.Arcade.LEFT_RIGHT){if(a.body.right<b._hash[h].body.x)break;if(b._hash[h].body.right<a.body.x)continue}else if(this.sortDirection===c.Physics.Arcade.RIGHT_LEFT){if(a.body.x>b._hash[h].body.right)break;if(b._hash[h].body.x>a.body.right)continue}else if(this.sortDirection===c.Physics.Arcade.TOP_BOTTOM){if(a.body.bottom<b._hash[h].body.y)break;if(b._hash[h].body.bottom<a.body.y)continue}else if(this.sortDirection===c.Physics.Arcade.BOTTOM_TOP){if(a.body.y>b._hash[h].body.bottom)break;if(b._hash[h].body.y>a.body.bottom)continue}this.collideSpriteVsSprite(a,b._hash[h],d,e,f,g)}}else{this.quadTree.clear(),this.quadTree.reset(this.game.world.bounds.x,this.game.world.bounds.y,this.game.world.bounds.width,this.game.world.bounds.height,this.maxObjects,this.maxLevels),this.quadTree.populate(b);for(var i=this.quadTree.retrieve(a),h=0;h<i.length;h++)this.separate(a.body,i[h],e,f,g)&&(d&&d.call(f,a,i[h].sprite),this._total++)}},collideGroupVsSelf:function(a,b,d,e,f){if(0!==a.length)for(var g=0;g<a._hash.length;g++)if(a._hash[g]&&a._hash[g].exists&&a._hash[g].body)for(var h=a._hash[g],i=g+1;i<a._hash.length;i++)if(a._hash[i]&&a._hash[i].exists&&a._hash[i].body){var j=a._hash[i];if(this.sortDirection===c.Physics.Arcade.LEFT_RIGHT){if(h.body.right<j.body.x)break;if(j.body.right<h.body.x)continue}else if(this.sortDirection===c.Physics.Arcade.RIGHT_LEFT){if(h.body.x>j.body.right)continue;if(j.body.x>h.body.right)break}else if(this.sortDirection===c.Physics.Arcade.TOP_BOTTOM){if(h.body.bottom<j.body.y)continue;if(j.body.bottom<h.body.y)break}else if(this.sortDirection===c.Physics.Arcade.BOTTOM_TOP){if(h.body.y>j.body.bottom)continue;if(j.body.y>h.body.bottom)break}this.collideSpriteVsSprite(h,j,b,d,e,f)}},collideGroupVsGroup:function(a,b,d,e,f,g){if(0!==a.length&&0!==b.length)for(var h=0;h<a.children.length;h++)a.children[h].exists&&(a.children[h].physicsType===c.GROUP?this.collideGroupVsGroup(a.children[h],b,d,e,f,g):this.collideSpriteVsGroup(a.children[h],b,d,e,f,g))},separate:function(a,b,c,d,e){if(!a.enable||!b.enable||!this.intersects(a,b))return!1;if(c&&c.call(d,a.sprite,b.sprite)===!1)return!1;var f=!1;return f=this.forceX||Math.abs(this.gravity.y+a.gravity.y)<Math.abs(this.gravity.x+a.gravity.x)?this.separateX(a,b,e)||this.separateY(a,b,e):this.separateY(a,b,e)||this.separateX(a,b,e),e?!0:f},intersects:function(a,b){return a.right<=b.position.x?!1:a.bottom<=b.position.y?!1:a.position.x>=b.right?!1:a.position.y>=b.bottom?!1:!0},separateX:function(a,b,c){if(a.immovable&&b.immovable)return!1;var d=0;if(this.intersects(a,b)){var e=a.deltaAbsX()+b.deltaAbsX()+this.OVERLAP_BIAS;if(0===a.deltaX()&&0===b.deltaX()?(a.embedded=!0,b.embedded=!0):a.deltaX()>b.deltaX()?(d=a.right-b.x,d>e||a.checkCollision.right===!1||b.checkCollision.left===!1?d=0:(a.touching.none=!1,a.touching.right=!0,b.touching.none=!1,b.touching.left=!0)):a.deltaX()<b.deltaX()&&(d=a.x-b.width-b.x,-d>e||a.checkCollision.left===!1||b.checkCollision.right===!1?d=0:(a.touching.none=!1,a.touching.left=!0,b.touching.none=!1,b.touching.right=!0)),a.overlapX=d,b.overlapX=d,0!==d){if(c||a.customSeparateX||b.customSeparateX)return!0;var f=a.velocity.x,g=b.velocity.x;if(a.immovable||b.immovable)a.immovable?b.immovable||(b.x+=d,b.velocity.x=f-g*b.bounce.x,a.moves&&(b.y+=(a.y-a.prev.y)*a.friction.y)):(a.x=a.x-d,a.velocity.x=g-f*a.bounce.x,b.moves&&(a.y+=(b.y-b.prev.y)*b.friction.y));else{d*=.5,a.x=a.x-d,b.x+=d;var h=Math.sqrt(g*g*b.mass/a.mass)*(g>0?1:-1),i=Math.sqrt(f*f*a.mass/b.mass)*(f>0?1:-1),j=.5*(h+i);h-=j,i-=j,a.velocity.x=j+h*a.bounce.x,b.velocity.x=j+i*b.bounce.x}return!0}}return!1},separateY:function(a,b,c){if(a.immovable&&b.immovable)return!1;var d=0;if(this.intersects(a,b)){var e=a.deltaAbsY()+b.deltaAbsY()+this.OVERLAP_BIAS;if(0===a.deltaY()&&0===b.deltaY()?(a.embedded=!0,b.embedded=!0):a.deltaY()>b.deltaY()?(d=a.bottom-b.y,d>e||a.checkCollision.down===!1||b.checkCollision.up===!1?d=0:(a.touching.none=!1,a.touching.down=!0,b.touching.none=!1,b.touching.up=!0)):a.deltaY()<b.deltaY()&&(d=a.y-b.bottom,-d>e||a.checkCollision.up===!1||b.checkCollision.down===!1?d=0:(a.touching.none=!1,a.touching.up=!0,b.touching.none=!1,b.touching.down=!0)),a.overlapY=d,b.overlapY=d,0!==d){if(c||a.customSeparateY||b.customSeparateY)return!0;var f=a.velocity.y,g=b.velocity.y;if(a.immovable||b.immovable)a.immovable?b.immovable||(b.y+=d,b.velocity.y=f-g*b.bounce.y,a.moves&&(b.x+=(a.x-a.prev.x)*a.friction.x)):(a.y=a.y-d,a.velocity.y=g-f*a.bounce.y,b.moves&&(a.x+=(b.x-b.prev.x)*b.friction.x));else{d*=.5,a.y=a.y-d,b.y+=d;var h=Math.sqrt(g*g*b.mass/a.mass)*(g>0?1:-1),i=Math.sqrt(f*f*a.mass/b.mass)*(f>0?1:-1),j=.5*(h+i);h-=j,i-=j,a.velocity.y=j+h*a.bounce.y,b.velocity.y=j+i*b.bounce.y}return!0}}return!1},getObjectsUnderPointer:function(a,b,c,d){return 0!==b.length&&a.exists?this.getObjectsAtLocation(a.x,a.y,b,c,d,a):void 0},getObjectsAtLocation:function(a,b,d,e,f,g){this.quadTree.clear(),this.quadTree.reset(this.game.world.bounds.x,this.game.world.bounds.y,this.game.world.bounds.width,this.game.world.bounds.height,this.maxObjects,this.maxLevels),this.quadTree.populate(d);for(var h=new c.Rectangle(a,b,1,1),i=[],j=this.quadTree.retrieve(h),k=0;k<j.length;k++)j[k].hitTest(a,b)&&(e&&e.call(f,g,j[k].sprite),i.push(j[k].sprite));return i},moveToObject:function(a,b,c,d){"undefined"==typeof c&&(c=60),"undefined"==typeof d&&(d=0);var e=Math.atan2(b.y-a.y,b.x-a.x);return d>0&&(c=this.distanceBetween(a,b)/(d/1e3)),a.body.velocity.x=Math.cos(e)*c,a.body.velocity.y=Math.sin(e)*c,e},moveToPointer:function(a,b,c,d){"undefined"==typeof b&&(b=60),c=c||this.game.input.activePointer,"undefined"==typeof d&&(d=0);var e=this.angleToPointer(a,c);return d>0&&(b=this.distanceToPointer(a,c)/(d/1e3)),a.body.velocity.x=Math.cos(e)*b,a.body.velocity.y=Math.sin(e)*b,e},moveToXY:function(a,b,c,d,e){"undefined"==typeof d&&(d=60),"undefined"==typeof e&&(e=0);var f=Math.atan2(c-a.y,b-a.x);return e>0&&(d=this.distanceToXY(a,b,c)/(e/1e3)),a.body.velocity.x=Math.cos(f)*d,a.body.velocity.y=Math.sin(f)*d,f},velocityFromAngle:function(a,b,d){return"undefined"==typeof b&&(b=60),d=d||new c.Point,d.setTo(Math.cos(this.game.math.degToRad(a))*b,Math.sin(this.game.math.degToRad(a))*b)},velocityFromRotation:function(a,b,d){return"undefined"==typeof b&&(b=60),d=d||new c.Point,d.setTo(Math.cos(a)*b,Math.sin(a)*b)},accelerationFromRotation:function(a,b,d){return"undefined"==typeof b&&(b=60),d=d||new c.Point,d.setTo(Math.cos(a)*b,Math.sin(a)*b)},accelerateToObject:function(a,b,c,d,e){"undefined"==typeof c&&(c=60),"undefined"==typeof d&&(d=1e3),"undefined"==typeof e&&(e=1e3);var f=this.angleBetween(a,b);return a.body.acceleration.setTo(Math.cos(f)*c,Math.sin(f)*c),a.body.maxVelocity.setTo(d,e),f},accelerateToPointer:function(a,b,c,d,e){"undefined"==typeof c&&(c=60),"undefined"==typeof b&&(b=this.game.input.activePointer),"undefined"==typeof d&&(d=1e3),"undefined"==typeof e&&(e=1e3);var f=this.angleToPointer(a,b);return a.body.acceleration.setTo(Math.cos(f)*c,Math.sin(f)*c),a.body.maxVelocity.setTo(d,e),f},accelerateToXY:function(a,b,c,d,e,f){"undefined"==typeof d&&(d=60),"undefined"==typeof e&&(e=1e3),"undefined"==typeof f&&(f=1e3);var g=this.angleToXY(a,b,c);return a.body.acceleration.setTo(Math.cos(g)*d,Math.sin(g)*d),a.body.maxVelocity.setTo(e,f),g},distanceBetween:function(a,b){var c=a.x-b.x,d=a.y-b.y;return Math.sqrt(c*c+d*d)},distanceToXY:function(a,b,c){var d=a.x-b,e=a.y-c;return Math.sqrt(d*d+e*e)},distanceToPointer:function(a,b){b=b||this.game.input.activePointer;var c=a.x-b.worldX,d=a.y-b.worldY;return Math.sqrt(c*c+d*d)},angleBetween:function(a,b){var c=b.x-a.x,d=b.y-a.y;return Math.atan2(d,c)},angleToXY:function(a,b,c){var d=b-a.x,e=c-a.y;return Math.atan2(e,d)},angleToPointer:function(a,b){b=b||this.game.input.activePointer;var c=b.worldX-a.x,d=b.worldY-a.y;return Math.atan2(d,c)}},c.Physics.Arcade.Body=function(a){this.sprite=a,this.game=a.game,this.type=c.Physics.ARCADE,this.enable=!0,this.offset=new c.Point,this.position=new c.Point(a.x,a.y),this.prev=new c.Point(this.position.x,this.position.y),this.allowRotation=!0,this.rotation=a.rotation,this.preRotation=a.rotation,this.width=a.width,this.height=a.height,this.sourceWidth=a.width,this.sourceHeight=a.height,a.texture&&(this.sourceWidth=a.texture.frame.width,this.sourceHeight=a.texture.frame.height),this.halfWidth=Math.abs(a.width/2),this.halfHeight=Math.abs(a.height/2),this.center=new c.Point(a.x+this.halfWidth,a.y+this.halfHeight),this.velocity=new c.Point,this.newVelocity=new c.Point(0,0),this.deltaMax=new c.Point(0,0),this.acceleration=new c.Point,this.drag=new c.Point,this.allowGravity=!0,this.gravity=new c.Point(0,0),this.bounce=new c.Point,this.maxVelocity=new c.Point(1e4,1e4),this.friction=new c.Point(1,0),this.angularVelocity=0,this.angularAcceleration=0,this.angularDrag=0,this.maxAngular=1e3,this.mass=1,this.angle=0,this.speed=0,this.facing=c.NONE,this.immovable=!1,this.moves=!0,this.customSeparateX=!1,this.customSeparateY=!1,this.overlapX=0,this.overlapY=0,this.embedded=!1,this.collideWorldBounds=!1,this.checkCollision={none:!1,any:!0,up:!0,down:!0,left:!0,right:!0},this.touching={none:!0,up:!1,down:!1,left:!1,right:!1},this.wasTouching={none:!0,up:!1,down:!1,left:!1,right:!1},this.blocked={up:!1,down:!1,left:!1,right:!1},this.tilePadding=new c.Point,this.dirty=!1,this.skipQuadTree=!1,this._reset=!0,this._sx=a.scale.x,this._sy=a.scale.y,this._dx=0,this._dy=0},c.Physics.Arcade.Body.prototype={updateBounds:function(){var a=Math.abs(this.sprite.scale.x),b=Math.abs(this.sprite.scale.y);(a!==this._sx||b!==this._sy)&&(this.width=this.sourceWidth*a,this.height=this.sourceHeight*b,this.halfWidth=Math.floor(this.width/2),this.halfHeight=Math.floor(this.height/2),this._sx=a,this._sy=b,this.center.setTo(this.position.x+this.halfWidth,this.position.y+this.halfHeight),this._reset=!0)},preUpdate:function(){this.enable&&!this.game.physics.arcade.isPaused&&(this.dirty=!0,this.wasTouching.none=this.touching.none,this.wasTouching.up=this.touching.up,this.wasTouching.down=this.touching.down,this.wasTouching.left=this.touching.left,this.wasTouching.right=this.touching.right,this.touching.none=!0,this.touching.up=!1,this.touching.down=!1,this.touching.left=!1,this.touching.right=!1,this.blocked.up=!1,this.blocked.down=!1,this.blocked.left=!1,this.blocked.right=!1,this.embedded=!1,this.updateBounds(),this.position.x=this.sprite.world.x-this.sprite.anchor.x*this.width+this.offset.x,this.position.y=this.sprite.world.y-this.sprite.anchor.y*this.height+this.offset.y,this.rotation=this.sprite.angle,this.preRotation=this.rotation,(this._reset||this.sprite.fresh)&&(this.prev.x=this.position.x,this.prev.y=this.position.y),this.moves&&(this.game.physics.arcade.updateMotion(this),this.newVelocity.set(this.velocity.x*this.game.time.physicsElapsed,this.velocity.y*this.game.time.physicsElapsed),this.position.x+=this.newVelocity.x,this.position.y+=this.newVelocity.y,(this.position.x!==this.prev.x||this.position.y!==this.prev.y)&&(this.speed=Math.sqrt(this.velocity.x*this.velocity.x+this.velocity.y*this.velocity.y),this.angle=Math.atan2(this.velocity.y,this.velocity.x)),this.collideWorldBounds&&this.checkWorldBounds()),this._dx=this.deltaX(),this._dy=this.deltaY(),this._reset=!1)},postUpdate:function(){this.enable&&this.dirty&&(this.dirty=!1,this.deltaX()<0?this.facing=c.LEFT:this.deltaX()>0&&(this.facing=c.RIGHT),this.deltaY()<0?this.facing=c.UP:this.deltaY()>0&&(this.facing=c.DOWN),this.moves&&(this._dx=this.deltaX(),this._dy=this.deltaY(),0!==this.deltaMax.x&&0!==this._dx&&(this._dx<0&&this._dx<-this.deltaMax.x?this._dx=-this.deltaMax.x:this._dx>0&&this._dx>this.deltaMax.x&&(this._dx=this.deltaMax.x)),0!==this.deltaMax.y&&0!==this._dy&&(this._dy<0&&this._dy<-this.deltaMax.y?this._dy=-this.deltaMax.y:this._dy>0&&this._dy>this.deltaMax.y&&(this._dy=this.deltaMax.y)),this.sprite.position.x+=this._dx,this.sprite.position.y+=this._dy,this._reset=!0),this.center.setTo(this.position.x+this.halfWidth,this.position.y+this.halfHeight),this.allowRotation&&(this.sprite.angle+=this.deltaZ()),this.prev.x=this.position.x,this.prev.y=this.position.y)},destroy:function(){this.sprite.body=null,this.sprite=null},checkWorldBounds:function(){this.position.x<this.game.physics.arcade.bounds.x&&this.game.physics.arcade.checkCollision.left?(this.position.x=this.game.physics.arcade.bounds.x,this.velocity.x*=-this.bounce.x,this.blocked.left=!0):this.right>this.game.physics.arcade.bounds.right&&this.game.physics.arcade.checkCollision.right&&(this.position.x=this.game.physics.arcade.bounds.right-this.width,this.velocity.x*=-this.bounce.x,this.blocked.right=!0),this.position.y<this.game.physics.arcade.bounds.y&&this.game.physics.arcade.checkCollision.up?(this.position.y=this.game.physics.arcade.bounds.y,this.velocity.y*=-this.bounce.y,this.blocked.up=!0):this.bottom>this.game.physics.arcade.bounds.bottom&&this.game.physics.arcade.checkCollision.down&&(this.position.y=this.game.physics.arcade.bounds.bottom-this.height,this.velocity.y*=-this.bounce.y,this.blocked.down=!0)},setSize:function(a,b,c,d){"undefined"==typeof c&&(c=this.offset.x),"undefined"==typeof d&&(d=this.offset.y),this.sourceWidth=a,this.sourceHeight=b,this.width=this.sourceWidth*this._sx,this.height=this.sourceHeight*this._sy,this.halfWidth=Math.floor(this.width/2),this.halfHeight=Math.floor(this.height/2),this.offset.setTo(c,d),this.center.setTo(this.position.x+this.halfWidth,this.position.y+this.halfHeight)},reset:function(a,b){this.velocity.set(0),this.acceleration.set(0),this.speed=0,this.angularVelocity=0,this.angularAcceleration=0,this.position.x=a-this.sprite.anchor.x*this.width+this.offset.x,this.position.y=b-this.sprite.anchor.y*this.height+this.offset.y,this.prev.x=this.position.x,this.prev.y=this.position.y,this.rotation=this.sprite.angle,this.preRotation=this.rotation,this._sx=this.sprite.scale.x,this._sy=this.sprite.scale.y,this.center.setTo(this.position.x+this.halfWidth,this.position.y+this.halfHeight)},hitTest:function(a,b){return c.Rectangle.contains(this,a,b)},onFloor:function(){return this.blocked.down},onWall:function(){return this.blocked.left||this.blocked.right},deltaAbsX:function(){return this.deltaX()>0?this.deltaX():-this.deltaX()},deltaAbsY:function(){return this.deltaY()>0?this.deltaY():-this.deltaY()},deltaX:function(){return this.position.x-this.prev.x},deltaY:function(){return this.position.y-this.prev.y},deltaZ:function(){return this.rotation-this.preRotation}},Object.defineProperty(c.Physics.Arcade.Body.prototype,"bottom",{get:function(){return this.position.y+this.height}}),Object.defineProperty(c.Physics.Arcade.Body.prototype,"right",{get:function(){return this.position.x+this.width}}),Object.defineProperty(c.Physics.Arcade.Body.prototype,"x",{get:function(){return this.position.x},set:function(a){this.position.x=a}}),Object.defineProperty(c.Physics.Arcade.Body.prototype,"y",{get:function(){return this.position.y},set:function(a){this.position.y=a}}),c.Physics.Arcade.Body.render=function(a,b,c,d){"undefined"==typeof d&&(d=!0),c=c||"rgba(0,255,0,0.4)",d?(a.fillStyle=c,a.fillRect(b.position.x-b.game.camera.x,b.position.y-b.game.camera.y,b.width,b.height)):(a.strokeStyle=c,a.strokeRect(b.position.x-b.game.camera.x,b.position.y-b.game.camera.y,b.width,b.height))},c.Physics.Arcade.Body.renderBodyInfo=function(a,b){a.line("x: "+b.x.toFixed(2),"y: "+b.y.toFixed(2),"width: "+b.width,"height: "+b.height),a.line("velocity x: "+b.velocity.x.toFixed(2),"y: "+b.velocity.y.toFixed(2),"deltaX: "+b._dx.toFixed(2),"deltaY: "+b._dy.toFixed(2)),a.line("acceleration x: "+b.acceleration.x.toFixed(2),"y: "+b.acceleration.y.toFixed(2),"speed: "+b.speed.toFixed(2),"angle: "+b.angle.toFixed(2)),a.line("gravity x: "+b.gravity.x,"y: "+b.gravity.y,"bounce x: "+b.bounce.x.toFixed(2),"y: "+b.bounce.y.toFixed(2)),a.line("touching left: "+b.touching.left,"right: "+b.touching.right,"up: "+b.touching.up,"down: "+b.touching.down),a.line("blocked left: "+b.blocked.left,"right: "+b.blocked.right,"up: "+b.blocked.up,"down: "+b.blocked.down)},c.Physics.Arcade.Body.prototype.constructor=c.Physics.Arcade.Body,c.Physics.Arcade.TilemapCollision=function(){},c.Physics.Arcade.TilemapCollision.prototype={TILE_BIAS:16,collideSpriteVsTilemapLayer:function(a,b,c,d,e){if(a.body){var f=b.getTiles(a.body.position.x-a.body.tilePadding.x,a.body.position.y-a.body.tilePadding.y,a.body.width+a.body.tilePadding.x,a.body.height+a.body.tilePadding.y,!1,!1);if(0!==f.length)for(var g=0;g<f.length;g++)d?d.call(e,a,f[g])&&this.separateTile(g,a.body,f[g])&&(this._total++,c&&c.call(e,a,f[g])):this.separateTile(g,a.body,f[g])&&(this._total++,c&&c.call(e,a,f[g]))}},collideGroupVsTilemapLayer:function(a,b,c,d,e){if(0!==a.length)for(var f=0;f<a.children.length;f++)a.children[f].exists&&this.collideSpriteVsTilemapLayer(a.children[f],b,c,d,e)},separateTile:function(a,b,c){if(!b.enable||!c.intersects(b.position.x,b.position.y,b.right,b.bottom))return!1;if(c.collisionCallback&&!c.collisionCallback.call(c.collisionCallbackContext,b.sprite,c))return!1;if(c.layer.callbacks[c.index]&&!c.layer.callbacks[c.index].callback.call(c.layer.callbacks[c.index].callbackContext,b.sprite,c))return!1;if(!(c.faceLeft||c.faceRight||c.faceTop||c.faceBottom))return!1;var d=0,e=0,f=0,g=1;if(b.deltaAbsX()>b.deltaAbsY()?f=-1:b.deltaAbsX()<b.deltaAbsY()&&(g=-1),0!==b.deltaX()&&0!==b.deltaY()&&(c.faceLeft||c.faceRight)&&(c.faceTop||c.faceBottom)&&(f=Math.min(Math.abs(b.position.x-c.right),Math.abs(b.right-c.left)),g=Math.min(Math.abs(b.position.y-c.bottom),Math.abs(b.bottom-c.top))),g>f){if((c.faceLeft||c.faceRight)&&(d=this.tileCheckX(b,c),0!==d&&!c.intersects(b.position.x,b.position.y,b.right,b.bottom)))return!0;(c.faceTop||c.faceBottom)&&(e=this.tileCheckY(b,c))}else{if((c.faceTop||c.faceBottom)&&(e=this.tileCheckY(b,c),0!==e&&!c.intersects(b.position.x,b.position.y,b.right,b.bottom)))return!0;(c.faceLeft||c.faceRight)&&(d=this.tileCheckX(b,c))}return 0!==d||0!==e},tileCheckX:function(a,b){var c=0;return a.deltaX()<0&&!a.blocked.left&&b.collideRight&&a.checkCollision.left?b.faceRight&&a.x<b.right&&(c=a.x-b.right,c<-this.TILE_BIAS&&(c=0)):a.deltaX()>0&&!a.blocked.right&&b.collideLeft&&a.checkCollision.right&&b.faceLeft&&a.right>b.left&&(c=a.right-b.left,c>this.TILE_BIAS&&(c=0)),0!==c&&(a.customSeparateX?a.overlapX=c:this.processTileSeparationX(a,c)),c},tileCheckY:function(a,b){var c=0;return a.deltaY()<0&&!a.blocked.up&&b.collideDown&&a.checkCollision.up?b.faceBottom&&a.y<b.bottom&&(c=a.y-b.bottom,c<-this.TILE_BIAS&&(c=0)):a.deltaY()>0&&!a.blocked.down&&b.collideUp&&a.checkCollision.down&&b.faceTop&&a.bottom>b.top&&(c=a.bottom-b.top,c>this.TILE_BIAS&&(c=0)),0!==c&&(a.customSeparateY?a.overlapY=c:this.processTileSeparationY(a,c)),c},processTileSeparationX:function(a,b){0>b?a.blocked.left=!0:b>0&&(a.blocked.right=!0),a.position.x-=b,a.velocity.x=0===a.bounce.x?0:-a.velocity.x*a.bounce.x},processTileSeparationY:function(a,b){0>b?a.blocked.up=!0:b>0&&(a.blocked.down=!0),a.position.y-=b,a.velocity.y=0===a.bounce.y?0:-a.velocity.y*a.bounce.y}},c.Utils.mixinPrototype(c.Physics.Arcade.prototype,c.Physics.Arcade.TilemapCollision.prototype),c.Tile=function(a,b,c,d,e,f){this.layer=a,this.index=b,this.x=c,this.y=d,this.rotation=0,this.flipped=!1,this.worldX=c*e,this.worldY=d*f,this.width=e,this.height=f,this.centerX=Math.abs(e/2),this.centerY=Math.abs(f/2),this.alpha=1,this.properties={},this.scanned=!1,this.faceTop=!1,this.faceBottom=!1,this.faceLeft=!1,this.faceRight=!1,this.collideLeft=!1,this.collideRight=!1,this.collideUp=!1,this.collideDown=!1,this.collisionCallback=null,this.collisionCallbackContext=this},c.Tile.prototype={containsPoint:function(a,b){return!(a<this.worldX||b<this.worldY||a>this.right||b>this.bottom)},intersects:function(a,b,c,d){return c<=this.worldX?!1:d<=this.worldY?!1:a>=this.worldX+this.width?!1:b>=this.worldY+this.height?!1:!0},setCollisionCallback:function(a,b){this.collisionCallback=a,this.collisionCallbackContext=b},destroy:function(){this.collisionCallback=null,this.collisionCallbackContext=null,this.properties=null},setCollision:function(a,b,c,d){this.collideLeft=a,this.collideRight=b,this.collideUp=c,this.collideDown=d,this.faceLeft=a,this.faceRight=b,this.faceTop=c,this.faceBottom=d},resetCollision:function(){this.collideLeft=!1,this.collideRight=!1,this.collideUp=!1,this.collideDown=!1,this.faceTop=!1,this.faceBottom=!1,this.faceLeft=!1,this.faceRight=!1},isInteresting:function(a,b){return a&&b?this.collideLeft||this.collideRight||this.collideUp||this.collideDown||this.faceTop||this.faceBottom||this.faceLeft||this.faceRight||this.collisionCallback:a?this.collideLeft||this.collideRight||this.collideUp||this.collideDown:b?this.faceTop||this.faceBottom||this.faceLeft||this.faceRight:!1},copy:function(a){this.index=a.index,this.alpha=a.alpha,this.properties=a.properties,this.collideUp=a.collideUp,this.collideDown=a.collideDown,this.collideLeft=a.collideLeft,this.collideRight=a.collideRight,this.collisionCallback=a.collisionCallback,this.collisionCallbackContext=a.collisionCallbackContext}},c.Tile.prototype.constructor=c.Tile,Object.defineProperty(c.Tile.prototype,"collides",{get:function(){return this.collideLeft||this.collideRight||this.collideUp||this.collideDown}}),Object.defineProperty(c.Tile.prototype,"canCollide",{get:function(){return this.collideLeft||this.collideRight||this.collideUp||this.collideDown||this.collisionCallback}}),Object.defineProperty(c.Tile.prototype,"left",{get:function(){return this.worldX}}),Object.defineProperty(c.Tile.prototype,"right",{get:function(){return this.worldX+this.width}}),Object.defineProperty(c.Tile.prototype,"top",{get:function(){return this.worldY}}),Object.defineProperty(c.Tile.prototype,"bottom",{get:function(){return this.worldY+this.height}}),c.Tilemap=function(a,b,d,e,f,g){this.game=a,this.key=b;var h=c.TilemapParser.parse(this.game,b,d,e,f,g);null!==h&&(this.width=h.width,this.height=h.height,this.tileWidth=h.tileWidth,this.tileHeight=h.tileHeight,this.orientation=h.orientation,this.format=h.format,this.version=h.version,this.properties=h.properties,this.widthInPixels=h.widthInPixels,this.heightInPixels=h.heightInPixels,this.layers=h.layers,this.tilesets=h.tilesets,this.tiles=h.tiles,this.objects=h.objects,this.collideIndexes=[],this.collision=h.collision,this.images=h.images,this.currentLayer=0,this.debugMap=[],this._results=[],this._tempA=0,this._tempB=0)},c.Tilemap.CSV=0,c.Tilemap.TILED_JSON=1,c.Tilemap.NORTH=0,c.Tilemap.EAST=1,c.Tilemap.SOUTH=2,c.Tilemap.WEST=3,c.Tilemap.prototype={create:function(a,b,c,d,e,f){return"undefined"==typeof f&&(f=this.game.world),this.width=b,this.height=c,this.setTileSize(d,e),this.layers.length=0,this.createBlankLayer(a,b,c,d,e,f)},setTileSize:function(a,b){this.tileWidth=a,this.tileHeight=b,this.widthInPixels=this.width*a,this.heightInPixels=this.height*b},addTilesetImage:function(a,b,d,e,f,g,h){if("undefined"==typeof d&&(d=this.tileWidth),"undefined"==typeof e&&(e=this.tileHeight),"undefined"==typeof f&&(f=0),"undefined"==typeof g&&(g=0),"undefined"==typeof h&&(h=0),0===d&&(d=32),0===e&&(e=32),"undefined"==typeof b){if("string"!=typeof a)return null;if(b=a,!this.game.cache.checkImageKey(b))return console.warn('Phaser.Tilemap.addTilesetImage: Invalid image key given: "'+b+'"'),null}if("string"==typeof a&&(a=this.getTilesetIndex(a),null===a&&this.format===c.Tilemap.TILED_JSON))return console.warn('Phaser.Tilemap.addTilesetImage: No data found in the JSON matching the tileset name: "'+b+'"'),null;if(this.tilesets[a])return this.tilesets[a].setImage(this.game.cache.getImage(b)),this.tilesets[a];var i=new c.Tileset(b,h,d,e,f,g,{});i.setImage(this.game.cache.getImage(b)),this.tilesets.push(i);for(var j=this.tilesets.length-1,k=f,l=f,m=0,n=0,o=0,p=h;p<h+i.total&&(this.tiles[p]=[k,l,j],k+=d+g,m++,m!==i.total)&&(n++,n!==i.columns||(k=f,l+=e+g,n=0,o++,o!==i.rows));p++);return i},createFromObjects:function(a,b,d,e,f,g,h,i,j){if("undefined"==typeof f&&(f=!0),"undefined"==typeof g&&(g=!1),"undefined"==typeof h&&(h=this.game.world),"undefined"==typeof i&&(i=c.Sprite),"undefined"==typeof j&&(j=!0),!this.objects[a])return void console.warn("Tilemap.createFromObjects: Invalid objectgroup name given: "+a);for(var k,l=0,m=this.objects[a].length;m>l;l++)if(this.objects[a][l].gid===b){k=new i(this.game,this.objects[a][l].x,this.objects[a][l].y,d,e),k.name=this.objects[a][l].name,k.visible=this.objects[a][l].visible,k.autoCull=g,k.exists=f,this.objects[a][l].rotation&&(k.angle=this.objects[a][l].rotation),j&&(k.y-=k.height),h.add(k);for(var n in this.objects[a][l].properties)h.set(k,n,this.objects[a][l].properties[n],!1,!1,0,!0)}},createFromTiles:function(a,b,d,e,f,g){"number"==typeof a&&(a=[a]),"undefined"==typeof b||null===b?b=[]:"number"==typeof b&&(b=[b]),e=this.getLayer(e),"undefined"==typeof f&&(f=this.game.world),"undefined"==typeof g&&(g={}),void 0===g.customClass&&(g.customClass=c.Sprite),void 0===g.adjustY&&(g.adjustY=!0);var h=this.layers[e].width,i=this.layers[e].height;if(this.copy(0,0,h,i,e),this._results.length<2)return 0;for(var j,k=0,l=1,m=this._results.length;m>l;l++)if(-1!==a.indexOf(this._results[l].index)){j=new g.customClass(this.game,this._results[l].worldX,this._results[l].worldY,d);for(var n in g)j[n]=g[n];f.add(j),k++}if(1===b.length)for(l=0;l<a.length;l++)this.replace(a[l],b[0],0,0,h,i,e);else if(b.length>1)for(l=0;l<a.length;l++)this.replace(a[l],b[l],0,0,h,i,e);return k},createLayer:function(a,b,d,e){"undefined"==typeof b&&(b=this.game.width),"undefined"==typeof d&&(d=this.game.height),"undefined"==typeof e&&(e=this.game.world);var f=a;return"string"==typeof a&&(f=this.getLayerIndex(a)),null===f||f>this.layers.length?void console.warn("Tilemap.createLayer: Invalid layer ID given: "+f):e.add(new c.TilemapLayer(this.game,this,f,b,d))},createBlankLayer:function(a,b,d,e,f,g){if("undefined"==typeof g&&(g=this.game.world),null!==this.getLayerIndex(a))return void console.warn("Tilemap.createBlankLayer: Layer with matching name already exists");for(var h,i={name:a,x:0,y:0,width:b,height:d,widthInPixels:b*e,heightInPixels:d*f,alpha:1,visible:!0,properties:{},indexes:[],callbacks:[],bodies:[],data:null},j=[],k=0;d>k;k++){h=[];for(var l=0;b>l;l++)h.push(new c.Tile(i,-1,l,k,e,f));j.push(h)}i.data=j,this.layers.push(i),this.currentLayer=this.layers.length-1;var m=i.widthInPixels,n=i.heightInPixels;
 m>this.game.width&&(m=this.game.width),n>this.game.height&&(n=this.game.height);var j=new c.TilemapLayer(this.game,this,this.layers.length-1,m,n);return j.name=a,g.add(j)},getIndex:function(a,b){for(var c=0;c<a.length;c++)if(a[c].name===b)return c;return null},getLayerIndex:function(a){return this.getIndex(this.layers,a)},getTilesetIndex:function(a){return this.getIndex(this.tilesets,a)},getImageIndex:function(a){return this.getIndex(this.images,a)},getObjectIndex:function(a){return this.getIndex(this.objects,a)},setTileIndexCallback:function(a,b,c,d){if(d=this.getLayer(d),"number"==typeof a)this.layers[d].callbacks[a]={callback:b,callbackContext:c};else for(var e=0,f=a.length;f>e;e++)this.layers[d].callbacks[a[e]]={callback:b,callbackContext:c}},setTileLocationCallback:function(a,b,c,d,e,f,g){if(g=this.getLayer(g),this.copy(a,b,c,d,g),!(this._results.length<2))for(var h=1;h<this._results.length;h++)this._results[h].setCollisionCallback(e,f)},setCollision:function(a,b,c,d){if("undefined"==typeof b&&(b=!0),"undefined"==typeof d&&(d=!0),c=this.getLayer(c),"number"==typeof a)return this.setCollisionByIndex(a,b,c,!0);if(Array.isArray(a)){for(var e=0;e<a.length;e++)this.setCollisionByIndex(a[e],b,c,!1);d&&this.calculateFaces(c)}},setCollisionBetween:function(a,b,c,d,e){if("undefined"==typeof c&&(c=!0),"undefined"==typeof e&&(e=!0),d=this.getLayer(d),!(a>b)){for(var f=a;b>=f;f++)this.setCollisionByIndex(f,c,d,!1);e&&this.calculateFaces(d)}},setCollisionByExclusion:function(a,b,c,d){"undefined"==typeof b&&(b=!0),"undefined"==typeof d&&(d=!0),c=this.getLayer(c);for(var e=0,f=this.tiles.length;f>e;e++)-1===a.indexOf(e)&&this.setCollisionByIndex(e,b,c,!1);d&&this.calculateFaces(c)},setCollisionByIndex:function(a,b,c,d){if("undefined"==typeof b&&(b=!0),"undefined"==typeof c&&(c=this.currentLayer),"undefined"==typeof d&&(d=!0),b)this.collideIndexes.push(a);else{var e=this.collideIndexes.indexOf(a);e>-1&&this.collideIndexes.splice(e,1)}for(var f=0;f<this.layers[c].height;f++)for(var g=0;g<this.layers[c].width;g++){var h=this.layers[c].data[f][g];h&&h.index===a&&(b?h.setCollision(!0,!0,!0,!0):h.resetCollision(),h.faceTop=b,h.faceBottom=b,h.faceLeft=b,h.faceRight=b)}return d&&this.calculateFaces(c),c},getLayer:function(a){return"undefined"==typeof a?a=this.currentLayer:"string"==typeof a?a=this.getLayerIndex(a):a instanceof c.TilemapLayer&&(a=a.index),a},setPreventRecalculate:function(a){if(a===!0&&this.preventingRecalculate!==!0&&(this.preventingRecalculate=!0,this.needToRecalculate={}),a===!1&&this.preventingRecalculate===!0){this.preventingRecalculate=!1;for(var b in this.needToRecalculate)this.calculateFaces(b);this.needToRecalculate=!1}},calculateFaces:function(a){if(this.preventingRecalculate)return void(this.needToRecalculate[a]=!0);for(var b=null,c=null,d=null,e=null,f=0,g=this.layers[a].height;g>f;f++)for(var h=0,i=this.layers[a].width;i>h;h++){var j=this.layers[a].data[f][h];j&&(b=this.getTileAbove(a,h,f),c=this.getTileBelow(a,h,f),d=this.getTileLeft(a,h,f),e=this.getTileRight(a,h,f),j.collides&&(j.faceTop=!0,j.faceBottom=!0,j.faceLeft=!0,j.faceRight=!0),b&&b.collides&&(j.faceTop=!1),c&&c.collides&&(j.faceBottom=!1),d&&d.collides&&(j.faceLeft=!1),e&&e.collides&&(j.faceRight=!1))}},getTileAbove:function(a,b,c){return c>0?this.layers[a].data[c-1][b]:null},getTileBelow:function(a,b,c){return c<this.layers[a].height-1?this.layers[a].data[c+1][b]:null},getTileLeft:function(a,b,c){return b>0?this.layers[a].data[c][b-1]:null},getTileRight:function(a,b,c){return b<this.layers[a].width-1?this.layers[a].data[c][b+1]:null},setLayer:function(a){a=this.getLayer(a),this.layers[a]&&(this.currentLayer=a)},hasTile:function(a,b,c){return c=this.getLayer(c),this.layers[c].data[b][a].index>-1},removeTile:function(a,b,d){if(d=this.getLayer(d),a>=0&&a<this.layers[d].width&&b>=0&&b<this.layers[d].height&&this.hasTile(a,b,d)){var e=this.layers[d].data[b][a];return this.layers[d].data[b][a]=new c.Tile(this.layers[d],-1,a,b,this.tileWidth,this.tileHeight),this.layers[d].dirty=!0,this.calculateFaces(d),e}},removeTileWorldXY:function(a,b,c,d,e){return e=this.getLayer(e),a=this.game.math.snapToFloor(a,c)/c,b=this.game.math.snapToFloor(b,d)/d,this.removeTile(a,b,e)},putTile:function(a,b,d,e){if(null===a)return this.removeTile(b,d,e);if(e=this.getLayer(e),b>=0&&b<this.layers[e].width&&d>=0&&d<this.layers[e].height){var f;return a instanceof c.Tile?(f=a.index,this.hasTile(b,d,e)?this.layers[e].data[d][b].copy(a):this.layers[e].data[d][b]=new c.Tile(e,f,b,d,a.width,a.height)):(f=a,this.hasTile(b,d,e)?this.layers[e].data[d][b].index=f:this.layers[e].data[d][b]=new c.Tile(this.layers[e],f,b,d,this.tileWidth,this.tileHeight)),this.collideIndexes.indexOf(f)>-1?this.layers[e].data[d][b].setCollision(!0,!0,!0,!0):this.layers[e].data[d][b].resetCollision(),this.layers[e].dirty=!0,this.calculateFaces(e),this.layers[e].data[d][b]}return null},putTileWorldXY:function(a,b,c,d,e,f){return f=this.getLayer(f),b=this.game.math.snapToFloor(b,d)/d,c=this.game.math.snapToFloor(c,e)/e,this.putTile(a,b,c,f)},searchTileIndex:function(a,b,c,d){"undefined"==typeof b&&(b=0),"undefined"==typeof c&&(c=!1),d=this.getLayer(d);var e=0;if(c){for(var f=this.layers[d].height-1;f>=0;f--)for(var g=this.layers[d].width-1;g>=0;g--)if(this.layers[d].data[f][g].index===a){if(e===b)return this.layers[d].data[f][g];e++}}else for(var f=0;f<this.layers[d].height;f++)for(var g=0;g<this.layers[d].width;g++)if(this.layers[d].data[f][g].index===a){if(e===b)return this.layers[d].data[f][g];e++}return null},getTile:function(a,b,c,d){return"undefined"==typeof d&&(d=!1),c=this.getLayer(c),a>=0&&a<this.layers[c].width&&b>=0&&b<this.layers[c].height?-1===this.layers[c].data[b][a].index?d?this.layers[c].data[b][a]:null:this.layers[c].data[b][a]:null},getTileWorldXY:function(a,b,c,d,e){return"undefined"==typeof c&&(c=this.tileWidth),"undefined"==typeof d&&(d=this.tileHeight),e=this.getLayer(e),a=this.game.math.snapToFloor(a,c)/c,b=this.game.math.snapToFloor(b,d)/d,this.getTile(a,b,e)},copy:function(a,b,c,d,e){if(e=this.getLayer(e),!this.layers[e])return void(this._results.length=0);"undefined"==typeof a&&(a=0),"undefined"==typeof b&&(b=0),"undefined"==typeof c&&(c=this.layers[e].width),"undefined"==typeof d&&(d=this.layers[e].height),0>a&&(a=0),0>b&&(b=0),c>this.layers[e].width&&(c=this.layers[e].width),d>this.layers[e].height&&(d=this.layers[e].height),this._results.length=0,this._results.push({x:a,y:b,width:c,height:d,layer:e});for(var f=b;b+d>f;f++)for(var g=a;a+c>g;g++)this._results.push(this.layers[e].data[f][g]);return this._results},paste:function(a,b,c,d){if("undefined"==typeof a&&(a=0),"undefined"==typeof b&&(b=0),d=this.getLayer(d),c&&!(c.length<2)){for(var e=a-c[1].x,f=b-c[1].y,g=1;g<c.length;g++)this.layers[d].data[f+c[g].y][e+c[g].x].copy(c[g]);this.layers[d].dirty=!0,this.calculateFaces(d)}},swap:function(a,b,c,d,e,f,g){g=this.getLayer(g),this.copy(c,d,e,f,g),this._results.length<2||(this._tempA=a,this._tempB=b,this._results.forEach(this.swapHandler,this),this.paste(c,d,this._results,g))},swapHandler:function(a){a.index===this._tempA?a.index=this._tempB:a.index===this._tempB&&(a.index=this._tempA)},forEach:function(a,b,c,d,e,f,g){g=this.getLayer(g),this.copy(c,d,e,f,g),this._results.length<2||(this._results.forEach(a,b),this.paste(c,d,this._results,g))},replace:function(a,b,c,d,e,f,g){if(g=this.getLayer(g),this.copy(c,d,e,f,g),!(this._results.length<2)){for(var h=1;h<this._results.length;h++)this._results[h].index===a&&(this._results[h].index=b);this.paste(c,d,this._results,g)}},random:function(a,b,c,d,e){if(e=this.getLayer(e),this.copy(a,b,c,d,e),!(this._results.length<2)){for(var f=[],g=1;g<this._results.length;g++)if(this._results[g].index){var h=this._results[g].index;-1===f.indexOf(h)&&f.push(h)}for(var i=1;i<this._results.length;i++)this._results[i].index=this.game.rnd.pick(f);this.paste(a,b,this._results,e)}},shuffle:function(a,b,d,e,f){if(f=this.getLayer(f),this.copy(a,b,d,e,f),!(this._results.length<2)){for(var g=[],h=1;h<this._results.length;h++)this._results[h].index&&g.push(this._results[h].index);c.Utils.shuffle(g);for(var i=1;i<this._results.length;i++)this._results[i].index=g[i-1];this.paste(a,b,this._results,f)}},fill:function(a,b,c,d,e,f){if(f=this.getLayer(f),this.copy(b,c,d,e,f),!(this._results.length<2)){for(var g=1;g<this._results.length;g++)this._results[g].index=a;this.paste(b,c,this._results,f)}},removeAllLayers:function(){this.layers.length=0,this.currentLayer=0},dump:function(){for(var a="",b=[""],c=0;c<this.layers[this.currentLayer].height;c++){for(var d=0;d<this.layers[this.currentLayer].width;d++)a+="%c  ",b.push(this.layers[this.currentLayer].data[c][d]>1?this.debugMap[this.layers[this.currentLayer].data[c][d]]?"background: "+this.debugMap[this.layers[this.currentLayer].data[c][d]]:"background: #ffffff":"background: rgb(0, 0, 0)");a+="\n"}b[0]=a,console.log.apply(console,b)},destroy:function(){this.removeAllLayers(),this.data=[],this.game=null}},c.Tilemap.prototype.constructor=c.Tilemap,Object.defineProperty(c.Tilemap.prototype,"layer",{get:function(){return this.layers[this.currentLayer]},set:function(a){a!==this.currentLayer&&this.setLayer(a)}}),c.TilemapLayer=function(a,b,d,e,f){e|=0,f|=0,PIXI.Sprite.call(this,PIXI.TextureCache.__default),c.Component.Core.init.call(this,a,0,0,null,null),this.map=b,this.index=d,this.layer=b.layers[d],this.canvas=c.Canvas.create(e,f),this.context=this.canvas.getContext("2d"),this.baseTexture=new PIXI.BaseTexture(this.canvas),this.texture=new PIXI.Texture(this.baseTexture),this.textureFrame=new c.Frame(0,0,0,e,f,"tilemapLayer",a.rnd.uuid()),this.type=c.TILEMAPLAYER,this.physicsType=c.TILEMAPLAYER,this.renderSettings={enableScrollDelta:!0,overdrawRatio:.2,copyCanvas:null},this.debug=!1,this.exists=!0,this.debugSettings={missingImageFill:"rgb(255,255,255)",debuggedTileOverfill:"rgba(0,255,0,0.4)",forceFullRedraw:!0,debugAlpha:.5,facingEdgeStroke:"rgba(0,255,0,1)",collidingTileOverfill:"rgba(0,255,0,0.2)"},this.scrollFactorX=1,this.scrollFactorY=1,this.dirty=!0,this.rayStepRate=4,this._wrap=!1,this._mc={scrollX:0,scrollY:0,renderWidth:0,renderHeight:0,tileWidth:b.tileWidth,tileHeight:b.tileHeight,cw:b.tileWidth,ch:b.tileHeight,tilesets:[]},this._scrollX=0,this._scrollY=0,this._results=[],a.device.canvasBitBltShift||(this.renderSettings.copyCanvas=c.TilemapLayer.ensureSharedCopyCanvas()),this.fixedToCamera=!0},c.TilemapLayer.prototype=Object.create(PIXI.Sprite.prototype),c.TilemapLayer.prototype.constructor=c.TilemapLayer;var l=["Bounds","Destroy","FixedToCamera","Reset","Smoothed"];c.Component.Core.install.call(c.TilemapLayer.prototype,l),c.TilemapLayer.sharedCopyCanvas=null,c.TilemapLayer.ensureSharedCopyCanvas=function(){return this.sharedCopyCanvas||(this.sharedCopyCanvas=c.Canvas.create(2,2)),this.sharedCopyCanvas},c.TilemapLayer.prototype.preUpdate=function(){return c.Component.Core.preUpdate.call(this),!0},c.TilemapLayer.prototype.postUpdate=function(){c.Component.Core.prototype.postUpdate.call(this);var a=this.game.camera;this.scrollX=a.x*this.scrollFactorX/this.scale.x,this.scrollY=a.y*this.scrollFactorY/this.scale.y,this.render()},c.TilemapLayer.prototype.resizeWorld=function(){this.game.world.setBounds(0,0,this.layer.widthInPixels*this.scale.x,this.layer.heightInPixels*this.scale.y)},c.TilemapLayer.prototype._fixX=function(a){return 0>a&&(a=0),1===this.scrollFactorX?a:this._scrollX+(a-this._scrollX/this.scrollFactorX)},c.TilemapLayer.prototype._unfixX=function(a){return 1===this.scrollFactorX?a:this._scrollX/this.scrollFactorX+(a-this._scrollX)},c.TilemapLayer.prototype._fixY=function(a){return 0>a&&(a=0),1===this.scrollFactorY?a:this._scrollY+(a-this._scrollY/this.scrollFactorY)},c.TilemapLayer.prototype._unfixY=function(a){return 1===this.scrollFactorY?a:this._scrollY/this.scrollFactorY+(a-this._scrollY)},c.TilemapLayer.prototype.getTileX=function(a){return Math.floor(this._fixX(a)/this._mc.tileWidth)},c.TilemapLayer.prototype.getTileY=function(a){return Math.floor(this._fixY(a)/this._mc.tileHeight)},c.TilemapLayer.prototype.getTileXY=function(a,b,c){return c.x=this.getTileX(a),c.y=this.getTileY(b),c},c.TilemapLayer.prototype.getRayCastTiles=function(a,b,c,d){b||(b=this.rayStepRate),"undefined"==typeof c&&(c=!1),"undefined"==typeof d&&(d=!1);var e=this.getTiles(a.x,a.y,a.width,a.height,c,d);if(0===e.length)return[];for(var f=a.coordinatesOnLine(b),g=[],h=0;h<e.length;h++)for(var i=0;i<f.length;i++){var j=e[h],k=f[i];if(j.containsPoint(k[0],k[1])){g.push(j);break}}return g},c.TilemapLayer.prototype.getTiles=function(a,b,c,d,e,f){"undefined"==typeof e&&(e=!1),"undefined"==typeof f&&(f=!1);var g=!(e||f);a=this._fixX(a),b=this._fixY(b);for(var h=Math.floor(a/(this._mc.cw*this.scale.x)),i=Math.floor(b/(this._mc.ch*this.scale.y)),j=Math.ceil((a+c)/(this._mc.cw*this.scale.x))-h,k=Math.ceil((b+d)/(this._mc.ch*this.scale.y))-i;this._results.length;)this._results.pop();for(var l=i;i+k>l;l++)for(var m=h;h+j>m;m++){var n=this.layer.data[l];n&&n[m]&&(g||n[m].isInteresting(e,f))&&this._results.push(n[m])}return this._results.slice()},Object.defineProperty(c.TilemapLayer.prototype,"tileColor",{get:function(){return this.debugSettings.missingImageFill},set:function(a){this.debugSettings.missingImageFill=a}}),Object.defineProperty(c.TilemapLayer.prototype,"wrap",{get:function(){return this._wrap},set:function(a){this._wrap=a,this.dirty=!0}}),c.TilemapLayer.prototype.resolveTileset=function(a){var b=this._mc.tilesets;if(2e3>a)for(;b.length<a;)b.push(void 0);var c=this.map.tiles[a]&&this.map.tiles[a][2];if(null!=c){var d=this.map.tilesets[c];if(d&&d.containsTileIndex(a))return b[a]=d}return b[a]=null},c.TilemapLayer.prototype.resetTilesetCache=function(){for(var a=this._mc.tilesets;a.length;)a.pop()},c.TilemapLayer.prototype.setScale=function(a,b){a=a||1,b=b||a;for(var c=0;c<this.layer.data.length;c++)for(var d=this.layer.data[c],e=0;e<d.length;e++){var f=d[e];f.width=this.map.tileWidth*a,f.height=this.map.tileHeight*b,f.worldX=f.x*f.width,f.worldY=f.y*f.height}this.scale.setTo(a,b)},c.TilemapLayer.prototype.shiftCanvas=function(a,b,c){var d=a.canvas,e=d.width-Math.abs(b),f=d.height-Math.abs(c),g=0,h=0,i=b,j=c;0>b&&(g=-b,i=0),0>c&&(h=-c,j=0);var k=this.renderSettings.copyCanvas;if(k){(k.width<e||k.height<f)&&(k.width=e,k.height=f);var l=k.getContext("2d");l.clearRect(0,0,e,f),l.drawImage(d,g,h,e,f,0,0,e,f),a.clearRect(i,j,e,f),a.drawImage(k,0,0,e,f,i,j,e,f)}else a.save(),a.globalCompositeOperation="copy",a.drawImage(d,g,h,e,f,i,j,e,f),a.restore()},c.TilemapLayer.prototype.renderRegion=function(a,b,c,d,e,f){var g=this.context,h=this.layer.width,i=this.layer.height,j=this._mc.tileWidth,k=this._mc.tileHeight,l=this._mc.tilesets,m=0/0;this._wrap||(e>=c&&(c=Math.max(0,c),e=Math.min(h-1,e)),f>=d&&(d=Math.max(0,d),f=Math.min(i-1,f)));var n,o,p,q,r,s,t=c*j-a,u=d*k-b,v=(c+(1<<20)*h)%h,w=(d+(1<<20)*i)%i;for(g.fillStyle=this.tileColor,q=w,s=f-d,o=u;s>=0;q++,s--,o+=k){q>=i&&(q-=i);var x=this.layer.data[q];for(p=v,r=e-c,n=t;r>=0;p++,r--,n+=j){p>=h&&(p-=h);var y=x[p];if(y&&!(y.index<0)){var z=y.index,A=l[z];void 0===A&&(A=this.resolveTileset(z)),y.alpha===m||this.debug||(g.globalAlpha=y.alpha,m=y.alpha),A?y.rotation||y.flipped?(g.save(),g.translate(n+y.centerX,o+y.centerY),g.rotate(y.rotation),y.flipped&&g.scale(-1,1),A.draw(g,-y.centerX,-y.centerY,z),g.restore()):A.draw(g,n,o,z):this.debugSettings.missingImageFill&&(g.fillStyle=this.debugSettings.missingImageFill,g.fillRect(n,o,j,k)),y.debug&&this.debugSettings.debuggedTileOverfill&&(g.fillStyle=this.debugSettings.debuggedTileOverfill,g.fillRect(n,o,j,k))}}}},c.TilemapLayer.prototype.renderDeltaScroll=function(a,b){var c=this._mc.scrollX,d=this._mc.scrollY,e=this.canvas.width,f=this.canvas.height,g=this._mc.tileWidth,h=this._mc.tileHeight,i=0,j=-g,k=0,l=-h;if(0>a?(i=e+a,j=e-1):a>0&&(j=a),0>b?(k=f+b,l=f-1):b>0&&(l=b),this.shiftCanvas(this.context,a,b),i=Math.floor((i+c)/g),j=Math.floor((j+c)/g),k=Math.floor((k+d)/h),l=Math.floor((l+d)/h),j>=i){this.context.clearRect(i*g-c,0,(j-i+1)*g,f);var m=Math.floor((0+d)/h),n=Math.floor((f-1+d)/h);this.renderRegion(c,d,i,m,j,n)}if(l>=k){this.context.clearRect(0,k*h-d,e,(l-k+1)*h);var o=Math.floor((0+c)/g),p=Math.floor((e-1+c)/g);this.renderRegion(c,d,o,k,p,l)}},c.TilemapLayer.prototype.renderFull=function(){var a=this._mc.scrollX,b=this._mc.scrollY,c=this.canvas.width,d=this.canvas.height,e=this._mc.tileWidth,f=this._mc.tileHeight,g=Math.floor(a/e),h=Math.floor((c-1+a)/e),i=Math.floor(b/f),j=Math.floor((d-1+b)/f);this.context.clearRect(0,0,c,d),this.renderRegion(a,b,g,i,h,j)},c.TilemapLayer.prototype.render=function(){var a=!1;if(this.visible){this.context.save(),(this.dirty||this.layer.dirty)&&(this.layer.dirty=!1,a=!0);var b=this.canvas.width,c=this.canvas.height,d=0|this._scrollX,e=0|this._scrollY,f=this._mc,g=f.scrollX-d,h=f.scrollY-e;if(a||0!==g||0!==h||f.renderWidth!==b||f.renderHeight!==c)return f.scrollX=d,f.scrollY=e,(f.renderWidth!==b||f.renderHeight!==c)&&(f.renderWidth=b,f.renderHeight=c),this.debug&&(this.context.globalAlpha=this.debugSettings.debugAlpha,this.debugSettings.forceFullRedraw&&(a=!0)),!a&&this.renderSettings.enableScrollDelta&&Math.abs(g)+Math.abs(h)<Math.min(b,c)?this.renderDeltaScroll(g,h):this.renderFull(),this.debug&&(this.context.globalAlpha=1,this.renderDebug()),this.baseTexture.dirty(),this.dirty=!1,this.context.restore(),!0}},c.TilemapLayer.prototype.renderDebug=function(){var a,b,c,d,e,f,g=this._mc.scrollX,h=this._mc.scrollY,i=this.context,j=this.canvas.width,k=this.canvas.height,l=this.layer.width,m=this.layer.height,n=this._mc.tileWidth,o=this._mc.tileHeight,p=Math.floor(g/n),q=Math.floor((j-1+g)/n),r=Math.floor(h/o),s=Math.floor((k-1+h)/o),t=p*n-g,u=r*o-h,v=(p+(1<<20)*l)%l,w=(r+(1<<20)*m)%m;for(i.strokeStyle=this.debugSettings.facingEdgeStroke,d=w,f=s-r,b=u;f>=0;d++,f--,b+=o){d>=m&&(d-=m);var x=this.layer.data[d];for(c=v,e=q-p,a=t;e>=0;c++,e--,a+=n){c>=l&&(c-=l);var y=x[c];!y||y.index<0||!y.collides||(this.debugSettings.collidingTileOverfill&&(i.fillStyle=this.debugSettings.collidingTileOverfill,i.fillRect(a,b,this._mc.cw,this._mc.ch)),this.debugSettings.facingEdgeStroke&&(i.beginPath(),y.faceTop&&(i.moveTo(a,b),i.lineTo(a+this._mc.cw,b)),y.faceBottom&&(i.moveTo(a,b+this._mc.ch),i.lineTo(a+this._mc.cw,b+this._mc.ch)),y.faceLeft&&(i.moveTo(a,b),i.lineTo(a,b+this._mc.ch)),y.faceRight&&(i.moveTo(a+this._mc.cw,b),i.lineTo(a+this._mc.cw,b+this._mc.ch)),i.stroke()))}}},Object.defineProperty(c.TilemapLayer.prototype,"scrollX",{get:function(){return this._scrollX},set:function(a){this._scrollX=a}}),Object.defineProperty(c.TilemapLayer.prototype,"scrollY",{get:function(){return this._scrollY},set:function(a){this._scrollY=a}}),Object.defineProperty(c.TilemapLayer.prototype,"collisionWidth",{get:function(){return this._mc.cw},set:function(a){this._mc.cw=0|a,this.dirty=!0}}),Object.defineProperty(c.TilemapLayer.prototype,"collisionHeight",{get:function(){return this._mc.ch},set:function(a){this._mc.ch=0|a,this.dirty=!0}}),c.TilemapParser={parse:function(a,b,d,e,f,g){if("undefined"==typeof d&&(d=32),"undefined"==typeof e&&(e=32),"undefined"==typeof f&&(f=10),"undefined"==typeof g&&(g=10),"undefined"==typeof b)return this.getEmptyData();if(null===b)return this.getEmptyData(d,e,f,g);var h=a.cache.getTilemapData(b);if(h){if(h.format===c.Tilemap.CSV)return this.parseCSV(b,h.data,d,e);if(!h.format||h.format===c.Tilemap.TILED_JSON)return this.parseTiledJSON(h.data)}else console.warn("Phaser.TilemapParser.parse - No map data found for key "+b)},parseCSV:function(a,b,d,e){var f=this.getEmptyData();b=b.trim();for(var g=[],h=b.split("\n"),i=h.length,j=0,k=0;k<h.length;k++){g[k]=[];for(var l=h[k].split(","),m=0;m<l.length;m++)g[k][m]=new c.Tile(f.layers[0],parseInt(l[m],10),m,k,d,e);0===j&&(j=l.length)}return f.format=c.Tilemap.CSV,f.name=a,f.width=j,f.height=i,f.tileWidth=d,f.tileHeight=e,f.widthInPixels=j*d,f.heightInPixels=i*e,f.layers[0].width=j,f.layers[0].height=i,f.layers[0].widthInPixels=f.widthInPixels,f.layers[0].heightInPixels=f.heightInPixels,f.layers[0].data=g,f},getEmptyData:function(a,b,c,d){var e={};e.width=0,e.height=0,e.tileWidth=0,e.tileHeight=0,"undefined"!=typeof a&&null!==a&&(e.tileWidth=a),"undefined"!=typeof b&&null!==b&&(e.tileHeight=b),"undefined"!=typeof c&&null!==c&&(e.width=c),"undefined"!=typeof d&&null!==d&&(e.height=d),e.orientation="orthogonal",e.version="1",e.properties={},e.widthInPixels=0,e.heightInPixels=0;var f=[],g={name:"layer",x:0,y:0,width:0,height:0,widthInPixels:0,heightInPixels:0,alpha:1,visible:!0,properties:{},indexes:[],callbacks:[],bodies:[],data:[]};return f.push(g),e.layers=f,e.images=[],e.objects={},e.collision={},e.tilesets=[],e.tiles=[],e},parseTiledJSON:function(a){function b(a,b){var c={};for(var d in b){var e=b[d];a[e]&&(c[e]=a[e])}return c}if("orthogonal"!==a.orientation)return console.warn("TilemapParser.parseTiledJSON - Only orthogonal map types are supported in this version of Phaser"),null;var d={};d.width=a.width,d.height=a.height,d.tileWidth=a.tilewidth,d.tileHeight=a.tileheight,d.orientation=a.orientation,d.format=c.Tilemap.TILED_JSON,d.version=a.version,d.properties=a.properties,d.widthInPixels=d.width*d.tileWidth,d.heightInPixels=d.height*d.tileHeight;for(var e=[],f=0;f<a.layers.length;f++)if("tilelayer"===a.layers[f].type){var g={name:a.layers[f].name,x:a.layers[f].x,y:a.layers[f].y,width:a.layers[f].width,height:a.layers[f].height,widthInPixels:a.layers[f].width*a.tilewidth,heightInPixels:a.layers[f].height*a.tileheight,alpha:a.layers[f].opacity,visible:a.layers[f].visible,properties:{},indexes:[],callbacks:[],bodies:[]};a.layers[f].properties&&(g.properties=a.layers[f].properties);for(var h,i,j,k,l=0,m=[],n=[],o=0,p=a.layers[f].data.length;p>o;o++){if(h=0,i=!1,k=a.layers[f].data[o],k>536870912)switch(j=0,k>2147483648&&(k-=2147483648,j+=4),k>1073741824&&(k-=1073741824,j+=2),k>536870912&&(k-=536870912,j+=1),j){case 5:h=Math.PI/2;break;case 6:h=Math.PI;break;case 3:h=3*Math.PI/2;break;case 4:h=0,i=!0;break;case 7:h=Math.PI/2,i=!0;break;case 2:h=Math.PI,i=!0;break;case 1:h=3*Math.PI/2,i=!0}k>0?(m.push(new c.Tile(g,k,l,n.length,a.tilewidth,a.tileheight)),m[m.length-1].rotation=h,m[m.length-1].flipped=i):m.push(new c.Tile(g,-1,l,n.length,a.tilewidth,a.tileheight)),l++,l===a.layers[f].width&&(n.push(m),l=0,m=[])}g.data=n,e.push(g)}d.layers=e;for(var q=[],f=0;f<a.layers.length;f++)if("imagelayer"===a.layers[f].type){var r={name:a.layers[f].name,image:a.layers[f].image,x:a.layers[f].x,y:a.layers[f].y,alpha:a.layers[f].opacity,visible:a.layers[f].visible,properties:{}};a.layers[f].properties&&(r.properties=a.layers[f].properties),q.push(r)}d.images=q;for(var s=[],f=0;f<a.tilesets.length;f++){var t=a.tilesets[f];if(t.image){var u=new c.Tileset(t.name,t.firstgid,t.tilewidth,t.tileheight,t.margin,t.spacing,t.properties);t.tileproperties&&(u.tileProperties=t.tileproperties),u.updateTileData(t.imagewidth,t.imageheight),s.push(u)}else console.warn("Phaser.TilemapParser - Image Collection Tilesets are not support")}d.tilesets=s;for(var v={},w={},f=0;f<a.layers.length;f++)if("objectgroup"===a.layers[f].type){v[a.layers[f].name]=[],w[a.layers[f].name]=[];for(var x=0,p=a.layers[f].objects.length;p>x;x++)if(a.layers[f].objects[x].gid){var y={gid:a.layers[f].objects[x].gid,name:a.layers[f].objects[x].name,type:a.layers[f].objects[x].hasOwnProperty("type")?a.layers[f].objects[x].type:"",x:a.layers[f].objects[x].x,y:a.layers[f].objects[x].y,visible:a.layers[f].objects[x].visible,properties:a.layers[f].objects[x].properties};a.layers[f].objects[x].rotation&&(y.rotation=a.layers[f].objects[x].rotation),v[a.layers[f].name].push(y)}else if(a.layers[f].objects[x].polyline){var y={name:a.layers[f].objects[x].name,type:a.layers[f].objects[x].type,x:a.layers[f].objects[x].x,y:a.layers[f].objects[x].y,width:a.layers[f].objects[x].width,height:a.layers[f].objects[x].height,visible:a.layers[f].objects[x].visible,properties:a.layers[f].objects[x].properties};a.layers[f].objects[x].rotation&&(y.rotation=a.layers[f].objects[x].rotation),y.polyline=[];for(var z=0;z<a.layers[f].objects[x].polyline.length;z++)y.polyline.push([a.layers[f].objects[x].polyline[z].x,a.layers[f].objects[x].polyline[z].y]);w[a.layers[f].name].push(y),v[a.layers[f].name].push(y)}else if(a.layers[f].objects[x].polygon){var y=b(a.layers[f].objects[x],["name","type","x","y","visible","rotation","properties"]);y.polygon=[];for(var z=0;z<a.layers[f].objects[x].polygon.length;z++)y.polygon.push([a.layers[f].objects[x].polygon[z].x,a.layers[f].objects[x].polygon[z].y]);v[a.layers[f].name].push(y)}else if(a.layers[f].objects[x].ellipse){var y=b(a.layers[f].objects[x],["name","type","ellipse","x","y","width","height","visible","rotation","properties"]);v[a.layers[f].name].push(y)}else{var y=b(a.layers[f].objects[x],["name","type","x","y","width","height","visible","rotation","properties"]);y.rectangle=!0,v[a.layers[f].name].push(y)}}d.objects=v,d.collision=w,d.tiles=[];for(var f=0;f<d.tilesets.length;f++)for(var t=d.tilesets[f],l=t.tileMargin,A=t.tileMargin,B=0,C=0,D=0,o=t.firstgid;o<t.firstgid+t.total&&(d.tiles[o]=[l,A,f],l+=t.tileWidth+t.tileSpacing,B++,B!==t.total)&&(C++,C!==t.columns||(l=t.tileMargin,A+=t.tileHeight+t.tileSpacing,C=0,D++,D!==t.rows));o++);for(var g,E,F,t,f=0;f<d.layers.length;f++){g=d.layers[f];for(var G=0;G<g.data.length;G++){m=g.data[G];for(var H=0;H<m.length;H++)E=m[H],E.index<0||(F=d.tiles[E.index][2],t=d.tilesets[F],t.tileProperties&&t.tileProperties[E.index-t.firstgid]&&(E.properties=c.Utils.mixin(t.tileProperties[E.index-t.firstgid],E.properties)))}}return d}},c.Tileset=function(a,b,c,d,e,f,g){("undefined"==typeof c||0>=c)&&(c=32),("undefined"==typeof d||0>=d)&&(d=32),"undefined"==typeof e&&(e=0),"undefined"==typeof f&&(f=0),this.name=a,this.firstgid=0|b,this.tileWidth=0|c,this.tileHeight=0|d,this.tileMargin=0|e,this.tileSpacing=0|f,this.properties=g||{},this.image=null,this.rows=0,this.columns=0,this.total=0,this.drawCoords=[]},c.Tileset.prototype={draw:function(a,b,c,d){var e=d-this.firstgid<<1;e>=0&&e+1<this.drawCoords.length&&a.drawImage(this.image,this.drawCoords[e],this.drawCoords[e+1],this.tileWidth,this.tileHeight,b,c,this.tileWidth,this.tileHeight)},containsTileIndex:function(a){return a>=this.firstgid&&a<this.firstgid+this.total},setImage:function(a){this.image=a,this.updateTileData(a.width,a.height)},setSpacing:function(a,b){this.tileMargin=0|a,this.tileSpacing=0|b,this.image&&this.updateTileData(this.image.width,this.image.height)},updateTileData:function(a,b){var c=(b-2*this.tileMargin+this.tileSpacing)/(this.tileHeight+this.tileSpacing),d=(a-2*this.tileMargin+this.tileSpacing)/(this.tileWidth+this.tileSpacing);(c%1!==0||d%1!==0)&&console.warn("Phaser.Tileset - image tile area is not an even multiple of tile size"),c=Math.floor(c),d=Math.floor(d),(this.rows&&this.rows!==c||this.columns&&this.columns!==d)&&console.warn("Phaser.Tileset - actual and expected number of tile rows and columns differ"),this.rows=c,this.columns=d,this.total=c*d,this.drawCoords.length=0;for(var e=this.tileMargin,f=this.tileMargin,g=0;g<this.rows;g++){for(var h=0;h<this.columns;h++)this.drawCoords.push(e),this.drawCoords.push(f),e+=this.tileWidth+this.tileSpacing;e=this.tileMargin,f+=this.tileHeight+this.tileSpacing}}},c.Tileset.prototype.constructor=c.Tileset,c.Particles=function(a){this.game=a,this.emitters={},this.ID=0},c.Particles.prototype={add:function(a){return this.emitters[a.name]=a,a},remove:function(a){delete this.emitters[a.name]},update:function(){for(var a in this.emitters)this.emitters[a].exists&&this.emitters[a].update()}},c.Particles.prototype.constructor=c.Particles,c.Particles.Arcade={},c.Particles.Arcade.Emitter=function(a,b,d,e){this.maxParticles=e||50,c.Group.call(this,a),this.name="emitter"+this.game.particles.ID++,this.type=c.EMITTER,this.physicsType=c.GROUP,this.area=new c.Rectangle(b,d,1,1),this.minParticleSpeed=new c.Point(-100,-100),this.maxParticleSpeed=new c.Point(100,100),this.minParticleScale=1,this.maxParticleScale=1,this.scaleData=null,this.minRotation=-360,this.maxRotation=360,this.minParticleAlpha=1,this.maxParticleAlpha=1,this.alphaData=null,this.gravity=100,this.particleClass=c.Particle,this.particleDrag=new c.Point,this.angularDrag=0,this.frequency=100,this.lifespan=2e3,this.bounce=new c.Point,this.on=!1,this.particleAnchor=new c.Point(.5,.5),this.blendMode=c.blendModes.NORMAL,this.emitX=b,this.emitY=d,this.autoScale=!1,this.autoAlpha=!1,this.particleBringToTop=!1,this.particleSendToBack=!1,this._minParticleScale=new c.Point(1,1),this._maxParticleScale=new c.Point(1,1),this._quantity=0,this._timer=0,this._counter=0,this._flowQuantity=0,this._flowTotal=0,this._explode=!0,this._frames=null},c.Particles.Arcade.Emitter.prototype=Object.create(c.Group.prototype),c.Particles.Arcade.Emitter.prototype.constructor=c.Particles.Arcade.Emitter,c.Particles.Arcade.Emitter.prototype.update=function(){if(this.on&&this.game.time.time>=this._timer)if(this._timer=this.game.time.time+this.frequency*this.game.time.slowMotion,0!==this._flowTotal)if(this._flowQuantity>0){for(var a=0;a<this._flowQuantity;a++)if(this.emitParticle()&&(this._counter++,-1!==this._flowTotal&&this._counter>=this._flowTotal)){this.on=!1;break}}else this.emitParticle()&&(this._counter++,-1!==this._flowTotal&&this._counter>=this._flowTotal&&(this.on=!1));else this.emitParticle()&&(this._counter++,this._quantity>0&&this._counter>=this._quantity&&(this.on=!1));for(var a=this.children.length;a--;)this.children[a].exists&&this.children[a].update()},c.Particles.Arcade.Emitter.prototype.makeParticles=function(a,b,c,d,e){"undefined"==typeof b&&(b=0),"undefined"==typeof c&&(c=this.maxParticles),"undefined"==typeof d&&(d=!1),"undefined"==typeof e&&(e=!1);var f,g=0,h=a,i=b;for(this._frames=b,c>this.maxParticles&&(this.maxParticles=c);c>g;)Array.isArray(a)&&(h=this.game.rnd.pick(a)),Array.isArray(b)&&(i=this.game.rnd.pick(b)),f=new this.particleClass(this.game,0,0,h,i),this.game.physics.arcade.enable(f,!1),d?(f.body.checkCollision.any=!0,f.body.checkCollision.none=!1):f.body.checkCollision.none=!0,f.body.collideWorldBounds=e,f.body.skipQuadTree=!0,f.exists=!1,f.visible=!1,f.anchor.copyFrom(this.particleAnchor),this.add(f),g++;return this},c.Particles.Arcade.Emitter.prototype.kill=function(){this.on=!1,this.alive=!1,this.exists=!1},c.Particles.Arcade.Emitter.prototype.revive=function(){this.alive=!0,this.exists=!0},c.Particles.Arcade.Emitter.prototype.explode=function(a,b){this._flowTotal=0,this.start(!0,a,0,b,!1)},c.Particles.Arcade.Emitter.prototype.flow=function(a,b,c,d,e){("undefined"==typeof c||0===c)&&(c=1),"undefined"==typeof d&&(d=-1),"undefined"==typeof e&&(e=!0),c>this.maxParticles&&(c=this.maxParticles),this._counter=0,this._flowQuantity=c,this._flowTotal=d,e?(this.start(!0,a,b,c),this._counter+=c,this.on=!0,this._timer=this.game.time.time+b*this.game.time.slowMotion):this.start(!1,a,b,c)},c.Particles.Arcade.Emitter.prototype.start=function(a,b,c,d,e){if("undefined"==typeof a&&(a=!0),"undefined"==typeof b&&(b=0),("undefined"==typeof c||null===c)&&(c=250),"undefined"==typeof d&&(d=0),"undefined"==typeof e&&(e=!1),d>this.maxParticles&&(d=this.maxParticles),this.revive(),this.visible=!0,this.lifespan=b,this.frequency=c,a||e)for(var f=0;d>f;f++)this.emitParticle();else this.on=!0,this._quantity+=d,this._counter=0,this._timer=this.game.time.time+c*this.game.time.slowMotion},c.Particles.Arcade.Emitter.prototype.emitParticle=function(){var a=this.getFirstExists(!1);return null===a?!1:(this.width>1||this.height>1?a.reset(this.game.rnd.integerInRange(this.left,this.right),this.game.rnd.integerInRange(this.top,this.bottom)):a.reset(this.emitX,this.emitY),a.angle=0,a.lifespan=this.lifespan,this.particleBringToTop?this.bringToTop(a):this.particleSendToBack&&this.sendToBack(a),this.autoScale?a.setScaleData(this.scaleData):1!==this.minParticleScale||1!==this.maxParticleScale?a.scale.set(this.game.rnd.realInRange(this.minParticleScale,this.maxParticleScale)):(this._minParticleScale.x!==this._maxParticleScale.x||this._minParticleScale.y!==this._maxParticleScale.y)&&a.scale.set(this.game.rnd.realInRange(this._minParticleScale.x,this._maxParticleScale.x),this.game.rnd.realInRange(this._minParticleScale.y,this._maxParticleScale.y)),a.frame=Array.isArray("object"===this._frames)?this.game.rnd.pick(this._frames):this._frames,this.autoAlpha?a.setAlphaData(this.alphaData):a.alpha=this.game.rnd.realInRange(this.minParticleAlpha,this.maxParticleAlpha),a.blendMode=this.blendMode,a.body.updateBounds(),a.body.bounce.setTo(this.bounce.x,this.bounce.y),a.body.velocity.x=this.game.rnd.between(this.minParticleSpeed.x,this.maxParticleSpeed.x),a.body.velocity.y=this.game.rnd.between(this.minParticleSpeed.y,this.maxParticleSpeed.y),a.body.angularVelocity=this.game.rnd.between(this.minRotation,this.maxRotation),a.body.gravity.y=this.gravity,a.body.drag.x=this.particleDrag.x,a.body.drag.y=this.particleDrag.y,a.body.angularDrag=this.angularDrag,a.onEmit(),!0)
 },c.Particles.Arcade.Emitter.prototype.destroy=function(){this.game.particles.remove(this),c.Group.prototype.destroy.call(this,!0,!1)},c.Particles.Arcade.Emitter.prototype.setSize=function(a,b){this.area.width=a,this.area.height=b},c.Particles.Arcade.Emitter.prototype.setXSpeed=function(a,b){a=a||0,b=b||0,this.minParticleSpeed.x=a,this.maxParticleSpeed.x=b},c.Particles.Arcade.Emitter.prototype.setYSpeed=function(a,b){a=a||0,b=b||0,this.minParticleSpeed.y=a,this.maxParticleSpeed.y=b},c.Particles.Arcade.Emitter.prototype.setRotation=function(a,b){a=a||0,b=b||0,this.minRotation=a,this.maxRotation=b},c.Particles.Arcade.Emitter.prototype.setAlpha=function(a,b,d,e,f){if("undefined"==typeof a&&(a=1),"undefined"==typeof b&&(b=1),"undefined"==typeof d&&(d=0),"undefined"==typeof e&&(e=c.Easing.Linear.None),"undefined"==typeof f&&(f=!1),this.minParticleAlpha=a,this.maxParticleAlpha=b,this.autoAlpha=!1,d>0&&a!==b){var g={v:a},h=this.game.make.tween(g).to({v:b},d,e);h.yoyo(f),this.alphaData=h.generateData(60),this.alphaData.reverse(),this.autoAlpha=!0}},c.Particles.Arcade.Emitter.prototype.setScale=function(a,b,d,e,f,g,h){if("undefined"==typeof a&&(a=1),"undefined"==typeof b&&(b=1),"undefined"==typeof d&&(d=1),"undefined"==typeof e&&(e=1),"undefined"==typeof f&&(f=0),"undefined"==typeof g&&(g=c.Easing.Linear.None),"undefined"==typeof h&&(h=!1),this.minParticleScale=1,this.maxParticleScale=1,this._minParticleScale.set(a,d),this._maxParticleScale.set(b,e),this.autoScale=!1,f>0&&(a!==b||d!==e)){var i={x:a,y:d},j=this.game.make.tween(i).to({x:b,y:e},f,g);j.yoyo(h),this.scaleData=j.generateData(60),this.scaleData.reverse(),this.autoScale=!0}},c.Particles.Arcade.Emitter.prototype.at=function(a){a.center?(this.emitX=a.center.x,this.emitY=a.center.y):(this.emitX=a.world.x+a.anchor.x*a.width,this.emitY=a.world.y+a.anchor.y*a.height)},Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"width",{get:function(){return this.area.width},set:function(a){this.area.width=a}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"height",{get:function(){return this.area.height},set:function(a){this.area.height=a}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"x",{get:function(){return this.emitX},set:function(a){this.emitX=a}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"y",{get:function(){return this.emitY},set:function(a){this.emitY=a}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"left",{get:function(){return Math.floor(this.x-this.area.width/2)}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"right",{get:function(){return Math.floor(this.x+this.area.width/2)}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"top",{get:function(){return Math.floor(this.y-this.area.height/2)}}),Object.defineProperty(c.Particles.Arcade.Emitter.prototype,"bottom",{get:function(){return Math.floor(this.y+this.area.height/2)}}),void 0===PIXI.blendModes&&(PIXI.blendModes=c.blendModes),void 0===PIXI.scaleModes&&(PIXI.scaleModes=c.scaleModes),void 0===PIXI.Texture.emptyTexture&&(PIXI.Texture.emptyTexture=new PIXI.Texture(new PIXI.BaseTexture)),void 0===PIXI.DisplayObject._tempMatrix&&(PIXI.DisplayObject._tempMatrix=new PIXI.Matrix),void 0===PIXI.RenderTexture.tempMatrix&&(PIXI.RenderTexture.tempMatrix=new PIXI.Matrix),void 0===PIXI.Graphics.POLY&&(PIXI.Graphics.POLY=c.POLYGON,PIXI.Graphics.RECT=c.RECTANGLE,PIXI.Graphics.CIRC=c.CIRCLE,PIXI.Graphics.ELIP=c.ELLIPSE,PIXI.Graphics.RREC=c.ROUNDEDRECTANGLE),"undefined"!=typeof exports?("undefined"!=typeof module&&module.exports&&(exports=module.exports=c),exports.Phaser=c):"undefined"!=typeof define&&define.amd?define("Phaser",function(){return b.Phaser=c}()):b.Phaser=c}.call(this);
-//# sourceMappingURL=phaser-arcade-physics.map
+//# sourceMappingURL=node_modules/phaser/build/custom/phaser-arcade-physics.map
 ; browserify_shim__define__module__export__(typeof Phaser != "undefined" ? Phaser : window.Phaser);
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":45}]},{},[1]);
+},{"_process":47}]},{},[1]);
