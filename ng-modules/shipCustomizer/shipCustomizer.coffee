@@ -3,7 +3,8 @@ Nodule = require('nodule')  # for nodule helpers
 Sprite = require('../travelScreen/Sprite.coffee')
 
 app = angular.module('ship-customizer', [
-    require('game')
+    require('game'),
+    require('game-btn')
 ]);
 
 app.directive("shipCustomizer", () ->

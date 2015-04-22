@@ -40,7 +40,7 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     var vm = this;
     vm.active_module = 'main-menu';
 
-    vm.MSPF = 100;  // ms per frame
+    vm.MSPF = 50;  // ms per frame
 
     // first round of music must be started manually (I don't know why)
     vm.music = new Howl({
