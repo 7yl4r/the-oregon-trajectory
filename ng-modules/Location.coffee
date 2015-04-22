@@ -5,7 +5,7 @@ module.exports = class Location
         @name = name
         @x = x
         @xdot = xdot
-        @actionKey = actionKey
+        @actionKey = actionKey  # TODO: remove actionKey (use trigger and sprite instead)
         if sprite?
             @sprite = sprite
         else
@@ -32,7 +32,7 @@ module.exports = class Location
     _getSpriteForAction: (key)->
         switch key
             when "station"
-                return new Sprite('assets/sprites/station_sheet.png',
+                return new Sprite('assets/stations/marker1/spritesheet.png',
                     "station1", -1000, 'random')
             when "maneuver"
                 return new Sprite('assets/sprites/maneuver-node/sprites.png',
