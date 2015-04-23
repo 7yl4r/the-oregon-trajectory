@@ -60,20 +60,27 @@
 
             <div id="debug-section" style="display:none">
                 debug tools: <br>
-                active module: {{MainCtrl.active_module}} <br>
-
-                switch to module
-                <input id='module-choice' ng-model="moduleChoice" type="text"/>
-                <button ng-click="$emit('switchToModule', moduleChoice)">go</button><br>
-
-                force event
-                <input id='event-choice' ng-model="eventChoice" type="text"/>
-                <button ng-click="$broadcast('forceEvent', eventChoice)">go</button><br>
-
-                <button onclick='game.GODMODE()'>god mode</button>
-                event bypass:<input type="checkbox"
-                        onclick="window.BYPASS = !window.BYPASS">
-                </button>
+                <div class="col-md-2">
+                    active module: {{MainCtrl.active_module}} <br>
+                </div>
+                <div class="col-md-2">
+                    switch to module <br>
+                    <input id='module-choice' ng-model="moduleChoice" type="text"/>
+                    <button ng-click="$emit('switchToModule', moduleChoice)">go</button><br>
+                </div>
+                <div class="col-md-2">
+                    force event <br>
+                    <input id='event-choice' ng-model="eventChoice" type="text"/>
+                    <button ng-click="$broadcast('forceEvent', eventChoice)">go</button><br>
+                </div>
+                <div class="col-md-1">
+                    <button onclick='game.GODMODE()'>god mode</button>
+                </div>
+                <div class="col-md-1">
+                    event bypass: <input type="checkbox"
+                                        onclick="window.BYPASS = !window.BYPASS">
+                    </button>
+                </div>
 
             </div>
 
