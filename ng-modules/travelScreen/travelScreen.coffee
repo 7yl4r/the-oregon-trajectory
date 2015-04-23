@@ -7,6 +7,7 @@ Location = require('./../Location.coffee')
 
 Randy = require('./ng-randy/ng-randy.coffee')
 
+window.BYPASS = false  # true to bypass location event triggers (for debug)
 MIN_TRAVELS_PER_EVENT = 1000  # min amount of travel between events
 EVENT_VARIABILITY = 10  # affects consistency in event timing. high values = less consistent timing. must be > 0
 # units of EVENT_VARIABILITY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
@@ -159,7 +160,10 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
             for (var loc_i in data.locations){
                 var pos = data.locations[loc_i].x;
                 var loc = data.locations[loc_i].name;
-                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0) {  // passing & not yet visited
+                if (pos < data.distanceTraveled &&
+                    data.visited.indexOf(loc) < 0 &&
+                    !window.BYPASS
+                ) {  // passing & not yet visited
                     data.visited.push(loc);
                     console.log('arrived at ', loc);
                     data.locations[loc_i].trigger({'$scope':$scope})
@@ -265,6 +269,6 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         ));
     });
 }]);
-
-module.exports = angular.module('travel-screen').name;
 `
+module.exports = angular.module('travel-screen').name
+
