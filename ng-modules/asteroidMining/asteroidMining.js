@@ -201,7 +201,6 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         if (typeof vm.engineSound != 'undefined'){
             if (new Date().getTime() - vm.lastEngineFire > vm.engineDelay
                 && vm.engineSound.isPlaying) {
-                console.log('stopping sound');
                 vm.engineSound.stop();
             }
         }
