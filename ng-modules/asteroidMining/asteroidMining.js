@@ -47,8 +47,8 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
     });
     vm.music_sad = new Howl({
         urls: [
-            'assets/sound/effects/somethingBad/SomethingBad.mp3',
-            'assets/sound/effects/somethingBad/SomethingBad.ogg'
+            'assets/sound/effects/somethingbad/SomethingBad.mp3',
+            'assets/sound/effects/somethingbad/SomethingBad.ogg'
         ],
         loop: true
     });
@@ -98,6 +98,13 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
             'assets/sound/effects/clunk/clunk.ogg',
             'assets/sound/effects/clunk/clunk.wav'
         ]
+      );
+      vm.game.load.audio('propel',
+          [
+              'assets/sound/effects/propellant/propellant.mp3',
+              'assets/sound/effects/propellant/propellant.ogg',
+              'assets/sound/effects/propellant/propellant.wav'
+          ]
       );
     }
 
@@ -180,25 +187,50 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
     }
 
+    vm.engineDelay = 100;  // ms of delay for engine shutdown (sound only)
+    vm.lastEngineFire = 0;
+    vm.fireEngines = function() {
+        vm.lastEngineFire = new Date().getTime();
+        if (typeof vm.engineSound == 'undefined' ||
+            !vm.engineSound.isPlaying){
+            vm.engineSound = vm.game.sound.play('propel');
+        }
+    }
+
+    vm.shutdownEngines = function(){
+        if (typeof vm.engineSound != 'undefined'){
+            if (new Date().getTime() - vm.lastEngineFire > vm.engineDelay
+                && vm.engineSound.isPlaying) {
+                console.log('stopping sound');
+                vm.engineSound.stop();
+            }
+        }
+    }
+
     vm.update = function() {
         if (vm.nodule.isActive) {
           if (vm.cursors.up.isDown) {
-              // fire engines, accelerate forward
+              // accelerate forward
+              vm.fireEngines();
               vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
               vm.stats.main_fuel++;
           } else {
+              vm.shutdownEngines();
               vm.sprite.body.acceleration.set(0);
           }
 
           if (vm.cursors.left.isDown) {
               // rotate
+              vm.fireEngines();
               vm.sprite.body.angularVelocity = -100;
               vm.stats.secondary_fuel++;
           } else if (vm.cursors.right.isDown) {
               // rotate
+              vm.fireEngines();
               vm.sprite.body.angularVelocity = 100;
               vm.stats.secondary_fuel++;
           } else {
+              vm.shutdownEngines();
               vm.sprite.body.angularVelocity = 0;
           }
 
