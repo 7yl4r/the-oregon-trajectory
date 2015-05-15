@@ -71,7 +71,18 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
       vm.game.load.image('ship', data.ship.sheet.src);
 
-
+      vm.game.load.audio('shot1',
+          [
+              'assets/sound/effects/shot1/shot1.mp3',
+              'assets/sound/effects/shot1/shot1.ogg',
+              'assets/sound/effects/shot1/shot1.wav'
+          ]
+      );
+      vm.game.load.audio('shot2',
+          [
+              'assets/sound/effects/shot2/shot2.mp3',
+              'assets/sound/effects/shot2/shot2.ogg'
+          ])
     }
 
     vm.create = function() {
@@ -298,6 +309,11 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
 
             if (bullet)
             {
+                if (Math.random() > .5) {
+                    vm.game.sound.play('shot1');
+                } else {
+                    vm.game.sound.play('shot2');
+                }
                 var pos = vm.sprite.toGlobal(vm.sprite.anchor);
                 bullet.reset(pos.x, pos.y);
                 bullet.lifespan = 2000;
