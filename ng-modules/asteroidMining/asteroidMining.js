@@ -38,7 +38,16 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
 
     var vm = this;
+    vm.music = new Howl({
+        urls: [
+                'assets/sound/music/asteroidMining/asteroidMining.mp3',
+                'assets/sound/music/asteroidMining/asteroidMining.ogg'
+        ],
+        loop: true
+    });
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
+      $scope.$emit('changeMusicTo', vm.music);
+
       if (vm.game) {
         vm.game.destroy();
       }
@@ -61,6 +70,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
       vm.game.load.image('ship', data.ship.sheet.src);
+
 
     }
 
