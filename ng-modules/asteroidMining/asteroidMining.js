@@ -45,6 +45,14 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         ],
         loop: true
     });
+    vm.music_sad = new Howl({
+        urls: [
+            'assets/sound/effects/somethingBad/SomethingBad.mp3',
+            'assets/sound/effects/somethingBad/SomethingBad.ogg'
+        ],
+        loop: true
+    });
+    
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
       $scope.$emit('changeMusicTo', vm.music);
 
@@ -167,6 +175,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
     vm.update = function() {
         if (vm.nodule.isActive) {
           if (vm.cursors.up.isDown) {
+              // fire engines, accelerate forward
               vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
               vm.stats.main_fuel++;
           } else {
@@ -174,9 +183,11 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
           }
 
           if (vm.cursors.left.isDown) {
+              // rotate
               vm.sprite.body.angularVelocity = -100;
               vm.stats.secondary_fuel++;
           } else if (vm.cursors.right.isDown) {
+              // rotate
               vm.sprite.body.angularVelocity = 100;
               vm.stats.secondary_fuel++;
           } else {
@@ -241,6 +252,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
               vm.stats.crash = true;
               vm.stats.credits = 0;
               vm.stats.fuel = 0;
+              $scope.$emit('changeMusicTo', vm.music_sad);
               vm.exitModule('crash');
           });
         }
