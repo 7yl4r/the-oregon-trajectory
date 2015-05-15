@@ -12,8 +12,6 @@ module.exports = class Sprite
         #           r: 3.1415       # rotation of sprite in radians (defaults to 0) (use "random" to set random rotation)
         #       }
         @setSheet(spritesheet, nameOrJSON)
-        @r = 0  # rotation position
-        @spin = 0  # rotation speed
         if y == 'random'
             @y = Math.random()*200.0+200.0
         else
@@ -31,6 +29,9 @@ module.exports = class Sprite
     setDimensions: (nameOrJSON)->
         # sets dimensions, max_frames, draws_per_frame based on name to match given sprite
         # TODO: these should be read from a json file given with each sprite
+
+        @r = 0  # rotation position
+        @spin = 0  # rotation speed
 
         # for slowing animation speed
         @draws_per_frame = 50  # number of draw calls before setting new frame
@@ -93,7 +94,7 @@ module.exports = class Sprite
         ssy = 0  # TODO: use y-axis in spritesheets for different ship conditionals/permuations (damage, age, etc)
         if @r != 0
             ctx.save()
-            ctx.translate(x+@w/2*@scale,y+@w/2*@scale)
+            ctx.translate(x,y)
             ctx.rotate(@r)
             ctx.drawImage(@sheet, ssx, ssy, @w, @h, -@w/2*@scale, -@h/2*@scale, @w*@scale, @h*@scale)
             ctx.restore()
