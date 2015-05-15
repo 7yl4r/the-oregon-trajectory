@@ -52,7 +52,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         ],
         loop: true
     });
-    
+
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
       $scope.$emit('changeMusicTo', vm.music);
 
@@ -90,7 +90,15 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
           [
               'assets/sound/effects/shot2/shot2.mp3',
               'assets/sound/effects/shot2/shot2.ogg'
-          ])
+          ]
+      );
+      vm.game.load.audio('clunk',
+        [
+            'assets/sound/effects/clunk/clunk.mp3',
+            'assets/sound/effects/clunk/clunk.ogg',
+            'assets/sound/effects/clunk/clunk.wav'
+        ]
+      );
     }
 
     vm.create = function() {
@@ -388,6 +396,8 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
     }
 
     vm.partCatch = function() {
+      // catch the asteroid chunk
+      vm.game.sound.play('clunk');
       var rnd = vm.game.rnd.integerInRange.bind(vm.game.rnd);
       vm.stats.parts++;
       vm.stats.fuel += rnd(game.miningFuelPerPartMin, game.miningFuelPerPartMax);
