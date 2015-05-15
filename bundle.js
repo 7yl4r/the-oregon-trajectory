@@ -349,7 +349,24 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
 
     var vm = this;
+    vm.music = new Howl({
+        urls: [
+                'assets/sound/music/asteroidMining/asteroidMining.mp3',
+                'assets/sound/music/asteroidMining/asteroidMining.ogg'
+        ],
+        loop: true
+    });
+    vm.music_sad = new Howl({
+        urls: [
+            'assets/sound/effects/somethingbad/SomethingBad.mp3',
+            'assets/sound/effects/somethingbad/SomethingBad.ogg'
+        ],
+        loop: true
+    });
+
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
+      $scope.$emit('changeMusicTo', vm.music);
+
       if (vm.game) {
         vm.game.destroy();
       }
@@ -373,6 +390,33 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
       vm.game.load.image('ship', data.ship.sheet.src);
 
+      vm.game.load.audio('shot1',
+          [
+              'assets/sound/effects/shot1/shot1.mp3',
+              'assets/sound/effects/shot1/shot1.ogg',
+              'assets/sound/effects/shot1/shot1.wav'
+          ]
+      );
+      vm.game.load.audio('shot2',
+          [
+              'assets/sound/effects/shot2/shot2.mp3',
+              'assets/sound/effects/shot2/shot2.ogg'
+          ]
+      );
+      vm.game.load.audio('clunk',
+        [
+            'assets/sound/effects/clunk/clunk.mp3',
+            'assets/sound/effects/clunk/clunk.ogg',
+            'assets/sound/effects/clunk/clunk.wav'
+        ]
+      );
+      vm.game.load.audio('propel',
+          [
+              'assets/sound/effects/propellant/propellant.mp3',
+              'assets/sound/effects/propellant/propellant.ogg',
+              'assets/sound/effects/propellant/propellant.wav'
+          ]
+      );
     }
 
     vm.create = function() {
@@ -454,22 +498,50 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
     }
 
+    vm.engineDelay = 100;  // ms of delay for engine shutdown (sound only)
+    vm.lastEngineFire = 0;
+    vm.fireEngines = function() {
+        vm.lastEngineFire = new Date().getTime();
+        if (typeof vm.engineSound == 'undefined' ||
+            !vm.engineSound.isPlaying){
+            vm.engineSound = vm.game.sound.play('propel');
+        }
+    }
+
+    vm.shutdownEngines = function(){
+        if (typeof vm.engineSound != 'undefined'){
+            if (new Date().getTime() - vm.lastEngineFire > vm.engineDelay
+                && vm.engineSound.isPlaying) {
+                console.log('stopping sound');
+                vm.engineSound.stop();
+            }
+        }
+    }
+
     vm.update = function() {
         if (vm.nodule.isActive) {
           if (vm.cursors.up.isDown) {
+              // accelerate forward
+              vm.fireEngines();
               vm.game.physics.arcade.accelerationFromRotation(vm.sprite.rotation, 200, vm.sprite.body.acceleration);
               vm.stats.main_fuel++;
           } else {
+              vm.shutdownEngines();
               vm.sprite.body.acceleration.set(0);
           }
 
           if (vm.cursors.left.isDown) {
+              // rotate
+              vm.fireEngines();
               vm.sprite.body.angularVelocity = -100;
               vm.stats.secondary_fuel++;
           } else if (vm.cursors.right.isDown) {
+              // rotate
+              vm.fireEngines();
               vm.sprite.body.angularVelocity = 100;
               vm.stats.secondary_fuel++;
           } else {
+              vm.shutdownEngines();
               vm.sprite.body.angularVelocity = 0;
           }
 
@@ -531,6 +603,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
               vm.stats.crash = true;
               vm.stats.credits = 0;
               vm.stats.fuel = 0;
+              $scope.$emit('changeMusicTo', vm.music_sad);
               vm.exitModule('crash');
           });
         }
@@ -599,6 +672,11 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
 
             if (bullet)
             {
+                if (Math.random() > .5) {
+                    vm.game.sound.play('shot1');
+                } else {
+                    vm.game.sound.play('shot2');
+                }
                 var pos = vm.sprite.toGlobal(vm.sprite.anchor);
                 bullet.reset(pos.x, pos.y);
                 bullet.lifespan = 2000;
@@ -661,6 +739,8 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
     }
 
     vm.partCatch = function() {
+      // catch the asteroid chunk
+      vm.game.sound.play('clunk');
       var rnd = vm.game.rnd.integerInRange.bind(vm.game.rnd);
       vm.stats.parts++;
       vm.stats.fuel += rnd(game.miningFuelPerPartMin, game.miningFuelPerPartMax);
@@ -2040,8 +2120,6 @@ module.exports = Sprite = (function() {
       y = 0;
     }
     this.setSheet(spritesheet, nameOrJSON);
-    this.r = 0;
-    this.spin = 0;
     if (y === 'random') {
       this.y = Math.random() * 200.0 + 200.0;
     } else {
@@ -2058,6 +2136,8 @@ module.exports = Sprite = (function() {
   };
 
   Sprite.prototype.setDimensions = function(nameOrJSON) {
+    this.r = 0;
+    this.spin = 0;
     this.draws_per_frame = 50;
     this.draw_counter = 0;
     switch (nameOrJSON) {
@@ -2124,7 +2204,7 @@ module.exports = Sprite = (function() {
     ssy = 0;
     if (this.r !== 0) {
       ctx.save();
-      ctx.translate(x + this.w / 2 * this.scale, y + this.w / 2 * this.scale);
+      ctx.translate(x, y);
       ctx.rotate(this.r);
       ctx.drawImage(this.sheet, ssx, ssy, this.w, this.h, -this.w / 2 * this.scale, -this.h / 2 * this.scale, this.w * this.scale, this.h * this.scale);
       ctx.restore();
@@ -2843,6 +2923,8 @@ Location = require('./../Location.coffee');
 
 Randy = require('./ng-randy/ng-randy.coffee');
 
+window.BYPASS = false;
+
 MIN_TRAVELS_PER_EVENT = 1000;
 
 EVENT_VARIABILITY = 10;
@@ -2994,7 +3076,10 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
             for (var loc_i in data.locations){
                 var pos = data.locations[loc_i].x;
                 var loc = data.locations[loc_i].name;
-                if (pos < data.distanceTraveled && data.visited.indexOf(loc) < 0) {  // passing & not yet visited
+                if (pos < data.distanceTraveled &&
+                    data.visited.indexOf(loc) < 0 &&
+                    !window.BYPASS
+                ) {  // passing & not yet visited
                     data.visited.push(loc);
                     console.log('arrived at ', loc);
                     data.locations[loc_i].trigger({'$scope':$scope})
@@ -3100,9 +3185,9 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
         ));
     });
 }]);
+;
 
 module.exports = angular.module('travel-screen').name;
-;
 
 
 
