@@ -41,6 +41,9 @@ class Game
 
         @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random');
 
+        # debug vars
+        @BYPASS_LOCATIONS = false
+
     _init: ()->
         # re-initializes the game
         # TODO: move this...
@@ -211,7 +214,12 @@ class Game
         return
 
     # === debug helper methods ===
+    BYPASS: ()->
+        # toggles location/event bypass
+        @BYPASS_LOCATIONS = !@BYPASS_LOCATIONS
+
     GODMODE: ()->
+        # toggles god mode
         BIG_NUMBER = 99999999999
         @crewHealth = [BIG_NUMBER, BIG_NUMBER]
         @fuel = BIG_NUMBER
