@@ -19,8 +19,9 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
     vm.music = new Howl({
         urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
         loop: true,
-        volume:0.6
+        volume:0.5
     });
+
     clickSound = new Howl({
         urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
     });

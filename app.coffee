@@ -45,7 +45,8 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     // first round of music must be started manually (I don't know why)
     vm.music = new Howl({
         urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
-        loop: true
+        loop: true,
+        volume: .5
     });
     vm.music.play();
 
