@@ -1,5 +1,4 @@
 require('angular');
-Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 
 var app = angular.module('leaderboard', [

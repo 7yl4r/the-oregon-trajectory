@@ -213,7 +213,6 @@ module.exports = angular.module('app-footer').name;
 
 },{"angular":46}],6:[function(require,module,exports){
 require('angular');
-Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 Phaser = require('phaser');
 
@@ -249,26 +248,12 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
 }]);
 
-app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
+app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$scope', '$rootScope', '$filter',
+    function(data, music, sounds, $scope, $rootScope, $filter) {
 
     var vm = this;
-    vm.music = new Howl({
-        urls: [
-                'assets/sound/music/asteroidMining/asteroidMining.mp3',
-                'assets/sound/music/asteroidMining/asteroidMining.ogg'
-        ],
-        loop: true
-    });
-    vm.music_sad = new Howl({
-        urls: [
-            'assets/sound/effects/somethingbad/SomethingBad.mp3',
-            'assets/sound/effects/somethingbad/SomethingBad.ogg'
-        ],
-        loop: true
-    });
-
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
-      $scope.$emit('changeMusicTo', vm.music);
+      $scope.$emit('changeMusicTo', music.asteroidMining);
 
       if (vm.game) {
         vm.game.destroy();
@@ -290,6 +275,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
       vm.game.load.image('ship', data.ship.sheet.src);
 
+      // NOTE: these audio snippets are duplicates of those already loaded in game.sounds (and we could use those instead)
       vm.game.load.audio('shot1',
           [
               'assets/sound/effects/shot1/shot1.mp3',
@@ -504,7 +490,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
               vm.stats.crash = true;
               vm.stats.credits = 0;
               vm.stats.fuel = 0;
-              $scope.$emit('changeMusicTo', vm.music_sad);
+              sounds.bummer.play();
               vm.exitModule('crash');
           });
         }
@@ -667,7 +653,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
 
 module.exports = angular.module('asteroid-mining').name;
 
-},{"angular":46,"howler":4,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":27,"phaser":49}],7:[function(require,module,exports){
+},{"angular":46,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":27,"phaser":49}],7:[function(require,module,exports){
 
 
 module.exports = function (stats, callback) {
@@ -740,11 +726,9 @@ app.controller("audioController", function(){
 
 module.exports = angular.module('audio-controls').name;
 },{"angular":46,"howler":4}],10:[function(require,module,exports){
-var Howl, Nodule, app;
+var Nodule, app;
 
 require('angular');
-
-Howl = require('howler');
 
 Nodule = require('nodule');
 
@@ -842,7 +826,7 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":46,"game-btn":12,"howler":4,"nodule":27}],11:[function(require,module,exports){
+},{"angular":46,"game-btn":12,"nodule":27}],11:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -883,7 +867,9 @@ module.exports = angular.module('example-module').name;
 require('angular');
 require('howler');
 
-var app = angular.module('game-btn', []);
+var app = angular.module('game-btn', [
+    require('game')
+]);
 
 app.directive("gameBtn", function() {
     return {
@@ -899,55 +885,46 @@ app.directive("gameBtn", function() {
     };
 });
 
-app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
+app.controller("gameBtnController", ['data', 'sounds', '$scope', '$rootScope', function(data, sounds, $scope, $rootScope){
     var vm = this;
-    vm.clickSound = new Howl({
-        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-    });
+    vm.clickSound = sounds.click;
 }]);
 
 module.exports = angular.module('game-btn').name;
-},{"angular":46,"howler":4}],13:[function(require,module,exports){
+},{"angular":46,"game":28,"howler":4}],13:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
-Howl = require('howler');
 
-var app = angular.module('game-over', []);
+var app = angular.module('game-over', [
+    require('game')
+]);
 
 app.directive("gameOver", function() {
-  return {
-    restrict: 'E',
-    templateUrl: "ng-modules/gameOver/gameOver.html"
-  };
+    return {
+        restrict: 'E',
+        templateUrl: "ng-modules/gameOver/gameOver.html"
+    };
 });
 
-app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', function($rootScope, $scope, data){
-  vm = this;
-  vm.data = data;
-  vm.music =  new Howl({
-    urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
-    loop: true
-  });
-  clickSound = new Howl({
-    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-  })
+app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', 'sounds', 'music', function($rootScope, $scope, data, sounds, music){
+    vm = this;
+    vm.data = data;
 
-  vm.onEnter = function(){
-    $scope.$emit('changeMusicTo', vm.music);
-  }
-  vm.nodule = Nodule($rootScope, 'game-over', vm.onEnter);
+    vm.onEnter = function(){
+        $scope.$emit('changeMusicTo', music.losing);
+    }
+    vm.nodule = Nodule($rootScope, 'game-over', vm.onEnter);
 
-  vm.mainMenu = function(){
-    clickSound.play();
-    $scope.$emit('switchToModule', 'main-menu');
-  }
+    vm.mainMenu = function(){
+        sounds.click.play();
+        $scope.$emit('switchToModule', 'main-menu');
+    }
 }]);
 
 module.exports = angular.module('game-over').name;
 
-},{"angular":46,"howler":4,"nodule":27}],14:[function(require,module,exports){
+},{"angular":46,"game":28,"nodule":27}],14:[function(require,module,exports){
 require('angular');
-Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 
 var app = angular.module('leaderboard', [
@@ -987,9 +964,8 @@ app.controller("leaderboardController", ['leaderboard', 'data', '$scope', '$root
 }]);
 
 module.exports = angular.module('leaderboard').name;
-},{"angular":46,"howler":4,"nodule":27,"score":19}],15:[function(require,module,exports){
+},{"angular":46,"nodule":27,"score":19}],15:[function(require,module,exports){
 require('angular');
-require('howler');
 Nodule = require('nodule');
 
 var app = angular.module('main-menu', [
@@ -1004,26 +980,17 @@ app.directive("mainMenu", function() {
     };
 });
 
-app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
+app.controller("mainMenuController", ['data', 'music', 'sounds', '$scope', '$rootScope', function(data, music, sounds, $scope, $rootScope){
     var vm = this;
-    vm.music = new Howl({
-        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
-        loop: true,
-        volume:0.5
-    });
-
-    clickSound = new Howl({
-        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-    });
 
     vm.onEntry = function() {
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.theme);
     }
 
     vm.nodule = new Nodule($rootScope, 'main-menu', vm.onEntry)
 
     vm.startGame = function(){
-        clickSound.play();
+        sounds.click.play();
         data.reset();
         $scope.$emit('switchToModule', 'ship-customizer');
     }
@@ -1048,7 +1015,7 @@ app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(d
 
 module.exports = angular.module('main-menu').name;
 
-},{"angular":46,"game":28,"game-btn":12,"howler":4,"learn-about-trajectory":22,"nodule":27}],16:[function(require,module,exports){
+},{"angular":46,"game":28,"game-btn":12,"learn-about-trajectory":22,"nodule":27}],16:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -1323,7 +1290,7 @@ app.directive("shipCustomizer", function() {
 });
 
 app.controller("shipCustomizerController", [
-  'data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+  'data', 'sounds', '$scope', '$rootScope', function(data, sounds, $scope, $rootScope) {
     this.shipOptions = [
       {
         file: data.gameDir + '/assets/sprites/ship.png',
@@ -1346,6 +1313,7 @@ app.controller("shipCustomizerController", [
     this.nodule = new Nodule($rootScope, 'ship-customizer');
     this.pickShip = (function(_this) {
       return function(ship) {
+        sounds.click.play();
         _this.selectedShip.selected = false;
         ship.selected = true;
         data.ship.setSheet(ship.file, ship.spriteSpecs);
@@ -1382,7 +1350,7 @@ app.directive("shop", function() {
     };
 });
 
-app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scope, $rootScope, data){
+app.controller("ShopController", ['$scope', '$rootScope', 'data', 'sounds', function($scope, $rootScope, data, sounds){
 
     this.data = data;
     this.item_consumables = [
@@ -1415,19 +1383,14 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scop
                 // selling
                 this.data[this.activeItem.key] += amt;
                 this.data.money -= total;
-                var sound = new Howl({
-                    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-                });
-                sound.play();
+
+                sounds.click.play();
             }
             else if (total <= data.money && amt > 0) {
                 // buying
                 this.data[this.activeItem.key] += amt;
                 this.data.money -= total;
-                var sound = new Howl({
-                    urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-                });
-                sound.play();
+                sounds.click.play();
             }
             else {
                 console.log("ERROR: Not enough money or resources!");
@@ -1458,10 +1421,7 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', function($scop
     };
 
     this.toSpace = function(){
-        var sound = new Howl({
-            urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-        });
-        sound.play();
+        sounds.click.play();
         $scope.$emit('switchToModule', 'travel-screen');
     };
 
@@ -1568,10 +1528,10 @@ module.exports = {
 
 },{}],23:[function(require,module,exports){
 require('angular');
-Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 
 var app = angular.module('situation', [
+    require('game')
 ]);
 
 app.directive("situation", function() {
@@ -1581,7 +1541,7 @@ app.directive("situation", function() {
     };
 });
 
-app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', function(data, $scope, $rootScope, $sce) {
+app.controller("situationController", ['data', 'sounds', '$scope', '$rootScope', '$sce', function(data, sounds, $scope, $rootScope, $sce) {
 
     var vm = this;
     vm.nodule = new Nodule($rootScope, 'situation', function(dialog, currentStep) {
@@ -1620,6 +1580,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
     };
 
     $scope.choose = function(choice){
+        sounds.click.play();
         if (typeof choice.next === 'string') {
           $scope.currentStep = choice.next;
         } else if (typeof choice.next === 'function') {
@@ -1632,7 +1593,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
 
 module.exports = angular.module('situation').name;
 
-},{"angular":46,"howler":4,"nodule":27}],24:[function(require,module,exports){
+},{"angular":46,"game":28,"nodule":27}],24:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -1796,13 +1757,15 @@ module.exports = Nodule = (function() {
 
 
 },{}],28:[function(require,module,exports){
-var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Sprite, app, iss, temp_marker;
+var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, Howl, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Sprite, app, iss, temp_marker;
 
 require('angular');
 
 Location = require('./Location.coffee');
 
 Sprite = require('./../travelScreen/Sprite.coffee');
+
+Howl = require('howler');
 
 iss = require('../../assets/stations/iss/spriteSpec.js');
 
@@ -2036,20 +1999,73 @@ app.factory('data', [
   }
 ]);
 
+app.factory('music', [
+  function() {
+    var music;
+    music = {};
+    music.theme = new Howl({
+      urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+      loop: true,
+      volume: 0.5
+    });
+    music.ambience = new Howl({
+      urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+      loop: true
+    });
+    music.asteroidMining = new Howl({
+      urls: ['assets/sound/music/asteroidMining/asteroidMining.mp3', 'assets/sound/music/asteroidMining/asteroidMining.ogg'],
+      loop: true
+    });
+    music.losing = new Howl({
+      urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
+      loop: false
+    });
+    music.winning = new Howl({
+      urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
+      loop: false
+    });
+    return music;
+  }
+]);
+
+app.factory('sounds', [
+  function() {
+    var sounds;
+    sounds = {};
+    sounds.click = new Howl({
+      urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+    });
+    sounds.bummer = new Howl({
+      urls: ['assets/sound/effects/somethingbad/SomethingBad.mp3', 'assets/sound/effects/somethingbad/SomethingBad.ogg']
+    });
+    sounds.shot1 = new Howl({
+      urls: ['assets/sound/effects/shot1/shot1.mp3', 'assets/sound/effects/shot1/shot1.ogg', 'assets/sound/effects/shot1/shot1.wav']
+    });
+    sounds.shot2 = new Howl({
+      urls: ['assets/sound/effects/shot2/shot2.mp3', 'assets/sound/effects/shot2/shot2.ogg']
+    });
+    sounds.clunk = new Howl({
+      urls: ['assets/sound/effects/clunk/clunk.mp3', 'assets/sound/effects/clunk/clunk.ogg', 'assets/sound/effects/clunk/clunk.wav']
+    });
+    sounds.propel = new Howl({
+      urls: ['assets/sound/effects/propellant/propellant.mp3', 'assets/sound/effects/propellant/propellant.ogg', 'assets/sound/effects/propellant/propellant.wav']
+    });
+    return sounds;
+  }
+]);
+
 module.exports = angular.module('game').name;
 
 
 
-},{"../../assets/stations/iss/spriteSpec.js":2,"../../assets/stations/marker1/spriteSpec.js":3,"./../travelScreen/Sprite.coffee":30,"./Location.coffee":26,"angular":46}],29:[function(require,module,exports){
-var Howl, Nodule, app;
+},{"../../assets/stations/iss/spriteSpec.js":2,"../../assets/stations/marker1/spriteSpec.js":3,"./../travelScreen/Sprite.coffee":30,"./Location.coffee":26,"angular":46,"howler":4}],29:[function(require,module,exports){
+var Nodule, app;
 
 require('angular');
 
-Howl = require('howler');
-
 Nodule = require('nodule');
 
-app = angular.module('trader', [require('game-btn')]);
+app = angular.module('trader', [require('game-btn'), require('game')]);
 
 app.directive("trader", function() {
   return {
@@ -2059,7 +2075,7 @@ app.directive("trader", function() {
 });
 
 app.controller("traderController", [
-  'data', '$scope', '$rootScope', function(data, $scope, $rootScope) {
+  'data', 'sounds', '$scope', '$rootScope', function(data, sounds, $scope, $rootScope) {
     this.data = data;
     this.onEntry = (function(_this) {
       return function() {
@@ -2098,6 +2114,7 @@ app.controller("traderController", [
     })(this);
     this.selectOption = (function(_this) {
       return function(option) {
+        sounds.click.play();
         option.action();
         return _this.leave();
       };
@@ -2114,7 +2131,7 @@ module.exports = angular.module('trader').name;
 
 
 
-},{"angular":46,"game-btn":12,"howler":4,"nodule":27}],30:[function(require,module,exports){
+},{"angular":46,"game":28,"game-btn":12,"nodule":27}],30:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
@@ -2947,7 +2964,7 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
+app.controller("travelScreenController", ['$rootScope', '$scope', 'data', 'music', '$interval', function($rootScope, $scope, data, music, $interval){
     var vm = this;
     vm.data = data;
     vm.randy = new Randy($scope);
@@ -2958,7 +2975,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     vm.ship = data.ship;
 
     vm.onEntry = function(){
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.ambience);
         vm.startTravel();
     }
 
@@ -2968,11 +2985,6 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     // nodule for handling module entry/exit and such
     vm.nodule = new Nodule($rootScope, 'travel-screen', vm.onEntry, vm.onExit);
-
-    vm.music = new Howl({
-        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
-        loop: true
-    });
 
     var timeoutId;
 
@@ -3200,9 +3212,10 @@ module.exports = angular.module('travel-screen').name;
 },{"./../theOregonTrajectory/Location.coffee":26,"./Sprite.coffee":30,"./Tile.coffee":31,"./ng-randy/ng-randy.coffee":34,"angular":46,"game":28,"game-btn":12,"ng-hold":18,"nodule":27}],43:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
-Howl = require('howler');
 
-var app = angular.module('you-win', []);
+var app = angular.module('you-win', [
+    require('game')
+]);
 
 app.directive("youWin", function() {
     return {
@@ -3211,30 +3224,23 @@ app.directive("youWin", function() {
     };
 });
 
-app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
+app.controller("youWinCtrl", [ '$rootScope', '$scope', 'music', 'sounds', function($rootScope, $scope, music, sounds){
     vm = this;
-    vm.music =  new Howl({
-        urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
-        loop: true
-    });
-    clickSound = new Howl({
-        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-    })
 
     vm.onEnter = function(){
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.winning);
     }
     vm.nodule = Nodule($rootScope, 'you-win', vm.onEnter);
 
     vm.mainMenu = function(){
-        clickSound.play();
+        sounds.click.play();
         $scope.$emit('switchToModule', 'main-menu');
     }
 }]);
 
 module.exports = angular.module('you-win').name;
 
-},{"angular":46,"howler":4,"nodule":27}],44:[function(require,module,exports){
+},{"angular":46,"game":28,"nodule":27}],44:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");

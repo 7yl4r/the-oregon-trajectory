@@ -1,8 +1,9 @@
 require('angular');
 Nodule = require('nodule');
-Howl = require('howler');
 
-var app = angular.module('you-win', []);
+var app = angular.module('you-win', [
+    require('game')
+]);
 
 app.directive("youWin", function() {
     return {
@@ -11,23 +12,16 @@ app.directive("youWin", function() {
     };
 });
 
-app.controller("youWinCtrl", [ '$rootScope', '$scope', function($rootScope, $scope){
+app.controller("youWinCtrl", [ '$rootScope', '$scope', 'music', 'sounds', function($rootScope, $scope, music, sounds){
     vm = this;
-    vm.music =  new Howl({
-        urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
-        loop: true
-    });
-    clickSound = new Howl({
-        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-    })
 
     vm.onEnter = function(){
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.winning);
     }
     vm.nodule = Nodule($rootScope, 'you-win', vm.onEnter);
 
     vm.mainMenu = function(){
-        clickSound.play();
+        sounds.click.play();
         $scope.$emit('switchToModule', 'main-menu');
     }
 }]);

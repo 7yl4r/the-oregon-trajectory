@@ -1,8 +1,8 @@
 require('angular');
-Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 
 var app = angular.module('situation', [
+    require('game')
 ]);
 
 app.directive("situation", function() {
@@ -12,7 +12,7 @@ app.directive("situation", function() {
     };
 });
 
-app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', function(data, $scope, $rootScope, $sce) {
+app.controller("situationController", ['data', 'sounds', '$scope', '$rootScope', '$sce', function(data, sounds, $scope, $rootScope, $sce) {
 
     var vm = this;
     vm.nodule = new Nodule($rootScope, 'situation', function(dialog, currentStep) {
@@ -51,6 +51,7 @@ app.controller("situationController", ['data', '$scope', '$rootScope', '$sce', f
     };
 
     $scope.choose = function(choice){
+        sounds.click.play();
         if (typeof choice.next === 'string') {
           $scope.currentStep = choice.next;
         } else if (typeof choice.next === 'function') {

@@ -1,5 +1,4 @@
 require('angular');
-require('howler');
 Nodule = require('nodule');
 
 var app = angular.module('main-menu', [
@@ -14,26 +13,17 @@ app.directive("mainMenu", function() {
     };
 });
 
-app.controller("mainMenuController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
+app.controller("mainMenuController", ['data', 'music', 'sounds', '$scope', '$rootScope', function(data, music, sounds, $scope, $rootScope){
     var vm = this;
-    vm.music = new Howl({
-        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
-        loop: true,
-        volume:0.5
-    });
-
-    clickSound = new Howl({
-        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-    });
 
     vm.onEntry = function() {
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.theme);
     }
 
     vm.nodule = new Nodule($rootScope, 'main-menu', vm.onEntry)
 
     vm.startGame = function(){
-        clickSound.play();
+        sounds.click.play();
         data.reset();
         $scope.$emit('switchToModule', 'ship-customizer');
     }

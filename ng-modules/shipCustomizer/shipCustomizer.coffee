@@ -14,7 +14,7 @@ app.directive("shipCustomizer", () ->
     }
 )
 
-app.controller("shipCustomizerController", ['data', '$scope', '$rootScope', (data, $scope, $rootScope) ->
+app.controller("shipCustomizerController", ['data', 'sounds', '$scope', '$rootScope', (data, sounds, $scope, $rootScope) ->
     @shipOptions = [
         {
             file: data.gameDir+'/assets/sprites/ship.png',
@@ -41,6 +41,7 @@ app.controller("shipCustomizerController", ['data', '$scope', '$rootScope', (dat
 
     @pickShip = (ship)=>
         # this function is triggered by the button
+        sounds.click.play()
         @selectedShip.selected = false
         ship.selected = true
         data.ship.setSheet(ship.file, ship.spriteSpecs);
