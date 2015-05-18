@@ -3,7 +3,7 @@ require('angular');
 Tile = require('./Tile.coffee')
 Sprite = require('./Sprite.coffee')
 Nodule = require('nodule')
-Location = require('./../Location.coffee')
+Location = require('./../theOregonTrajectory/Location.coffee')
 
 Randy = require('./ng-randy/ng-randy.coffee')
 

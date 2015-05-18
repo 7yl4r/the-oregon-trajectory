@@ -1,4 +1,4 @@
-Sprite = require('./travelScreen/Sprite.coffee')
+Sprite = require('./../travelScreen/Sprite.coffee')
 
 module.exports = class Location
     constructor: (name, x, xdot, actionKey, trigger=undefined, sprite=undefined)->
