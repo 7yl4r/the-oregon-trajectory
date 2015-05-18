@@ -63,16 +63,16 @@
                 <div class="col-md-2">
                     active module: {{MainCtrl.active_module}} <br>
                 </div>
-                <div class="col-md-2">
+                <form class="col-md-2">
                     switch to module <br>
                     <input id='module-choice' ng-model="moduleChoice" type="text"/>
-                    <button ng-click="$emit('switchToModule', moduleChoice)">go</button><br>
-                </div>
-                <div class="col-md-2">
+                    <input type="submit" ng-click="$emit('switchToModule', moduleChoice)"><br>
+                </form>
+                <form class="col-md-2">
                     force event <br>
                     <input id='event-choice' ng-model="eventChoice" type="text"/>
-                    <button ng-click="$broadcast('forceEvent', eventChoice)">go</button><br>
-                </div>
+                    <input type="submit" ng-click="$broadcast('forceEvent', eventChoice)"><br>
+                </form>
                 <div class="col-md-1">
                     <button onclick='game.GODMODE()'>god mode</button>
                 </div>
