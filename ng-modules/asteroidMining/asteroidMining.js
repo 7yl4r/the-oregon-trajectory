@@ -67,9 +67,6 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       });
     });
 
-    vm.asteroidSize = 0.5;
-    vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
-
     vm.preload = function() {
       // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
       // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
@@ -164,6 +161,8 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         rnd(w/60.0, w/90.0));
 
       // the asteroid
+      vm.asteroidSize = data.encounter_object.sprite.scale;  // 0.5;
+      vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
       vm.asteroid = vm.game.add.sprite(
         rnd(w*2/3.0, w*9/10.0),
         rnd(h/10.0, h*9/10.0),
@@ -201,7 +200,6 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         if (typeof vm.engineSound != 'undefined'){
             if (new Date().getTime() - vm.lastEngineFire > vm.engineDelay
                 && vm.engineSound.isPlaying) {
-                console.log('stopping sound');
                 vm.engineSound.stop();
             }
         }

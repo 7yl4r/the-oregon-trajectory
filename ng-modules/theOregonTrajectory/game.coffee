@@ -1,10 +1,10 @@
 require('angular')
 Location = require('./Location.coffee')
-Sprite = require('./travelScreen/Sprite.coffee')
+Sprite = require('./../travelScreen/Sprite.coffee')
 
 # stations:
-iss = require('../assets/stations/iss/spriteSpec.js')
-temp_marker = require('../assets/stations/marker1/spriteSpec.js')
+iss = require('../../assets/stations/iss/spriteSpec.js')
+temp_marker = require('../../assets/stations/marker1/spriteSpec.js')
 
 window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
@@ -40,6 +40,9 @@ class Game
         @_init()  # initializes params
 
         @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random');
+
+        # debug vars
+        @BYPASS_LOCATIONS = false
 
     _init: ()->
         # re-initializes the game
@@ -211,7 +214,12 @@ class Game
         return
 
     # === debug helper methods ===
+    BYPASS: ()->
+        # toggles location/event bypass
+        @BYPASS_LOCATIONS = !@BYPASS_LOCATIONS
+
     GODMODE: ()->
+        # toggles god mode
         BIG_NUMBER = 99999999999
         @crewHealth = [BIG_NUMBER, BIG_NUMBER]
         @fuel = BIG_NUMBER
