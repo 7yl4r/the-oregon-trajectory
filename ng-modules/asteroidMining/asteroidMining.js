@@ -161,7 +161,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
         rnd(w/60.0, w/90.0));
 
       // the asteroid
-      vm.asteroidSize = 0.5;
+      vm.asteroidSize = data.encounter_object.sprite.scale;  // 0.5;
       vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
       vm.asteroid = vm.game.add.sprite(
         rnd(w*2/3.0, w*9/10.0),

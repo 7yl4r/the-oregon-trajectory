@@ -158,11 +158,13 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
             // handle arrival at stations/events
             if (!data.BYPASS_LOCATIONS){
                 for (var loc_i in data.locations){
-                    var pos = data.locations[loc_i].x;
-                    var loc = data.locations[loc_i].name;
+                    var location = data.locations[loc_i];
+                    var pos = location.x;
+                    var loc = location.name;
                     if (pos < data.distanceTraveled &&
                         data.visited.indexOf(loc) < 0) {  // passing & not yet visited
                         data.visited.push(loc);
+                        data.encounter_object = location;  // store the location obj for use by the triggered module
                         console.log('arrived at ', loc);
                         data.locations[loc_i].trigger({'$scope':$scope})
                     }
