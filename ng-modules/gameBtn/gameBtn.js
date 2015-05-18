@@ -1,7 +1,9 @@
 require('angular');
 require('howler');
 
-var app = angular.module('game-btn', []);
+var app = angular.module('game-btn', [
+    require('game')
+]);
 
 app.directive("gameBtn", function() {
     return {
@@ -17,11 +19,9 @@ app.directive("gameBtn", function() {
     };
 });
 
-app.controller("gameBtnController", ['data', '$scope', '$rootScope', function(data, $scope, $rootScope){
+app.controller("gameBtnController", ['data', 'sounds', '$scope', '$rootScope', function(data, sounds, $scope, $rootScope){
     var vm = this;
-    vm.clickSound = new Howl({
-        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-    });
+    vm.clickSound = sounds.click;
 }]);
 
 module.exports = angular.module('game-btn').name;

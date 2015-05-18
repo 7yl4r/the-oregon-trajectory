@@ -1,5 +1,4 @@
 require('angular');
-Howl = require('howler');    // for sounds (if you need them)
 Nodule = require('nodule');  // for nodule helpers
 Phaser = require('phaser');
 
@@ -35,26 +34,12 @@ app.controller("asteroidMiningController", ['data', '$scope', '$rootScope', func
 
 }]);
 
-app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', '$filter', function(data, $scope, $rootScope, $filter) {
+app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$scope', '$rootScope', '$filter',
+    function(data, music, sounds, $scope, $rootScope, $filter) {
 
     var vm = this;
-    vm.music = new Howl({
-        urls: [
-                'assets/sound/music/asteroidMining/asteroidMining.mp3',
-                'assets/sound/music/asteroidMining/asteroidMining.ogg'
-        ],
-        loop: true
-    });
-    vm.music_sad = new Howl({
-        urls: [
-            'assets/sound/effects/somethingbad/SomethingBad.mp3',
-            'assets/sound/effects/somethingbad/SomethingBad.ogg'
-        ],
-        loop: true
-    });
-
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
-      $scope.$emit('changeMusicTo', vm.music);
+      $scope.$emit('changeMusicTo', music.asteroidMining);
 
       if (vm.game) {
         vm.game.destroy();
@@ -76,6 +61,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
       vm.game.load.image('ship', data.ship.sheet.src);
 
+      // NOTE: these audio snippets are duplicates of those already loaded in game.sounds (and we could use those instead)
       vm.game.load.audio('shot1',
           [
               'assets/sound/effects/shot1/shot1.mp3',
@@ -290,7 +276,7 @@ app.controller("asteroidMiningGameController", ['data', '$scope', '$rootScope', 
               vm.stats.crash = true;
               vm.stats.credits = 0;
               vm.stats.fuel = 0;
-              $scope.$emit('changeMusicTo', vm.music_sad);
+              sounds.bummer.play();
               vm.exitModule('crash');
           });
         }

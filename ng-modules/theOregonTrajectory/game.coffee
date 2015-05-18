@@ -299,6 +299,14 @@ app.factory('music', [ ()->
         loop: true
     })
 
+    music.asteroidMining = new Howl({
+        urls: [
+            'assets/sound/music/asteroidMining/asteroidMining.mp3',
+            'assets/sound/music/asteroidMining/asteroidMining.ogg'
+        ],
+        loop: true
+    });
+
     music.losing = new Howl({
         urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
         loop: false
@@ -310,6 +318,49 @@ app.factory('music', [ ()->
     })
 
     return music
+])
+
+app.factory('sounds', [ ()->
+    sounds = {}
+
+    sounds.click = new Howl({
+        urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+    })
+    sounds.bummer = new Howl({
+        urls: [
+            'assets/sound/effects/somethingbad/SomethingBad.mp3',
+            'assets/sound/effects/somethingbad/SomethingBad.ogg'
+        ],
+    });
+    sounds.shot1 = new Howl({
+        urls: [
+            'assets/sound/effects/shot1/shot1.mp3',
+            'assets/sound/effects/shot1/shot1.ogg',
+            'assets/sound/effects/shot1/shot1.wav'
+        ]
+    })
+    sounds.shot2 = new Howl({
+        urls:[
+            'assets/sound/effects/shot2/shot2.mp3',
+            'assets/sound/effects/shot2/shot2.ogg'
+        ]
+    })
+    sounds.clunk = new Howl({
+        urls:[
+            'assets/sound/effects/clunk/clunk.mp3',
+            'assets/sound/effects/clunk/clunk.ogg',
+            'assets/sound/effects/clunk/clunk.wav'
+        ]
+    })
+    sounds.propel = new Howl({
+        urls:[
+            'assets/sound/effects/propellant/propellant.mp3',
+            'assets/sound/effects/propellant/propellant.ogg',
+            'assets/sound/effects/propellant/propellant.wav'
+        ]
+    })
+
+    return sounds
 ])
 
 module.exports = angular.module('game').name

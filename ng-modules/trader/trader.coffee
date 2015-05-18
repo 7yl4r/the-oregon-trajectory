@@ -1,9 +1,9 @@
 require('angular')
-Howl = require('howler')    # for sounds (if you need them)
 Nodule = require('nodule')  # for nodule helpers
 
 app = angular.module('trader', [
-    require('game-btn')
+    require('game-btn'),
+    require('game')
 ]);
 
 app.directive("trader", () ->
@@ -13,7 +13,7 @@ app.directive("trader", () ->
     }
 )
 
-app.controller("traderController", ['data', '$scope', '$rootScope', (data, $scope, $rootScope) ->
+app.controller("traderController", ['data', 'sounds', '$scope', '$rootScope', (data, sounds, $scope, $rootScope) ->
     @data = data
     @onEntry = ()=>
         @tradeOptions = @getRandomTradeOptions()
@@ -57,6 +57,7 @@ app.controller("traderController", ['data', '$scope', '$rootScope', (data, $scop
         @stationName = names[Math.floor(Math.random() * names.length)];
 
     @selectOption = (option)=>
+        sounds.click.play()
         option.action()
         @leave()
 
