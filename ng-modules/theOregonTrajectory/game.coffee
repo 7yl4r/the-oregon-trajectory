@@ -1,6 +1,7 @@
 require('angular')
 Location = require('./Location.coffee')
 Sprite = require('./../travelScreen/Sprite.coffee')
+Howl = require('howler');
 
 # stations:
 iss = require('../../assets/stations/iss/spriteSpec.js')
@@ -282,6 +283,33 @@ app.factory('data', ['$rootScope', ($rootScope) ->
     game = new Game($rootScope)
     window.game = game
     return game
+])
+
+app.factory('music', [ ()->
+    music = {}
+
+    music.theme = new Howl({
+        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+        loop: true,
+        volume:0.5
+    })
+
+    music.ambience = new Howl({
+        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+        loop: true
+    })
+
+    music.losing = new Howl({
+        urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
+        loop: false
+    })
+
+    music.winning = new Howl({
+        urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
+        loop: false
+    })
+
+    return music
 ])
 
 module.exports = angular.module('game').name

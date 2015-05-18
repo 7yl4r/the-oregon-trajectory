@@ -26,7 +26,7 @@ app.directive("travelScreen", function() {
     };
 });
 
-app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$interval', function($rootScope, $scope, data, $interval){
+app.controller("travelScreenController", ['$rootScope', '$scope', 'data', 'music', '$interval', function($rootScope, $scope, data, music, $interval){
     var vm = this;
     vm.data = data;
     vm.randy = new Randy($scope);
@@ -37,7 +37,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
     vm.ship = data.ship;
 
     vm.onEntry = function(){
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.ambience);
         vm.startTravel();
     }
 
@@ -47,11 +47,6 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', '$inte
 
     // nodule for handling module entry/exit and such
     vm.nodule = new Nodule($rootScope, 'travel-screen', vm.onEntry, vm.onExit);
-
-    vm.music = new Howl({
-        urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
-        loop: true
-    });
 
     var timeoutId;
 

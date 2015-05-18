@@ -2,7 +2,9 @@ require('angular');
 Nodule = require('nodule');
 Howl = require('howler');
 
-var app = angular.module('game-over', []);
+var app = angular.module('game-over', [
+    require('game')
+]);
 
 app.directive("gameOver", function() {
     return {
@@ -11,19 +13,15 @@ app.directive("gameOver", function() {
     };
 });
 
-app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', function($rootScope, $scope, data){
+app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', 'music', function($rootScope, $scope, data, music){
     vm = this;
     vm.data = data;
-    vm.music =  new Howl({
-        urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
-        loop: true
-    });
     clickSound = new Howl({
         urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
     })
 
     vm.onEnter = function(){
-        $scope.$emit('changeMusicTo', vm.music);
+        $scope.$emit('changeMusicTo', music.losing);
     }
     vm.nodule = Nodule($rootScope, 'game-over', vm.onEnter);
 
