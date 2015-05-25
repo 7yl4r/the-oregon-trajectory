@@ -76,6 +76,16 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
 
     @help = ()=>
         @step = 'help'
+
+    @getHarvestHTML = ()=>
+        # TODO:
+        # if @debrisFuel == 0
+        #   return "nothing of use here"
+        # else if @debrisFuel > 0 && @debrisFuel < 500
+        #   return "something..."
+        # else
+        return "This appears to be the remains of communications satellite. <br><br>
+        The old technology is not much of use to you here, but there is a small amount of fuel on board."
 ])
 
 module.exports = angular.module('debris-encounter').name
