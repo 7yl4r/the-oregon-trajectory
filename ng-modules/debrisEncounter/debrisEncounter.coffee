@@ -51,8 +51,11 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
         else if @debrisDensity < 200  # if not dense enough
             return 0
         else
-            percentFuel = Math.random()*0.7  # percent of object that is fuel
-            return parseInt(@debrisSize*@debrisSize*@debrisSize*percentFuel * @debrisDensity/@MAX_DENSITY * 10)
+            percentFuel = 0
+            while percentFuel = 0
+                percentFuel = Math.random()*0.7  # percent of object that is fuel
+                if percentFuel != 0
+                return parseInt(@debrisSize*@debrisSize*@debrisSize*percentFuel * @debrisDensity/@MAX_DENSITY * 10)
 
     @continueTravels = ()=>
         $scope.$emit('switchToModule', 'travel-screen');
