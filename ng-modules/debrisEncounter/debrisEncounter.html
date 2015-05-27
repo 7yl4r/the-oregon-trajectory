@@ -62,8 +62,7 @@
         </game-btn></li>
     </div>
     <div ng-show="debrisCtrl.step=='harvest'">
-        This appears to be the remains of communications satellite.
-        The old technology is not much of use to you here, but there is a small amount of fuel on board.
+        {{debrisCtrl.getHarvestText()}}
 
         <ul>
             <li>+{{debrisCtrl.debrisFuel}} fuel</li>

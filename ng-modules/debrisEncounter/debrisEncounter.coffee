@@ -76,6 +76,22 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
 
     @help = ()=>
         @step = 'help'
+
+    @getHarvestText = ()=>
+        # returns text describing the situation based on resources found
+        if @debrisDensity < 200
+            return "This is no more than a cloud of dust and gas. Probably remnants from a collision or else someone has already been here and collected all the good stuff."
+        else if @debrisDensity > 6000
+            return "As you approach the debris your readings confirm that there is no fuel on board, in fact, this is just a giant hunk of metal! You survey the debris for hints of it's origin but find no clues."
+        else 
+            debris_choices = ["communications satellite", "pioneer ship", "surveillance satellite"]
+            debris_type = debris_choices[Math.floor(Math.random() * debris_choices.length)]
+            if @debrisFuel == 0
+                return "This appears to be the remains of a " + debris_type + ". The technology is not much of use to you, and you find nothing else of use."
+            else if @debrisFuel > 0 && @debrisFuel < 500
+                return "This appears to be the remains of a " + debris_type + ". The technology is not much of use to you, but there is a small amount of fuel on board."
+            else
+                return "You've discovered someone's fuel stash. Who knows when (or if) they'll be back, so you collect what you can."
 ])
 
 module.exports = angular.module('debris-encounter').name
