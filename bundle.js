@@ -814,9 +814,29 @@ app.controller("debrisEncounterController", [
         return data.fuel += _this.debrisFuel;
       };
     })(this);
-    return this.help = (function(_this) {
+    this.help = (function(_this) {
       return function() {
         return _this.step = 'help';
+      };
+    })(this);
+    return this.getHarvestText = (function(_this) {
+      return function() {
+        var debris_choices, debris_type;
+        if (_this.debrisDensity < 200) {
+          return "This is no more than a cloud of dust and gas. Probably remnants from a collision or else someone has already been here and collected all the good stuff.";
+        } else if (_this.debrisDensity > 6000) {
+          return "As you approach the debris your readings confirm that there is no fuel on board, in fact, this is just a giant hunk of metal! You survey the debris for hints of it's origin but find no clues.";
+        } else {
+          debris_choices = ["communications satellite", "pioneer ship", "surveillance satellite"];
+          debris_type = debris_choices[Math.floor(Math.random() * debris_choices.length)];
+          if (_this.debrisFuel === 0) {
+            return "This appears to be the remains of a " + debris_type + ". The technology is not much of use to you, and you find nothing else of use.";
+          } else if (_this.debrisFuel > 0 && _this.debrisFuel < 500) {
+            return "This appears to be the remains of a " + debris_type + ". The technology is not much of use to you, but there is a small amount of fuel on board.";
+          } else {
+            return "You've discovered someone's fuel stash. Who knows when (or if) they'll be back, so you collect what you can.";
+          }
+        }
       };
     })(this);
   }
