@@ -85,7 +85,7 @@ app.controller("debrisEncounterController", ['data', '$scope', '$rootScope', (da
             return "As you approach the debris your readings confirm that there is no fuel on board, in fact, this is just a giant hunk of metal! You survey the debris for hints of it's origin but find no clues."
         else 
             debris_choices = ["communications satellite", "pioneer ship", "surveillance satellite"]
-            debris_type = debris_choices[Math.floor(Math.random() * myArray.length)]
+            debris_type = debris_choices[Math.floor(Math.random() * debris_choices.length)]
             if @debrisFuel == 0
                 return "This appears to be the remains of a " + debris_type + ". The technology is not much of use to you, and you find nothing else of use."
             else if @debrisFuel > 0 && @debrisFuel < 500
