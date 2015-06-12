@@ -421,6 +421,10 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
     }
 
     vm.exitModule = function(reason){
+        if(vm.engineSound.isPlaying) {
+          vm.engineSound.stop();
+        }
+
         if (vm.game) {
           game.fuel = vm.calcFuel();
           game.money = vm.calcCredits()
