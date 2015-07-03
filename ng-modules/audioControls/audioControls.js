@@ -10,7 +10,7 @@ app.directive("audioControls", function() {
     };
 });
 
-app.controller("audioController", function(){
+app.controller("audioController", ['$rootScope', function($rootScope){
     var vm = this;
     vm.muted = false;
 
@@ -18,11 +18,13 @@ app.controller("audioController", function(){
         if (vm.muted){
             Howler.unmute();
             vm.muted = false;
+            $rootScope.$broadcast('unMute');
         } else {
             Howler.mute();
             vm.muted = true;
+            $rootScope.$broadcast('mute');
         }
     }
-});
+}]);
 
 module.exports = angular.module('audio-controls').name;
