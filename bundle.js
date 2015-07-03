@@ -252,6 +252,7 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
     function(data, music, sounds, $scope, $rootScope, $filter) {
 
     var vm = this;
+    vm.muted = false;
     vm.nodule = new Nodule($rootScope, 'asteroid-mining-game', function(){
       $scope.$emit('changeMusicTo', music.asteroidMining);
 
@@ -264,6 +265,24 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
         update: vm.update,
         render: vm.render
       });
+
+      vm.game.sound.mute = vm.muted;  // mute new games if needed
+
+    });
+
+    $scope.$on('mute', function(){
+        // save choice for init game later
+        vm.muted = true;
+        // handle mute game while mining:
+        if (typeof vm.game != "undefined"){
+            vm.game.sound.mute = true;
+        }
+    });
+    $scope.$on('unMute', function(){
+        vm.muted = false;
+        if (typeof vm.game != "undefined") {
+            vm.game.sound.mute = false;
+        }
     });
 
     vm.preload = function() {
@@ -635,6 +654,10 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
     }
 
     vm.exitModule = function(reason){
+        if(vm.engineSound.isPlaying) {
+          vm.engineSound.stop();
+        }
+
         if (vm.game) {
           game.fuel = vm.calcFuel();
           game.money = vm.calcCredits()
@@ -709,7 +732,7 @@ app.directive("audioControls", function() {
     };
 });
 
-app.controller("audioController", function(){
+app.controller("audioController", ['$rootScope', function($rootScope){
     var vm = this;
     vm.muted = false;
 
@@ -717,12 +740,14 @@ app.controller("audioController", function(){
         if (vm.muted){
             Howler.unmute();
             vm.muted = false;
+            $rootScope.$broadcast('unMute');
         } else {
             Howler.mute();
             vm.muted = true;
+            $rootScope.$broadcast('mute');
         }
     }
-});
+}]);
 
 module.exports = angular.module('audio-controls').name;
 },{"angular":46,"howler":4}],10:[function(require,module,exports){
