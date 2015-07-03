@@ -1,4 +1,4 @@
-<div class="container" ng-app="shop" ng-controller="ShopController as shop">
+<div class="container shop" ng-app="shop" ng-controller="ShopController as shop">
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
@@ -38,11 +38,11 @@
                         {{shop.activeItem.description}}<br>
                     </div>
                     <div class="input-group">
-                            <span class="input-group-addon" style="line-height: 20%">
+                            <span class="input-group-addon">
                                 {{shop.activeItem.price | currency}} x</span>
                         <input type="text" id="{{shop.activeItem.key}}" class="form-control input-sm" placeholder="amount"/>
                     </div>
-                    <button class="btn btn-inverse item-buy" ng-click="shop.buy()">Trade</button>
+                    <button class="btn btn-primary item-buy" ng-click="shop.buy()">Trade</button>
                 </div>
             </div>
         </div>

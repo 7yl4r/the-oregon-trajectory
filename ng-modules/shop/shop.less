@@ -1,124 +1,125 @@
+.shop {
+  #game-info {
+    display: block;
+    width: 50%;
+  }
 
-#game-info {
-  display: block;
-  width: 50%;
-}
+  #date {
+    display: block;
+  }
 
-#date {
-  display: block;
-}
+  .info-container {
+    background-color: lighten(@body-bg, 9%);
+    margin: 1em auto;
+    padding: 0.5em;
+    border-radius: 1ch;
+  }
 
-.info-container {
-  background-color: #ECF0F1;
-  margin: 1em auto;
-  padding: 0.5em;
-  border-radius: 1ch;
-}
+  .info-container h4 {
+    margin: 0;
+  }
 
-.info-container h4 {
-  margin: 0;
-}
+  .shop-box {
+    background-color: lighten(@body-bg, 15%);
+    margin: 1em;
+    box-shadow: 0 0 10em 1px @brand-primary inset;
+    border-radius: 1ch;
+  }
 
-.shop-box {
-  background-color: #e6eaeb;
-  margin: 1em;
-  box-shadow: 0 0 10em 1px #BDC3C7 inset;
-  border-radius: 1ch;
-}
+  #store-display {
+    height: 12em;
+  }
 
-#store-display {
-  height: 12em;
-}
+  .flex-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+  }
 
-.flex-container {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-}
+  .showcase {
+    -webkit-order: 1;
+    order: 1;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: center;
+    align-self: center;
+    min-width: 15em;
+  }
 
-.showcase {
-  -webkit-order: 1;
-  order: 1;
-  -webkit-flex: 0 1 auto;
-  flex: 0 1 auto;
-  -webkit-align-self: center;
-  align-self: center;
-  min-width: 15em;
-}
+  .storefront {
+    -webkit-order: 2;
+    order: 2;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    display: inline-block;
+  }
 
-.storefront {
-  -webkit-order: 2;
-  order: 2;
-  -webkit-flex: 1 1 auto;
-  flex: 1 1 auto;
-  display: inline-block;
-}
+  .item-col {
+    min-width: 10em;
+  }
 
-.item-col {
-  min-width: 10em;
-}
+  .item-outer {
+    width: 100%;
+    margin: 0 auto;
+  }
 
-.item-outer {
-  width: 100%;
-  margin: 0 auto;
-}
+  .item-container {
+    width: 10em;
+    height: 10em;
+    margin: 1em auto;
+    padding: 0;
+    position: relative;
+    display: block;
+    border-radius: 1ch;
+  }
 
-.item-container {
-  width: 10em;
-  height: 10em;
-  margin: 1em auto;
-  padding: 0;
-  position: relative;
-  display: block;
-  border-radius: 1ch;
-}
+  .activeItem-container {
+    width: 20em;
+    margin: 1em auto;
+    padding: 0;
+    position: relative;
+    display: block;
+    border-radius: 1ch;
+  }
 
+  .container-shadow {
+    background-color: @body-bg;
+    box-shadow: 0.5em 0.5em 0.3em #82888c;
+  }
 
-.activeItem-container {
-  width: 10em;
-  margin: 1em auto;
-  padding: 0;
-  position: relative;
-  display: block;
-  border-radius: 1ch;
-}
+  .item-container-selected {
+    box-shadow: 0 0 3em 0.5em @brand-info;
+  }
 
-.container-shadow {
-  background-color: #ECF0F1;
-  box-shadow: 0.5em 0.5em 0.3em #82888c;
-}
+  .item-contents {
+    margin: 0 auto;
+    display: table;
+  }
 
-.item-container-selected {
-  box-shadow: 0 0 3em 0.5em #76A7CE;
-}
+  .item-name {
+    width: 100%;
+    font-size: 90%;
+    text-align: center;
+    display: block;
+  }
 
-.item-contents {
-  margin: 0 auto;
-  display: table;
-}
+  .item-image {
+    width: 50%;
+    margin: 0 auto;
+    display: block;
+  }
 
-.item-name {
-  width: 100%;
-  text-align: center;
-  display: block;
-}
+  .item-buy {
+    width: 100%;
+    margin: 0 auto;
+  }
 
-.item-image {
-  width: 50%;
-  margin: 0 auto;
-  display: block;
-}
-
-.item-buy {
-  width: 100%;
-  margin: 0 auto;
-}
-
-.item-description {
-  width: 100%;
-  font-size: 75%;
-  text-align: center;
-  padding: 0.1em;
-  display: block;
+  .item-description {
+    width: 100%;
+    font-size: 75%;
+    text-align: center;
+    padding: 0.1em;
+    display: block;
+  }
 }
