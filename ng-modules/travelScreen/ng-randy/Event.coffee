@@ -62,197 +62,196 @@ module.exports = class Event
                     'random'
                 )
             when SPRITE_TYPES.randomAsteroid
-                if Math.random() < .05  # 5% chance of potato asteroid
-                    fname = 'assets/sprites/asteroids/p0.png'
-                    dimensions = {
-                        w:149,
-                        h:185,
-                    }
-                else
-                    n_asteroids = 26.0  # actual count is this +1
-                    n = Math.round(Math.random()*n_asteroids)
-                    fname = 'assets/sprites/asteroids/' + n + '.png'
-                    switch n
-                        when 0
-                            dimensions = {
-                                w:400,
-                                h:300
-                            }
-                        when 1
-                            dimensions = {
-                                w:642,
-                                h:632
-                            }
-                            fname = 'assets/sprites/asteroids/1.png'
-                        when 2
-                            dimensions = {
-                                w: 353,
-                                h: 226
-                            }
-                        when 3
-                            dimensions = {
-                                w:402,
-                                h:303
-                            }
-                        when 4
-                            dimensions = {
-                                w: 99,
-                                h: 65
-                            }
-                        when 5
-                            dimensions = {
-                                w: 216,
-                                h: 178
-                            }
-                        when 6
-                            dimensions = {
-                                w: 832
-                                h: 432
-                            }
-                        when 7
-                            dimensions = {
-                                w: 800,
-                                h: 465
-                            }
-                        when 8
-                            dimensions = {
-                                w:507,
-                                h:400
-                            }
-                        when 9
-                            dimensions = {
-                                w:926,
-                                h: 400
-                            }
-                        when 10
-                            dimensions = {
-                                w:1011,
-                                h: 400
-                            }
-                        when 11
-                            dimensions = {
-                                w: 834,
-                                h: 400
-                            }
-                        when 12
-                            dimensions = {
-                                w: 529
-                                h: 400
-                            }
-                        when 13
-                            dimensions = {
-                                w: 922,
-                                h: 489
-                            }
-                        when 14
-                            dimensions = {
-                                w:432,
-                                h:432,
-                                max_frame: 12
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/sprites.png'
-                        when 15
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/01.png'
-                        when 16
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/02.png'
-                        when 17
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/03.png'
-                        when 18
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/04.png'
-                        when 19
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/05.png'
-                        when 20
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/06.png'
-                        when 21
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/07.png'
-                        when 22
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/08.png'
-                        when 23
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/09.png'
-                        when 24
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/10.png'
-                        when 25
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/11.png'
-                        when 26
-                            dimensions = {
-                                w: 432,
-                                h:432,
-                            }
-                            fname = 'assets/sprites/asteroids/rosetta/12.png'
-                        when 27
-                            dimensions = {
-                                w: 12,
-                                h: 12
-                            }
-                        when 28
-                            dimensions = {
-                                w:21,
-                                h:21
-                            }
-                        when 29
-                            dimensions = {
-                                w:30,
-                                h:31
-                            }
-                        when 30
-                            dimensions = {
-                                w:55,
-                                h:53
-                            }
-                        when 31
-                            dimensions = {
-                                w:48,
-                                h:42
-                            }
-                        when 32
-                            dimensions = {
-                                w: 18,
-                                h: 26
-                            }
+                n_asteroids = 33.0  # actual count is this +1
+                n = Math.round(Math.random()*n_asteroids)
+                fname = 'assets/sprites/asteroids/' + n + '.png'
+                switch n
+                    when 0
+                        dimensions = {
+                            w:400,
+                            h:300
+                        }
+                    when 1
+                        dimensions = {
+                            w:400,
+                            h:394
+                        }
+                        fname = 'assets/sprites/asteroids/1.png'
+                    when 2
+                        dimensions = {
+                            w: 400,
+                            h: 256
+                        }
+                    when 3
+                        dimensions = {
+                            w:402,
+                            h:303
+                        }
+                    when 4
+                        dimensions = {
+                            w: 300,
+                            h: 197
+                        }
+                    when 5
+                        dimensions = {
+                            w: 300,
+                            h: 247
+                        }
+                    when 6
+                        dimensions = {
+                            w: 400,
+                            h: 208
+                        }
+                    when 7
+                        dimensions = {
+                            w: 400,
+                            h: 233
+                        }
+                    when 8
+                        dimensions = {
+                            w:400,
+                            h:316
+                        }
+                    when 9
+                        dimensions = {
+                            w: 400,
+                            h: 173
+                        }
+                    when 10
+                        dimensions = {
+                            w: 400,
+                            h: 158
+                        }
+                    when 11
+                        dimensions = {
+                            w: 400,
+                            h: 192
+                        }
+                    when 12
+                        dimensions = {
+                            w: 400
+                            h: 302
+                        }
+                    when 13
+                        dimensions = {
+                            w: 400,
+                            h: 212
+                        }
+                    when 14
+                        dimensions = {
+                            w:432,
+                            h:432,
+                            max_frame: 12
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/sprites.png'
+                    when 15
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/01.png'
+                    when 16
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/02.png'
+                    when 17
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/03.png'
+                    when 18
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/04.png'
+                    when 19
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/05.png'
+                    when 20
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/06.png'
+                    when 21
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/07.png'
+                    when 22
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/08.png'
+                    when 23
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/09.png'
+                    when 24
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/10.png'
+                    when 25
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/11.png'
+                    when 26
+                        dimensions = {
+                            w: 432,
+                            h:432,
+                        }
+                        fname = 'assets/sprites/asteroids/rosetta/12.png'
+                    when 27
+                        dimensions = {
+                            w: 300,
+                            h: 300
+                        }
+                    when 28
+                        dimensions = {
+                            w:370,
+                            h:370
+                        }
+                    when 29
+                        dimensions = {
+                            w:392,
+                            h:405
+                        }
+                    when 30
+                        dimensions = {
+                            w:400,
+                            h:385
+                        }
+                    when 31
+                        dimensions = {
+                            w:400,
+                            h:350
+                        }
+                    when 32
+                        dimensions = {
+                            w: 208,
+                            h: 300
+                        }
+                    when 33
+                        fname = 'assets/sprites/asteroids/p0.png'  # POTATO!
+                        dimensions = {
+                            w:362,
+                            h:450,
+                        }
 
                 dimensions.r = "random"
                 dimensions.scale = "random"
