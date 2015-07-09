@@ -2402,29 +2402,229 @@ module.exports = Event = (function() {
           spin: .001
         }, -1000, 'random');
       case SPRITE_TYPES.randomAsteroid:
-        if (Math.random() < .05) {
-          fname = 'assets/sprites/asteroids/p0.png';
-          dimensions = {
-            w: 149,
-            h: 185
-          };
-        } else {
-          n_asteroids = 1.0;
-          n = Math.round(Math.random() * n_asteroids);
-          switch (n) {
-            case 0:
-              dimensions = {
-                w: 400,
-                h: 300
-              };
-              break;
-            case 1:
-              dimensions = {
-                w: 642,
-                h: 632
-              };
-          }
-          fname = 'assets/sprites/asteroids/' + n + '.png';
+        n_asteroids = 33.0;
+        n = Math.round(Math.random() * n_asteroids);
+        fname = 'assets/sprites/asteroids/' + n + '.png';
+        switch (n) {
+          case 0:
+            dimensions = {
+              w: 400,
+              h: 300
+            };
+            break;
+          case 1:
+            dimensions = {
+              w: 400,
+              h: 394
+            };
+            fname = 'assets/sprites/asteroids/1.png';
+            break;
+          case 2:
+            dimensions = {
+              w: 400,
+              h: 256
+            };
+            break;
+          case 3:
+            dimensions = {
+              w: 402,
+              h: 303
+            };
+            break;
+          case 4:
+            dimensions = {
+              w: 300,
+              h: 197
+            };
+            break;
+          case 5:
+            dimensions = {
+              w: 300,
+              h: 247
+            };
+            break;
+          case 6:
+            dimensions = {
+              w: 400,
+              h: 208
+            };
+            break;
+          case 7:
+            dimensions = {
+              w: 400,
+              h: 233
+            };
+            break;
+          case 8:
+            dimensions = {
+              w: 400,
+              h: 316
+            };
+            break;
+          case 9:
+            dimensions = {
+              w: 400,
+              h: 173
+            };
+            break;
+          case 10:
+            dimensions = {
+              w: 400,
+              h: 158
+            };
+            break;
+          case 11:
+            dimensions = {
+              w: 400,
+              h: 192
+            };
+            break;
+          case 12:
+            dimensions = {
+              w: 400,
+              h: 302
+            };
+            break;
+          case 13:
+            dimensions = {
+              w: 400,
+              h: 212
+            };
+            break;
+          case 14:
+            dimensions = {
+              w: 432,
+              h: 432,
+              max_frame: 12
+            };
+            fname = 'assets/sprites/asteroids/rosetta/sprites.png';
+            break;
+          case 15:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/01.png';
+            break;
+          case 16:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/02.png';
+            break;
+          case 17:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/03.png';
+            break;
+          case 18:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/04.png';
+            break;
+          case 19:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/05.png';
+            break;
+          case 20:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/06.png';
+            break;
+          case 21:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/07.png';
+            break;
+          case 22:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/08.png';
+            break;
+          case 23:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/09.png';
+            break;
+          case 24:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/10.png';
+            break;
+          case 25:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/11.png';
+            break;
+          case 26:
+            dimensions = {
+              w: 432,
+              h: 432
+            };
+            fname = 'assets/sprites/asteroids/rosetta/12.png';
+            break;
+          case 27:
+            dimensions = {
+              w: 300,
+              h: 300
+            };
+            break;
+          case 28:
+            dimensions = {
+              w: 370,
+              h: 370
+            };
+            break;
+          case 29:
+            dimensions = {
+              w: 392,
+              h: 405
+            };
+            break;
+          case 30:
+            dimensions = {
+              w: 400,
+              h: 385
+            };
+            break;
+          case 31:
+            dimensions = {
+              w: 400,
+              h: 350
+            };
+            break;
+          case 32:
+            dimensions = {
+              w: 208,
+              h: 300
+            };
+            break;
+          case 33:
+            fname = 'assets/sprites/asteroids/p0.png';
+            dimensions = {
+              w: 362,
+              h: 450
+            };
         }
         dimensions.r = "random";
         dimensions.scale = "random";
