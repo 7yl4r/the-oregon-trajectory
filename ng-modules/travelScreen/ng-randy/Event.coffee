@@ -223,6 +223,36 @@ module.exports = class Event
                                 h:432,
                             }
                             fname = 'assets/sprites/asteroids/rosetta/12.png'
+                        when 27
+                            dimensions = {
+                                w: 12,
+                                h: 12
+                            }
+                        when 28
+                            dimensions = {
+                                w:21,
+                                h:21
+                            }
+                        when 29
+                            dimensions = {
+                                w:30,
+                                h:31
+                            }
+                        when 30
+                            dimensions = {
+                                w:55,
+                                h:53
+                            }
+                        when 31
+                            dimensions = {
+                                w:48,
+                                h:42
+                            }
+                        when 32
+                            dimensions = {
+                                w: 18,
+                                h: 26
+                            }
 
                 dimensions.r = "random"
                 dimensions.scale = "random"
