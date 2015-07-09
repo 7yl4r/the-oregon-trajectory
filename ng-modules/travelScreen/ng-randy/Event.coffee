@@ -69,7 +69,7 @@ module.exports = class Event
                         h:185,
                     }
                 else
-                    n_asteroids = 1.0  # +1
+                    n_asteroids = 2.0  # +1
                     n = Math.round(Math.random()*n_asteroids)
                     switch n
                         when 0
@@ -77,12 +77,20 @@ module.exports = class Event
                                 w:400,
                                 h:300
                             }
+                            fname = 'assets/sprites/asteroids/0.png'
                         when 1
                             dimensions = {
                                 w:642,
                                 h:632
                             }
-                    fname = 'assets/sprites/asteroids/' + n + '.png'
+                            fname = 'assets/sprites/asteroids/1.png'
+                        when 2
+                            dimensions = {
+                                w:432,
+                                h:432,
+                                max_frame: 12
+                            }
+                            fname = 'assets/sprites/asteroids/rosetta/sprites.png'
                 dimensions.r = "random"
                 dimensions.scale = "random"
                 dimensions.spin = "random"
