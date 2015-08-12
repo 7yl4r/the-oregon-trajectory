@@ -2,6 +2,7 @@ require('angular')
 Location = require('./Location.coffee')
 Sprite = require('./../travelScreen/Sprite.coffee')
 Howl = require('howler');
+Reputation = require('./Reputation.coffee')
 
 # stations:
 iss = require('../../assets/stations/iss/spriteSpec.js')
@@ -119,6 +120,8 @@ class Game
                 "maneuver"
             )
         ]
+
+        @reputation = new Reputation();
 
         @distanceTraveled = 0
         @displayDistanceTraveled = 0

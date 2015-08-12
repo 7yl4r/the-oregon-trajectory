@@ -55,7 +55,10 @@ app.controller("situationController", ['data', 'sounds', '$scope', '$rootScope',
         if (typeof choice.next === 'string') {
           $scope.currentStep = choice.next;
         } else if (typeof choice.next === 'function') {
-          choice.next(vm.data);
+          var ret = choice.next(vm.data);
+          if ( typeof ret === "string"){
+              $scope.currentStep = ret;
+          } // else function did not return string, must be end of situation
         } else {
           alert("can't handle next of type "+(typeof choice.next)+" and value "+choice.next);
         }
