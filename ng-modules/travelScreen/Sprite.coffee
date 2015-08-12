@@ -77,7 +77,7 @@ module.exports = class Sprite
                     @r = nameOrJSON.r or 0
                     
                 if nameOrJSON.spin == "random"
-                    @spin = Math.random()*Math.PI*0.003  # max of pi/50
+                    @spin = (Math.random()*0.006 - 0.003)*Math.PI  # max of +/- pi/50
                 else 
                     @spin = nameOrJSON.spin or 0
                 return
