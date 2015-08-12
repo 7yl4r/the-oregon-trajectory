@@ -7,13 +7,24 @@ module.exports = {
         choices: [
             {
                 name: "Investigate the signal",
-                next:"oldShip"
+                next:"transit"
             },{
                 name: "Ignore the signal and continue on your current path",
                 next:"wonder"
             }
         ]
     },
+    transit: {
+        story: "You expend 50 fuel adjusting your course to pass nearer to the signal",
+        choices: [
+            {
+                name: "continue",
+                next: (gameData)->
+                    gameData.fuel -= 50
+                    return "oldShip"
+            }
+        ]
+    }
     oldShip: {
         story: "You found a ship, but it appears to have been abandoned long ago. You salvage some scrap, 300 fuel and 200 food",
         choices: [
