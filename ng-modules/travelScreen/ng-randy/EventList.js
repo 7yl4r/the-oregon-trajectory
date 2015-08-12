@@ -19,7 +19,6 @@ Here is a breakdown of the event attributes:
 
 PHANTOM_SIGNAL = require("./situations/phantomSignal.coffee");
 MEDICINE = require("./situations/medicine.coffee");
-MEDICINE2 = require("./situations/medicine2.coffee");
 SOLAR_FLARE = require("./situations/solarFlare.coffee");
 
 module.exports = [
@@ -89,17 +88,6 @@ module.exports = [
             "args": {
                 "moduleName": "situation",
                 "moduleArgs": SOLAR_FLARE
-            }
-        }
-    },{
-        "name": "medicine-two",
-        "criteria":{},
-        "chance": .1,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "situation",
-                "moduleArgs": MEDICINE2
             }
         }
     }
