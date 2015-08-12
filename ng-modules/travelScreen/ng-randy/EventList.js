@@ -22,7 +22,6 @@ PHANTOM_SIGNAL2 = require("./situations/phantomSignal2.coffee");
 MEDICINE = require("./situations/medicine.coffee");
 MEDICINE2 = require("./situations/medicine2.coffee");
 SOLAR_FLARE = require("./situations/solarFlare.coffee");
-SOLAR_FLARE2 = require("./situations/solarFlare2.coffee");
 
 module.exports = [
     {
@@ -113,28 +112,6 @@ module.exports = [
             "args": {
                 "moduleName": "situation",
                 "moduleArgs": MEDICINE2
-            }
-        }
-    },{
-        "name": "solar-flare-two",
-        "criteria":{},
-        "chance": .1,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "situation",
-                "moduleArgs": SOLAR_FLARE2
-            }
-        }
-    },{
-        "name": "solar-flare-two",
-        "criteria":{},
-        "chance": .1,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "situation",
-                "moduleArgs": require("./situations/repairs.coffee")
             }
         }
     }
