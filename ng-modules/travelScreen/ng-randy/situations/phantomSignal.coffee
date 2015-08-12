@@ -21,9 +21,18 @@ module.exports = {
                 name: "continue",
                 next: (gameData)->
                     gameData.fuel -= 50
-                    return "oldShip"
+                    chance = Math.random()
+                    if chance < .2
+                        return "oldShip"
+                    else if chance < .4
+                        return "oldship2"
+                    else
+                        return "nothing"
             }
         ]
+    }
+    nothing: {
+        story: "As you grow closer your instruments resolve the anomaly; looks like it was just background radiation after all."
     }
     oldShip: {
         story: "You found a ship, but it appears to have been abandoned long ago. You salvage some scrap, 300 fuel and 200 food",
@@ -33,6 +42,18 @@ module.exports = {
                 next: (gameData)->
                     gameData.fuel += 300
                     gameData.food += 200
+                    gameData.scope.$broadcast('switchToModule', 'travel-screen')
+            }
+        ]
+    },
+    oldShip2: {
+        story: "It wasn’t background radiation at all – it’s a small ship! They’ve been trying to signal for help for almost a week. They give you all 500 of their food and 1000 fuel in exchange for a ride to the next station.",
+        choices: [
+            {
+                name: "continue",
+                next: (gameData)->
+                    gameData.fuel += 500
+                    gameData.food += 1000
                     gameData.scope.$broadcast('switchToModule', 'travel-screen')
             }
         ]
