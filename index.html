@@ -59,16 +59,16 @@
                 </div>
                 <form class="col-md-2">
                     switch to module <br>
-                    <input id='module-choice' ng-model="moduleChoice" type="text"/>
-                    <input type="submit" ng-click="$emit('switchToModule', moduleChoice)"><br>
+                    <input id='module-choice' class="form-control" ng-model="moduleChoice" type="text"/>
+                    <input type="submit"  class="btn-primary" ng-click="$emit('switchToModule', moduleChoice)"><br>
                 </form>
                 <form class="col-md-2">
                     force event <br>
-                    <input id='event-choice' ng-model="eventChoice" type="text"/>
-                    <input type="submit" ng-click="$broadcast('forceEvent', eventChoice)"><br>
+                    <input id='event-choice' class="form-control" ng-model="eventChoice" type="text"/>
+                    <input type="submit"  class="btn-primary" ng-click="$broadcast('forceEvent', eventChoice)"><br>
                 </form>
                 <div class="col-md-1">
-                    <button onclick='game.GODMODE()'>god mode</button>
+                    <button class="btn-primary" onclick='game.GODMODE()'>god mode</button>
                 </div>
                 <div class="col-md-1">
                     event bypass: <input type="checkbox"
