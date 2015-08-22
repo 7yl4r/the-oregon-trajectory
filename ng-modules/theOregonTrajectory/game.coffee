@@ -228,6 +228,17 @@ class Game
         @crewHealth = [BIG_NUMBER, BIG_NUMBER]
         @fuel = BIG_NUMBER
 
+    getCurrentEvent: ()->
+        # returns most recently triggered event/location
+        # returns null if no event yet triggered
+        lastName = @visited[@visited.length-1]
+        for location in @locations
+            if location.name == lastName
+                return location
+            # else keep looking
+        # else
+        return null
+
     # === "private" methods ===
     _getRemainingLocations: ()->
         # returns array of locations not yet reached
