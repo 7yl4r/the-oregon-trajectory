@@ -3,6 +3,7 @@ Location = require('./Location.coffee')
 Sprite = require('./../travelScreen/Sprite.coffee')
 Howl = require('howler');
 Reputation = require('./Reputation.coffee')
+Score = require('./Score.coffee')
 
 # stations:
 iss = require('../../assets/stations/iss/spriteSpec.js')
@@ -122,6 +123,7 @@ class Game
         ]
 
         @reputation = new Reputation();
+        @score = new Score();
 
         @distanceTraveled = 0
         @displayDistanceTraveled = 0
@@ -184,6 +186,10 @@ class Game
         else  # just update the distance
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
             @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance * @nextWaypoint.travelRate)
+
+    updateScore: ()->
+        # updates the score
+        @score.updateScore(@reputation, @shipHealth, @money, @rations, @fuel, null);  # TODO: should pass ship object (DNE)
 
     hurtCrew: (i, amnt)->
         # hurts crewmember i given amnt (and checks for death)

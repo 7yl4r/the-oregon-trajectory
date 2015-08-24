@@ -25,7 +25,16 @@ module.exports = class Reputation
         @_checkFaction(factionName)
         @_reputations[factionName].help()
 
+    getAllReputationValues: ()->
+        # returns array of reputation values (between -1, 1)
+        values = []
+        for reputation in @_reputations
+            values.push(getRepWith(reputation.getRep()))
+        return values
+
     getRepWith: (factionName)->
+        # returns reputation value for given faction.
+        # value between (-1, 1)
         @_checkFaction(factionName)
         return @_reputations[factionName].getRep()
 
