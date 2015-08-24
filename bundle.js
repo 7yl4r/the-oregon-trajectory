@@ -156,7 +156,7 @@ var isOldBrowser;
 
 
 
-},{"angular":44,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":46,"game-over":13,"header-navbar":17,"howler":4,"leaderboard":14,"main-menu":15,"maneuver-screen":16,"ngTouch":43,"ship-customizer":20,"shop":21,"situation":23,"splash-header":25,"trader":31,"travel-screen":40,"ui.bootstrap":42,"you-win":41}],2:[function(require,module,exports){
+},{"angular":45,"app-footer":5,"asteroid-mining":6,"audio-controls":9,"debris-encounter":10,"example-module":11,"fastclick":47,"game-over":13,"header-navbar":17,"howler":4,"leaderboard":14,"main-menu":15,"maneuver-screen":16,"ngTouch":44,"ship-customizer":20,"shop":21,"situation":23,"splash-header":25,"trader":32,"travel-screen":41,"ui.bootstrap":43,"you-win":42}],2:[function(require,module,exports){
 module.exports = {
     sheet: '/assets/stations/iss/sheet.png',
     dimensions: {
@@ -211,7 +211,7 @@ module.exports = angular.module('app-footer').name;
 
 
 
-},{"angular":44}],6:[function(require,module,exports){
+},{"angular":45}],6:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 Phaser = require('phaser');
@@ -286,9 +286,7 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
     });
 
     vm.preload = function() {
-      // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
-      // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
-      vm.game.load.image('a3', baseUrl+'assets/sprites/asteroids/p0.png');
+      vm.game.load.image('asteroid', data.getCurrentEvent().sprite.sheet.src);
       vm.game.load.image('a-small', baseUrl+'assets/sprites/asteroids/p0-small.png');
       vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
@@ -381,11 +379,11 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
 
       // the asteroid
       vm.asteroidSize = data.encounter_object.sprite.scale;  // 0.5;
-      vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
+      vm.ASTEROID_SHRINK = 0.005;  // amount asteroid decreases in size with each hit
       vm.asteroid = vm.game.add.sprite(
         rnd(w*2/3.0, w*9/10.0),
         rnd(h/10.0, h*9/10.0),
-        'a3');
+        'asteroid');
       vm.asteroid.anchor.set(0.5, 0.5);
       vm.asteroid.scale.set(vm.asteroidSize, vm.asteroidSize);
       vm.asteroid.rotateAngle = vm.game.rnd.realInRange(-2, 2);
@@ -546,7 +544,7 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
                     break;
             }
 
-            var enemy = vm.asteroids.create(x, y, "a3");
+            var enemy = vm.asteroids.create(x, y, "asteroid");
             enemy.scale = { x: 0.5, y: 0.5 };
             enemy.moveX = vm.game.rnd.integerInRange(-2, 2);
             while (enemy.moveX == 0) {
@@ -676,7 +674,7 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
 
 module.exports = angular.module('asteroid-mining').name;
 
-},{"angular":44,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":28,"phaser":47}],7:[function(require,module,exports){
+},{"angular":45,"mining-dialog-finish":7,"mining-dialog-start":8,"nodule":28,"phaser":48}],7:[function(require,module,exports){
 
 
 module.exports = function (stats, callback) {
@@ -750,7 +748,7 @@ app.controller("audioController", ['$rootScope', function($rootScope){
 }]);
 
 module.exports = angular.module('audio-controls').name;
-},{"angular":44,"howler":4}],10:[function(require,module,exports){
+},{"angular":45,"howler":4}],10:[function(require,module,exports){
 var Nodule, app;
 
 require('angular');
@@ -871,7 +869,7 @@ module.exports = angular.module('debris-encounter').name;
 
 
 
-},{"angular":44,"game-btn":12,"nodule":28}],11:[function(require,module,exports){
+},{"angular":45,"game-btn":12,"nodule":28}],11:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -908,7 +906,7 @@ app.controller("exampleController", ['data', '$scope', '$rootScope', function(da
 
 // this is needed to connect with the main app.
 module.exports = angular.module('example-module').name;
-},{"angular":44,"nodule":28}],12:[function(require,module,exports){
+},{"angular":45,"nodule":28}],12:[function(require,module,exports){
 require('angular');
 require('howler');
 
@@ -936,7 +934,7 @@ app.controller("gameBtnController", ['data', 'sounds', '$scope', '$rootScope', f
 }]);
 
 module.exports = angular.module('game-btn').name;
-},{"angular":44,"game":30,"howler":4}],13:[function(require,module,exports){
+},{"angular":45,"game":31,"howler":4}],13:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 
@@ -957,6 +955,7 @@ app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', 'sounds', 'musi
 
     vm.onEnter = function(){
         $scope.$emit('changeMusicTo', music.losing);
+        data.updateScore();
     }
     vm.nodule = Nodule($rootScope, 'game-over', vm.onEnter);
 
@@ -968,7 +967,7 @@ app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', 'sounds', 'musi
 
 module.exports = angular.module('game-over').name;
 
-},{"angular":44,"game":30,"nodule":28}],14:[function(require,module,exports){
+},{"angular":45,"game":31,"nodule":28}],14:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');  // for nodule helpers
 
@@ -1009,7 +1008,7 @@ app.controller("leaderboardController", ['leaderboard', 'data', '$scope', '$root
 }]);
 
 module.exports = angular.module('leaderboard').name;
-},{"angular":44,"nodule":28,"score":19}],15:[function(require,module,exports){
+},{"angular":45,"nodule":28,"score":19}],15:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 
@@ -1060,7 +1059,7 @@ app.controller("mainMenuController", ['data', 'music', 'sounds', '$scope', '$roo
 
 module.exports = angular.module('main-menu').name;
 
-},{"angular":44,"game":30,"game-btn":12,"learn-about-trajectory":22,"nodule":28}],16:[function(require,module,exports){
+},{"angular":45,"game":31,"game-btn":12,"learn-about-trajectory":22,"nodule":28}],16:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('maneuver-screen', []);
@@ -1091,7 +1090,7 @@ app.controller('ManeuverScreenCtrl', function($scope){
 
 module.exports = angular.module('maneuver-screen').name;
 
-},{"angular":44}],17:[function(require,module,exports){
+},{"angular":45}],17:[function(require,module,exports){
 require('angular');
 
 
@@ -1115,7 +1114,7 @@ app.controller("headerController", ['$http', 'data', function($http, data) {
 }]);
 
 module.exports = angular.module('header-navbar').name;
-},{"angular":44,"game":30}],18:[function(require,module,exports){
+},{"angular":45,"game":31}],18:[function(require,module,exports){
 /*
  angular directive: repeat action while mouse is clicked down for a long period of time
  and until the mouse is released.
@@ -1204,7 +1203,7 @@ app.directive('ngHold', [function () {
 }]);
 
 module.exports = angular.module('directives/ngHold').name;
-},{"angular":44}],19:[function(require,module,exports){
+},{"angular":45}],19:[function(require,module,exports){
 
 require('angular')
 
@@ -1316,7 +1315,7 @@ app.factory('leaderboard', ['$http', function($http) {
 
 module.exports = angular.module('score').name
 
-},{"angular":44}],20:[function(require,module,exports){
+},{"angular":45}],20:[function(require,module,exports){
 var Nodule, Sprite, app;
 
 require('angular');
@@ -1377,7 +1376,7 @@ module.exports = angular.module('ship-customizer').name;
 
 
 
-},{"../travelScreen/Sprite.coffee":32,"angular":44,"game":30,"game-btn":12,"nodule":28}],21:[function(require,module,exports){
+},{"../travelScreen/Sprite.coffee":33,"angular":45,"game":31,"game-btn":12,"nodule":28}],21:[function(require,module,exports){
 require('angular');
 Howl = require('howler');
 Nodule = require('nodule');
@@ -1536,7 +1535,7 @@ app.controller("ShopController", ['$scope', '$rootScope', 'data', 'sounds', func
 
 module.exports = angular.module('shop').name;
 
-},{"angular":44,"game":30,"game-btn":12,"howler":4,"ng-hold":18,"nodule":28}],22:[function(require,module,exports){
+},{"angular":45,"game":31,"game-btn":12,"howler":4,"ng-hold":18,"nodule":28}],22:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "<h3>Oregon Trajectory Info</h3> The year is 2050 and you are tasked with a mission called Oregon, named after the Oregon Trail of the 1800s, to go to Jupiter’s moon Europa. NASA scientists discovered that Europa has signs of water and organic molecules such as methane. They believe life is under the surface of Europa and you’re going to find it!",
@@ -1641,7 +1640,7 @@ app.controller("situationController", ['data', 'sounds', '$scope', '$rootScope',
 
 module.exports = angular.module('situation').name;
 
-},{"angular":44,"game":30,"nodule":28}],24:[function(require,module,exports){
+},{"angular":45,"game":31,"nodule":28}],24:[function(require,module,exports){
 require('angular');
 
 var app = angular.module('social-button-directive', []);
@@ -1688,7 +1687,7 @@ app.directive("socialButtons", function() {
 });
 
 module.exports = angular.module('social-button-directive').name;
-},{"angular":44}],25:[function(require,module,exports){
+},{"angular":45}],25:[function(require,module,exports){
 require('angular');
 
 var app = angular.module(
@@ -1706,7 +1705,7 @@ app.directive("splashHeader", function() {
 });
 
 module.exports = angular.module('splash-header').name;
-},{"angular":44,"social-button-directive":24}],26:[function(require,module,exports){
+},{"angular":45,"social-button-directive":24}],26:[function(require,module,exports){
 var FactionRep;
 
 module.exports = FactionRep = (function() {
@@ -1839,7 +1838,7 @@ module.exports = Location = (function() {
 
 
 
-},{"./../travelScreen/Sprite.coffee":32}],28:[function(require,module,exports){
+},{"./../travelScreen/Sprite.coffee":33}],28:[function(require,module,exports){
 var Nodule,
   slice = [].slice;
 
@@ -1906,6 +1905,17 @@ module.exports = Reputation = (function() {
     return this._reputations[factionName].help();
   };
 
+  Reputation.prototype.getAllReputationValues = function() {
+    var i, len, ref, reputation, values;
+    values = [];
+    ref = this._reputations;
+    for (i = 0, len = ref.length; i < len; i++) {
+      reputation = ref[i];
+      values.push(getRepWith(reputation.getRep()));
+    }
+    return values;
+  };
+
   Reputation.prototype.getRepWith = function(factionName) {
     this._checkFaction(factionName);
     return this._reputations[factionName].getRep();
@@ -1926,7 +1936,78 @@ module.exports = Reputation = (function() {
 
 
 },{"./FactionRep.coffee":26}],30:[function(require,module,exports){
-var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, Howl, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Reputation, Sprite, app, iss, temp_marker;
+var DISTANCE_CONVERSION, HEALTH_CONVERSION, REPUTATION_CONVERSION, SPACECOIN_CONVERSION, Score;
+
+REPUTATION_CONVERSION = 100;
+
+HEALTH_CONVERSION = 1000;
+
+SPACECOIN_CONVERSION = 1 / 10;
+
+DISTANCE_CONVERSION = 1000;
+
+module.exports = Score = (function() {
+  function Score() {
+    this.totalScore = this.repuationScore = this.healthScore = this.wealthScore = this.distanceScore = this.bonusScore = 0;
+  }
+
+  Score.prototype._recalcScore = function() {
+    return this.totalScore = this.reputationScore + this.healthScore + this.wealthScore + this.bonusScore + this.distanceScore;
+  };
+
+  Score.prototype.updateScore = function(distance, reputation, shipHealth, spaceCoin, rations, fuel, ship) {
+    this.updateReputationScore(reputation);
+    this.updateHealthScore(shipHealth);
+    this.updateWealthScore(spaceCoin, rations, fuel, ship);
+    return this.updateDistanceScore(distance);
+  };
+
+  Score.prototype.updateDistanceScore = function(distance) {
+    this.distanceScore = Math.round(distance.toString().length * DISTANCE_CONVERSION);
+    return this._recalcScore();
+  };
+
+  Score.prototype.updateReputationScore = function(reputation) {
+    var i, len, ref, rep;
+    this.reputationScore = 0;
+    ref = reputation.getAllReputationValues();
+    for (i = 0, len = ref.length; i < len; i++) {
+      rep = ref[i];
+      this.reputationScore += rep * REPUTATION_CONVERSION;
+    }
+    this.reputationScore = Math.round(this.reputationScore);
+    return this._recalcScore();
+  };
+
+  Score.prototype.updateHealthScore = function(shipHealth) {
+    var healthScore;
+    this.healthScore = (shipHealth - 1) * HEALTH_CONVERSION;
+    if (this.healthScore < 0) {
+      healthScore = 0;
+    }
+    this.healthScore = Math.round(this.healthScore);
+    return this._recalcScore();
+  };
+
+  Score.prototype.updateWealthScore = function(spaceCoin, rations, fuel, ship) {
+    this.wealthScore = (rations + fuel + spaceCoin) * SPACECOIN_CONVERSION;
+    this.wealthScore = Math.round(this.wealthScore);
+    return this._recalcScore();
+  };
+
+  Score.prototype.addBonus = function(points) {
+    this.bonusScore += points;
+    return this._recalcScore();
+  };
+
+  return Score;
+
+})();
+
+
+
+},{}],31:[function(require,module,exports){
+var AU_2_KM, CERES_DIST_AU, DIST_CERES, DIST_CERES_MANU, DIST_EUROPA, DIST_EUROPA_MANU, DIST_ISS, DIST_MARS, DIST_MARS_MANU, DIST_MOON, DIST_MOON_MANU, DIST_PIX, EUROPA_DIST_AU, Game, Howl, ISS_DIST_AU, Location, MARS_DIST_AU, MOON_DIST_AU, PIX_2_AU_CERES, PIX_2_AU_EUROPA, PIX_2_AU_ISS, PIX_2_AU_MARS, PIX_2_AU_MOON, Reputation, Score, Sprite, app, iss, temp_marker;
 
 require('angular');
 
@@ -1937,6 +2018,8 @@ Sprite = require('./../travelScreen/Sprite.coffee');
 Howl = require('howler');
 
 Reputation = require('./Reputation.coffee');
+
+Score = require('./Score.coffee');
 
 iss = require('../../assets/stations/iss/spriteSpec.js');
 
@@ -2011,6 +2094,7 @@ Game = (function() {
     })(this);
     this.locations = [new Location("iss", DIST_ISS, PIX_2_AU_ISS, "station", shopFunc, new Sprite(this.gameDir + iss.sheet, iss.dimensions, -1000, 'random')), new Location("moon-maneuver", DIST_MOON_MANU, PIX_2_AU_MOON, "maneuver"), new Location("moon", DIST_MOON, PIX_2_AU_MOON, "station", shopFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("mars-maneuver", DIST_MARS_MANU, PIX_2_AU_MARS, "maneuver"), new Location("mars", DIST_MARS, PIX_2_AU_MARS, "station", shopFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("ceres-maneuver", DIST_CERES_MANU, PIX_2_AU_CERES, "maneuver"), new Location("ceres", DIST_CERES, PIX_2_AU_CERES, "station", shopFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("europa-maneuver", DIST_EUROPA_MANU, PIX_2_AU_EUROPA, "maneuver"), new Location("jupiter", DIST_EUROPA - DIST_MOON, PIX_2_AU_EUROPA - PIX_2_AU_MOON, "maneuver"), new Location("europa", DIST_EUROPA, PIX_2_AU_EUROPA, "station", winFunc, new Sprite(this.gameDir + temp_marker.sheet, temp_marker.dimensions, -1000, 'random')), new Location("END_OF_UNIVERSE", DIST_EUROPA + DIST_ISS, PIX_2_AU_EUROPA + PIX_2_AU_ISS, "maneuver")];
     this.reputation = new Reputation();
+    this.score = new Score();
     this.distanceTraveled = 0;
     this.displayDistanceTraveled = 0;
     this.crewHealth = [100, 100];
@@ -2064,6 +2148,10 @@ Game = (function() {
     }
   };
 
+  Game.prototype.updateScore = function() {
+    return this.score.updateScore(this.distanceTraveled, this.reputation, this.shipHealth, this.money, this.rations, this.fuel, null);
+  };
+
   Game.prototype.hurtCrew = function(i, amnt) {
     amnt = Math.round(amnt);
     this.crewHealth[i] -= amnt;
@@ -2108,6 +2196,19 @@ Game = (function() {
     BIG_NUMBER = 99999999999;
     this.crewHealth = [BIG_NUMBER, BIG_NUMBER];
     return this.fuel = BIG_NUMBER;
+  };
+
+  Game.prototype.getCurrentEvent = function() {
+    var j, lastName, len, location, ref;
+    lastName = this.visited[this.visited.length - 1];
+    ref = this.locations;
+    for (j = 0, len = ref.length; j < len; j++) {
+      location = ref[j];
+      if (location.name === lastName) {
+        return location;
+      }
+    }
+    return null;
   };
 
   Game.prototype._getRemainingLocations = function() {
@@ -2230,7 +2331,7 @@ module.exports = angular.module('game').name;
 
 
 
-},{"../../assets/stations/iss/spriteSpec.js":2,"../../assets/stations/marker1/spriteSpec.js":3,"./../travelScreen/Sprite.coffee":32,"./Location.coffee":27,"./Reputation.coffee":29,"angular":44,"howler":4}],31:[function(require,module,exports){
+},{"../../assets/stations/iss/spriteSpec.js":2,"../../assets/stations/marker1/spriteSpec.js":3,"./../travelScreen/Sprite.coffee":33,"./Location.coffee":27,"./Reputation.coffee":29,"./Score.coffee":30,"angular":45,"howler":4}],32:[function(require,module,exports){
 var Nodule, app;
 
 require('angular');
@@ -2303,7 +2404,7 @@ module.exports = angular.module('trader').name;
 
 
 
-},{"angular":44,"game":30,"game-btn":12,"nodule":28}],32:[function(require,module,exports){
+},{"angular":45,"game":31,"game-btn":12,"nodule":28}],33:[function(require,module,exports){
 var Sprite;
 
 module.exports = Sprite = (function() {
@@ -2373,7 +2474,7 @@ module.exports = Sprite = (function() {
           this.r = nameOrJSON.r || 0;
         }
         if (nameOrJSON.spin === "random") {
-          this.spin = Math.random() * Math.PI * 0.003;
+          this.spin = (Math.random() * 0.006 - 0.003) * Math.PI;
         } else {
           this.spin = nameOrJSON.spin || 0;
         }
@@ -2419,7 +2520,7 @@ module.exports = Sprite = (function() {
 
 
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var Tile;
 
 module.exports = Tile = (function() {
@@ -2456,7 +2557,7 @@ module.exports = Tile = (function() {
 
 
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 var Event, Sprite;
 
 Sprite = require('../Sprite.coffee');
@@ -2779,7 +2880,7 @@ module.exports = Event = (function() {
 
 
 
-},{"../Sprite.coffee":32}],35:[function(require,module,exports){
+},{"../Sprite.coffee":33}],36:[function(require,module,exports){
 /*
 
 This file contains the list of in-travel random events.
@@ -2874,7 +2975,7 @@ module.exports = [
         }
     }
 ];
-},{"./situations/medicine.coffee":37,"./situations/phantomSignal.coffee":38,"./situations/solarFlare.coffee":39}],36:[function(require,module,exports){
+},{"./situations/medicine.coffee":38,"./situations/phantomSignal.coffee":39,"./situations/solarFlare.coffee":40}],37:[function(require,module,exports){
 var Event, EventList, Randy;
 
 Event = require('./Event.coffee');
@@ -2953,7 +3054,7 @@ module.exports = Randy = (function() {
 
 
 
-},{"./Event.coffee":34,"./EventList.js":35}],37:[function(require,module,exports){
+},{"./Event.coffee":35,"./EventList.js":36}],38:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " As you speed along towards your next destination you detect an NIH science ship beacon.",
@@ -3066,7 +3167,7 @@ module.exports = {
 
 
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 module.exports = {
   initial: {
     story: "As you speed towards your next destination, your radio picks up a faint rhythmic clicking. <br><br> Your radio could just be picking up low level cosmic background radiation, but there’s a small chance that the signal could be coming from another ship or a cache of supplies.",
@@ -3102,7 +3203,15 @@ module.exports = {
     ]
   },
   nothing: {
-    story: "As you grow closer your instruments resolve the anomaly; looks like it was just background radiation after all."
+    story: "As you grow closer your instruments resolve the anomaly; looks like it was just background radiation after all.",
+    choices: [
+      {
+        name: "continue",
+        next: function(gameData) {
+          return gameData.scope.$broadcast('switchToModule', 'travel-screen');
+        }
+      }
+    ]
   },
   oldShip: {
     story: "You found a ship, but it appears to have been abandoned long ago. You salvage some scrap, 300 fuel and 200 food",
@@ -3145,7 +3254,7 @@ module.exports = {
 
 
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 module.exports = {
   initial: {
     story: " You and your crew are running an important experiment that will take another 5 hours to complete, but you’ve received a space weather report warning of an impending proton storm. Proton storms, also known as “solar particle events”, happen when particles emitted by the sun during coronal mass ejects and solar flares are pushed out into space. <br><br>Luckily your spacecraft is equipped with a shielded pod that will protect you from the storm – but your crew isn’t the only thing you have to worry about! Energized protons can damage electronic components, cause software contamination and can even result in unexpected (sometimes called “phantom”) spacecraft commands to be executed. <br><br> It’s probably a smart idea to turn off your equipment and stop your experiment until after the storm passes in a few hours, but your chief science officer believes that you’re on the edge of a breakthrough.",
@@ -3230,7 +3339,7 @@ module.exports = {
 
 
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var EVENT_VARIABILITY, Location, MIN_TRAVELS_PER_EVENT, Nodule, Randy, Sprite, Tile;
 
 require('angular');
@@ -3458,7 +3567,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', 'music
             try {
                 vm.drawSprite(data.locations[loc_i]);
             } catch (err){
-                console.log(loc_i, 'of', data.locations.length, data.locations[loc_i]);
+                console.log("drawSpriteLoc fails @ ", loc_i, 'of', data.locations.length, data.locations[loc_i]);
             }
         }
     }
@@ -3508,7 +3617,7 @@ module.exports = angular.module('travel-screen').name;
 
 
 
-},{"./../theOregonTrajectory/Location.coffee":27,"./Sprite.coffee":32,"./Tile.coffee":33,"./ng-randy/ng-randy.coffee":36,"angular":44,"game":30,"game-btn":12,"ng-hold":18,"nodule":28}],41:[function(require,module,exports){
+},{"./../theOregonTrajectory/Location.coffee":27,"./Sprite.coffee":33,"./Tile.coffee":34,"./ng-randy/ng-randy.coffee":37,"angular":45,"game":31,"game-btn":12,"ng-hold":18,"nodule":28}],42:[function(require,module,exports){
 require('angular');
 Nodule = require('nodule');
 
@@ -3539,7 +3648,7 @@ app.controller("youWinCtrl", [ '$rootScope', '$scope', 'music', 'sounds', functi
 
 module.exports = angular.module('you-win').name;
 
-},{"angular":44,"game":30,"nodule":28}],42:[function(require,module,exports){
+},{"angular":45,"game":31,"nodule":28}],43:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -3558,7 +3667,7 @@ return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placeme
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":44}],43:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":45}],44:[function(require,module,exports){
 (function (global){
 
 ; require("/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js");
@@ -3582,7 +3691,7 @@ l,!0),f=[]),m=Date.now(),d(f,h,t),r&&r.blur(),u.isDefined(g.disabled)&&!1!==g.di
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":44}],44:[function(require,module,exports){
+},{"/home/tylar/the-oregon-trajectory/node_modules/angular/angular.min.js":45}],45:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -3842,7 +3951,7 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3902,7 +4011,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*
@@ -3938,7 +4047,7 @@ FastClick.notNeeded=function(a){var c,b;if("undefined"===typeof window.ontouchst
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 (function (process,global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /* Phaser v2.3.0 - http://phaser.io - @photonstorm - (c) 2015 Photon Storm Ltd. */
@@ -3967,4 +4076,4 @@ m>this.game.width&&(m=this.game.width),n>this.game.height&&(n=this.game.height);
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":45}]},{},[1]);
+},{"_process":46}]},{},[1]);
