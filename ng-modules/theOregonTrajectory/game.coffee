@@ -189,7 +189,7 @@ class Game
 
     updateScore: ()->
         # updates the score
-        @score.updateScore(@reputation, @shipHealth, @money, @rations, @fuel, null);  # TODO: should pass ship object (DNE)
+        @score.updateScore(@distanceTraveled, @reputation, @shipHealth, @money, @rations, @fuel, null);  # TODO: should pass ship object (DNE)
 
     hurtCrew: (i, amnt)->
         # hurts crewmember i given amnt (and checks for death)

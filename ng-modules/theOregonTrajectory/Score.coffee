@@ -1,6 +1,7 @@
 REPUTATION_CONVERSION = 100  # reputation-to-score conversion factor
 HEALTH_CONVERSION = 1000  # crewmember health to score conversion factor
-SPACECOIN_CONVERSION = 10  # spacecoin to score conversion factor
+SPACECOIN_CONVERSION = 1/10  # spacecoin to score conversion factor
+DISTANCE_CONVERSION = 1000  # number of digits in distance (km) to score conversion factor
 
 module.exports = class Score
     constructor: ()->
@@ -8,15 +9,21 @@ module.exports = class Score
         @repuationScore =
         @healthScore =
         @wealthScore =
+        @distanceScore =
         @bonusScore = 0
 
     _recalcScore: ()->
-        @totalScore = @reputationScore + @healthScore + @wealthScore + @bonusScore
+        @totalScore = @reputationScore + @healthScore + @wealthScore + @bonusScore + @distanceScore
 
-    updateScore: (reputation, shipHealth, spaceCoin, rations, fuel, ship)->
+    updateScore: (distance, reputation, shipHealth, spaceCoin, rations, fuel, ship)->
         @updateReputationScore(reputation)
         @updateHealthScore(shipHealth)
         @updateWealthScore(spaceCoin, rations, fuel, ship)
+        @updateDistanceScore(distance)
+
+    updateDistanceScore: (distance)->
+        @distanceScore = Math.round(distance.toString().length * DISTANCE_CONVERSION)
+        @_recalcScore()
 
     updateReputationScore: (reputation)->
         @reputationScore = 0
