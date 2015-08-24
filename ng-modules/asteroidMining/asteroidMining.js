@@ -72,9 +72,7 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
     });
 
     vm.preload = function() {
-      // vm.game.load.image('a1', 'assets/sprites/asteroids/0.png');
-      // vm.game.load.image('a2', 'assets/sprites/asteroids/1.png');
-      vm.game.load.image('a3', baseUrl+'assets/sprites/asteroids/p0.png');
+      vm.game.load.image('asteroid', data.getCurrentEvent().sprite.sheet.src);
       vm.game.load.image('a-small', baseUrl+'assets/sprites/asteroids/p0-small.png');
       vm.game.load.image('space', baseUrl+'assets/backgrounds/milky_way_bg.png');
       vm.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
@@ -167,11 +165,11 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
 
       // the asteroid
       vm.asteroidSize = data.encounter_object.sprite.scale;  // 0.5;
-      vm.ASTEROID_SHRINK = 0.001;  // amount asteroid decreases in size with each hit
+      vm.ASTEROID_SHRINK = 0.005;  // amount asteroid decreases in size with each hit
       vm.asteroid = vm.game.add.sprite(
         rnd(w*2/3.0, w*9/10.0),
         rnd(h/10.0, h*9/10.0),
-        'a3');
+        'asteroid');
       vm.asteroid.anchor.set(0.5, 0.5);
       vm.asteroid.scale.set(vm.asteroidSize, vm.asteroidSize);
       vm.asteroid.rotateAngle = vm.game.rnd.realInRange(-2, 2);
@@ -332,7 +330,7 @@ app.controller("asteroidMiningGameController", ['data', 'music', 'sounds', '$sco
                     break;
             }
 
-            var enemy = vm.asteroids.create(x, y, "a3");
+            var enemy = vm.asteroids.create(x, y, "asteroid");
             enemy.scale = { x: 0.5, y: 0.5 };
             enemy.moveX = vm.game.rnd.integerInRange(-2, 2);
             while (enemy.moveX == 0) {

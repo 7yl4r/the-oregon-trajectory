@@ -12,6 +12,32 @@
 			Many ships fail to make it all the way to Europa.
 
 			<br>
+
+            <p>
+                <ul>
+                    <li>
+                        {{gameOverCtrl.data.score.reputationScore}} reputation
+                    </li>
+                    <li>
+                        + {{gameOverCtrl.data.score.wealthScore}} wealth
+                    </li>
+                    <li>
+                        + {{gameOverCtrl.data.score.healthScore}} health
+                    </li>
+                    <li>
+                        + {{gameOverCtrl.data.score.bonusScore}} bonus
+                    </li>
+                    <li>
+                        + {{gameOverCtrl.data.score.distanceScore}} distance
+                    </li>
+                    <li>
+                        ---------------------------------------
+                    </li>
+                    <li>
+                        <h3>{{gameOverCtrl.data.score.totalScore}}</h3>
+                    </li>
+                </ul>
+            </p>
 		</li>
     <span class="spacecraft">
         <img ng-src="{{gameOverCtrl.data.ship.sheet.src}}">

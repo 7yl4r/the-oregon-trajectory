@@ -32,7 +32,14 @@ module.exports = {
         ]
     }
     nothing: {
-        story: "As you grow closer your instruments resolve the anomaly; looks like it was just background radiation after all."
+        story: "As you grow closer your instruments resolve the anomaly; looks like it was just background radiation after all.",
+        choices: [
+            {
+                name: "continue",
+                next: (gameData)->
+                    gameData.scope.$broadcast('switchToModule', 'travel-screen')
+            }
+        ]
     }
     oldShip: {
         story: "You found a ship, but it appears to have been abandoned long ago. You salvage some scrap, 300 fuel and 200 food",

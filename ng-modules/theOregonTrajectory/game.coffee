@@ -3,6 +3,7 @@ Location = require('./Location.coffee')
 Sprite = require('./../travelScreen/Sprite.coffee')
 Howl = require('howler');
 Reputation = require('./Reputation.coffee')
+Score = require('./Score.coffee')
 
 # stations:
 iss = require('../../assets/stations/iss/spriteSpec.js')
@@ -122,6 +123,7 @@ class Game
         ]
 
         @reputation = new Reputation();
+        @score = new Score();
 
         @distanceTraveled = 0
         @displayDistanceTraveled = 0
@@ -185,6 +187,10 @@ class Game
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
             @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance * @nextWaypoint.travelRate)
 
+    updateScore: ()->
+        # updates the score
+        @score.updateScore(@distanceTraveled, @reputation, @shipHealth, @money, @rations, @fuel, null);  # TODO: should pass ship object (DNE)
+
     hurtCrew: (i, amnt)->
         # hurts crewmember i given amnt (and checks for death)
         amnt = Math.round(amnt)
@@ -227,6 +233,17 @@ class Game
         BIG_NUMBER = 99999999999
         @crewHealth = [BIG_NUMBER, BIG_NUMBER]
         @fuel = BIG_NUMBER
+
+    getCurrentEvent: ()->
+        # returns most recently triggered event/location
+        # returns null if no event yet triggered
+        lastName = @visited[@visited.length-1]
+        for location in @locations
+            if location.name == lastName
+                return location
+            # else keep looking
+        # else
+        return null
 
     # === "private" methods ===
     _getRemainingLocations: ()->

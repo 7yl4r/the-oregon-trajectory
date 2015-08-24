@@ -18,6 +18,7 @@ app.controller("gameOverCtrl", [ '$rootScope', '$scope', 'data', 'sounds', 'musi
 
     vm.onEnter = function(){
         $scope.$emit('changeMusicTo', music.losing);
+        data.updateScore();
     }
     vm.nodule = Nodule($rootScope, 'game-over', vm.onEnter);
 

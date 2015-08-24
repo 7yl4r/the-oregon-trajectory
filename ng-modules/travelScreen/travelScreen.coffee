@@ -221,7 +221,7 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', 'music
             try {
                 vm.drawSprite(data.locations[loc_i]);
             } catch (err){
-                console.log(loc_i, 'of', data.locations.length, data.locations[loc_i]);
+                console.log("drawSpriteLoc fails @ ", loc_i, 'of', data.locations.length, data.locations[loc_i]);
             }
         }
     }
