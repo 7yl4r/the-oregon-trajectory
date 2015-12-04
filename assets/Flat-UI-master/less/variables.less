@@ -87,7 +87,7 @@
 @font-family-monospace:          Monaco, Menlo, Consolas, "Courier New", monospace;
 @font-size-base:                 10px;
 
-@local-font-path:               "../fonts/lato/";
+@local-font-path:               "fonts/lato/";
 @local-font-name:               "lato-regular";
 @local-font-svg-id:             "latoregular";
 @local-font-name-light:         "lato-light";
@@ -121,7 +121,7 @@
 //
 //## Specify custom locations of the include Glyphicons icon font.
 
-@icon-font-path:            "../fonts/glyphicons/";
+@icon-font-path:            "fonts/glyphicons/";
 @icon-font-name:            "flat-ui-icons-regular";
 @icon-font-svg-id:          "flat-ui-icons-regular";
 
@@ -371,11 +371,11 @@
 @navbar-margin-bottom:       @line-height-computed;
 @navbar-border-radius:       @border-radius-large;
 
-@navbar-default-bg:          saturate(spin(tint(@brand-primary, 91%), -18), 2%);
+@navbar-default-bg:          darken(saturate(@brand-primary, 2%), 30%);
 
 // Navbar links
-@navbar-default-link-color:           @brand-primary;
-@navbar-default-link-hover-color:     @brand-secondary;
+@navbar-default-link-color:           @brand-secondary;
+@navbar-default-link-hover-color:     @brand-primary;
 @navbar-default-link-hover-bg:        transparent;
 @navbar-default-link-active-color:    @brand-secondary;
 @navbar-default-link-active-bg:       transparent;
