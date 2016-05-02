@@ -11,6 +11,7 @@ window.onbeforeunload = () ->
 `
 // WARN: do not change this next line unless you update newModule.py as well!
 var app = angular.module('the-oregon-trajectory', [
+        require('welcome'),
         require('ship-customizer'),
         require('leaderboard'),
         require('asteroid-mining'),
@@ -38,17 +39,17 @@ var app = angular.module('the-oregon-trajectory', [
 
 app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
     var vm = this;
-    vm.active_module = 'main-menu';
+    vm.active_module = 'welcome';
 
     vm.MSPF = 50;  // ms per frame
 
     // first round of music must be started manually (I don't know why)
-    vm.music = new Howl({
-        urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
-        loop: true,
-        volume: .5
-    });
-    vm.music.play();
+     vm.music = new Howl({
+         urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+         loop: true,
+         volume: .5
+     });
+     vm.music.play();
 
     vm.musicVol = 0.9;
     vm.MUSIC_FADE_TIME = 300;
@@ -89,21 +90,13 @@ app.controller('MainCtrl', ['$scope', '$modal', function($scope, $modal){
         }
     }
 
-    // this example is retained here for later use
-    /*
-    $scope.showDownloadModal = function() {
-        var modalInstance = $modal.open({
-            templateUrl: 'downloadModal.html',
-            controller: 'DownloadCtrl'
-        });
-    };
-    */
-
     vm.scheduleDraw = function(){
         $scope.$broadcast('draw');
         setTimeout(function(){vm.scheduleDraw()}, 1/vm.MSPF);
     }
-    vm.switchToModule({}, 'main-menu');  // init app by starting main menu
+
+    vm.switchToModule({}, 'welcome');  // init app by starting first module
+
     vm.scheduleDraw();  // do first draw
 }]);
 
