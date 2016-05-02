@@ -1,6 +1,8 @@
 # the-oregon-trajectory #
 
 [![Join the chat at https://gitter.im/7yl4r/the-oregon-trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Bountysource](https://img.shields.io/bountysource/team/mozilla-core/activity.svg)](https://www.bountysource.com/trackers/13859664-7yl4r-the-oregon-trajectory)
+[![ghit.me hit counter](https://ghit.me/badge.svg?repo=7yl4r/the-oregon-trajectory)](https://ghit.me/repo/7yl4r/the-oregon-trajectory)
 
 [University of Earth-L4's entry for NASA SpaceApps 2198 challenge - 200 years of space habitation history](https://2015.spaceappschallenge.org/challenge/asteroids-2025-2100-future-history/)
 
