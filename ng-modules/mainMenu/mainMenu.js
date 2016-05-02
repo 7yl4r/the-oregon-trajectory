@@ -13,11 +13,18 @@ app.directive("mainMenu", function() {
     };
 });
 
-app.controller("mainMenuController", ['data', 'music', 'sounds', '$scope', '$rootScope', function(data, music, sounds, $scope, $rootScope){
+app.controller("mainMenuController", ['data', 'music', 'sounds', '$scope', '$rootScope', '$modal',
+                              function(data,   music,   sounds,   $scope,   $rootScope,   $modal ){
     var vm = this;
 
     vm.onEntry = function() {
         $scope.$emit('changeMusicTo', music.theme);
+
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: 'ng-modules/mainMenu/welcomeModal.html',
+            controller: 'ModalInstanceCtrl'
+        });
     }
 
     vm.nodule = new Nodule($rootScope, 'main-menu', vm.onEntry)
@@ -45,5 +52,17 @@ app.controller("mainMenuController", ['data', 'music', 'sounds', '$scope', '$roo
         */
     }
 }]);
+
+/* controller for the intro modal */
+app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
 
 module.exports = angular.module('main-menu').name;
