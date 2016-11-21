@@ -20,66 +20,10 @@
     <script src="assets/Flat-UI-master/dist/js/vendor/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="ng-cloak" ng-controller="MainCtrl as MainCtrl">
+<body class="ng-cloak">
     <nav-header></nav-header>
     <div role="main">
 
-        <div>
-            <!--the sections below are toggled hide/show as needed-->
-            <welcome class="game-module"></welcome>
-
-            <main-menu class="game-module"></main-menu>
-
-            <shop class="game-module"></shop>
-
-            <you-win class="game-module"></you-win>
-
-            <travel-screen class="game-module"></travel-screen>
-
-            <game-over class="game-module"></game-over>
-
-            <debris-encounter class="game-module"></debris-encounter>
-
-            <trader class="game-module"></trader>
-
-            <situation class="game-module"></situation>
-
-            <asteroid-mining class="game-module"></asteroid-mining>
-            <asteroid-mining-game class="game-module"></asteroid-mining-game>
-
-            <leaderboard class="game-module"></leaderboard>
-
-            <ship-customizer class="game-module"></ship-customizer>
-
-            <audio-controls></audio-controls>
-
-            <div id="debug-section" style="display:none">
-                debug tools: <br>
-                <div class="col-md-2">
-                    active module: {{MainCtrl.active_module}} <br>
-                </div>
-                <form class="col-md-2">
-                    switch to module <br>
-                    <input id='module-choice' class="form-control" ng-model="moduleChoice" type="text"/>
-                    <input type="submit"  class="btn-primary" ng-click="$emit('switchToModule', moduleChoice)"><br>
-                </form>
-                <form class="col-md-2">
-                    force event <br>
-                    <input id='event-choice' class="form-control" ng-model="eventChoice" type="text"/>
-                    <input type="submit"  class="btn-primary" ng-click="$broadcast('forceEvent', eventChoice)"><br>
-                </form>
-                <div class="col-md-1">
-                    <button class="btn-primary" onclick='game.GODMODE()'>god mode</button>
-                </div>
-                <div class="col-md-1">
-                    event bypass: <input type="checkbox"
-                                        onclick="game.BYPASS()">
-                    </button>
-                </div>
-
-            </div>
-
-        </div><!-- /.container -->
 
     </div><!-- /.main -->
 

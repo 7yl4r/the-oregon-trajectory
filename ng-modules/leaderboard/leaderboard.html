@@ -1,9 +1,0 @@
-<div class="container" ng-controller="leaderboardController as leaderboardCtrl">
-    <h3>TOP SCORES</h3>
-	<ol>
-        <li ng-repeat="score in leaderboardCtrl.scores">
-            {{score.name}} : {{score.score}}
-        </li>
-	</ol>
-	<button ng-click="leaderboardCtrl.clickedTheButton()">return to main menu</button>
-</div>
