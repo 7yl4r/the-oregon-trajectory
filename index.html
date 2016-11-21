@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="the-oregon-trajectory" id="top">
+<html lang="en" id="top">
 <head>
     <meta charset="utf-8">
     <title>The Oregon Trajectory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="Relive the historical mass terrestrial exodus of the 21st century and take the first wandering steps into the boundless frontier that we now call home.">
 
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous">
+    </script>
     <!-- browserify bundle -->
     <script src="bundle.js"></script>
 
@@ -20,13 +24,29 @@
     <script src="assets/Flat-UI-master/dist/js/vendor/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="ng-cloak">
+<body>
     <nav-header></nav-header>
     <div role="main">
-
+        <header class="game-header">
+             <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                        The Oregon Trajectory
+                        <span class="badge">
+                            v<span class='version-number'></span>
+                        </span>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-01">
+                    <ul class="nav navbar-nav">
+                        <li><a href="https://github.com/7yl4r/the-oregon-trajectory">GitHub</a></li>
+                        <li><a href="https://github.com/7yl4r/the-oregon-trajectory/wiki">Wiki</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+             </nav>
+        </header>
 
     </div><!-- /.main -->
-
 
     <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
     <script src="assets/Flat-UI-master/dist/js/vendor/jquery.min.js"></script>
