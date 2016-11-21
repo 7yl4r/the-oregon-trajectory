@@ -12,19 +12,19 @@ EVENT_VARIABILITY = 10  # affects consistency in event timing. high values = les
 # units of EVENT_VARIABILITY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
 
 # switching to javascript here...
-`
-var app = angular.module('travel-screen', [
+app = angular.module('travel-screen', [
     require('ng-hold'),
     require('game'),
     require('game-btn')
 ]);
 
-app.directive("travelScreen", function() {
+app.directive("travelScreen", () ->
     return {
         restrict: 'E',
         templateUrl: "ng-modules/travelScreen/travelScreen.html"
     };
-});
+);
+`
 
 app.controller("travelScreenController", ['$rootScope', '$scope', 'data', 'music', '$interval', function($rootScope, $scope, data, music, $interval){
     var vm = this;
@@ -267,4 +267,3 @@ app.controller("travelScreenController", ['$rootScope', '$scope', 'data', 'music
 }]);
 `
 module.exports = angular.module('travel-screen').name
-
