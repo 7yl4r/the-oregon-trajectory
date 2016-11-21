@@ -50,3 +50,4 @@ Now, that's the Oregon Trail. Recreation of The Oregon Trail considered complete
 
 * awesome map from [planetary resources](http://www.planetaryresources.com/asteriods/#asteroids-map)
 * game details bastardized from [the internet archive's page on the Oregon Trail](https://archive.org/details/msdos_Oregon_Trail_The_1990) (and presumably the original MECC release)
+* [GrafxKid's little green robot](http://opengameart.org/content/green-robot)
