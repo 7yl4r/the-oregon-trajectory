@@ -10,6 +10,8 @@ window.fillVersionSpans = () ->
 window.globalData = {
     gameDir:'',
     baseUrl:(if location.host == '7yl4r.github.io' then '/the-oregon-trajectory/' else '/')
+    engineDelay: 100, # ms of delay for engine shutdown (sound only)
+    lastEngineFire: 0
 };
 
 $(document).ready( ()->
