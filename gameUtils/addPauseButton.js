@@ -28,6 +28,7 @@ function create(game){
         8,
         game.make.sprite(0, 0, 'pause-button')
     ));
+
     menuButton.inputEnabled = true;
     menuButton.input.useHandCursor = true;
     menuButton.events.onInputDown.add((function(_game) {

@@ -77,4 +77,6 @@ module.exports = function() {  // create function
   //  Game input
   globalData.cursors = globalData.game.input.keyboard.createCursorKeys();
   globalData.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+
+  require('pause-button').create(globalData.game)
 }

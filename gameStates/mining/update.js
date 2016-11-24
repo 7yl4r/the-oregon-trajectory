@@ -73,7 +73,8 @@ fireBullet = function() {
 }
 
 exitModule = function(reason){
-    if(globalData.engineSound.isPlaying) {
+    if(typeof globalData.engineSound != 'undefined' ||
+        globalData.engineSound.isPlaying) {
       globalData.engineSound.stop();
     }
 
