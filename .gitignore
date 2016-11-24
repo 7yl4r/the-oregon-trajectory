@@ -1,3 +1,7 @@
+# slick ui installed from https://github.com/Flaxis/slick-ui
+#   dist file only included in this repo for easy install.
+lib/slick-ui/*
+
 # .wav files (b/c they are often too big for github)
 *.wav
 

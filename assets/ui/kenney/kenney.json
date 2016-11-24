@@ -1,0 +1,37 @@
+{
+  "name": "kenney",
+  "images": {
+    "check_on": "images/grey_boxCheckmark.png",
+    "cross_on": "images/grey_boxCross.png",
+    "radio_on": "images/grey_boxTick.png",
+    "check_off": "images/grey_box.png",
+    "cross_off": "images/grey_box.png",
+    "radio_off": "images/grey_circle.png",
+    "button_on": "images/blue_button02.png",
+    "button_off": "images/grey_button02.png",
+    "text_field": "images/grey_button02.png",
+    "slider_end": "images/grey_sliderEnd.png",
+    "slider_base": "images/grey_sliderHorizontal.png",
+    "slider_handle_off": "images/grey_sliderDown.png",
+    "slider_handle_on": "images/blue_sliderDown.png",
+    "panel": "images/grey_panel.png"
+  },
+  "renderer": {
+    "button": "SlickUI.Element.Renderer.ButtonRenderer"
+  },
+  "fonts": {
+    "minecraftia": ["fonts/minecraftia-black.png", "fonts/minecraftia.xml"]
+  },
+  "button": {
+    "border-x": 8,
+    "border-y": 8
+  },
+  "text_field": {
+    "border-x": 8,
+    "border-y": 8
+  },
+  "panel": {
+    "border-x": 10,
+    "border-y": 10
+  }
+}
