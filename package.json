@@ -1,6 +1,6 @@
 {
   "name": "the-oregon-trajectory",
-  "version": "1.1.15",
+  "version": "2.0.0",
   "description": "An old-timey retelling of the mass terrestrial exodus in the 21st century.",
   "bugs": {
     "url": "https://github.com/7yl4r/the-oregon-trail/issues",
@@ -58,6 +58,11 @@
     }
   },
   "browser": {
+    "phaser-preload": "./phaserLifecycle/preload.js",
+    "phaser-create": "./phaserLifecycle/create.js",
+    "phaser-update": "./phaserLifecycle/update.js",
+    "phaser-render": "./phaserLifecycle/render.js",
+
     "welcome": "./ng-modules/welcome/welcome.js",
     "ship-customizer": "./ng-modules/shipCustomizer/shipCustomizer.coffee",
     "leaderboard": "./ng-modules/leaderboard/leaderboard.js",
