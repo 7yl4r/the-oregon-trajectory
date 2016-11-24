@@ -3,7 +3,7 @@ gameState = function(game){}
 gameState.prototype = {
     preload: function() {
         // load menu assets
-        this.game.load.image('pause-menu', 'assets/menus/pause.png');
+        this.game.load.image('ship-menu', 'assets/ui/ships.png');
 
     },
     create: function(){
@@ -23,7 +23,7 @@ gameState.prototype = {
         menu = this.game.add.sprite(
             this.game.width/2,
             this.game.height/2,
-            'pause-menu'
+            'ship-menu'
         );
         menu.anchor.setTo(0.5, 0.5);
 
@@ -54,7 +54,14 @@ gameState.prototype = {
             // Check if the click was inside the menu
             if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
                 // The choicemap is an array that will help us see which item was clicked
-                var choicemap = ['one', 'two', 'three', 'four', 'five', 'six'];
+                var choicemap = [
+                    'JR0D Manned Crew Capsule U',
+                    'Arboris AGS-15 ',
+                    'J3Zs Modified Orion mk3',
+                    'MEH-47 Lame Cartoon Ship',
+                    'NCC-1701 Enter-to-win-prize Starship',
+                    '12 PRSCs Century Eagle'
+                ];
 
                 // Get menu local coordinates for the click
                 var x = event.x - x1,
@@ -64,7 +71,7 @@ gameState.prototype = {
                 var choice = Math.floor(x / 90) + 3*Math.floor(y / 90);
 
                 // Display the choice
-                choiceLabel.text = 'Continue with ship ' + choicemap[choice];
+                choiceLabel.text = 'Continue with ' + choicemap[choice];
                 event.game.ship = choicemap[choice];
             }
             else{
