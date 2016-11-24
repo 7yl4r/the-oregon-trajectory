@@ -58,10 +58,9 @@
     }
   },
   "browser": {
-    "phaser-preload": "./phaserLifecycle/preload.js",
-    "phaser-create": "./phaserLifecycle/create.js",
-    "phaser-update": "./phaserLifecycle/update.js",
-    "phaser-render": "./phaserLifecycle/render.js",
+    "pause": "./gameActions/pause.js",
+    "pause-controller": "./gameMenus/pause.js",
+    "main-menu-controller": "./gameMenus/mainMenu.js",
 
     "welcome": "./ng-modules/welcome/welcome.js",
     "ship-customizer": "./ng-modules/shipCustomizer/shipCustomizer.coffee",

@@ -35,11 +35,10 @@ $(document).ready( ()->
     , 'json');
 
     globalData.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'game-container-div')
-    globalData.game.state.add('mining', require('./states/mining/mining'))
-    globalData.game.state.add('boot', require('./states/boot'))
+    globalData.game.state.add('mining', require('./gameStates/mining/mining'))
+    globalData.game.state.add('boot', require('./gameStates/boot'))
 
     globalData.game.state.start('boot')
-
 
     # game volume mute
     # globalData.game.sound.mute = false;

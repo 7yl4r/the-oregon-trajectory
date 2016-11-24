@@ -88,6 +88,7 @@ exitModule = function(reason){
     //   console.log('end mining');
     // });
     console.log('end mining')
+    globalData.game.state.start('boot')
 }
 
 module.exports = function() {  // update function
