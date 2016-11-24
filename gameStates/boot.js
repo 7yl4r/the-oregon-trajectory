@@ -1,14 +1,22 @@
-mining = function(game){
-    console.log('starting game state : mining')
+boot = function(game){
+    console.log('starting game state : boot')
 }
 
-mining.prototype = {
+boot.prototype = {
     preload: function() {
+        console.log('boot screen preloading...')
+
         this.game.load.image('diamond', 'assets/sprites/advice/frustrated.png');
 
         // load menu assets
         this.game.load.image('pause-menu', 'assets/menus/pause.png');
         this.game.load.image('main-menu', 'assets/menus/main.png');
+
+        // load phaser plugins
+        SlickUI = require('slick-ui');
+        globalData.game.slickUI = globalData.game.plugins.add(Phaser.Plugin.SlickUI);
+        globalData.game.slickUI.load(util.absPath('assets/ui/kenney/kenney.json'));
+
     },
     create: function() {
         /*
@@ -54,4 +62,4 @@ mining.prototype = {
     }
 }
 
-module.exports = mining
+module.exports = boot

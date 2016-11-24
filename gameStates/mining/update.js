@@ -56,7 +56,7 @@ fireBullet = function() {
 
         if (bullet)
         {
-            if (Math.random() > .5) {
+            if (Math.random() > 0.5) {
                 globalData.game.sound.play('shot1');
             } else {
                 globalData.game.sound.play('shot2');

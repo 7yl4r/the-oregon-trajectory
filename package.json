@@ -55,12 +55,17 @@
     },
     "phaser": {
       "exports": "Phaser"
+  },
+    "slick-ui": {
+        "exports": "SlickUI"
     }
   },
   "browser": {
     "pause": "./gameActions/pause.js",
     "pause-controller": "./gameMenus/pause.js",
     "main-menu-controller": "./gameMenus/mainMenu.js",
+
+    "slick-ui": "./lib/slick-ui/dist/slick-ui.min.js",
 
     "welcome": "./ng-modules/welcome/welcome.js",
     "ship-customizer": "./ng-modules/shipCustomizer/shipCustomizer.coffee",
@@ -89,6 +94,7 @@
     "score": "./ng-modules/score.js",
     "nodule": "./ng-modules/theOregonTrajectory/Nodule.coffee",
     "ng-hold": "./ng-modules/ngHold.js",
+
     "angular": "./node_modules/angular/angular.min.js",
     "ui.bootstrap": "./node_modules/angular-bootstrap/ui-bootstrap.min.js",
     "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",

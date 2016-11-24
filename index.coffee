@@ -25,6 +25,13 @@ window.globalData = {
       return globalData.game.money + globalData.stats.credits
 };
 
+window.util = {
+    absPath: (path) ->
+        # use this anywhere you need an absolute path to a file.
+        #   pass path without preceeding / or ./
+        return globalData.baseUrl+path
+}
+
 $(document).ready( ()->
 
     # version number display
@@ -35,11 +42,11 @@ $(document).ready( ()->
     , 'json');
 
     globalData.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'game-container-div')
+
+    # set up phaser game states
     globalData.game.state.add('mining', require('./gameStates/mining/mining'))
     globalData.game.state.add('boot', require('./gameStates/boot'))
 
     globalData.game.state.start('boot')
 
-    # game volume mute
-    # globalData.game.sound.mute = false;
 )
