@@ -26,7 +26,7 @@ module.exports = function(event){
 
         switch(choice){
             case 0:
-                event.game.state.start('mining');
+                event.game.state.start('ship-chooser');
                 break;
             default:
                 break
