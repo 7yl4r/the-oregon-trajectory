@@ -63,6 +63,7 @@
   "browser": {
     "pause": "./gameActions/pause.js",
     "pause-controller": "./gameMenus/pause.js",
+    "pause-button": "./gameUtils/addPauseButton.js",
     "main-menu-controller": "./gameMenus/mainMenu.js",
 
     "slick-ui": "./lib/slick-ui/dist/slick-ui.min.js",
