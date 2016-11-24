@@ -11,7 +11,18 @@ window.globalData = {
     gameDir:'',
     baseUrl:(if location.host == '7yl4r.github.io' then '/the-oregon-trajectory/' else '/')
     engineDelay: 100, # ms of delay for engine shutdown (sound only)
-    lastEngineFire: 0
+    lastEngineFire: 0,
+    calcFuel: () ->
+        return (
+            globalData.game.fuel
+            + globalData.stats.fuel
+            - globalData.stats.main_fuel*globalData.game.miningFuelExpenseThrust
+            - globalData.stats.secondary_fuel*globalData.game.miningFuelExpenseRotate
+            - globalData.stats.bullets*globalData.game.miningFuelExpenseFiringBullet
+        )
+    ,
+    calcCredits: () ->
+      return globalData.game.money + globalData.stats.credits
 };
 
 $(document).ready( ()->
