@@ -48,6 +48,7 @@ $(document).ready( ()->
     globalData.game.state.add('mining', require('./gameStates/mining/mining'))
     globalData.game.state.add('boot', require('./gameStates/boot'))
     globalData.game.state.add('ship-chooser', require('./gameStates/shipChooser'))
+    globalData.game.state.add('travel-screen', require('./gameStates/travelScreen'))
 
     globalData.game.state.start('boot')
 
