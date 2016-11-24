@@ -36,6 +36,7 @@ function create(game){
             if(panel.visible) {
                 return;
             }
+            _game.inMenu = true;  // pause
             panel.visible = true;
             panel.x = basePosition + 156;
             _game.add.tween(panel).to( {x: basePosition}, 500, Phaser.Easing.Exponential.Out, true).onComplete.add(function () {
@@ -52,6 +53,8 @@ function create(game){
                 panel.x -= 156;
             });
             menuButton.visible = true;
+
+            _game.inMenu = false;  // unpause
         };
     })(game));
 

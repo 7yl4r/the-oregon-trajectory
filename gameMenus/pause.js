@@ -25,9 +25,6 @@ module.exports = function(event){
             // Remove the menu and the label
             menu.destroy();
             choiseLabel.destroy();
-
-            // Unpause the game
-            event.game.paused = false;
         }
     }
 };

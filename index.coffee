@@ -12,6 +12,7 @@ window.globalData = {
     baseUrl:(if location.host == '7yl4r.github.io' then '/the-oregon-trajectory/' else '/')
     engineDelay: 100, # ms of delay for engine shutdown (sound only)
     lastEngineFire: 0,
+    inMenu: false,
     calcFuel: () ->
         return (
             globalData.game.fuel
