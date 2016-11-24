@@ -36,7 +36,9 @@ $(document).ready( ()->
 
     globalData.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'game-container-div')
     globalData.game.state.add('mining', require('./states/mining/mining'))
-    globalData.game.state.start('mining')
+    globalData.game.state.add('boot', require('./states/boot'))
+
+    globalData.game.state.start('boot')
 
 
     # game volume mute
