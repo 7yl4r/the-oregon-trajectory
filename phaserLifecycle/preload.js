@@ -2,6 +2,8 @@ module.exports = function() {  // preload function
   globalData.game.load.image('a-small', globalData.baseUrl+'assets/sprites/asteroids/p0-small.png');
   globalData.game.load.image('space', globalData.baseUrl+'assets/backgrounds/milky_way_bg.png');
   globalData.game.load.image('bullet', 'http://examples.phaser.io/assets/games/asteroids/bullets.png');
+  globalData.game.load.image('ship', globalData.baseUrl+'assets/sprites/ship.png');
+  globalData.game.load.image('asteroid', globalData.baseUrl+'assets/sprites/asteroids/0.png');
 
   // NOTE: these audio snippets are duplicates of those already loaded in game.sounds (and we could use those instead)
   globalData.game.load.audio('shot1',
