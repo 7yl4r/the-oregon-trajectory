@@ -99,6 +99,13 @@ gameState.prototype = {
             'bg-earth'
         );
 
+        globalData.gameData.locationArrivalSignal.add((function(_game, _tileGroup){
+            return function(tileName){
+                console.log('adding location tile: ' + tileName);
+                addTile(_game, _tileGroup, tileName);
+            }
+        })(this.game, this.tileGroup));
+
         this.ship = this.game.add.sprite(
             300/this.game.width*this.game.width,
             this.game.height/2,
@@ -124,46 +131,55 @@ gameState.prototype = {
 
 module.exports = gameState;
 
+addTile = function(game, tileGroup, newTileKey){
+    // adds a tile to the scrolling background
+    console.log('add ' + newTileKey);
+    tileGroup.create(
+        getScreenRightEdge(game),
+        0,
+        newTileKey
+    );
+}
+
+getScreenRightEdge = function(game){
+    return -game.world.x + game.width;
+}
+
 travel = function(gameState){
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
         globalData.gameData.travel();
 
         gameState.ship.x += TRAVEL_SPEED;
 
-        // TODO: append new bg tiles if needed
+        // append new filler bg tiles if needed
         var tileGroupWidth = 0;
         gameState.tileGroup.forEachExists(function(childTile){
             tileGroupWidth += childTile.width
         })
         var tileRightSide = gameState.tileGroup.x + tileGroupWidth;
-        var screenRightEdge = -globalData.game.world.x + globalData.game.width;
+        var screenRightEdge = getScreenRightEdge(globalData.game);
         // console.log('tileEdge:' + tileRightSide + "\t screenEdge:" + screenRightEdge);
+
         if (tileRightSide < screenRightEdge){
-            var newTileKey = getNextTile()
-            console.log('add ' + newTileKey);
-            gameState.tileGroup.create(
-                screenRightEdge,
-                0,
-                newTileKey
-            );
+            // NOTE: could choose rand filler here
+            addTile(gameState.game, gameState.tileGroup, 'filler');
         }
 
         // handle arrival at stations/events
-        // if (!globalData.gameData.BYPASS_LOCATIONS){
-        //     for (var loc_i in globalData.gameData.locations){
-        //         var location = globalData.gameData.locations[loc_i];
-        //         var pos = location.x;
-        //         var loc = location.name;
-        //         if (pos < globalData.gameData.distanceTraveled &&
-        //             globalData.gameData.visited.indexOf(loc) < 0) {  // passing & not yet visited
-        //             globalData.gameData.visited.push(loc);
-        //             globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
-        //             console.log('arrived at ', loc);
-        //             // TODO:
-        //             // globalData.gameData.locations[loc_i].trigger({'$scope':$scope})
-        //         }
-        //     }
-        // }
+        if (!globalData.gameData.BYPASS_LOCATIONS){
+            for (var loc_i in globalData.gameData.locations){
+                var location = globalData.gameData.locations[loc_i];
+                var pos = location.x;
+                var loc = location.name;
+                if (pos < globalData.gameData.distanceTraveled &&
+                    globalData.gameData.visited.indexOf(loc) < 0) {  // passing & not yet visited
+                    globalData.gameData.visited.push(loc);
+                    globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
+                    console.log('arrived at ', loc);
+                    globalData.gameData.locations[loc_i].trigger();
+                }
+            }
+        }
 
         // handle random events
         // TODO: if is a good time/place for an event
@@ -181,25 +197,6 @@ travel = function(gameState){
     else { // end game
         globalData.gameData.end();
     }
-}
-
-
-getNextTile = function(){
-    // if distance travelled to destination big enough, append destination tile, else use filler
-    var halfTileWidth = 1000*TRAVELS_PER_MOVE;  // estimated width (should be close to avg) (in moves)
-    if (globalData.gameData.nextWaypoint.distance < halfTileWidth ){
-        console.log(globalData.gameData.nextWaypoint);
-        // TODO: return relevant location tile
-        if (globalData.gameData.nextWaypoint.name == 'moon'
-            || globalData.gameData.nextWaypoint.name == 'mars'
-            || globalData.gameData.nextWaypoint.name == 'ceres'
-            || globalData.gameData.nextWaypoint.name == 'jupiter'
-            || globalData.gameData.nextWaypoint.name == 'europa'
-        ){
-            return globalData.gameData.nextWaypoint.name;
-        }
-    }
-    return 'filler';
 }
 
 // #####################

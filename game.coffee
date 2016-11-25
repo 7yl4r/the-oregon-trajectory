@@ -2,12 +2,13 @@ Location = require('./gameUtils/Location.coffee')
 Sprite = require('./gameUtils/Sprite.coffee')
 Reputation = require('./gameUtils/Reputation.coffee')
 Score = require('./gameUtils/Score.coffee')
+Phaser = require('phaser')
 
 # stations:
 iss = require('./assets/stations/iss/spriteSpec.js')
 temp_marker = require('./assets/stations/marker1/spriteSpec.js')
 
-window.TRAVEL_SPEED = 2 # pixels per movement tick of tile travel
+window.TRAVEL_SPEED = 10 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
 DIST_PIX        = 33000
@@ -37,12 +38,12 @@ class Game
     worldWidth = DIST_EUROPA
 
     constructor: (gameScope)->
-        @scope = gameScope
 
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
         @_init()  # initializes params
 
-        @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random');
+        @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random')
+        @locationArrivalSignal = new Phaser.Signal()
 
         # debug vars
         @BYPASS_LOCATIONS = false
@@ -51,15 +52,20 @@ class Game
         # re-initializes the game
         # TODO: move this...
         shopFunc = ()=>
-            @scope.$broadcast('switchToModule', 'shop')
+            # TODO:
+            console.log('switch to shop');
         winFunc = ()=>
-            @scope.$broadcast('switchToModule', 'you-win')
+            # TODO:
+            console.log('switch to win state');
         @locations = [
             new Location("iss",
                 DIST_ISS,
                 PIX_2_AU_ISS,
                 "station",
-                shopFunc,
+                ()=>
+                    @locationArrivalSignal.dispatch('earth')
+                    shopFunc()
+                ,
                 new Sprite(@gameDir+iss.sheet, iss.dimensions, -1000, 'random')
             ),
             new Location("moon-maneuver",
@@ -71,7 +77,10 @@ class Game
                 DIST_MOON,
                 PIX_2_AU_MOON,
                 "station",
-                shopFunc,
+                ()=>
+                    @locationArrivalSignal.dispatch('moon')
+                    shopFunc()
+                ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
             new Location("mars-maneuver",
@@ -83,7 +92,10 @@ class Game
                 DIST_MARS,
                 PIX_2_AU_MARS,
                 "station",
-                shopFunc,
+                ()=>
+                    @locationArrivalSignal.dispatch('mars')
+                    shopFunc()
+                ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
             new Location("ceres-maneuver",
@@ -95,7 +107,10 @@ class Game
                 DIST_CERES,
                 PIX_2_AU_CERES,
                 "station",
-                shopFunc,
+                ()=>
+                    @locationArrivalSignal.dispatch('ceres')
+                    shopFunc()
+                ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
             new Location("europa-maneuver",
@@ -106,13 +121,18 @@ class Game
             new Location("jupiter",
                 DIST_EUROPA-DIST_MOON,
                 PIX_2_AU_EUROPA-PIX_2_AU_MOON,
-                "maneuver"
+                "maneuver",
+                ()=>
+                    @locationArrivalSignal.dispatch('jupiter')
             ),
             new Location("europa",
                 DIST_EUROPA,
                 PIX_2_AU_EUROPA,
                 "station",
-                winFunc,
+                ()=>
+                    @locationArrivalSignal.dispatch('europa')
+                    winFunc()
+                ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             )
             new Location("END_OF_UNIVERSE",
@@ -180,12 +200,15 @@ class Game
             if Math.random() < @eatChance  # if hungry
                 @rations -= @crewHealth.length  # eat
 
+    updateNextWaypoint: ()->
         # update next location if needed
         if @distanceTraveled > @nextWaypoint.location
             @nextWaypoint = @_getStatsToNextLocation()
         else  # just update the distance
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
             @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance * @nextWaypoint.travelRate)
+
+        console.log('next waypoint:', @nextWaypoint);
 
     updateScore: ()->
         # updates the score
@@ -197,7 +220,6 @@ class Game
         @crewHealth[i] -= amnt
         if @crewHealth[i] < 1
             console.log('crew member died!')
-            @scope.$broadcast('crew death', i)
             @crewHealth.splice(i, 1)  # remove the crew member
         # recalc ship health
         @_calcShipHealth()
@@ -215,12 +237,13 @@ class Game
 
     reset: ()->
         @_init()
-        @scope.$broadcast('resetGame')
+        # TODO:
+        console.log('TODO: resetGame')
         return
 
     end: ()->
         console.log('game over!')
-        @scope.$broadcast('switchToModule', 'game-over')
+        # TODO: switch to game over state
         return
 
     # === debug helper methods ===
