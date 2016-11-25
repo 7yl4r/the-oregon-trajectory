@@ -7,6 +7,8 @@ window.onbeforeunload = () ->
 window.fillVersionSpans = () ->
     $('.version-number').text(globalData.version)
 
+Game = require('game');
+
 window.globalData = {
     gameDir:'',
     baseUrl:(if location.host == '7yl4r.github.io' then '/the-oregon-trajectory/' else '/')
@@ -23,7 +25,8 @@ window.globalData = {
         )
     ,
     calcCredits: () ->
-      return globalData.game.money + globalData.stats.credits
+      return globalData.game.money + globalData.stats.credits,
+    gameData: new Game()
 };
 
 window.util = {

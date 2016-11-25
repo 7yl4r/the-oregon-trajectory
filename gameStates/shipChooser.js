@@ -40,7 +40,7 @@ gameState.prototype = {
         choiceLabel.events.onInputUp.add((function(_game){
             return function () {
                 if(typeof _game.ship != 'undefined'){
-                    _game.state.start('mining');
+                    _game.state.start('travel-screen');
                 }
             }
         })(this.game));
