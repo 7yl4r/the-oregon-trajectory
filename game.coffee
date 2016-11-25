@@ -7,7 +7,7 @@ Score = require('./gameUtils/Score.coffee')
 iss = require('./assets/stations/iss/spriteSpec.js')
 temp_marker = require('./assets/stations/marker1/spriteSpec.js')
 
-window.TRAVEL_SPEED = 1 # pixels per movement tick of tile travel
+window.TRAVEL_SPEED = 50 # pixels per movement tick of tile travel
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
 DIST_PIX        = 33000

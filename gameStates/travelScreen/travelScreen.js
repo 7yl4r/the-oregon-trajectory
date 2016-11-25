@@ -77,33 +77,28 @@ gameState.prototype = {
     create: function(){
         this.randyTime = 0;
 
-        // this.tiles = [new Tile(0, document.getElementById("bg-earth"))];
-        this.bg = this.game.add.image(
-            this.game.width/2,
-            this.game.height/2,
-            'bg-earth'
-        );
-        this.bg.anchor.setTo(0, 0.5);
+        this.tiles = [
+            new Tile(
+                0,
+                this.game.add.image(
+                    this.game.width/2,
+                    this.game.height/2,
+                    'bg-earth'
+                )
+            )
+        ];
 
         this.ship = this.game.add.image(
-            this.game.width/2,
+            300/this.game.width*this.game.width,
             this.game.height/2,
             'player-ship'
         );
         this.ship.anchor.setTo(0.5, 0.5);
 
-        // vm.sprites = {}
-        // vm.shipY = 300;
-        // vm.shipX = 0+vm.ship.w/2;
-        // vm.travelling = false;
-        //
-        // vm.startTravel();
-
         require('pause-button').create(this.game)
     },
     update: function(){
         if (!globalData.game.inMenu){  // check for menu pause
-            this.bg.x -= 1;
             travel(this);
         }
     },
@@ -114,39 +109,41 @@ gameState.prototype = {
 
 module.exports = gameState;
 
-travel = function(game){
+travel = function(gameState){
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
         globalData.gameData.travel();
 
         // move ship to optimal screen position
-        if (game.ship.x < _getIdealShipPos()) {
-            game.ship.x += 1;
+        if (gameState.ship.x < _getIdealShipPos()) {
+            gameState.ship.x += 1;
             globalData.gameData.distanceTraveled += 1
         } else {
-            game.ship.x = _getIdealShipPos();
+            gameState.ship.x = _getIdealShipPos();
         }
 
-        // // move the tiles
-        // game.tiles.forEach(function (tile) {
-        //     tile.travel();
-        // });
-        //
-        // // remove old offscreen tiles
-        // while (game.tiles[0].hasTravelledOffscreen()) {
-        //     game.tiles.splice(0, 1);  // remove leftmost tile
-        //     console.log('tile removed');
-        // }
-        //
-        // // append new bg tiles if needed
-        // var overhang = game.tiles[game.tiles.length - 1].getOverhang();
-        // while (overhang < 100) {
-        //     game.tiles.push(game.getNextTile(window.innerWidth + overhang));
-        //     overhang = game.tiles[game.tiles.length - 1].getOverhang();
-        //     console.log('tile added');
-        //     if (game.tiles.length > 100){
-        //         throw new Error('too many tiles!');
-        //     }
-        // }
+        // move the tiles
+        gameState.tiles.forEach(function (tile) {
+            tile.travel();
+        });
+
+        // remove old offscreen tiles
+        while (gameState.tiles[0].hasTravelledOffscreen()) {
+            gameState.tiles.splice(0, 1);  // remove leftmost tile
+            console.log('tile removed');
+        }
+
+        // append new bg tiles if needed
+        var overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
+        while (overhang < 100) {
+            var newTileX = overhang + gameState.game.width;
+            var nextTile = getNextTile(newTileX, gameState.game);
+            gameState.tiles.push(nextTile);
+            overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
+            console.log(nextTile.img.key + ' tile added at ' +  newTileX);
+            if (gameState.tiles.length > 100){
+                throw new Error('too many tiles!');
+            }
+        }
 
         // handle arrival at stations/events
         if (!globalData.gameData.BYPASS_LOCATIONS){
@@ -179,39 +176,12 @@ travel = function(game){
     }
     // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
     else { // end game
-        game.stopTravel();
         globalData.gameData.end();
     }
 }
 
 
-// #####################
-// code to port:
-// #####################
-// var timeoutId;
-//
-// $scope.$on('resetGame', vm.init);
-//
-// // PRIVATE FUNCTION
-// var cancelInterval = function() {
-//     var result = $interval.cancel(timeoutId);
-//     if (result == true) timeoutId = undefined;
-// }
-//
-// stopTravel = function(){
-//     vm.travelling = false;
-//     cancelInterval();
-// }
-//
-// toggleTravel = function(){
-//     if (vm.travelling){
-//         vm.stopTravel();
-//     } else {
-//         vm.startTravel();
-//     }
-// };
-//
-getNextTile = function(xpos){
+getNextTile = function(xpos, game){
     // if distance travelled to destination big enough, append destination tile, else use filler
     var halfTileWidth = 1000*TRAVELS_PER_MOVE;  // estimated width (should be close to avg) (in moves)
     if (globalData.gameData.nextWaypoint.distance < halfTileWidth ){
@@ -223,20 +193,35 @@ getNextTile = function(xpos){
             || globalData.gameData.nextWaypoint.name == 'jupiter'
             || globalData.gameData.nextWaypoint.name == 'europa'
         ){
-            img = document.getElementById(globalData.gameData.nextWaypoint.name);
+            img = game.add.image(
+                game.width/2,
+                game.height/2,
+                globalData.gameData.nextWaypoint.name
+            );
         } else {
             // filler
-            img = document.getElementById("filler");
+            img = game.add.image(
+                game.width/2,
+                game.height/2,
+                'filler'
+            );
         }
     } else {
         // filler
-        img = document.getElementById("filler");
+        img = img = game.add.image(
+            game.width/2,
+            game.height/2,
+            'filler'
+        );
     }
     // return tile
     return new Tile(xpos, img);
 }
 
-//
+// #####################
+// code to port:
+// #####################
+
 // drift = function(height){
 //     // returns slightly drifted modification on given height
 //     if (Math.random() < 0.01) {  // small chance of drift

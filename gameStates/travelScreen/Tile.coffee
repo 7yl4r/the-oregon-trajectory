@@ -1,26 +1,27 @@
 module.exports = class Tile
-    constructor: (startX, imageElement)->
-        @x = startX
-        @img = imageElement
-        @travelCount = 0
+    gameWidth = 800
 
-    draw: (ctx)->
-        # draws the tile
-        ctx.drawImage(@img, @x, 0)
-        return
+    constructor: (startX, imageObject)->
+        @img = imageObject
+        @img.anchor.setTo(0, 0.5)
+        @img.x = startX
+
+        @travelCount = 0
 
     travel: ()->
         # moves the tile 1 travel unit
         if @travelCount > TRAVELS_PER_MOVE
-            @x -= window.TRAVEL_SPEED
+            @img.x -= window.TRAVEL_SPEED
             @travelCount = 0
         else
             @travelCount += 1
 
     getOverhang: ()->
-        # returns theoretical amount of tile overhanging right of screen, yet to be traveled to
-        return @img.naturalWidth + @x - window.innerWidth
+        # returns theoretical amount of tile overhanging right of screen,
+        #   yet to be traveled to
+        # console.log('w(' + @img.width + ') + x(' + @img.x + ')')
+        return @img.width + @img.x
 
     hasTravelledOffscreen: ()->
         # returns true if tile has travelled left off screen
-        return (@img.naturalWidth + @x) < 0
+        return (@img.width + @img.x) < 0
