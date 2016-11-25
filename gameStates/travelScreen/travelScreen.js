@@ -78,16 +78,26 @@ gameState.prototype = {
     create: function(){
         this.randyTime = 0;
 
-        this.tiles = [
-            new Tile(
-                0,
-                this.game.add.image(
-                    this.game.width/2,
-                    this.game.height/2,
-                    'bg-earth'
-                )
-            )
-        ];
+        // this.tiles = [
+        //     new Tile(
+        //         0,
+        //         this.game.add.image(
+        //             this.game.width/2,
+        //             this.game.height/2,
+        //             'bg-earth'
+        //         )
+        //     )
+        // ];
+
+        this.tileGroup = this.game.add.group();
+        this.tileGroup.classType = Phaser.Image;
+        this.tileGroup.setAll('outOfBoundsKill', true);
+        this.tileGroup.setAll('checkWorldBounds', true);
+        this.tileGroup.create(
+            this.game.width,
+            0,
+            'bg-earth'
+        );
 
         this.ship = this.game.add.sprite(
             300/this.game.width*this.game.width,
@@ -106,12 +116,6 @@ gameState.prototype = {
         if (!globalData.game.inMenu){  // check for menu pause
             travel(this);
         }
-
-        // // manual camera follow
-        // this.game.camera.focusOnXY(this.ship.x - 10, this.game.camera.y);
-        // console.log('camera move to ' + this.ship.x)
-        //
-        // this.game.camera.x += 1;
     },
     render: function(){
         this.game.debug.cameraInfo(this.game.camera, 32, 32);
@@ -126,54 +130,40 @@ travel = function(gameState){
 
         gameState.ship.x += TRAVEL_SPEED;
 
-        // // move ship to optimal screen position
-        // if (gameState.ship.x < _getIdealShipPos()) {
-        //     gameState.ship.x += 1;
-        //     globalData.gameData.distanceTraveled += 1
-        // } else {
-        //     gameState.ship.x = _getIdealShipPos();
-        // }
-
-        // // move the tiles
-        // gameState.tiles.forEach(function (tile) {
-        //     tile.travel();
-        // });
-        //
-        // // remove old offscreen tiles
-        // while (gameState.tiles[0].hasTravelledOffscreen()) {
-        //     gameState.tiles.splice(0, 1);  // remove leftmost tile
-        //     console.log('tile removed');
-        // }
-        //
-        // // append new bg tiles if needed
-        // var overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
-        // while (overhang < 100) {
-        //     var newTileX = overhang + gameState.game.width;
-        //     var nextTile = getNextTile(newTileX, gameState.game);
-        //     gameState.tiles.push(nextTile);
-        //     overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
-        //     console.log(nextTile.img.key + ' tile added at ' +  newTileX);
-        //     if (gameState.tiles.length > 100){
-        //         throw new Error('too many tiles!');
-        //     }
-        // }
+        // TODO: append new bg tiles if needed
+        var tileGroupWidth = 0;
+        gameState.tileGroup.forEachExists(function(childTile){
+            tileGroupWidth += childTile.width
+        })
+        var tileRightSide = gameState.tileGroup.x + tileGroupWidth;
+        var screenRightEdge = -globalData.game.world.x + globalData.game.width;
+        // console.log('tileEdge:' + tileRightSide + "\t screenEdge:" + screenRightEdge);
+        if (tileRightSide < screenRightEdge){
+            var newTileKey = getNextTile()
+            console.log('add ' + newTileKey);
+            gameState.tileGroup.create(
+                screenRightEdge,
+                0,
+                newTileKey
+            );
+        }
 
         // handle arrival at stations/events
-        if (!globalData.gameData.BYPASS_LOCATIONS){
-            for (var loc_i in globalData.gameData.locations){
-                var location = globalData.gameData.locations[loc_i];
-                var pos = location.x;
-                var loc = location.name;
-                if (pos < globalData.gameData.distanceTraveled &&
-                    globalData.gameData.visited.indexOf(loc) < 0) {  // passing & not yet visited
-                    globalData.gameData.visited.push(loc);
-                    globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
-                    console.log('arrived at ', loc);
-                    // TODO:
-                    // globalData.gameData.locations[loc_i].trigger({'$scope':$scope})
-                }
-            }
-        }
+        // if (!globalData.gameData.BYPASS_LOCATIONS){
+        //     for (var loc_i in globalData.gameData.locations){
+        //         var location = globalData.gameData.locations[loc_i];
+        //         var pos = location.x;
+        //         var loc = location.name;
+        //         if (pos < globalData.gameData.distanceTraveled &&
+        //             globalData.gameData.visited.indexOf(loc) < 0) {  // passing & not yet visited
+        //             globalData.gameData.visited.push(loc);
+        //             globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
+        //             console.log('arrived at ', loc);
+        //             // TODO:
+        //             // globalData.gameData.locations[loc_i].trigger({'$scope':$scope})
+        //         }
+        //     }
+        // }
 
         // handle random events
         // TODO: if is a good time/place for an event
@@ -194,7 +184,7 @@ travel = function(gameState){
 }
 
 
-getNextTile = function(xpos, game){
+getNextTile = function(){
     // if distance travelled to destination big enough, append destination tile, else use filler
     var halfTileWidth = 1000*TRAVELS_PER_MOVE;  // estimated width (should be close to avg) (in moves)
     if (globalData.gameData.nextWaypoint.distance < halfTileWidth ){
@@ -206,29 +196,10 @@ getNextTile = function(xpos, game){
             || globalData.gameData.nextWaypoint.name == 'jupiter'
             || globalData.gameData.nextWaypoint.name == 'europa'
         ){
-            img = game.add.image(
-                game.width/2,
-                game.height/2,
-                globalData.gameData.nextWaypoint.name
-            );
-        } else {
-            // filler
-            img = game.add.image(
-                game.width/2,
-                game.height/2,
-                'filler'
-            );
+            return globalData.gameData.nextWaypoint.name;
         }
-    } else {
-        // filler
-        img = img = game.add.image(
-            game.width/2,
-            game.height/2,
-            'filler'
-        );
     }
-    // return tile
-    return new Tile(xpos, img);
+    return 'filler';
 }
 
 // #####################
