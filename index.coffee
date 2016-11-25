@@ -10,7 +10,7 @@ window.fillVersionSpans = () ->
 Game = require('game');
 
 window.globalData = {
-    gameDir:'',
+    gameDir:'', # TODO: fix duplicated on gameData
     baseUrl:(if location.host == '7yl4r.github.io' then '/the-oregon-trajectory/' else '/')
     engineDelay: 100, # ms of delay for engine shutdown (sound only)
     lastEngineFire: 0,
@@ -25,7 +25,8 @@ window.globalData = {
         )
     ,
     calcCredits: () ->
-      return globalData.game.money + globalData.stats.credits,
+        return globalData.game.money + globalData.stats.credits
+    ,
     gameData: new Game()
 };
 
@@ -51,7 +52,7 @@ $(document).ready( ()->
     globalData.game.state.add('mining', require('./gameStates/mining/mining'))
     globalData.game.state.add('boot', require('./gameStates/boot'))
     globalData.game.state.add('ship-chooser', require('./gameStates/shipChooser'))
-    globalData.game.state.add('travel-screen', require('./gameStates/travelScreen'))
+    globalData.game.state.add('travel-screen', require('./gameStates/travelScreen/travelScreen'))
 
     globalData.game.state.start('boot')
 

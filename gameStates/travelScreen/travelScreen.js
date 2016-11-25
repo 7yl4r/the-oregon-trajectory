@@ -1,3 +1,5 @@
+Tile = require('./Tile.coffee')
+
 gameState = function(game){}
 
 MIN_TRAVELS_PER_EVENT = 1000;  // min amount of travel between events
@@ -7,6 +9,7 @@ EVENT_VARIABILITY = 10;  // affects consistency in event timing. high values = l
 gameState.prototype = {
     preload: function() {
         // visual assets
+        // ----------------
         this.game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));
         this.game.load.image('moon', util.absPath('assets/backgrounds/moon.png'));
         this.game.load.image('bg-earth', util.absPath('assets/backgrounds/bg.png'));
@@ -17,14 +20,64 @@ gameState.prototype = {
 
         this.game.load.image('player-ship', util.absPath('assets/sprites/ship.png'));
 
+        // ----------------
+        // music assets
+        // ----------------
+        // game.load.audio('TAG', 'FILE-PATH.mp3');
+        // music.theme = new Howl({
+        //     urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
+        // music.ambience = new Howl({
+        //     urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
+        // music.asteroidMining = new Howl({
+        //     urls: [
+        //         'assets/sound/music/asteroidMining/asteroidMining.mp3',
+        //         'assets/sound/music/asteroidMining/asteroidMining.ogg'
+        //     ],
+        // music.losing = new Howl({
+        //     urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
+        // music.winning = new Howl({
+        //     urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
+
+        // ----------------
+        // sound assets
+        // ----------------
+        // sounds.click = new Howl({
+        //     urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
+        // sounds.bummer = new Howl({
+        //     urls: [
+        //         'assets/sound/effects/somethingbad/SomethingBad.mp3',
+        //         'assets/sound/effects/somethingbad/SomethingBad.ogg'
+        // sounds.shot1 = new Howl({
+        //     urls: [
+        //         'assets/sound/effects/shot1/shot1.mp3',
+        //         'assets/sound/effects/shot1/shot1.ogg',
+        //         'assets/sound/effects/shot1/shot1.wav'
+        // sounds.shot2 = new Howl({
+        //     urls:[
+        //         'assets/sound/effects/shot2/shot2.mp3',
+        //         'assets/sound/effects/shot2/shot2.ogg'
+        // sounds.clunk = new Howl({
+        //     urls:[
+        //         'assets/sound/effects/clunk/clunk.mp3',
+        //         'assets/sound/effects/clunk/clunk.ogg',
+        //         'assets/sound/effects/clunk/clunk.wav'
+        // sounds.propel = new Howl({
+        //     urls:[
+        //         'assets/sound/effects/propellant/propellant.mp3',
+        //         'assets/sound/effects/propellant/propellant.ogg',
+        //         'assets/sound/effects/propellant/propellant.wav'
+
+        // ----------------
         // plugins
+        // ----------------
         require('slick-ui-preload')();
 
         require('pause-button').preload(this.game)
     },
     create: function(){
+        this.randyTime = 0;
 
-        // vm.tiles = [new Tile(0, document.getElementById("bg-earth"))];
+        // this.tiles = [new Tile(0, document.getElementById("bg-earth"))];
         this.bg = this.game.add.image(
             this.game.width/2,
             this.game.height/2,
@@ -32,12 +85,12 @@ gameState.prototype = {
         );
         this.bg.anchor.setTo(0, 0.5);
 
-        this.bg = this.game.add.image(
+        this.ship = this.game.add.image(
             this.game.width/2,
             this.game.height/2,
             'player-ship'
         );
-        this.bg.anchor.setTo(0.5, 0.5);
+        this.ship.anchor.setTo(0.5, 0.5);
 
         // vm.sprites = {}
         // vm.shipY = 300;
@@ -51,7 +104,7 @@ gameState.prototype = {
     update: function(){
         if (!globalData.game.inMenu){  // check for menu pause
             this.bg.x -= 1;
-            travel();
+            travel(this);
         }
     },
     render: function(){
@@ -61,39 +114,39 @@ gameState.prototype = {
 
 module.exports = gameState;
 
-travel = function(){
+travel = function(game){
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
         globalData.gameData.travel();
 
         // move ship to optimal screen position
-        if (vm.shipX < vm._getIdealShipPos()) {
-            vm.shipX += 1;
+        if (game.ship.x < _getIdealShipPos()) {
+            game.ship.x += 1;
             globalData.gameData.distanceTraveled += 1
         } else {
-            vm.shipX = vm._getIdealShipPos();
+            game.ship.x = _getIdealShipPos();
         }
 
-        // move the tiles
-        vm.tiles.forEach(function (tile) {
-            tile.travel();
-        });
-
-        // remove old offscreen tiles
-        while (vm.tiles[0].hasTravelledOffscreen()) {
-            vm.tiles.splice(0, 1);  // remove leftmost tile
-            console.log('tile removed');
-        }
-
-        // append new bg tiles if needed
-        var overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
-        while (overhang < 100) {
-            vm.tiles.push(vm.getNextTile(window.innerWidth + overhang));
-            overhang = vm.tiles[vm.tiles.length - 1].getOverhang();
-            console.log('tile added');
-            if (vm.tiles.length > 100){
-                throw new Error('too many tiles!');
-            }
-        }
+        // // move the tiles
+        // game.tiles.forEach(function (tile) {
+        //     tile.travel();
+        // });
+        //
+        // // remove old offscreen tiles
+        // while (game.tiles[0].hasTravelledOffscreen()) {
+        //     game.tiles.splice(0, 1);  // remove leftmost tile
+        //     console.log('tile removed');
+        // }
+        //
+        // // append new bg tiles if needed
+        // var overhang = game.tiles[game.tiles.length - 1].getOverhang();
+        // while (overhang < 100) {
+        //     game.tiles.push(game.getNextTile(window.innerWidth + overhang));
+        //     overhang = game.tiles[game.tiles.length - 1].getOverhang();
+        //     console.log('tile added');
+        //     if (game.tiles.length > 100){
+        //         throw new Error('too many tiles!');
+        //     }
+        // }
 
         // handle arrival at stations/events
         if (!globalData.gameData.BYPASS_LOCATIONS){
@@ -106,26 +159,27 @@ travel = function(){
                     globalData.gameData.visited.push(loc);
                     globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
                     console.log('arrived at ', loc);
-                    globalData.gameData.locations[loc_i].trigger({'$scope':$scope})
+                    // TODO:
+                    // globalData.gameData.locations[loc_i].trigger({'$scope':$scope})
                 }
             }
         }
 
         // handle random events
         // TODO: if is a good time/place for an event
-        if (randyTime > MIN_TRAVELS_PER_EVENT){
+        if (this.randyTime > MIN_TRAVELS_PER_EVENT){
             if (randy.roll()){
-                randyTime = 0
+                this.randyTime = 0
             } else {
-                randyTime = MIN_TRAVELS_PER_EVENT/EVENT_VARIABILITY
+                this.randyTime = MIN_TRAVELS_PER_EVENT/EVENT_VARIABILITY
             }
         } else {
-            randyTime += 1
+            this.randyTime += 1
         }
     }
     // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
     else { // end game
-        vm.stopTravel();
+        game.stopTravel();
         globalData.gameData.end();
     }
 }
@@ -243,9 +297,9 @@ getNextTile = function(xpos){
 //     vm.drawShip();
 // }
 //
-// _getIdealShipPos = function(){
-//     return window.innerWidth / 3
-// }
+_getIdealShipPos = function(){
+    return window.innerWidth / 3
+}
 //
 // $scope.$on('encounter', function(ngEvent, event){
 //     // on random encounter
