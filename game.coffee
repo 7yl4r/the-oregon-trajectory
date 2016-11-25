@@ -34,6 +34,8 @@ DIST_EUROPA_MANU = parseInt(DIST_CERES + DIST_PIX/2)
 DIST_EUROPA      = parseInt(DIST_EUROPA_MANU + DIST_PIX/2)
 
 class Game
+    worldWidth = DIST_EUROPA
+    
     constructor: (gameScope)->
         @scope = gameScope
 

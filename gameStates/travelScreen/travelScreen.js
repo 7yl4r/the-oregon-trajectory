@@ -1,4 +1,5 @@
 Tile = require('./Tile.coffee')
+Phaser = require('phaser')
 
 gameState = function(game){}
 
@@ -88,12 +89,16 @@ gameState.prototype = {
             )
         ];
 
-        this.ship = this.game.add.image(
+        this.ship = this.game.add.sprite(
             300/this.game.width*this.game.width,
             this.game.height/2,
             'player-ship'
         );
         this.ship.anchor.setTo(0.5, 0.5);
+
+        this.game.world.setBounds(0, 0, globalData.gameData.worldWidth, 600);
+
+        this.game.camera.follow(this.ship);  // this is not working for me
 
         require('pause-button').create(this.game)
     },
@@ -101,9 +106,15 @@ gameState.prototype = {
         if (!globalData.game.inMenu){  // check for menu pause
             travel(this);
         }
+
+        // // manual camera follow
+        // this.game.camera.focusOnXY(this.ship.x - 10, this.game.camera.y);
+        // console.log('camera move to ' + this.ship.x)
+        //
+        // this.game.camera.x += 1;
     },
     render: function(){
-
+        this.game.debug.cameraInfo(this.game.camera, 32, 32);
     }
 }
 
@@ -113,37 +124,39 @@ travel = function(gameState){
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
         globalData.gameData.travel();
 
-        // move ship to optimal screen position
-        if (gameState.ship.x < _getIdealShipPos()) {
-            gameState.ship.x += 1;
-            globalData.gameData.distanceTraveled += 1
-        } else {
-            gameState.ship.x = _getIdealShipPos();
-        }
+        gameState.ship.x += TRAVEL_SPEED;
 
-        // move the tiles
-        gameState.tiles.forEach(function (tile) {
-            tile.travel();
-        });
+        // // move ship to optimal screen position
+        // if (gameState.ship.x < _getIdealShipPos()) {
+        //     gameState.ship.x += 1;
+        //     globalData.gameData.distanceTraveled += 1
+        // } else {
+        //     gameState.ship.x = _getIdealShipPos();
+        // }
 
-        // remove old offscreen tiles
-        while (gameState.tiles[0].hasTravelledOffscreen()) {
-            gameState.tiles.splice(0, 1);  // remove leftmost tile
-            console.log('tile removed');
-        }
-
-        // append new bg tiles if needed
-        var overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
-        while (overhang < 100) {
-            var newTileX = overhang + gameState.game.width;
-            var nextTile = getNextTile(newTileX, gameState.game);
-            gameState.tiles.push(nextTile);
-            overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
-            console.log(nextTile.img.key + ' tile added at ' +  newTileX);
-            if (gameState.tiles.length > 100){
-                throw new Error('too many tiles!');
-            }
-        }
+        // // move the tiles
+        // gameState.tiles.forEach(function (tile) {
+        //     tile.travel();
+        // });
+        //
+        // // remove old offscreen tiles
+        // while (gameState.tiles[0].hasTravelledOffscreen()) {
+        //     gameState.tiles.splice(0, 1);  // remove leftmost tile
+        //     console.log('tile removed');
+        // }
+        //
+        // // append new bg tiles if needed
+        // var overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
+        // while (overhang < 100) {
+        //     var newTileX = overhang + gameState.game.width;
+        //     var nextTile = getNextTile(newTileX, gameState.game);
+        //     gameState.tiles.push(nextTile);
+        //     overhang = gameState.tiles[gameState.tiles.length - 1].getOverhang();
+        //     console.log(nextTile.img.key + ' tile added at ' +  newTileX);
+        //     if (gameState.tiles.length > 100){
+        //         throw new Error('too many tiles!');
+        //     }
+        // }
 
         // handle arrival at stations/events
         if (!globalData.gameData.BYPASS_LOCATIONS){
