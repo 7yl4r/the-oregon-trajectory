@@ -1,10 +1,10 @@
 Sprite = require('./Sprite.coffee')
 
 module.exports = class Location
-    constructor: (name, x, xdot, actionKey, trigger=undefined, sprite=undefined)->
+    constructor: (name, x, actionKey, trigger=undefined, sprite=undefined)->
+        # console.log('new Loc(', name, x, actionKey, '):', this)
         @name = name
         @x = x
-        @xdot = xdot
         @actionKey = actionKey  # TODO: remove actionKey (use trigger and sprite instead)
         if sprite?
             @sprite = sprite
@@ -18,17 +18,6 @@ module.exports = class Location
     trigger: (args)->
         console.log('arrived at event', @)
         console.log('you really ought to set an event trigger for this location')
-
-    _handleStationArrival: (args)->
-        # TODO: station-specific stuff like
-        # switch @name
-        #   when "iss"
-        #       # something...
-        #   when "moon"
-        #       # something else...
-
-        # TODO: port this:
-        # args.$scope.$emit('switchToModule', 'shop')
 
     # TODO: remove this method and actionKey attribute, sprites should be passed inTo the location now...
     _getSpriteForAction: (key)->

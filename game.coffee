@@ -8,45 +8,65 @@ Phaser = require('phaser')
 iss = require('./assets/stations/iss/spriteSpec.js')
 temp_marker = require('./assets/stations/marker1/spriteSpec.js')
 
-window.TRAVEL_SPEED = 10 # pixels per movement tick of tile travel
+window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
+# NOTE: this base speed does not affect travel time between planets b/c
+#           it is used to calculate those distances.
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
-DIST_PIX        = 33000
-ISS_DIST_AU     = 0.000002
-MOON_DIST_AU    = 0.0015
-MARS_DIST_AU    = 1.9608
-CERES_DIST_AU   = 1.6243
-EUROPA_DIST_AU  = 3.2486
 AU_2_KM         = 149597871
-PIX_2_AU_ISS    = ISS_DIST_AU/1000 * AU_2_KM
-PIX_2_AU_MOON   = MOON_DIST_AU/DIST_PIX * 2 * AU_2_KM
-PIX_2_AU_MARS   = MARS_DIST_AU/DIST_PIX * 2 * AU_2_KM
-PIX_2_AU_CERES  = CERES_DIST_AU/DIST_PIX * 2 * AU_2_KM
-PIX_2_AU_EUROPA = EUROPA_DIST_AU/DIST_PIX * 2 * AU_2_KM
-
-DIST_ISS         = 2000
-DIST_MOON_MANU   = parseInt(DIST_ISS + DIST_PIX/2)
-DIST_MOON        = parseInt(DIST_MOON_MANU + DIST_PIX/2)
-DIST_MARS_MANU   = parseInt(DIST_MOON + DIST_PIX/2)
-DIST_MARS        = parseInt(DIST_MARS_MANU + DIST_PIX/2)
-DIST_CERES_MANU  = parseInt(DIST_MARS + DIST_PIX/2)
-DIST_CERES       = parseInt(DIST_CERES_MANU + DIST_PIX/2)
-DIST_EUROPA_MANU = parseInt(DIST_CERES + DIST_PIX/2)
-DIST_EUROPA      = parseInt(DIST_EUROPA_MANU + DIST_PIX/2)
 
 class Game
-    worldWidth = DIST_EUROPA
-
-    constructor: (gameScope)->
+    constructor: ()->
 
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
-        @_init()  # initializes params
 
         @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random')
         @locationArrivalSignal = new Phaser.Signal()
+        @worldWidth_AU = 13.6749
+        @landmarks = {
+            EARTH: 'earth',
+            ISS: 'iss',
+            MANEUVER_MOON: 'moon-maneuver',
+            MOON: 'moon',
+            MANEUVER_MARS: 'mars-maneuver',
+            MARS: 'mars',
+            MANEUVER_CERES: 'ceres-maneuver'
+            CERES: 'ceres',
+            MANEUVER_JUPITER: 'jupiter-maneuver'
+            JUPITER: 'jupiter',
+            EUROPA: 'europa'
+        }
+
+        @distances = {}  # actual distances in AU
+        @distances[@landmarks.EARTH] = 0.0
+        @distances[@landmarks.MANEUVER_MOON] =    0.0015
+        @distances[@landmarks.MOON] =             0.0015*2
+        @distances[@landmarks.MANEUVER_MARS] =    0.0015*2+1.9608
+        @distances[@landmarks.MARS] =             0.0015*2+1.9608*2
+        @distances[@landmarks.MANEUVER_CERES] =   0.0015*2+1.9608*2+1.6243
+        @distances[@landmarks.CERES] =            0.0015*2+1.9608*2+1.6243*2
+        @distances[@landmarks.MANEUVER_JUPITER] = 0.0015*2+1.9608*2+1.6243*2+3.2486
+        @distances[@landmarks.JUPITER] =          0.0015*2+1.9608*2+1.6243*2+3.2486*2
+        @distances[@landmarks.EUROPA] =           0.0015*2+1.9608*2+1.6243*2+3.2486*2+.003
+
+        @dist_adjustments = {}  # use these to move locations for gameplay reasons
+        @dist_adjustments[@landmarks.EARTH] =            0.1
+        @dist_adjustments[@landmarks.MANEUVER_MOON] =    1
+        @dist_adjustments[@landmarks.MOON] =             2
+        @dist_adjustments[@landmarks.MANEUVER_MARS] =    1
+        @dist_adjustments[@landmarks.MARS] =             0
+        @dist_adjustments[@landmarks.MANEUVER_CERES] =   0
+        @dist_adjustments[@landmarks.CERES] =            0
+        @dist_adjustments[@landmarks.MANEUVER_JUPITER] = 0
+        @dist_adjustments[@landmarks.JUPITER] =          0
+        @dist_adjustments[@landmarks.EUROPA] =           0.3
+
 
         # debug vars
         @BYPASS_LOCATIONS = false
+        @setTravelTime(5)
+
+        @_init()  # initializes params
 
     _init: ()->
         # re-initializes the game
@@ -57,91 +77,82 @@ class Game
         winFunc = ()=>
             # TODO:
             console.log('switch to win state');
+
         @locations = [
-            new Location("iss",
-                DIST_ISS,
-                PIX_2_AU_ISS,
+            new Location(@landmarks.ISS,
+                @getDistance(@landmarks.ISS),
                 "station",
                 ()=>
-                    @locationArrivalSignal.dispatch('earth')
+                    @locationArrivalSignal.dispatch(@landmarks.EARTH)
                     shopFunc()
                 ,
                 new Sprite(@gameDir+iss.sheet, iss.dimensions, -1000, 'random')
             ),
-            new Location("moon-maneuver",
-                DIST_MOON_MANU,
-                PIX_2_AU_MOON,
+            new Location(@landmarks.MANEUVER_MOON,
+                @getDistance(@landmarks.MANEUVER_MOON),
                 "maneuver"
             ),
-            new Location("moon",
-                DIST_MOON,
-                PIX_2_AU_MOON,
+            new Location(@landmarks.MOON,
+                @getDistance(@landmarks.MOON),
                 "station",
                 ()=>
-                    @locationArrivalSignal.dispatch('moon')
+                    @locationArrivalSignal.dispatch(@landmarks.MOON)
                     shopFunc()
                 ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
-            new Location("mars-maneuver",
-                DIST_MARS_MANU,
-                PIX_2_AU_MARS,
+            new Location(@landmarks.MANEUVER_MARS,
+                @getDistance(@landmarks.MANEUVER_MARS),
                 "maneuver"
             ),
-            new Location("mars",
-                DIST_MARS,
-                PIX_2_AU_MARS,
+            new Location(@landmarks.MARS,
+                @getDistance(@landmarks.MARS),
                 "station",
                 ()=>
-                    @locationArrivalSignal.dispatch('mars')
+                    @locationArrivalSignal.dispatch(@landmarks.MARS)
                     shopFunc()
                 ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
-            new Location("ceres-maneuver",
-                DIST_CERES_MANU,
-                PIX_2_AU_CERES,
+            new Location(@landmarks.MANEUVER_CERES,
+                @getDistance(@landmarks.MANEUVER_CERES),
                 "maneuver"
             ),
-            new Location("ceres",
-                DIST_CERES,
-                PIX_2_AU_CERES,
+            new Location(@landmarks.CERES,
+                @getDistance(@landmarks.CERES),
                 "station",
                 ()=>
-                    @locationArrivalSignal.dispatch('ceres')
+                    @locationArrivalSignal.dispatch(@landmarks.CERES)
                     shopFunc()
                 ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
-            new Location("europa-maneuver",
-                DIST_EUROPA_MANU,
-                PIX_2_AU_EUROPA,
+            new Location(@landmarks.MANEUVER_JUPITER,
+                @getDistance(@landmarks.MANEUVER_JUPITER),
                 "maneuver"
             ),
-            new Location("jupiter",
-                DIST_EUROPA-DIST_MOON,
-                PIX_2_AU_EUROPA-PIX_2_AU_MOON,
+            new Location(@landmarks.JUPITER,
+                @getDistance(@landmarks.JUPITER),
                 "maneuver",
                 ()=>
-                    @locationArrivalSignal.dispatch('jupiter')
+                    @locationArrivalSignal.dispatch(@landmarks.JUPITER)
             ),
-            new Location("europa",
-                DIST_EUROPA,
-                PIX_2_AU_EUROPA,
+            new Location(@landmarks.EUROPA,
+                @getDistance(@landmarks.EUROPA),
                 "station",
                 ()=>
-                    @locationArrivalSignal.dispatch('europa')
+                    @locationArrivalSignal.dispatch(@landmarks.EUROPA)
                     winFunc()
                 ,
                 new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             )
             new Location("END_OF_UNIVERSE",
-                DIST_EUROPA+DIST_ISS,
-                PIX_2_AU_EUROPA+PIX_2_AU_ISS,
+                @getDistance(),
                 "maneuver"
             )
         ]
 
+        console.log('locs:', @locations)
         @reputation = new Reputation();
         @score = new Score();
 
@@ -165,7 +176,6 @@ class Game
         @miningCreditsPerPartMin = 2
         @miningCreditsPerPartMax = 8
 
-
         @radiationChance = .0005  # chance of being irradiated per tick
         @money = 5000
         @visited = ['ksc']
@@ -175,16 +185,37 @@ class Game
         #   distance:       111,    # distance to the place
         #   name:      "the place",
         #   location:       333,    # absolute location of the place
-        #   travelRate:     444,    # estimate of fuel to get there
+        #               :     444,    # estimate of fuel to get there
         #   fuelEstimate:   555,    # estimate of rations to get there
-        #   rationEstimate: 666     # current pixel-to-distance ratio
+        #   rationEstimate: 666
         # }
+
+    setTravelTime: (gameLength)->
+        # sets game targeted length in minutes and adjusts distances between
+        #   planets accordingly.
+        gameTime = gameLength*60 # convert to seconds
+        fps = 30
+        @worldWidth = gameTime*TRAVEL_SPEED*fps  # [s] * [px]/[s] = [px]
+
+        console.log('gameTime set to ' + gameLength + 'min. Width:' + @worldWidth + 'px')
+
+        @distances_px = {}
+        for distKey of @distances
+            @distances_px[distKey] = (@distances[distKey] + @dist_adjustments[distKey]) / @worldWidth_AU * @worldWidth
+
+        console.log('distances:', @distances)
+
+    getDistance: (landmarkKey, units)->
+        if units=='AU'
+            return @distances[landmarkKey]
+        else
+            return @distances_px[landmarkKey]
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
             @distanceTraveled += TRAVEL_SPEED
-            @displayDistanceTraveled += Math.round(TRAVEL_SPEED * @nextWaypoint.travelRate)
+            @displayDistanceTraveled += Math.round(TRAVEL_SPEED*@worldWidth/@worldWidth_AU)
             if Math.random() < @fuelChance
                 @fuel -= @fuelExpense
         else
@@ -206,7 +237,7 @@ class Game
             @nextWaypoint = @_getStatsToNextLocation()
         else  # just update the distance
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
-            @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance * @nextWaypoint.travelRate)
+            @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance)
 
         console.log('next waypoint:', @nextWaypoint);
 
@@ -283,9 +314,9 @@ class Game
         #   distance:       111,    # distance to the place
         #   name:      "the place",
         #   location:       333,    # absolute location of the place
-        #   travelRate:     444,    # estimate of fuel to get there
+        #                   444,    # estimate of fuel to get there
         #   fuelEstimate:   555,    # estimate of rations to get there
-        #   rationEstimate: 666     # current pixel-to-distance ratio
+        #   rationEstimate: 666
         # }
         # location is relative to starting position, distance is relative to current ship position
         remaining = @_getRemainingLocations()
@@ -293,17 +324,15 @@ class Game
         # get minimum of remaining locations
         next = {}
         next.location = remaining[0].x
-        next.travelRate     = remaining[0].xdot
         next.name     = remaining[0].name
         for i of remaining
             if remaining[i].x < next.distance  # assumes no equal distances
                 next.location = remaining[i].x
-                next.travelRate     = remaining[i].xdot
                 next.name     = remaining[i].name
 
             # calculate distance remaining before arrival
         next.distance = next.location - @distanceTraveled
-        next.displayDistance = Math.round(next.distance * next.travelRate)
+        next.displayDistance = Math.round(next.distance)
         next.fuelEstimate = next.distance * @fuelExpense * @fuelChance / TRAVEL_SPEED
         next.rationEstimate = next.distance * @eatChance * @crewHealth.length / TRAVEL_SPEED
         return next

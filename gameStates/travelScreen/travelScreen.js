@@ -13,7 +13,7 @@ gameState.prototype = {
         // ----------------
         this.game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));
         this.game.load.image('moon', util.absPath('assets/backgrounds/moon.png'));
-        this.game.load.image('bg-earth', util.absPath('assets/backgrounds/bg.png'));
+        this.game.load.image('earth', util.absPath('assets/backgrounds/bg.png'));
         this.game.load.image('mars', util.absPath('assets/backgrounds/mars.png'));
         this.game.load.image('ceres', util.absPath('assets/backgrounds/ceres.png'));
         this.game.load.image('jupiter', util.absPath('assets/backgrounds/jupiter.png'));
@@ -78,26 +78,11 @@ gameState.prototype = {
     create: function(){
         this.randyTime = 0;
 
-        // this.tiles = [
-        //     new Tile(
-        //         0,
-        //         this.game.add.image(
-        //             this.game.width/2,
-        //             this.game.height/2,
-        //             'bg-earth'
-        //         )
-        //     )
-        // ];
-
         this.tileGroup = this.game.add.group();
         this.tileGroup.classType = Phaser.Image;
         this.tileGroup.setAll('outOfBoundsKill', true);
         this.tileGroup.setAll('checkWorldBounds', true);
-        this.tileGroup.create(
-            this.game.width,
-            0,
-            'bg-earth'
-        );
+        addTile(this.game, this.tileGroup, 'earth')
 
         globalData.gameData.locationArrivalSignal.add((function(_game, _tileGroup){
             return function(tileName){
