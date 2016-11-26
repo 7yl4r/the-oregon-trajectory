@@ -21,8 +21,6 @@ class Game
     constructor: ()->
 
         @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
-
-        @ship = new Sprite(@gameDir + '/assets/sprites/ship.png', "ship", 0, 'random')
         @locationArrivalSignal = new Phaser.Signal()
         @worldWidth_AU = 13.6749
         @landmarks = {
@@ -61,9 +59,9 @@ class Game
         @dist_adjustments[@landmarks.MARS] =              1.0
         @dist_adjustments[@landmarks.MANEUVER_CERES] =    0.5
         @dist_adjustments[@landmarks.CERES] =             0.0
-        @dist_adjustments[@landmarks.MANEUVER_JUPITER] = -1.0
-        @dist_adjustments[@landmarks.JUPITER] =          -2.0
-        @dist_adjustments[@landmarks.EUROPA] =            0.0
+        @dist_adjustments[@landmarks.MANEUVER_JUPITER] = -1.5
+        @dist_adjustments[@landmarks.JUPITER] =          -2.5
+        @dist_adjustments[@landmarks.EUROPA] =           -1.0
 
 
         # debug vars
@@ -222,7 +220,7 @@ class Game
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
             @distanceTraveled += TRAVEL_SPEED
-            @displayDistanceTraveled += Math.round(TRAVEL_SPEED*@worldWidth/@worldWidth_AU)
+            @displayDistanceTraveled += TRAVEL_SPEED/@worldWidth*@worldWidth_AU
             if Math.random() < @fuelChance
                 @fuel -= @fuelExpense
         else

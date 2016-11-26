@@ -24,8 +24,8 @@ function create(game){
 }
 
 function update(game){
-    supplyPanel.update();
-    trajPanel.update();
+    supplyPanel.update(game);
+    trajPanel.update(game);
 }
 
 module.exports = {preload:preload, create:create, update:update}
