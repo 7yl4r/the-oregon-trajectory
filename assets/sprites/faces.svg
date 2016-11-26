@@ -25,8 +25,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="392.08848"
+     inkscape:zoom="1"
+     inkscape:cx="394.10879"
      inkscape:cy="791.15357"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -53,76 +53,112 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#f2d216;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#f2d216;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4136"
-       cx="292.85715"
-       cy="259.50507"
-       r="58.57143" />
+       cx="248.35715"
+       cy="115.43887"
+       r="16.91618"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/neutral.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#f2d216;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#f2d216;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4138"
-       cx="274.42856"
-       cy="251.29077"
-       r="2.8571429" />
+       cx="243.03473"
+       cy="113.06647"
+       r="0.82517946"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/neutral.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       r="2.8571429"
-       cy="251.29077"
-       cx="312.42856"
+       r="0.82517946"
+       cy="113.06647"
+       cx="254.00963"
        id="circle4140"
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#f2d216;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#f2d216;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/neutral.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <path
-       style="fill:none;fill-opacity:0.65490196;fill-rule:evenodd;stroke:#f2d216;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;opacity:1"
-       d="m 259.57143,287.71934 67.57143,0"
+       style="opacity:1;fill:none;fill-opacity:0.65490196;fill-rule:evenodd;stroke:#f2d216;stroke-width:2.31050253;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 238.74381,123.58751 19.51549,0"
        id="path4142"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/neutral.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       r="58.57143"
-       cy="119.50507"
-       cx="292.85715"
+       r="16.91618"
+       cy="75.005074"
+       cx="248.35715"
        id="circle4144"
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#27ae60;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#27ae60;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/happy.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       r="2.8571429"
-       cy="111.29077"
-       cx="274.42856"
+       r="0.82517946"
+       cy="72.632675"
+       cx="243.03473"
        id="circle4146"
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#27ae60;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#27ae60;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/happy.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#27ae60;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#27ae60;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="circle4148"
-       cx="312.42856"
-       cy="111.29077"
-       r="2.8571429" />
+       cx="254.00963"
+       cy="72.632675"
+       r="0.82517946"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/happy.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path4150"
-       d="m 259.57143,133.71934 c 21.66005,20.29825 44.00995,24.38517 67.57143,0"
-       style="opacity:1;fill:none;fill-opacity:0.65490196;fill-rule:evenodd;stroke:#27ae60;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       d="m 238.74381,79.110336 c 6.2557,5.862394 12.71063,7.042749 19.51549,0"
+       style="opacity:1;fill:none;fill-opacity:0.65490196;fill-rule:evenodd;stroke:#27ae60;stroke-width:2.31050253;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/happy.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       r="58.57143"
-       cy="399.50507"
-       cx="292.85715"
+       r="16.91618"
+       cy="155.87265"
+       cx="248.35715"
        id="circle4152"
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#f46131;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#f46131;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/sad.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       r="2.8571429"
-       cy="391.29077"
-       cx="274.42856"
+       r="0.82517946"
+       cy="153.50026"
+       cx="243.03473"
        id="circle4154"
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#f46131;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#f46131;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/sad.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <circle
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#f46131;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#f46131;stroke-width:2.31050253;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="circle4156"
-       cx="312.42856"
-       cy="391.29077"
-       r="2.8571429" />
+       cx="254.00963"
+       cy="153.50026"
+       r="0.82517946"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/sad.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path4158"
-       d="m 259.57143,433.71934 c 18.20453,-22.45824 39.85975,-26.97877 67.57143,0"
-       style="opacity:1;fill:none;fill-opacity:0.65490196;fill-rule:evenodd;stroke:#f46131;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       d="m 238.74381,165.75418 c 5.2577,-6.48623 11.512,-7.79182 19.51549,0"
+       style="opacity:1;fill:none;fill-opacity:0.65490196;fill-rule:evenodd;stroke:#f46131;stroke-width:2.31050253;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/tylar/the-oregon-trajectory/assets/ui/sad.png"
+       inkscape:export-xdpi="79.683769"
+       inkscape:export-ydpi="79.683769" />
   </g>
 </svg>
