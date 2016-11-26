@@ -32,7 +32,7 @@ module.exports = class Location
             @spriteKey
         );
         location.sprite.animations.add('animation1');
-        location.sprite.animations.play('animation1', 50, true);
+        location.sprite.animations.play('animation1', 2, true);
         location.sprite.anchor.setTo(0.5, 0.5);
         location.sprite.update = ()->
             this.y = drift(this.y)

@@ -37,6 +37,20 @@ gameState.prototype = {
         loadSpriteSheet(game, data.landmarks.CERES+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
         loadSpriteSheet(game, data.landmarks.EUROPA+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
 
+        // // TODO could include more in spec using a more advanced loader.
+        // // Example usage of loader might be like:
+        // SpriteSpecLoader.load(game, 'sprite-key', require('../path/to/spriteSpec.js'));
+        // // loader loads files, but holds onto animation data from spec for later
+        // sprite = add.sprite('tag');
+        // // setup uses saved animation data from spec to set animations and play
+        // SpriteSpecLoader.setup(sprite, 'sprite-key');
+        // // setup does something like to:
+        // //      foreach animation in specs[key].animations
+        // //      sprite.animations.add(animation.key, animation.frames);
+        // SpriteSpecLoader.play(sprite, 'sprite-key', 'anim-key')
+        // //      sprite.animations.play(animation.key, animation.fps);
+
+
         // ----------------
         // music assets
         // ----------------
