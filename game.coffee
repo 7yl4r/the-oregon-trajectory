@@ -38,7 +38,8 @@ class Game
         }
 
         @distances = {}  # actual distances in AU
-        @distances[@landmarks.EARTH] = 0.0
+        @distances[@landmarks.ISS] =              0.0010
+        @distances[@landmarks.EARTH] =            0.0
         @distances[@landmarks.MANEUVER_MOON] =    0.0015
         @distances[@landmarks.MOON] =             0.0015*2
         @distances[@landmarks.MANEUVER_MARS] =    0.0015*2+1.9608

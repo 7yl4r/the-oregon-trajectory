@@ -2,6 +2,7 @@ Tile = require('./Tile.coffee');
 Phaser = require('phaser');
 PauseButton = require('pause-button');
 StatusDisplay = require('status-display');
+drift = require('drift');
 
 gameState = function(game){}
 
@@ -94,14 +95,22 @@ gameState.prototype = {
             }
         })(this.game, this.tileGroup));
 
+        this.SHIP_INITIAL_POS = 300;
         this.ship = this.game.add.sprite(
-            300/this.game.width*this.game.width,
+            this.SHIP_INITIAL_POS,
             this.game.height/2,
             'player-ship'
         );
         this.ship.anchor.setTo(0.5, 0.5);
+        this.ship.update = function(){
+            this.y = drift(this.y)
+        }
         this.game.world.setBounds(0, 0, globalData.gameData.worldWidth, 600);
         this.game.camera.follow(this.ship);
+
+        for (var loc_i in globalData.gameData.locations){
+            globalData.gameData.locations[loc_i].addLocationSprite(this, globalData.gameData, globalData.gameData.locations[loc_i])
+        }
 
         PauseButton.create(this.game);
         StatusDisplay.create(this.game);
@@ -164,7 +173,7 @@ travel = function(gameState){
                     globalData.gameData.visited.push(loc);
                     globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
                     console.log('arrived at ', loc);
-                    globalData.gameData.locations[loc_i].trigger();
+                    globalData.gameData.locations[loc_i].trigger({state:gameState, data:globalData.gameData});
                 }
             }
         }
@@ -187,70 +196,11 @@ travel = function(gameState){
     }
 }
 
+
 // #####################
 // code to port:
 // #####################
 
-// drift = function(height){
-//     // returns slightly drifted modification on given height
-//     if (Math.random() < 0.01) {  // small chance of drift
-//         height += Math.round(Math.random() * 2 - 1);
-//         if (height > 400) {
-//             height = 399
-//         } else if (height < 200) {
-//             height = 201
-//         }
-//     }
-//     return height;
-// }
-//
-// drawSprite = function(location){
-//     // draws location sprite if in view at global Xposition
-//     // if w/in reasonable draw distance
-//     var spriteW = 500;  // max sprite width (for checking when to draw)
-//     var Xposition = location.x + vm.shipX;
-//
-//
-//     if (data.distanceTraveled + window.innerWidth + spriteW > Xposition    // if close enough
-//         && data.distanceTraveled - spriteW < Xposition                  ) { // if we haven't passed it
-//         location.sprite.y = vm.drift(location.sprite.y);
-//         location.sprite.r += location.sprite.spin;
-//         var rel_x = Xposition-data.distanceTraveled;
-//         location.sprite.x = rel_x;
-//         // use existing y value (add small bit of drift)
-//         location.sprite.draw(vm.ctx)
-//     }
-// }
-//
-// drawLocations = function(){
-//     for (var loc_i in data.locations){
-//         try {
-//             vm.drawSprite(data.locations[loc_i]);
-//         } catch (err){
-//             console.log("drawSpriteLoc fails @ ", loc_i, 'of', data.locations.length, data.locations[loc_i]);
-//         }
-//     }
-// }
-//
-// drawBg = function(){
-//     vm.tiles.forEach(function(tile) {
-//         tile.draw(vm.ctx);
-//     });
-// }
-//
-// drawShip = function(){
-//     vm.shipY = vm.drift(vm.shipY);
-//     vm.ship.draw(vm.ctx, vm.shipX, vm.shipY)
-// }
-//
-// draw = function(){
-//     // resize element to window
-//     vm.ctx.canvas.width  = window.innerWidth;  //TODO: only do this when needed, not every draw
-//     vm.drawBg();
-//     vm.drawLocations();
-//     vm.drawShip();
-// }
-//
 _getIdealShipPos = function(){
     return window.innerWidth / 3
 }
