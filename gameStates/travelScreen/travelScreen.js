@@ -108,7 +108,7 @@ gameState.prototype = {
             }
         })(this.game, this.tileGroup));
 
-        this.SHIP_INITIAL_POS = 300;
+        this.SHIP_INITIAL_POS = 0;
         this.ship = this.game.add.sprite(
             this.SHIP_INITIAL_POS,
             this.game.height/2,
@@ -118,7 +118,7 @@ gameState.prototype = {
         this.ship.update = function(){
             this.y = drift(this.y)
         }
-        this.game.world.setBounds(0, 0, globalData.gameData.worldWidth, 600);
+        this.game.world.setBounds(-200, 0, globalData.gameData.worldWidth, 600);
         this.game.camera.follow(this.ship);
 
         for (var loc_i in globalData.gameData.locations){

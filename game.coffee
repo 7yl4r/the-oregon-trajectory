@@ -136,7 +136,7 @@ class Game
                     winFunc()
             ),
             new Location("END_OF_UNIVERSE",
-                @getDistance(),
+                @worldWidth,
                 "maneuver"
             )
         ]
