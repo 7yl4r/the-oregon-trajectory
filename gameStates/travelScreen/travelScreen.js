@@ -109,8 +109,8 @@ gameState.prototype = {
     update: function(){
         if (!globalData.game.inMenu){  // check for menu pause
             travel(this);
+            StatusDisplay.update(this.game);
         }
-        StatusDisplay.update(this.game);
     },
     render: function(){
         // this.game.debug.cameraInfo(this.game.camera, 32, 32);
