@@ -15,7 +15,7 @@ function create(game){
         150,
         game.height - 16
     ));
-    
+
     panel.add(new SlickUI.Element.Text(10,0, "Menu"))
         .centerHorizontally().text.alpha = 0.5;
 
@@ -34,7 +34,7 @@ function create(game){
 
     game.slickUI.add(menuButton = new SlickUI.Element.DisplayObject(
         game.width - (64 + 8),
-        8,
+        game.height- (64 + 8),
         game.make.sprite(0, 0, 'pause-button')
     ));
 
