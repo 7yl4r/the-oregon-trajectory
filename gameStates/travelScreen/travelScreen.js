@@ -3,6 +3,7 @@ Phaser = require('phaser');
 PauseButton = require('pause-button');
 StatusDisplay = require('status-display');
 drift = require('drift');
+loadSpriteSheet = require('load-spritesheet');
 
 gameState = function(game){}
 
@@ -12,17 +13,29 @@ EVENT_VARIABILITY = 10;  // affects consistency in event timing. high values = l
 
 gameState.prototype = {
     preload: function() {
-        // visual assets
-        // ----------------
-        this.game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));
-        this.game.load.image('moon', util.absPath('assets/backgrounds/moon.png'));
-        this.game.load.image('earth', util.absPath('assets/backgrounds/bg.png'));
-        this.game.load.image('mars', util.absPath('assets/backgrounds/mars.png'));
-        this.game.load.image('ceres', util.absPath('assets/backgrounds/ceres.png'));
-        this.game.load.image('jupiter', util.absPath('assets/backgrounds/jupiter.png'));
-        this.game.load.image('europa', util.absPath('assets/backgrounds/europa.png'));
-
-        this.game.load.image('player-ship', util.absPath('assets/sprites/ship.png'));
+        game = this.game;
+        data = globalData.gameData;
+        // #################
+        // # visual assets #
+        // #################
+        // backgrounds:
+        game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));
+        game.load.image('moon', util.absPath('assets/backgrounds/moon.png'));
+        game.load.image('earth', util.absPath('assets/backgrounds/bg.png'));
+        game.load.image('mars', util.absPath('assets/backgrounds/mars.png'));
+        game.load.image('ceres', util.absPath('assets/backgrounds/ceres.png'));
+        game.load.image('jupiter', util.absPath('assets/backgrounds/jupiter.png'));
+        game.load.image('europa', util.absPath('assets/backgrounds/europa.png'));
+        // player ship:
+        game.load.image('player-ship', util.absPath('assets/sprites/ship.png'));
+        // maneuver marker:
+        loadSpriteSheet(game, 'maneuver', require('../../assets/sprites/maneuver-node/spriteSpec'));
+        // landmark sprites:
+        loadSpriteSheet(game, data.landmarks.ISS+'-station', require('../../assets/sprites/stations/iss/spriteSpec'));
+        loadSpriteSheet(game, data.landmarks.MOON+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
+        loadSpriteSheet(game, data.landmarks.MARS+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
+        loadSpriteSheet(game, data.landmarks.CERES+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
+        loadSpriteSheet(game, data.landmarks.EUROPA+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
 
         // ----------------
         // music assets

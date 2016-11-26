@@ -4,10 +4,6 @@ Reputation = require('./gameUtils/Reputation.coffee')
 Score = require('./gameUtils/Score.coffee')
 Phaser = require('phaser')
 
-# stations:
-iss = require('./assets/stations/iss/spriteSpec.js')
-temp_marker = require('./assets/stations/marker1/spriteSpec.js')
-
 window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
 # NOTE: this base speed does not affect travel time between planets b/c
 #           it is used to calculate those distances. Ships can travel faster
@@ -84,12 +80,10 @@ class Game
         @locations = [
             new Location(@landmarks.ISS,
                 @getDistance(@landmarks.ISS),
-                "station",
+                @landmarks.ISS+'-station',
                 ()=>
                     @locationArrivalSignal.dispatch(@landmarks.EARTH)
                     shopFunc()
-                ,
-                new Sprite(@gameDir+iss.sheet, iss.dimensions, -1000, 'random')
             ),
             new Location(@landmarks.MANEUVER_MOON,
                 @getDistance(@landmarks.MANEUVER_MOON),
@@ -97,12 +91,10 @@ class Game
             ),
             new Location(@landmarks.MOON,
                 @getDistance(@landmarks.MOON),
-                "station",
+                @landmarks.MOON+'-station',
                 ()=>
                     @locationArrivalSignal.dispatch(@landmarks.MOON)
                     shopFunc()
-                ,
-                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
             new Location(@landmarks.MANEUVER_MARS,
                 @getDistance(@landmarks.MANEUVER_MARS),
@@ -110,12 +102,10 @@ class Game
             ),
             new Location(@landmarks.MARS,
                 @getDistance(@landmarks.MARS),
-                "station",
+                @landmarks.MARS+'-station',
                 ()=>
                     @locationArrivalSignal.dispatch(@landmarks.MARS)
                     shopFunc()
-                ,
-                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
             new Location(@landmarks.MANEUVER_CERES,
                 @getDistance(@landmarks.MANEUVER_CERES),
@@ -123,12 +113,10 @@ class Game
             ),
             new Location(@landmarks.CERES,
                 @getDistance(@landmarks.CERES),
-                "station",
+                @landmarks.CERES+'-station',
                 ()=>
                     @locationArrivalSignal.dispatch(@landmarks.CERES)
                     shopFunc()
-                ,
-                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
             ),
             new Location(@landmarks.MANEUVER_JUPITER,
                 @getDistance(@landmarks.MANEUVER_JUPITER),
@@ -142,13 +130,11 @@ class Game
             ),
             new Location(@landmarks.EUROPA,
                 @getDistance(@landmarks.EUROPA),
-                "station",
+                @landmarks.EUROPA+'-station',
                 ()=>
                     @locationArrivalSignal.dispatch(@landmarks.EUROPA)
                     winFunc()
-                ,
-                new Sprite(@gameDir+temp_marker.sheet, temp_marker.dimensions, -1000, 'random')
-            )
+            ),
             new Location("END_OF_UNIVERSE",
                 @getDistance(),
                 "maneuver"
