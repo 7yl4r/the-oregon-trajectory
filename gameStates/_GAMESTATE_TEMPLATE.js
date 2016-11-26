@@ -7,7 +7,7 @@ gameState.prototype = {
     create: function(){
 
     },
-    upate: function(){
+    update: function(){
 
     },
     render: function(){

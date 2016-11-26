@@ -223,14 +223,9 @@ travel = function(gameState){
     }
 }
 
-
 // #####################
-// code to port:
+// code left to port:
 // #####################
-
-_getIdealShipPos = function(){
-    return window.innerWidth / 3
-}
 //
 // $scope.$on('encounter', function(ngEvent, event){
 //     // on random encounter
