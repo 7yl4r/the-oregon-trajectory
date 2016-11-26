@@ -64,9 +64,11 @@
     "pause": "./gameActions/pause.js",
     "pause-controller": "./gameMenus/pause.js",
     "pause-button": "./gameUtils/addPauseButton.js",
+    "status-display": "./gameUtils/statusDisplay/addStatusDisplay.js",
     "main-menu-controller": "./gameMenus/mainMenu.js",
 
     "game": "./game.coffee",
+    "si-number-formatter": "./gameUtils/SINumberFormatter.js",
 
     "slick-ui": "./lib/slick-ui/dist/slick-ui.min.js",
     "slick-ui-preload": "./gamePlugins/slickUI.js",

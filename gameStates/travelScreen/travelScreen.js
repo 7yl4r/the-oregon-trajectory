@@ -1,5 +1,7 @@
-Tile = require('./Tile.coffee')
-Phaser = require('phaser')
+Tile = require('./Tile.coffee');
+Phaser = require('phaser');
+PauseButton = require('pause-button');
+StatusDisplay = require('status-display');
 
 gameState = function(game){}
 
@@ -73,7 +75,8 @@ gameState.prototype = {
         // ----------------
         require('slick-ui-preload')();
 
-        require('pause-button').preload(this.game)
+        PauseButton.preload(this.game)
+        StatusDisplay.preload(this.game)
     },
     create: function(){
         this.randyTime = 0;
@@ -97,20 +100,20 @@ gameState.prototype = {
             'player-ship'
         );
         this.ship.anchor.setTo(0.5, 0.5);
-
         this.game.world.setBounds(0, 0, globalData.gameData.worldWidth, 600);
+        this.game.camera.follow(this.ship);
 
-        this.game.camera.follow(this.ship);  // this is not working for me
-
-        require('pause-button').create(this.game)
+        PauseButton.create(this.game);
+        StatusDisplay.create(this.game);
     },
     update: function(){
         if (!globalData.game.inMenu){  // check for menu pause
             travel(this);
         }
+        StatusDisplay.update(this.game);
     },
     render: function(){
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        // this.game.debug.cameraInfo(this.game.camera, 32, 32);
     }
 }
 

@@ -10,7 +10,9 @@ temp_marker = require('./assets/stations/marker1/spriteSpec.js')
 
 window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
 # NOTE: this base speed does not affect travel time between planets b/c
-#           it is used to calculate those distances.
+#           it is used to calculate those distances. Ships can travel faster
+#           and slower than this; this speed is a reasonable estimate of average
+#           travel speed in pixels per frame.
 window.TRAVELS_PER_MOVE = 5  # TRAVEL_SPEED divisor (for getting < 1 TRAVEL_SPEED)
 
 AU_2_KM         = 149597871
@@ -50,16 +52,18 @@ class Game
         @distances[@landmarks.EUROPA] =           0.0015*2+1.9608*2+1.6243*2+3.2486*2+.003
 
         @dist_adjustments = {}  # use these to move locations for gameplay reasons
-        @dist_adjustments[@landmarks.EARTH] =            0.1
-        @dist_adjustments[@landmarks.MANEUVER_MOON] =    1
-        @dist_adjustments[@landmarks.MOON] =             2
-        @dist_adjustments[@landmarks.MANEUVER_MARS] =    1
-        @dist_adjustments[@landmarks.MARS] =             0
-        @dist_adjustments[@landmarks.MANEUVER_CERES] =   0
-        @dist_adjustments[@landmarks.CERES] =            0
-        @dist_adjustments[@landmarks.MANEUVER_JUPITER] = 0
-        @dist_adjustments[@landmarks.JUPITER] =          0
-        @dist_adjustments[@landmarks.EUROPA] =           0.3
+        # calculations to come to these numbers from this spreadsheet:
+        # https://docs.google.com/spreadsheets/d/1xrVJzQhPNw9-6lNZPf_-sr50t_ECjgUU8BIYq2M84ok/edit?usp=sharing
+        @dist_adjustments[@landmarks.EARTH] =             0.1
+        @dist_adjustments[@landmarks.MANEUVER_MOON] =     1.3
+        @dist_adjustments[@landmarks.MOON] =              2.0
+        @dist_adjustments[@landmarks.MANEUVER_MARS] =     1.5
+        @dist_adjustments[@landmarks.MARS] =              1.0
+        @dist_adjustments[@landmarks.MANEUVER_CERES] =    0.5
+        @dist_adjustments[@landmarks.CERES] =             0.0
+        @dist_adjustments[@landmarks.MANEUVER_JUPITER] = -1.0
+        @dist_adjustments[@landmarks.JUPITER] =          -2.0
+        @dist_adjustments[@landmarks.EUROPA] =            0.0
 
 
         # debug vars
@@ -164,6 +168,9 @@ class Game
         @rations = 500
         @eatChance = 0.05  # chance of eating per tick
 
+        @water = 500
+        @drinkChance = 0.10  # chance of drinking per tick
+
         @fuel = 500
         @fuelExpense = 0.05; # main thruster during normal gameplay
         @fuelChance = 0.7;  # chance of expending fuel per tick
@@ -226,10 +233,17 @@ class Game
 
         if @rations < 1  # starvation
             for crew_i of @crewHealth
-                @hurtCrew(crew_i, Math.random()*0.6)
+                @hurtCrew(crew_i, Math.random()*0.4)
         else
             if Math.random() < @eatChance  # if hungry
                 @rations -= @crewHealth.length  # eat
+
+        if @water < 1  # dehydration
+            for crew_i of @crewHealth
+                @hurtCrew(crew_i, Math.random()*0.6)
+        else
+            if Math.random() < @drinkChance
+                @water -= @crewHealth.length
 
     updateNextWaypoint: ()->
         # update next location if needed

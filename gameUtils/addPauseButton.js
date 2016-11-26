@@ -9,9 +9,18 @@ function create(game){
     console.log('inserting pause button...');
     SlickUI = require('slick-ui');
     var button, panel, menuButton;
-    game.slickUI.add(panel = new SlickUI.Element.Panel(game.width - 156, 8, 150, game.height - 16));
-    panel.add(new SlickUI.Element.Text(10,0, "Menu")).centerHorizontally().text.alpha = 0.5;
-    panel.add(button = new SlickUI.Element.Button(0,game.height - 166, 140, 80)).events.onInputUp.add(function () {
+    game.slickUI.add(panel = new SlickUI.Element.Panel(
+        game.width - 156,
+        8,
+        150,
+        game.height - 16
+    ));
+    
+    panel.add(new SlickUI.Element.Text(10,0, "Menu"))
+        .centerHorizontally().text.alpha = 0.5;
+
+    panel.add(button = new SlickUI.Element.Button(0,game.height - 166, 140, 80))
+        .events.onInputUp.add(function () {
         console.log('Clicked save game');
     });
 

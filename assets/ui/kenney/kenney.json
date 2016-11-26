@@ -20,6 +20,7 @@
     "button": "SlickUI.Element.Renderer.ButtonRenderer"
   },
   "fonts": {
+    "minecraftia-white": ["fonts/minecraftia-white.png", "fonts/minecraftia.xml"],
     "minecraftia": ["fonts/minecraftia-black.png", "fonts/minecraftia.xml"]
   },
   "button": {
