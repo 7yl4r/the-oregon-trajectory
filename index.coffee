@@ -12,6 +12,8 @@ Game = require('game');
 window.globalData = {
     gameDir:'', # TODO: fix duplicated on gameData
     baseUrl:(if location.host == '7yl4r.github.io' then '/the-oregon-trajectory/' else '/')
+    w: 800,
+    h: 600,
     engineDelay: 100, # ms of delay for engine shutdown (sound only)
     lastEngineFire: 0,
     inMenu: false,
@@ -26,9 +28,8 @@ window.globalData = {
     ,
     calcCredits: () ->
         return globalData.game.money + globalData.stats.credits
-    ,
-    gameData: new Game()
 };
+window.globalData.gameData = new Game()
 
 window.util = {
     absPath: (path) ->
@@ -44,9 +45,14 @@ $(document).ready( ()->
     $.get(globalData.gameDir+'/package.json', {}, (data, textStatus, jqXHR)->
         globalData.version = data.version
         window.fillVersionSpans()
-    , 'json');
+    , 'json')
 
-    globalData.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'game-container-div')
+    globalData.game = new Phaser.Game(
+        globalData.gameData.w,
+        globalData.gameData.h,
+        Phaser.CANVAS,
+        'game-container-div'
+    )
 
     # set up phaser game states
     globalData.game.state.add('mining', require('./gameStates/mining/mining'))

@@ -11,7 +11,7 @@ function create(args){
     var PAD = args.pad;
     var FONT_SIZE = args.fontSize;
     var OVERHANG = PAD;
-    var PANEL_HEIGHT = args.statusPanelHeight;
+    var PANEL_HEIGHT = args.statusPanelHeight + OVERHANG;
     var PANEL_WIDTH = PAD*2 + args.statusTrajWidth;
     var SECTION_WIDTH = (PANEL_WIDTH - PAD*2.0) / 3.0;
     var PANEL_X = PAD*4 + args.statusSupplyWidth;

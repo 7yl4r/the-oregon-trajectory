@@ -38,20 +38,21 @@ gameState.prototype = {
         StatusDisplay.update(game);
         this.data = globalData.gameData;
 
-        var PAD = 10;
-        var FONT_SIZE = 16;
+        settings = this.data.UISettings;
+        var PAD = settings.pad;
+        var FONT_SIZE = settings.fontSize;
         var OVERHANG = PAD;
-        var BUTTON_H = 80;
-        var BUTTON_W = 140;
+        var BUTTON_H = settings.buttonH;
+        var BUTTON_W = settings.buttonW;
 
         // LEFT PANEL
         game.slickUI.add(leftPanel = new SlickUI.Element.Panel(
             -OVERHANG,
-            100,
-            400,
-            300
+            settings.middlePanelTop,
+            settings.leftPanelW,
+            settings.middlePanelH
         ));
-        leftPanel.alpha = 0.9; //args.panelAlpha;
+        leftPanel.alpha = settings.panelAlpha;
 
         // EXIT BUTTON
         game.slickUI.add(exitButton = new SlickUI.Element.Button(
