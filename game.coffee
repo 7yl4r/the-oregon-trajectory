@@ -15,9 +15,22 @@ AU_2_KM         = 149597871
 
 class Game
     constructor: ()->
+        @gameDir = "" # "/the-oregon-trajectory" # for conversion between gh-pages and local server
 
-        @gameDir = "" # "/the-oregon-trajectory" #  for conversion between gh-pages and local server
+        # game signals
         @locationArrivalSignal = new Phaser.Signal()
+
+        @UISettings = {
+            pad: 10,  # space between things
+            fontSize: 16,
+            statusPanelHeight: 80,  # status display on travelScreen & shop
+            statusSupplyWidth: 230,
+            statusTrajWidth: 230,
+            statusHealthWidth: 230,
+            panelAlpha: 0.4  # suggested panel opacity
+        }
+
+        # distances
         @worldWidth_AU = 13.6749
         @landmarks = {
             EARTH: 'earth',
@@ -59,7 +72,6 @@ class Game
         @dist_adjustments[@landmarks.MANEUVER_JUPITER] = -1.5
         @dist_adjustments[@landmarks.JUPITER] =          -2.5
         @dist_adjustments[@landmarks.EUROPA] =           -1.0
-
 
         # debug vars
         @BYPASS_LOCATIONS = false

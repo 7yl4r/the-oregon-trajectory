@@ -10,16 +10,8 @@ function preload(game){
 }
 
 function create(game){
-    panelArgs = {
-        game: game,
-        pad: 10,
-        fontSize: 16,
-        panelHeight: 80,
-        supplyWidth: 230,
-        trajWidth: 230,
-        healthWidth: 230,
-        panelAlpha: 0.4
-    }
+    panelArgs = globalData.gameData.UISettings;
+    panelArgs.game = game;
 
     supplyPanel.create(panelArgs);
     trajPanel.create(panelArgs);

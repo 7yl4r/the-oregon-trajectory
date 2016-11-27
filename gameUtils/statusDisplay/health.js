@@ -12,10 +12,10 @@ function create(args){
     var PAD = args.pad;
     var FONT_SIZE = args.fontSize;
     var OVERHANG = PAD;
-    var PANEL_HEIGHT = args.panelHeight;
-    var PANEL_WIDTH = PAD*2 + args.healthWidth;
+    var PANEL_HEIGHT = args.statusPanelHeight;
+    var PANEL_WIDTH = PAD*2 + args.statusHealthWidth;
     var SECTION_WIDTH = (PANEL_WIDTH - PAD*2.0) / 3.0;
-    var PANEL_X = PAD*7 + args.supplyWidth + args.trajWidth;
+    var PANEL_X = PAD*7 + args.statusSupplyWidth + args.statusTrajWidth;
     game.slickUI.add(this.panel = new SlickUI.Element.Panel(
         PANEL_X,
         -OVERHANG,
