@@ -7,25 +7,26 @@ gameState.prototype = {
         require('slick-ui-preload')();
         StatusDisplay.preload(this.game)
 
+        this.game.load.image('fuel', util.absPath('assets/sprites/shop-icons/fuel.png'));
+        this.game.load.image('rations', util.absPath('assets/sprites/shop-icons/food.png'));
+        this.game.load.image('water', util.absPath('assets/sprites/shop-icons/food.png')); // TODO: change
+
         this.item_consumables = [
             {
                 name: 'Rocket Fuel',
                 description: "You won't get very far without this.",
                 price: 4,
-                image: util.absPath("assets/sprites/shop-icons/fuel.png"),
                 key: "fuel"
             },{
                 name: 'Rations',
                 description: "Not just freeze-dried ice cream.",
                 price: 2,
-                image: util.absPath("assets/sprites/shop-icons/food.png"),
                 key: "rations"
             },{
                 name: 'Water',
                 description: "Di-hydrogen monoxide has many uses.",
                 price: 1,
-                image: util.absPath("assets/sprites/shop-icons/food.png"),
-                key: "rations"
+                key: "water"
             }
         ];
         this.tab = 1;
@@ -47,16 +48,59 @@ gameState.prototype = {
 
         // LEFT PANEL
         game.slickUI.add(leftPanel = new SlickUI.Element.Panel(
-            -OVERHANG,
+            0,
             settings.middlePanelTop,
             settings.leftPanelW,
             settings.middlePanelH
         ));
-        leftPanel.alpha = settings.panelAlpha;
+        // leftPanel.alpha = settings.panelAlpha;
+
+        leftPanel.add(leftInnerPanel = new SlickUI.Element.Panel(
+            0,
+            0,
+            leftPanel.width,
+            leftPanel.height
+        ));
+
+        // ITEM SELCTION BUTTONS
+        // shop button sizes depend on panel size
+        var bttnSize = settings.leftPanelW/2 - PAD;
+        for (var i = 0; i < this.item_consumables.length; i++){
+            var x = i%2*(bttnSize+PAD);
+            var y = Math.floor(i/2)*(bttnSize+PAD)
+            leftInnerPanel.add(itemButton = new SlickUI.Element.Button(
+                x,
+                y,
+                bttnSize,
+                bttnSize
+            )).events.onInputUp.add((function(_this,_i){
+                return function () {
+                    _this.activeItem = _this.item_consumables[_i];
+                }
+            })(this, i));
+            var itemSprite = game.make.sprite(0,0,this.item_consumables[i].key);
+            itemSprite.width = bttnSize-PAD;
+            itemSprite.height = bttnSize-PAD;
+            itemSprite.anchor.setTo(0.5);
+            itemButton.add(new SlickUI.Element.DisplayObject(
+                itemButton.width / 2,
+                itemButton.height / 2,
+                itemSprite
+            ));
+            itemButton.add(new SlickUI.Element.Text(0,0, this.item_consumables[i].price + '$')).center();
+        }
+
+        // RIGHT PANEL
+        game.slickUI.add(rightPanel = new SlickUI.Element.Panel(
+            settings.leftPanelW+PAD,
+            settings.middlePanelTop,
+            settings.leftPanelW,
+            settings.middlePanelH
+        ));
 
         // EXIT BUTTON
         game.slickUI.add(exitButton = new SlickUI.Element.Button(
-            game.width/2,
+            game.width/2 - BUTTON_W/2,
             game.height - PAD - BUTTON_H,
             BUTTON_W,
             BUTTON_H
@@ -65,6 +109,8 @@ gameState.prototype = {
             game.state.start('travel-screen');
         });
         exitButton.add(new SlickUI.Element.Text(0,0, "Exit Shop")).center();
+
+        window.shop = this;
 
     },
     update: function(){

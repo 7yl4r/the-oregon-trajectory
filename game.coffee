@@ -30,7 +30,7 @@ class Game
             buttonH: 80,  # suggested button size
             buttonW: 140,
             panelAlpha: 0.4,  # suggested panel opacity
-            leftPanelW: 400,
+            leftPanelW: 400-10,
             middlePanelH: 300
         }
         @UISettings.middlePanelTop = @UISettings.statusPanelHeight+@UISettings.pad
