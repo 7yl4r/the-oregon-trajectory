@@ -135,7 +135,7 @@ gameState.prototype = {
         this.buyButton.events.onInputUp.remove(this.buyListener);
         this.buyButton.events.onInputUp.add(this.buyListener = (function(_this){
             return function () {
-                console.log("buy: ", _this.activeItem);
+                _this.buy();
             }
         })(this));
     },
@@ -175,6 +175,7 @@ gameState.prototype = {
     buy: function(){
         // purchases the activeItem. (deducts money and adds suppy to inventory)
         // TODO: get amount from UI
+        // console.log("buy: ", this.activeItem);
         var amt = 1;//parseInt(document.getElementById(this.activeItem.key).value);
         var total = amt * this.activeItem.price;
 
@@ -187,7 +188,7 @@ gameState.prototype = {
 
                 // sounds.click.play();
             }
-            else if (total <= data.money && amt > 0) {
+            else if (total <= this.data.money && amt > 0) {
                 // buying
                 this.data[this.activeItem.key] += amt;
                 this.data.money -= total;
@@ -197,6 +198,7 @@ gameState.prototype = {
                 console.log("ERROR: Not enough money or resources!");
             }
         }
+        StatusDisplay.update(this.game);
     }
 }
 
