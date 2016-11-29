@@ -12,7 +12,7 @@ function create(args){
     var OVERHANG = PAD;
     var PANEL_HEIGHT = args.statusPanelHeight + OVERHANG;
     var PANEL_WIDTH = PAD*2 + args.statusSupplyWidth;
-    var SECTION_WIDTH = (PANEL_WIDTH - PAD*2.0) / 3.0;
+    var SECTION_WIDTH = (PANEL_WIDTH - PAD*2.0) / 4.0;
     game.slickUI.add(panel = new SlickUI.Element.Panel(
         PAD,
         -OVERHANG,
@@ -23,7 +23,7 @@ function create(args){
     panel.add(new SlickUI.Element.Text(
         0 ,
         PAD + OVERHANG,
-        "fuel   | water   | food",
+        "fuel water food money",
         FONT_SIZE,
         "minecraftia-white"
     ));
@@ -48,6 +48,13 @@ function create(args){
         FONT_SIZE,
         "minecraftia-white"
     ));
+    panel.add(this.moneyText = new SlickUI.Element.Text(
+        PAD+SECTION_WIDTH*3,
+        PAD + OVERHANG + FONT_SIZE,
+        " 0000",
+        FONT_SIZE,
+        "minecraftia-white"
+    ));
 
 
 }
@@ -56,6 +63,7 @@ function update(game){
     this.fuelText.value = SIFormat(globalData.gameData.fuel);
     this.waterText.value = SIFormat(globalData.gameData.water);
     this.rationText.value = SIFormat(globalData.gameData.rations);
+    this.moneyText.value = SIFormat(globalData.gameData.money);
 }
 
 module.exports = {preload:preload, create:create, update:update}

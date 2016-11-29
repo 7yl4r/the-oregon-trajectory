@@ -92,7 +92,7 @@ class Game
         # re-initializes the game
         # TODO: move this...
         shopFunc = ()=>
-            # TODO:
+            globalData.game.state.start('shop');
             console.log('switch to shop');
         winFunc = ()=>
             # TODO:

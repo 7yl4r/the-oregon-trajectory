@@ -3,34 +3,35 @@ StatusDisplay = require('status-display');
 gameState = function(game){}
 
 gameState.prototype = {
+    item_consumables: [
+        {
+            name: 'Rocket Fuel',
+            description: "You won't get very far without this.",
+            price: 4,
+            key: "fuel"
+        },{
+            name: 'Rations',
+            description: "Not just freeze-dried ice cream.",
+            price: 2,
+            key: "rations"
+        },{
+            name: 'Water',
+            description: "Di-hydrogen monoxide has many uses.",
+            price: 1,
+            key: "water"
+        }
+    ],
     preload: function() {
-        require('slick-ui-preload')();
-        StatusDisplay.preload(this.game)
+        console.log('shop preload');
 
         this.game.load.image('fuel', util.absPath('assets/sprites/shop-icons/fuel.png'));
         this.game.load.image('rations', util.absPath('assets/sprites/shop-icons/food.png'));
         this.game.load.image('water', util.absPath('assets/sprites/shop-icons/food.png')); // TODO: change
 
-        this.item_consumables = [
-            {
-                name: 'Rocket Fuel',
-                description: "You won't get very far without this.",
-                price: 4,
-                key: "fuel"
-            },{
-                name: 'Rations',
-                description: "Not just freeze-dried ice cream.",
-                price: 2,
-                key: "rations"
-            },{
-                name: 'Water',
-                description: "Di-hydrogen monoxide has many uses.",
-                price: 1,
-                key: "water"
-            }
-        ];
-        this.tab = 1;
+        require('slick-ui-preload')();
+        StatusDisplay.preload(this.game);
 
+        this.tab = 1;
     },
     create: function(){
         game = this.game
