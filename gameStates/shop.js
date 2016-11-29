@@ -132,12 +132,6 @@ gameState.prototype = {
         this.rightPanelTitle.text.setText(this.activeItem.name);
         this.rightPanelSprite.sprite.loadTexture(this.activeItem.key);
         this.rightPanelText.text.setText(this.activeItem.description);
-        this.buyButton.events.onInputUp.remove(this.buyListener);
-        this.buyButton.events.onInputUp.add(this.buyListener = (function(_this){
-            return function () {
-                _this.buy();
-            }
-        })(this));
     },
     makeRightPanel(rightPanel, settings){
         this.activeItem = this.item_consumables[0];
@@ -164,19 +158,49 @@ gameState.prototype = {
         ));
         // this.rightPanelText.centerHorizontally();
 
-        rightPanel.add(this.buyButton = new SlickUI.Element.Button(
-            (rightPanel.width-settings.buttonW)/2,
+        var bttnW = (rightPanel.width)/3 - settings.pad;
+        var bttnX = settings.pad;
+        rightPanel.add(buyButton = new SlickUI.Element.Button(
+            bttnX,
             rightPanel.height - settings.pad - settings.buttonH,
-            settings.buttonW,
+            bttnW,
             settings.buttonH
-        )).events.onInputUp.add(this.buyListener = function(){});
-        this.buyButton.add(new SlickUI.Element.Text(0,0, "Buy")).center();
+        )).events.onInputUp.add(buyListener = (function(_this){
+            return function () {
+                _this.buy(10);
+            }
+        })(this));
+        buyButton.add(new SlickUI.Element.Text(0,0, "Buy 10")).center();
+
+        bttnX += bttnW + settings.pad;
+        rightPanel.add(buyButton = new SlickUI.Element.Button(
+            bttnX,
+            rightPanel.height - settings.pad - settings.buttonH,
+            bttnW,
+            settings.buttonH
+        )).events.onInputUp.add((function(_this){
+            return function () {
+                _this.buy(100);
+            }
+        })(this));
+        buyButton.add(new SlickUI.Element.Text(0,0, "Buy 100")).center();
+
+        bttnX += bttnW + settings.pad;
+        rightPanel.add(buyButton = new SlickUI.Element.Button(
+            bttnX,
+            rightPanel.height - settings.pad - settings.buttonH,
+            bttnW,
+            settings.buttonH
+        )).events.onInputUp.add((function(_this){
+            return function () {
+                _this.buy(1000);
+            }
+        })(this));
+        buyButton.add(new SlickUI.Element.Text(0,0, "Buy 1000")).center();
     },
-    buy: function(){
+    buy: function(amt){
         // purchases the activeItem. (deducts money and adds suppy to inventory)
-        // TODO: get amount from UI
         // console.log("buy: ", this.activeItem);
-        var amt = 1;//parseInt(document.getElementById(this.activeItem.key).value);
         var total = amt * this.activeItem.price;
 
         if (typeof this.activeItem.key !== 'undefined') {
