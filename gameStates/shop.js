@@ -30,7 +30,7 @@ gameState.prototype = {
             }
         ];
         this.tab = 1;
-        this.activeItem = this.item_consumables[0];
+
     },
     create: function(){
         game = this.game
@@ -75,7 +75,7 @@ gameState.prototype = {
                 bttnSize
             )).events.onInputUp.add((function(_this,_i){
                 return function () {
-                    _this.activeItem = _this.item_consumables[_i];
+                    _this.setActiveItem(_i);
                 }
             })(this, i));
             var itemSprite = game.make.sprite(0,0,this.item_consumables[i].key);
@@ -91,7 +91,7 @@ gameState.prototype = {
         }
 
         // RIGHT PANEL
-        game.slickUI.add(rightPanel = new SlickUI.Element.Panel(
+        game.slickUI.add(this.rightPanel = new SlickUI.Element.Panel(
             settings.leftPanelW+PAD,
             settings.middlePanelTop,
             settings.leftPanelW,
@@ -110,8 +110,9 @@ gameState.prototype = {
         });
         exitButton.add(new SlickUI.Element.Text(0,0, "Exit Shop")).center();
 
-        window.shop = this;
-
+        window.shop = this;  // TODO: remove this debug option
+        this.makeRightPanel(this.rightPanel, settings);
+        this.setActiveItem(0);
     },
     update: function(){
 
@@ -119,7 +120,60 @@ gameState.prototype = {
     render: function(){
 
     },
+    setActiveItem(newItemIndex){
+        // use this to set the active item so that UI is updated
+        console.log('active item set to ', this.item_consumables[newItemIndex].name);
+        this.activeItem = this.item_consumables[newItemIndex];
+        this.updateActiveItemPanel(this.rightPanel, globalData.gameData.UISettings);
+    },
+    updateActiveItemPanel(rightPanel, settings){
+        // clears and draws the rightPanel with active item information.
+        console.log('update active item panel');
+        this.rightPanelTitle.text.setText(this.activeItem.name);
+        this.rightPanelSprite.sprite.loadTexture(this.activeItem.key);
+        this.rightPanelText.text.setText(this.activeItem.description);
+        this.buyButton.events.onInputUp.remove(this.buyListener);
+        this.buyButton.events.onInputUp.add(this.buyListener = (function(_this){
+            return function () {
+                console.log("buy: ", _this.activeItem);
+            }
+        })(this));
+    },
+    makeRightPanel(rightPanel, settings){
+        this.activeItem = this.item_consumables[0];
+        rightPanel.add(this.rightPanelTitle = new SlickUI.Element.Text(
+            rightPanel.width/2 - 40, // 40 for est text width
+            settings.pad,
+            'ITEM NAME'
+        ));
+
+        var activeSprite = game.make.sprite(0,0,'fuel');
+        activeSprite.width = rightPanel.width/2;
+        activeSprite.height = activeSprite.width;
+        // activeSprite.anchor.setTo(1);
+        rightPanel.add(this.rightPanelSprite = new SlickUI.Element.DisplayObject(
+            (rightPanel.width - activeSprite.width) / 2,
+            settings.fontSize + settings.pad,
+            activeSprite
+        ));
+
+        rightPanel.add(this.rightPanelText = new SlickUI.Element.Text(
+            settings.pad,
+            settings.fontSize + settings.pad*3 + activeSprite.height,
+            'DESCRIPTION'
+        ));
+        // this.rightPanelText.centerHorizontally();
+
+        rightPanel.add(this.buyButton = new SlickUI.Element.Button(
+            (rightPanel.width-settings.buttonW)/2,
+            rightPanel.height - settings.pad - settings.buttonH,
+            settings.buttonW,
+            settings.buttonH
+        )).events.onInputUp.add(this.buyListener = function(){});
+        this.buyButton.add(new SlickUI.Element.Text(0,0, "Buy")).center();
+    },
     buy: function(){
+        // purchases the activeItem. (deducts money and adds suppy to inventory)
         // TODO: get amount from UI
         var amt = 1;//parseInt(document.getElementById(this.activeItem.key).value);
         var total = amt * this.activeItem.price;
