@@ -7,8 +7,8 @@ loadSpriteSheet = require('load-spritesheet');
 
 gameState = function(game){}
 
-MIN_TRAVELS_PER_EVENT = 1000;  // min amount of travel between events
-EVENT_VARIABILITY = 10;  // affects consistency in event timing. high values = less consistent timing. must be > 0
+MIN_TRAVELS_PER_EVENT = 10;  // min amount of travel between events
+EVENT_VARIABILITY = 2;  // affects consistency in event timing. high values = less consistent timing. must be > 0
 // units of EVENT_VARIABILITY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
 
 gameState.prototype = {
@@ -183,10 +183,10 @@ updateBackgroundTiles = function(gameState){
     var screenRightEdge = getScreenRightEdge(globalData.game);
 
     if (tileRightSide < screenRightEdge){
-        console.log('grp.w:', tileGroupWidth, '\t grp.x:', gameState.tileGroup.x,
-                    '\t grp.right:', tileRightSide, "\t screenEdge:", screenRightEdge)
+        // console.log('grp.w:', tileGroupWidth, '\t grp.x:', gameState.tileGroup.x,
+        //             '\t grp.right:', tileRightSide, "\t screenEdge:", screenRightEdge)
         if (globalData.gameData.nextWaypoint.distance < HALF_TILE_W + globalData.game.width){
-            console.log('loc tile: ', globalData.gameData.nextWaypoint.name);
+            // console.log('loc tile: ', globalData.gameData.nextWaypoint.name);
             addTile(gameState.game, gameState.tileGroup, globalData.gameData.nextWaypoint.name);
         }
         // NOTE: could choose rand filler here
@@ -219,15 +219,9 @@ travel = function(gameState){
         }
 
         // handle random events
-        // TODO: if is a good time/place for an event
-        if (this.randyTime > MIN_TRAVELS_PER_EVENT){
-            if (randy.roll()){
-                this.randyTime = 0
-            } else {
-                this.randyTime = MIN_TRAVELS_PER_EVENT/EVENT_VARIABILITY
-            }
-        } else {
-            this.randyTime += 1
+        // NOTE: could check if is a good time/place for an event first.
+        if (globalData.gameData.randy.roll()){
+            console.log('event!');
         }
     }
     // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel

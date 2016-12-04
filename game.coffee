@@ -3,6 +3,7 @@ Sprite = require('./gameUtils/Sprite.coffee')
 Reputation = require('./gameUtils/Reputation.coffee')
 Score = require('./gameUtils/Score.coffee')
 Phaser = require('phaser')
+Randy = require('./gameUtils/Randy/Randy.coffee')
 
 window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
 # NOTE: this base speed does not affect travel time between planets b/c
@@ -90,6 +91,8 @@ class Game
 
     _init: ()->
         # re-initializes the game
+        @randy = new Randy();
+
         # TODO: move this...
         shopFunc = ()=>
             globalData.game.state.start('shop');
