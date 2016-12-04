@@ -61,6 +61,6 @@ $(document).ready( ()->
     globalData.game.state.add('travel-screen', require('./gameStates/travelScreen/travelScreen'))
     globalData.game.state.add('shop', require('./gameStates/shop'))
 
-    globalData.game.state.start('boot')  # change this to start directly into a state for testing
+    globalData.game.state.start('travel-screen')  # change this to start directly into a state for testing
 
 )

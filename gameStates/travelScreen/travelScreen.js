@@ -111,16 +111,16 @@ gameState.prototype = {
 
         this.tileGroup = this.game.add.group();
         this.tileGroup.classType = Phaser.Image;
-        this.tileGroup.setAll('outOfBoundsKill', true);
-        this.tileGroup.setAll('checkWorldBounds', true);
-        addTile(this.game, this.tileGroup, 'earth')
+        // this.tileGroup.setAll('outOfBoundsKill', true);
+        // this.tileGroup.setAll('checkWorldBounds', true);
 
-        globalData.gameData.locationArrivalSignal.add((function(_game, _tileGroup){
-            return function(tileName){
-                console.log('adding location tile: ' + tileName);
-                addTile(_game, _tileGroup, tileName);
-            }
-        })(this.game, this.tileGroup));
+        updateBackgroundTiles(this);
+        // // globalData.gameData.locationArrivalSignal.add((function(_game, _tileGroup){
+        //     return function(tileName){
+        //         console.log('adding location tile: ' + tileName);
+        //         addTile(_game, _tileGroup, tileName);
+        //     }
+        // })(this.game, this.tileGroup));
 
         this.SHIP_INITIAL_POS = 0;
         this.ship = this.game.add.sprite(
@@ -139,6 +139,9 @@ gameState.prototype = {
             globalData.gameData.locations[loc_i].addLocationSprite(this, globalData.gameData, globalData.gameData.locations[loc_i])
         }
 
+        this.tileGroup.x = globalData.gameData.distanceTraveled;
+        window.travelScreen = this;
+
         PauseButton.create(this.game);
         StatusDisplay.create(this.game);
     },
@@ -149,7 +152,7 @@ gameState.prototype = {
         }
     },
     render: function(){
-        // this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        this.game.debug.cameraInfo(this.game.camera, 32, 32);
     }
 }
 
@@ -159,7 +162,7 @@ addTile = function(game, tileGroup, newTileKey){
     // adds a tile to the scrolling background
     console.log('add ' + newTileKey);
     tileGroup.create(
-        getScreenRightEdge(game),
+        getScreenRightEdge(game) - tileGroup.x,
         0,
         newTileKey
     );
@@ -169,25 +172,35 @@ getScreenRightEdge = function(game){
     return -game.world.x + game.width;
 }
 
+updateBackgroundTiles = function(gameState){
+    // append new filler bg tiles if needed
+    var HALF_TILE_W = 500;  // guestimate of avg half-tile width
+    var tileGroupWidth = 0;
+    gameState.tileGroup.forEachExists(function(childTile){
+        tileGroupWidth += childTile.width
+    })
+    var tileRightSide = gameState.tileGroup.x + tileGroupWidth;
+    var screenRightEdge = getScreenRightEdge(globalData.game);
+
+    if (tileRightSide < screenRightEdge){
+        console.log('grp.w:', tileGroupWidth, '\t grp.x:', gameState.tileGroup.x,
+                    '\t grp.right:', tileRightSide, "\t screenEdge:", screenRightEdge)
+        if (globalData.gameData.nextWaypoint.distance < HALF_TILE_W + globalData.game.width){
+            console.log('loc tile: ', globalData.gameData.nextWaypoint.name);
+            addTile(gameState.game, gameState.tileGroup, globalData.gameData.nextWaypoint.name);
+        }
+        // NOTE: could choose rand filler here
+        addTile(gameState.game, gameState.tileGroup, 'filler');
+    }
+}
+
 travel = function(gameState){
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
         globalData.gameData.travel();
 
-        gameState.ship.x += TRAVEL_SPEED;
+        gameState.ship.x = globalData.gameData.distanceTraveled;
 
-        // append new filler bg tiles if needed
-        var tileGroupWidth = 0;
-        gameState.tileGroup.forEachExists(function(childTile){
-            tileGroupWidth += childTile.width
-        })
-        var tileRightSide = gameState.tileGroup.x + tileGroupWidth;
-        var screenRightEdge = getScreenRightEdge(globalData.game);
-        // console.log('tileEdge:' + tileRightSide + "\t screenEdge:" + screenRightEdge);
-
-        if (tileRightSide < screenRightEdge){
-            // NOTE: could choose rand filler here
-            addTile(gameState.game, gameState.tileGroup, 'filler');
-        }
+        updateBackgroundTiles(gameState);
 
         // handle arrival at stations/events
         if (!globalData.gameData.BYPASS_LOCATIONS){

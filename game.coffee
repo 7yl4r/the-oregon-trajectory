@@ -251,6 +251,8 @@ class Game
             if Math.random() < @drinkChance
                 @water -= @crewHealth.length
 
+        @updateNextWaypoint()
+
     updateNextWaypoint: ()->
         # update next location if needed
         if @distanceTraveled > @nextWaypoint.location
@@ -259,7 +261,7 @@ class Game
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
             @nextWaypoint.displayDistance = Math.round(@nextWaypoint.distance)
 
-        console.log('next waypoint:', @nextWaypoint);
+        # console.log('next waypoint:', @nextWaypoint);
 
     updateScore: ()->
         # updates the score
@@ -319,6 +321,15 @@ class Game
         # else
         return null
 
+    getLocationTile: (xPosition)->  # TODO: implement this
+        # returns location tile key for given x coordinate
+        spriteW = 500
+        closestPassedLoc = @locations[0]
+        if xPosition < @locations[i].x - spriteW/2
+            if closestPassedLoc.x < @locations[i].x
+                closestPassedLoc = @locations[i]
+        return closestPassedLoc.name
+
     # === "private" methods ===
     _getRemainingLocations: ()->
         # returns array of locations not yet reached
@@ -337,6 +348,7 @@ class Game
         #                   444,    # estimate of fuel to get there
         #   fuelEstimate:   555,    # estimate of rations to get there
         #   rationEstimate: 666
+        #   spriteKey:            "maneuver"  # key for sprite lookup
         # }
         # location is relative to starting position, distance is relative to current ship position
         remaining = @_getRemainingLocations()
