@@ -4,6 +4,7 @@ PauseButton = require('pause-button');
 StatusDisplay = require('status-display');
 drift = require('drift');
 loadSpriteSheet = require('load-spritesheet');
+EventList = require('EventList');
 
 gameState = function(game){}
 
@@ -36,6 +37,8 @@ gameState.prototype = {
         loadSpriteSheet(game, data.landmarks.MARS+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
         loadSpriteSheet(game, data.landmarks.CERES+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
         loadSpriteSheet(game, data.landmarks.EUROPA+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
+
+        EventList.preload(game);
 
         // // TODO could include more in spec using a more advanced loader.
         // // Example usage of loader might be like:
@@ -144,6 +147,18 @@ gameState.prototype = {
 
         PauseButton.create(this.game);
         StatusDisplay.create(this.game);
+
+        $(document).on("encounter", (function(gameState){
+            return function(event){
+                // TODO: handle encounter
+                var eventSprite = gameState.game.add.sprite(
+                    gameState.game.camera.x + gameState.game.width,
+                    gameState.game.height/2,
+                    'satelite-debris-1'
+                );
+                console.log('encounter:', event, 'sprite:', eventSprite);
+            }
+        })(this));
     },
     update: function(){
         if (!globalData.game.inMenu){  // check for menu pause
@@ -221,7 +236,7 @@ travel = function(gameState){
         // handle random events
         // NOTE: could check if is a good time/place for an event first.
         if (globalData.gameData.randy.roll()){
-            console.log('event!');
+            // console.log('event!');
         }
     }
     // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel

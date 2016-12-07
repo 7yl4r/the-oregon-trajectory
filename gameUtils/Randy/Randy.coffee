@@ -32,7 +32,7 @@
 #        ' ; ' ' ; ' ' ' ; ' ' ; + ; ' ; ; ; ' ; ' ' '`
 
 Event = require('./Event.coffee')
-EventList = require('./EventList.js')
+EventList = require('EventList')
 
 module.exports = class Randy
     # main class for handling random events

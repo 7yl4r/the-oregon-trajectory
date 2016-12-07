@@ -21,10 +21,55 @@ PHANTOM_SIGNAL = require("./situations/phantomSignal.coffee");
 MEDICINE = require("./situations/medicine.coffee");
 SOLAR_FLARE = require("./situations/solarFlare.coffee");
 
-module.exports = {
-    preload: function(){
+// procedural sprite types
+// SPRITE_TYPES = {
+//     randomDebris: "randomDebris",
+//     randomStation: "randomStation",
+//     randomAsteroid: "randomAsteroid"
+// }
 
+module.exports = {
+    preload: function(game){
+        game.load.image('satelite-debris-1', util.absPath('assets/sprites/debris-satellite.png'));
+
+        for (var N = 0; N < 18; N++){
+            game.load.image('station-' + N, util.absPath('assets/sprites/randomStation/' + N + '.png'));
+        }
+
+        n_asteroids = 33.0;  //# actual count is this +1
+        for (var N = 0; N < n_asteroids; N++){
+            fname = 'assets/sprites/asteroids/' + N + '.png'
+            switch (N){
+                case 14:
+                    fname = 'assets/sprites/asteroids/rosetta/sprites.png'
+                    break;
+                case 15:
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                    // 0-9
+                    fname = 'assets/sprites/asteroids/rosetta/0' + (N-14) + '.png';
+                    break;
+                case 24:
+                case 25:
+                case 26:
+                    // 10-12
+                    fname = 'assets/sprites/asteroids/rosetta/' + (N-14) + '.png';
+                    break;
+                case 33:
+                    fname = 'assets/sprites/asteroids/p0.png'  //# POTATO!
+                    break;
+            }
+            game.load.image('asteroid-' + N, util.absPath(fname));
+        }
+        game.load.image('spec', util.absPath('assets/sprites/spec.png'))
     },
+
     list: [
             {
                 "name": "space-junk",

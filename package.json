@@ -71,9 +71,13 @@
     "si-number-formatter": "./gameUtils/SINumberFormatter.js",
     "drift": "./gameUtils/drift.js",
     "load-spritesheet": "./gameUtils/loadSpriteSpec.js",
+    "EventList": "./gameData/EventList.js",
 
     "slick-ui": "./lib/slick-ui/dist/slick-ui.min.js",
     "slick-ui-preload": "./gamePlugins/slickUI.js",
+
+
+
 
     "welcome": "./ng-modules/welcome/welcome.js",
     "ship-customizer": "./ng-modules/shipCustomizer/shipCustomizer.coffee",

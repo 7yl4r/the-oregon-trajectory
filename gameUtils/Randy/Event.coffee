@@ -2,12 +2,6 @@ module.exports = class Event
     TRIGGER_ACTIONS =
         alert: "alert"
 
-    # procedural sprite types
-    SPRITE_TYPES =
-        randomDebris: "randomDebris"
-        randomStation: "randomStation"
-        randomAsteroid: "randomAsteroid"
-
     constructor: (eventJSON)->
         @name = eventJSON.name
         @criteria = eventJSON.criteria
@@ -34,5 +28,5 @@ module.exports = class Event
 
     trigger: ()->
         @count += 1
+        # console.log('triggered.')
         $(document).trigger("encounter", @)
-        #@sprite = @getSprite(@spriteKey)  # re-get sprite to re-randomize
