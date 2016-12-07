@@ -1,4 +1,3 @@
-Sprite = require('./Sprite.coffee')
 drift = require('drift')
 
 module.exports = class Location

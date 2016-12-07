@@ -21,74 +21,79 @@ PHANTOM_SIGNAL = require("./situations/phantomSignal.coffee");
 MEDICINE = require("./situations/medicine.coffee");
 SOLAR_FLARE = require("./situations/solarFlare.coffee");
 
-module.exports = [
-    {
-        "name": "space-junk",
-        "criteria": {
-            "locations": ['earth']
-        },
-        "chance": 0.4,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "debris-encounter"
+module.exports = {
+    preload: function(){
+
+    },
+    list: [
+            {
+                "name": "space-junk",
+                "criteria": {
+                    "locations": ['earth']
+                },
+                "chance": 0.4,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "debris-encounter"
+                    }
+                },
+                "sprite":"randomDebris"
+            },{
+                "name": "micro-meteroid",
+                "criteria":{},
+                "chance": 0.6,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "asteroid-mining"
+                    }
+                },
+                "sprite": "randomAsteroid"
+            },{
+                "name": "trading-post",
+                "criteria":{},
+                "chance": 0.2,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "trader"
+                    }
+                },
+                "sprite":"randomStation"
+            },{
+                "name": "phantom-signal",
+                "criteria":{},
+                "chance": 0.1,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "situation",
+                        "moduleArgs": PHANTOM_SIGNAL
+                    }
+                }
+            },{
+                "name": "medicine",
+                "criteria":{},
+                "chance": 0.1,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "situation",
+                        "moduleArgs": MEDICINE
+                    }
+                }
+            },{
+                "name": "solar-flare",
+                "criteria":{},
+                "chance": 0.1,
+                "triggeredAction": {
+                    "function": "switchToModule",
+                    "args": {
+                        "moduleName": "situation",
+                        "moduleArgs": SOLAR_FLARE
+                    }
+                }
             }
-        },
-        "sprite":"randomDebris"
-    },{
-        "name": "micro-meteroid",
-        "criteria":{},
-        "chance": 0.6,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "asteroid-mining"
-            }
-        },
-        "sprite": "randomAsteroid"
-    },{
-        "name": "trading-post",
-        "criteria":{},
-        "chance": 0.2,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "trader"
-            }
-        },
-        "sprite":"randomStation"
-    },{
-        "name": "phantom-signal",
-        "criteria":{},
-        "chance": 0.1,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "situation",
-                "moduleArgs": PHANTOM_SIGNAL
-            }
-        }
-    },{
-        "name": "medicine",
-        "criteria":{},
-        "chance": 0.1,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "situation",
-                "moduleArgs": MEDICINE
-            }
-        }
-    },{
-        "name": "solar-flare",
-        "criteria":{},
-        "chance": 0.1,
-        "triggeredAction": {
-            "function": "switchToModule",
-            "args": {
-                "moduleName": "situation",
-                "moduleArgs": SOLAR_FLARE
-            }
-        }
-    }
-];
+    ]
+}

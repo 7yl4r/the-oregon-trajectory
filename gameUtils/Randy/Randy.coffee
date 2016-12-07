@@ -61,7 +61,7 @@ module.exports = class Randy
     _loadEventsFromFile: (file)->
         # loads array of events from a single file
         # TODO: get this json from files
-        eventArray = EventList
+        eventArray = EventList.list
 
         for event in eventArray
             new_event = new Event(event)
