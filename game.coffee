@@ -1,9 +1,8 @@
-Location = require('./gameUtils/Location.coffee')
-Sprite = require('./gameUtils/Sprite.coffee')
 Reputation = require('./gameUtils/Reputation.coffee')
 Score = require('./gameUtils/Score.coffee')
 Phaser = require('phaser')
 Randy = require('./gameUtils/Randy/Randy.coffee')
+Map = require('./gameData/Map.coffee')
 
 window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
 # NOTE: this base speed does not affect travel time between planets b/c
@@ -42,50 +41,13 @@ class Game
 
         # distances
         @worldWidth_AU = 13.6749
-        @landmarks = {
-            EARTH: 'earth',
-            ISS: 'iss',
-            MANEUVER_MOON: 'moon-maneuver',
-            MOON: 'moon',
-            MANEUVER_MARS: 'mars-maneuver',
-            MARS: 'mars',
-            MANEUVER_CERES: 'ceres-maneuver'
-            CERES: 'ceres',
-            MANEUVER_JUPITER: 'jupiter-maneuver'
-            JUPITER: 'jupiter',
-            EUROPA: 'europa'
-        }
-
-        @distances = {}  # actual distances in AU
-        @distances[@landmarks.ISS] =              0.0010
-        @distances[@landmarks.EARTH] =            0.0
-        @distances[@landmarks.MANEUVER_MOON] =    0.0015
-        @distances[@landmarks.MOON] =             0.0015*2
-        @distances[@landmarks.MANEUVER_MARS] =    0.0015*2+1.9608
-        @distances[@landmarks.MARS] =             0.0015*2+1.9608*2
-        @distances[@landmarks.MANEUVER_CERES] =   0.0015*2+1.9608*2+1.6243
-        @distances[@landmarks.CERES] =            0.0015*2+1.9608*2+1.6243*2
-        @distances[@landmarks.MANEUVER_JUPITER] = 0.0015*2+1.9608*2+1.6243*2+3.2486
-        @distances[@landmarks.JUPITER] =          0.0015*2+1.9608*2+1.6243*2+3.2486*2
-        @distances[@landmarks.EUROPA] =           0.0015*2+1.9608*2+1.6243*2+3.2486*2+.003
-
-        @dist_adjustments = {}  # use these to move locations for gameplay reasons
-        # calculations to come to these numbers from this spreadsheet:
-        # https://docs.google.com/spreadsheets/d/1xrVJzQhPNw9-6lNZPf_-sr50t_ECjgUU8BIYq2M84ok/edit?usp=sharing
-        @dist_adjustments[@landmarks.EARTH] =             0.1
-        @dist_adjustments[@landmarks.MANEUVER_MOON] =     1.3
-        @dist_adjustments[@landmarks.MOON] =              2.0
-        @dist_adjustments[@landmarks.MANEUVER_MARS] =     1.5
-        @dist_adjustments[@landmarks.MARS] =              1.0
-        @dist_adjustments[@landmarks.MANEUVER_CERES] =    0.5
-        @dist_adjustments[@landmarks.CERES] =             0.0
-        @dist_adjustments[@landmarks.MANEUVER_JUPITER] = -1.5
-        @dist_adjustments[@landmarks.JUPITER] =          -2.5
-        @dist_adjustments[@landmarks.EUROPA] =           -1.0
+        @map = new Map(this)
+        @landmarks = @map.landmarks
+        @distances = @map.distances
+        @dist_adjustments = @map.dist_adjustments
 
         # debug vars
         @BYPASS_LOCATIONS = false
-        @setTravelTime(5)
 
         @_init()  # initializes params
 
@@ -93,77 +55,7 @@ class Game
         # re-initializes the game
         @randy = new Randy();
 
-        # TODO: move this...
-        shopFunc = ()=>
-            globalData.game.state.start('shop');
-            console.log('switch to shop');
-        winFunc = ()=>
-            # TODO:
-            console.log('switch to win state');
-
-        @locations = [
-            new Location(@landmarks.ISS,
-                @getDistance(@landmarks.ISS),
-                @landmarks.ISS+'-station',
-                ()=>
-                    @locationArrivalSignal.dispatch(@landmarks.EARTH)
-                    shopFunc()
-            ),
-            new Location(@landmarks.MANEUVER_MOON,
-                @getDistance(@landmarks.MANEUVER_MOON),
-                "maneuver"
-            ),
-            new Location(@landmarks.MOON,
-                @getDistance(@landmarks.MOON),
-                @landmarks.MOON+'-station',
-                ()=>
-                    @locationArrivalSignal.dispatch(@landmarks.MOON)
-                    shopFunc()
-            ),
-            new Location(@landmarks.MANEUVER_MARS,
-                @getDistance(@landmarks.MANEUVER_MARS),
-                "maneuver"
-            ),
-            new Location(@landmarks.MARS,
-                @getDistance(@landmarks.MARS),
-                @landmarks.MARS+'-station',
-                ()=>
-                    @locationArrivalSignal.dispatch(@landmarks.MARS)
-                    shopFunc()
-            ),
-            new Location(@landmarks.MANEUVER_CERES,
-                @getDistance(@landmarks.MANEUVER_CERES),
-                "maneuver"
-            ),
-            new Location(@landmarks.CERES,
-                @getDistance(@landmarks.CERES),
-                @landmarks.CERES+'-station',
-                ()=>
-                    @locationArrivalSignal.dispatch(@landmarks.CERES)
-                    shopFunc()
-            ),
-            new Location(@landmarks.MANEUVER_JUPITER,
-                @getDistance(@landmarks.MANEUVER_JUPITER),
-                "maneuver"
-            ),
-            new Location(@landmarks.JUPITER,
-                @getDistance(@landmarks.JUPITER),
-                "maneuver",
-                ()=>
-                    @locationArrivalSignal.dispatch(@landmarks.JUPITER)
-            ),
-            new Location(@landmarks.EUROPA,
-                @getDistance(@landmarks.EUROPA),
-                @landmarks.EUROPA+'-station',
-                ()=>
-                    @locationArrivalSignal.dispatch(@landmarks.EUROPA)
-                    winFunc()
-            ),
-            new Location("END_OF_UNIVERSE",
-                @worldWidth,
-                "maneuver"
-            )
-        ]
+        @locations = @map.stations
 
         console.log('locs:', @locations)
         @reputation = new Reputation();
@@ -205,27 +97,6 @@ class Game
         #   fuelEstimate:   555,    # estimate of rations to get there
         #   rationEstimate: 666
         # }
-
-    setTravelTime: (gameLength)->
-        # sets game targeted length in minutes and adjusts distances between
-        #   planets accordingly.
-        gameTime = gameLength*60 # convert to seconds
-        fps = 30
-        @worldWidth = gameTime*TRAVEL_SPEED*fps  # [s] * [px]/[s] = [px]
-
-        console.log('gameTime set to ' + gameLength + 'min. Width:' + @worldWidth + 'px')
-
-        @distances_px = {}
-        for distKey of @distances
-            @distances_px[distKey] = (@distances[distKey] + @dist_adjustments[distKey]) / @worldWidth_AU * @worldWidth
-
-        console.log('distances:', @distances)
-
-    getDistance: (landmarkKey, units)->
-        if units=='AU'
-            return @distances[landmarkKey]
-        else
-            return @distances_px[landmarkKey]
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values

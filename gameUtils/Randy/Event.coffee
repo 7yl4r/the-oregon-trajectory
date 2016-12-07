@@ -1,4 +1,4 @@
-Sprite = require('../Sprite.coffee')
+Sprite = require('../../gameData/Sprite.coffee')
 
 module.exports = class Event
     TRIGGER_ACTIONS =
