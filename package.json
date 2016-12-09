@@ -62,9 +62,8 @@
   },
   "browser": {
     "pause": "./gameActions/pause.js",
-    "pause-controller": "./gameMenus/pause.js",
-    "pause-button": "./gameUtils/addPauseButton.js",
-    "status-display": "./gameUtils/statusDisplay/addStatusDisplay.js",
+    "pause-button": "./gameMenus/addPauseButton.js",
+    "status-display": "./gameMenus/statusDisplay/addStatusDisplay.js",
     "main-menu-controller": "./gameMenus/mainMenu.js",
 
     "game": "./game.coffee",
