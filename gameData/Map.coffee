@@ -1,4 +1,5 @@
 Location = require('./Location.coffee')
+LANDMARKS = require('./earth-europa-trajectory.js').LANDMARK
 
 #// TODO: move this...
 shopFunc = ()->
@@ -8,21 +9,6 @@ shopFunc = ()->
 winFunc = ()->
     #// TODO:
     console.log('switch to win state');
-
-
-LANDMARKS = {
-    EARTH: 'earth',
-    ISS: 'iss',
-    MANEUVER_MOON: 'moon-maneuver',
-    MOON: 'moon',
-    MANEUVER_MARS: 'mars-maneuver',
-    MARS: 'mars',
-    MANEUVER_CERES: 'ceres-maneuver',
-    CERES: 'ceres',
-    MANEUVER_JUPITER: 'jupiter-maneuver',
-    JUPITER: 'jupiter',
-    EUROPA: 'europa'
-}
 
 module.exports = class Map
     constructor: (gameData)->
