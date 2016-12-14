@@ -1,4 +1,5 @@
-Location = require('./Location.coffee')
+Location = require('./Location.coffee').Location
+buildLocation = require('./Location.coffee').buildLocation
 LANDMARKS = require('./earth-europa-trajectory.js').LANDMARK
 
 #// TODO: move this...
@@ -13,6 +14,8 @@ winFunc = ()->
 module.exports = class Map
     constructor: (gameData)->
         @landmarks = LANDMARKS
+
+        # TODO: remove these...
         @distances = {}  # actual distances in AU
         @distances[@landmarks.ISS] =              0.0010
         @distances[@landmarks.EARTH] =            0.0
@@ -42,70 +45,13 @@ module.exports = class Map
 
         @setTravelTime(5, gameData)
 
-        @stations = [
-            new Location(
-                LANDMARKS.ISS,
-                @getDistance(LANDMARKS.ISS),
-                LANDMARKS.ISS+'-station',
-                ()=>
-                    gameData.locationArrivalSignal.dispatch(LANDMARKS.EARTH)
-                    shopFunc()
-            ),
-            new Location(LANDMARKS.MANEUVER_MOON,
-                @getDistance(LANDMARKS.MANEUVER_MOON),
-                "maneuver"
-            ),
-            new Location(LANDMARKS.MOON,
-                @getDistance(LANDMARKS.MOON),
-                LANDMARKS.MOON+'-station',
-                ()=>
-                    gameData.locationArrivalSignal.dispatch(LANDMARKS.MOON)
-                    shopFunc()
-            ),
-            new Location(LANDMARKS.MANEUVER_MARS,
-                @getDistance(LANDMARKS.MANEUVER_MARS),
-                "maneuver"
-            ),
-            new Location(LANDMARKS.MARS,
-                @getDistance(LANDMARKS.MARS),
-                LANDMARKS.MARS+'-station',
-                ()=>
-                    gameData.locationArrivalSignal.dispatch(LANDMARKS.MARS)
-                    shopFunc()
-            ),
-            new Location(LANDMARKS.MANEUVER_CERES,
-                @getDistance(LANDMARKS.MANEUVER_CERES),
-                "maneuver"
-            ),
-            new Location(LANDMARKS.CERES,
-                @getDistance(LANDMARKS.CERES),
-                LANDMARKS.CERES+'-station',
-                ()=>
-                    gameData.locationArrivalSignal.dispatch(LANDMARKS.CERES)
-                    shopFunc()
-            ),
-            new Location(LANDMARKS.MANEUVER_JUPITER,
-                @getDistance(LANDMARKS.MANEUVER_JUPITER),
-                "maneuver"
-            ),
-            new Location(LANDMARKS.JUPITER,
-                @getDistance(LANDMARKS.JUPITER),
-                "maneuver",
-                ()=>
-                    gameData.locationArrivalSignal.dispatch(LANDMARKS.JUPITER)
-            ),
-            new Location(LANDMARKS.EUROPA,
-                @getDistance(LANDMARKS.EUROPA),
-                LANDMARKS.EUROPA+'-station',
-                ()=>
-                    gameData.locationArrivalSignal.dispatch(LANDMARKS.EUROPA)
-                    winFunc()
-            ),
-            new Location("END_OF_UNIVERSE",
-                gameData.worldWidth,
-                "maneuver"
-            )
-        ]
+        for locKey of gameData.trajectory.locations
+            gameData.trajectory.locations[locKey].locObj = buildLocation( gameData.trajectory.locations[locKey], gameData )
+
+    getLocation: (gameData, locKey)->
+        for index of gameData.trajectory.locations
+            if gameData.trajectory.locations[index].key == locKey
+                return gameData.trajectory.locations[index]
 
     setTravelTime: (gameLength, gameData)->
         # sets game targeted length in minutes and adjusts distances between
@@ -116,17 +62,22 @@ module.exports = class Map
 
         console.log('gameTime set to ' + gameLength + 'min. Width:' + gameData.worldWidth + 'px')
 
-        @distances_px = {}
-        for distKey of @distances
-            @distances_px[distKey] = (@distances[distKey] + @dist_adjustments[distKey]) / gameData.worldWidth_AU * gameData.worldWidth
+        for locKey of gameData.trajectory.locations
+            loc = gameData.trajectory.locations[locKey]
+            loc.distance_px = (loc.distance + loc.distance_adj) / gameData.worldWidth_AU * gameData.worldWidth
 
-        console.log('distances:', @distances)
+        window.traj = gameData.trajectory  # TODO: remove this debug code
+        # @distances_px = {}
+        # for distKey of @distances
+        #     @distances_px[distKey] = (@distances[distKey] + @dist_adjustments[distKey]) / gameData.worldWidth_AU * gameData.worldWidth
+
+        # console.log('distances:', @distances)
 
     getDistance: (landmarkKey, units)->
         if units=='AU'
-            return @distances[landmarkKey]
+            return @getLocation(globalData.gameData, landmarkKey).distance
         else
-            return @distances_px[landmarkKey]
+            return @getLocation(globalData.gameData, landmarkKey).distance_px
 
     preload_backgrounds: (game)->
         game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));

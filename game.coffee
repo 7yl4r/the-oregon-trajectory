@@ -49,7 +49,6 @@ class Game
 
         @map = new Map(this)
         @landmarks = @map.landmarks
-        @distances = @map.distances
         @dist_adjustments = @map.dist_adjustments
 
         # debug vars
@@ -60,8 +59,6 @@ class Game
     _init: ()->
         # re-initializes the game
         @randy = new Randy();
-
-        @locations = @map.stations
 
         console.log('locs:', @locations)
         @reputation = new Reputation();
@@ -135,7 +132,7 @@ class Game
 
     updateNextWaypoint: ()->
         # update next location if needed
-        if @distanceTraveled > @nextWaypoint.location
+        if @distanceTraveled > @nextWaypoint.distance_px
             @nextWaypoint = @_getStatsToNextLocation()
         else  # just update the distance
             @nextWaypoint.distance = @nextWaypoint.location - @distanceTraveled
@@ -191,32 +188,44 @@ class Game
         @fuel = BIG_NUMBER
 
     getCurrentEvent: ()->
+        # AKA getLastEvent
         # returns most recently triggered event/location
         # returns null if no event yet triggered
         lastName = @visited[@visited.length-1]
-        for location in @locations
-            if location.name == lastName
-                return location
-            # else keep looking
+        for i of @trajectory.locations
+            if @trajectory.locations[i].name == lastName
+                return @trajectory.locations[i]
         # else
         return null
 
     getLocationTile: (xPosition)->  # TODO: implement this
         # returns location tile key for given x coordinate
         spriteW = 500
-        closestPassedLoc = @locations[0]
-        if xPosition < @locations[i].x - spriteW/2
-            if closestPassedLoc.x < @locations[i].x
-                closestPassedLoc = @locations[i]
+        closestPassedLoc = @trajectory.locations[0]
+        if xPosition < @trajectory.locations[i].distance - spriteW/2
+            if closestPassedLoc.distance < @trajectory.locations[i].distance
+                closestPassedLoc = @trajectory.locations[i]
         return closestPassedLoc.name
+
+    getNextLocIndex: ()->
+        # assumes trajectory.locations are in order of encounter
+        # always returns first loc, even if not passed
+        for i of @trajectory.locations  # assumes we're traversing this in order...
+            # console.log(@trajectory.locations[i].name, '?')
+            if @trajectory.locations[i].distance_px > @distanceTraveled
+                # console.log('nextLoc:',i)
+                return i
+        # console.log('.')
+        # else we've passed all locations
+        return 0
 
     # === "private" methods ===
     _getRemainingLocations: ()->
         # returns array of locations not yet reached
         remainingLocs = []
-        for location in @locations
-            if location.x > @distanceTraveled
-                remainingLocs.push(location)
+        for locKey of @trajectory.locations
+            if @trajectory[locKey].distance >  @distanceTraveled
+                remainingLocs.push(@trajectory[locKey])
         return remainingLocs
 
     _getStatsToNextLocation: ()->
@@ -231,23 +240,19 @@ class Game
         #   spriteKey:            "maneuver"  # key for sprite lookup
         # }
         # location is relative to starting position, distance is relative to current ship position
-        remaining = @_getRemainingLocations()
+        nextI = @getNextLocIndex();
+        # console.log('nextLocIndex:',nextI);
 
-        # get minimum of remaining locations
-        next = {}
-        next.location = remaining[0].x
-        next.name     = remaining[0].name
-        for i of remaining
-            if remaining[i].x < next.distance  # assumes no equal distances
-                next.location = remaining[i].x
-                next.name     = remaining[i].name
+        # add details nextLoc to fit legacy code
+        @trajectory.locations[nextI].location = @trajectory.locations[nextI].distance_px
 
-            # calculate distance remaining before arrival
-        next.distance = next.location - @distanceTraveled
-        next.displayDistance = Math.round(next.distance)
-        next.fuelEstimate = next.distance * @fuelExpense * @fuelChance / TRAVEL_SPEED
-        next.rationEstimate = next.distance * @eatChance * @crewHealth.length / TRAVEL_SPEED
-        return next
+        @trajectory.locations[nextI].distanceLeft = @trajectory.locations[nextI].location - @distanceTraveled
+        @trajectory.locations[nextI].displayDistance = Math.round(@trajectory.locations[nextI].distanceLeft)
+        @trajectory.locations[nextI].fuelEstimate = @trajectory.locations[nextI].distanceLeft * @fuelExpense * @fuelChance / TRAVEL_SPEED
+        @trajectory.locations[nextI].rationEstimate = @trajectory.locations[nextI].distanceLeft * @eatChance * @crewHealth.length / TRAVEL_SPEED
+
+        console.log('next location set to: ', @trajectory.locations[nextI])
+        return @trajectory.locations[nextI]
 
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaining crew members

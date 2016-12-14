@@ -105,6 +105,7 @@ gameState.prototype = {
         StatusDisplay.preload(this.game)
     },
     create: function(){
+        console.log('create travelScreen');
         this.randyTime = 0;
 
         this.tileGroup = this.game.add.group();
@@ -133,8 +134,13 @@ gameState.prototype = {
         this.game.world.setBounds(-200, 0, globalData.gameData.worldWidth, 600);
         this.game.camera.follow(this.ship);
 
-        for (var loc_i in globalData.gameData.locations){
-            globalData.gameData.locations[loc_i].addLocationSprite(this, globalData.gameData, globalData.gameData.locations[loc_i])
+        // add location sprites
+        for (var loc_i in globalData.gameData.trajectory.locations){
+            globalData.gameData.trajectory.locations[loc_i].locObj.addLocationSprite(
+                this,
+                globalData.gameData,
+                globalData.gameData.trajectory.locations[loc_i]
+            )
         }
 
         this.tileGroup.x = globalData.gameData.distanceTraveled;
@@ -151,7 +157,7 @@ gameState.prototype = {
                     gameState.game.height/2,
                     'satelite-debris-1'
                 );
-                console.log('encounter:', event, 'sprite:', eventSprite);
+                // console.log('encounter:', event, 'sprite:', eventSprite);
             }
         })(this));
     },
@@ -183,7 +189,7 @@ getScreenRightEdge = function(game){
 }
 
 updateBackgroundTiles = function(gameState){
-    // append new filler bg tiles if needed
+    // appends bg tiles if needed
     var HALF_TILE_W = 500;  // guestimate of avg half-tile width
     var tileGroupWidth = 0;
     gameState.tileGroup.forEachExists(function(childTile){
@@ -195,16 +201,18 @@ updateBackgroundTiles = function(gameState){
     if (tileRightSide < screenRightEdge){
         // console.log('grp.w:', tileGroupWidth, '\t grp.x:', gameState.tileGroup.x,
         //             '\t grp.right:', tileRightSide, "\t screenEdge:", screenRightEdge)
-        if (globalData.gameData.nextWaypoint.distance < HALF_TILE_W + globalData.game.width){
-            // console.log('loc tile: ', globalData.gameData.nextWaypoint.name);
-            addTile(gameState.game, gameState.tileGroup, globalData.gameData.nextWaypoint.name);
+        if (globalData.gameData.nextWaypoint.distanceLeft < HALF_TILE_W + globalData.game.width){
+            console.log('next loc tile: ', globalData.gameData.nextWaypoint);
+            addTile(gameState.game, gameState.tileGroup, globalData.gameData.nextWaypoint.key);
+        } else {
+            // NOTE: could choose rand filler here
+            addTile(gameState.game, gameState.tileGroup, 'filler');
         }
-        // NOTE: could choose rand filler here
-        addTile(gameState.game, gameState.tileGroup, 'filler');
     }
 }
 
 travel = function(gameState){
+    // console.log('travelScreen.travel');
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
         globalData.gameData.travel();
 
@@ -214,16 +222,16 @@ travel = function(gameState){
 
         // handle arrival at stations/events
         if (!globalData.gameData.BYPASS_LOCATIONS){
-            for (var loc_i in globalData.gameData.locations){
-                var location = globalData.gameData.locations[loc_i];
-                var pos = location.x;
+            for (var loc_i in globalData.gameData.trajectory.locations){
+                var location = globalData.gameData.trajectory.locations[loc_i];
+                var pos = location.distance_px;
                 var loc = location.name;
                 if (pos < globalData.gameData.distanceTraveled &&
                     globalData.gameData.visited.indexOf(loc) < 0) {  // passing & not yet visited
                     globalData.gameData.visited.push(loc);
                     globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
                     console.log('arrived at ', loc);
-                    globalData.gameData.locations[loc_i].trigger({state:gameState, data:globalData.gameData});
+                    globalData.gameData.trajectory.locations[loc_i].locObj.trigger({state:gameState, data:globalData.gameData});
                 }
             }
         }

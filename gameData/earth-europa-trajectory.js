@@ -17,6 +17,7 @@ traj = {
         {
             name: "Earth",
             background: "assets/backgrounds/bg.png",
+            key: LANDMARK.EARTH,
             distance: 0,
             distance_adj: 0.1,
             landmark: require('./landmarks/iss.js')  // TODO: buildLandmark(require('./landmarks/iss.js'), LANDMARK.EARTH)
