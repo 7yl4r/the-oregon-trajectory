@@ -36,6 +36,19 @@ class EncounterManager {
         // loadSpriteSheet(game, this.LANDMARK.CERES+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
         // loadSpriteSheet(game, this.LANDMARK.EUROPA+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
     }
+
+    getLastEncounter(gameData){
+        // # AKA getLastEvent
+        // # returns most recently triggered event/location
+        // # returns null if no event yet triggered
+        var lastName = gameData.visited[gameData.visited.length-1];
+        for (var enc of this.encounters){
+            if (enc.name == lastName){
+                return enc;
+            }
+        }  // else
+        return null;
+    }
 }
 
 module.exports = EncounterManager

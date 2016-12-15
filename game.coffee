@@ -213,12 +213,7 @@ class Game
         # AKA getLastEvent
         # returns most recently triggered event/location
         # returns null if no event yet triggered
-        lastName = @visited[@visited.length-1]
-        for i of @trajectory.locations
-            if @trajectory.locations[i].name == lastName
-                return @trajectory.locations[i]
-        # else
-        return null
+        return encounterManager.getLastEncounter(this)
 
     getLocationTile: (xPosition)->  # TODO: implement this
         # returns location tile key for given x coordinate
