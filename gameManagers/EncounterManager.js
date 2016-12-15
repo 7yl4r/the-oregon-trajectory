@@ -6,7 +6,6 @@ class EncounterManager {
         this.encounters = [];  // not yet enountered, sorted by distance_px
         this.potentialEncounters = [];  // not yet added to encounters
         this.passedEncounters = [];  // passed encounters, in order of encounter
-        this.visited = ['ksc'];
         this.nextEncounterDistance_px = Infinity;
 
         for (var loc of trajJSON.trajectory.locations){
@@ -51,20 +50,12 @@ class EncounterManager {
     getLastEncounter(){
         // # AKA getLastEvent
         // # returns most recently triggered event/location
-        // # returns null if no event yet triggered
-        var lastName = this.visited[this.visited.length-1];
-        for (var enc of this.encounters){
-            if (enc.name == lastName){
-                return enc;
-            }
-        }  // else
-        return null;
+        return this.passedEncounters[this.passedEncounters.length-1];
     }
 
     triggerNextEncounter(gameData, travelScreenState){
         var encounter = this.encounters.shift();
 
-        this.visited.push(encounter.name);
         console.log('encountering ', encounter);
         gameData.encounter_object = encounter;  // store the location obj for use by the triggered module
         for (var trigger of encounter.onArrivalTriggers){
