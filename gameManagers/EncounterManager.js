@@ -1,24 +1,41 @@
+loadSpriteSheet = require('load-spritesheet');
+
 class EncounterManager {
-  constructor(trajJSON) {
-      this.LANDMARK = trajJSON.LANDMARK
-  }
+    constructor(trajJSON) {
+        this.LANDMARK = trajJSON.LANDMARK
+        this.encounters = []
 
-  setPotentialEncounters(encountersJSON){
-      // sets potential encounters array
-      // TODO:
-      console.log('set pot enc');
-  }
+        for (var loc of trajJSON.trajectory.locations){
+            this.addEncounter(loc.landmark);
+        }
+        window.testTraj = trajJSON.trajectory.locations
+    }
 
-  preload(game){
-      // maneuver marker:
-      loadSpriteSheet(game, 'maneuver', require('../assets/sprites/maneuver-node/spriteSpec'));
-      // landmark sprites:
-      loadSpriteSheet(game, this.LANDMARK.ISS+'-station', require('../assets/sprites/stations/iss/spriteSpec'));
-      loadSpriteSheet(game, this.LANDMARK.MOON+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-      loadSpriteSheet(game, this.LANDMARK.MARS+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-      loadSpriteSheet(game, this.LANDMARK.CERES+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-      loadSpriteSheet(game, this.LANDMARK.EUROPA+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-  }
+    addEncounter(newEnc){
+        this.encounters.push(newEnc);
+    }
+
+    setPotentialEncounters(encountersJSON){
+        // sets potential encounters array
+        // TODO:
+        console.log('set pot enc');
+    }
+
+    preload(game){
+        // console.log('preloading encounters', this.encounters);
+        for (var encounter of this.encounters){
+            loadSpriteSheet(game, encounter.spriteKey, encounter.spriteSpec);
+            // console.log('encounter:', encounter);
+        }
+        // // maneuver marker:
+        // loadSpriteSheet(game, 'maneuver', require('../assets/sprites/maneuver-node/spriteSpec'));
+        // // landmark sprites:
+        // loadSpriteSheet(game, this.LANDMARK.ISS+'-station', require('../assets/sprites/stations/iss/spriteSpec'));
+        // loadSpriteSheet(game, this.LANDMARK.MOON+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
+        // loadSpriteSheet(game, this.LANDMARK.MARS+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
+        // loadSpriteSheet(game, this.LANDMARK.CERES+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
+        // loadSpriteSheet(game, this.LANDMARK.EUROPA+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
+    }
 }
 
 module.exports = EncounterManager

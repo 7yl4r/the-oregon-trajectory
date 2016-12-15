@@ -3,7 +3,6 @@ Phaser = require('phaser');
 PauseButton = require('pause-button');
 StatusDisplay = require('status-display');
 drift = require('drift');
-loadSpriteSheet = require('load-spritesheet');
 EventList = require('EventList');
 
 gameState = function(game){}

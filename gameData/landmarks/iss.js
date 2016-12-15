@@ -1,6 +1,7 @@
 module.exports = {
     name: "station",
-    sprite: "./assets/sprites/station",
+    spriteKey: "iss",
+    spriteSpec: require("../../assets/sprites/stations/iss/spriteSpec"),
     onArrivalTriggers: [
         {
             key: "switch-state",
