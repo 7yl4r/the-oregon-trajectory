@@ -3,17 +3,27 @@ loadSpriteSheet = require('load-spritesheet');
 class EncounterManager {
     constructor(trajJSON) {
         this.LANDMARK = trajJSON.LANDMARK;
-        this.encounters = [];
+        this.encounters = [];  // not yet enountered, sorted by distance_px
+        this.potentialEncounters = [];  // not yet added to encounters
+        this.passedEncounters = [];  // passed encounters, in order of encounter
         this.visited = ['ksc'];
+        this.nextEncounterDistance_px = Infinity;
 
         for (var loc of trajJSON.trajectory.locations){
             this.addEncounter(loc.landmark);
         }
-        window.testTraj = trajJSON.trajectory.locations;
+
+        // for debug:
+        $(document).on('switch-state', function(event){
+            console.log('switch state', event.data);
+        });
     }
 
     addEncounter(newEnc){
         this.encounters.push(newEnc);
+        if (newEnc.distance_px < this.nextEncounterDistance_px){
+            this.nextEncounterDistance_px = newEnc.distance_px;
+        }
     }
 
     setPotentialEncounters(encountersJSON){
@@ -51,19 +61,26 @@ class EncounterManager {
         return null;
     }
 
+    triggerNextEncounter(gameData, travelScreenState){
+        var encounter = this.encounters.shift();
+
+        this.visited.push(encounter.name);
+        console.log('encountering ', encounter);
+        gameData.encounter_object = encounter;  // store the location obj for use by the triggered module
+        for (var trigger of encounter.onArrivalTriggers){
+            $(document).trigger(trigger.key, undefined, trigger.payload);
+        }
+
+        this.passedEncounters.push(encounter);
+
+        this.nextEncounterDistance_px = this.encounters[0].distance_px;
+    }
+
     checkForEncounter(gameData, travelScreenState){
         // triggers encounters it if needed.
         // handle arrival at stations/events
-        for (var location of gameData.trajectory.locations){
-            var pos = location.distance_px;
-            var loc = location.name;
-            if (pos < gameData.distanceTraveled &&
-                this.visited.indexOf(loc) < 0) {  // passing & not yet visited
-                this.visited.push(loc);
-                gameData.encounter_object = location;  // store the location obj for use by the triggered module
-                console.log('arrived at ', loc);
-                location.locObj.trigger({state:travelScreenState, data:gameData});
-            }
+        if (this.nextEncounterDistance_px > gameData.distanceTraveled){
+            this.triggerNextEncounter(gameData, travelScreenState);
         }
     }
 }

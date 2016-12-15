@@ -30,26 +30,15 @@ class Location {
     // #     this.x = x
     // #     this.spriteKey = spriteKey
     // #
-    // #     if trigger?
-    // #         this.trigger = trigger
-    // #
     // #     if spriteKey?
     // #         this.spriteKey = spriteKey
     // #     else
     // #         this.spriteKey = name
-    constructor(locJSON, trigger=undefined){
+    constructor(locJSON){
         // # console.log('new Loc(', name, x, actionKey, '):', this)
         this.name = locJSON.name;
         this.x = locJSON.distance_px;
         this.spriteKey = locJSON.key;
-
-        if (trigger){
-            this.trigger = trigger;
-        }
-    }
-    trigger(args){
-        console.log('arrived at event', this);
-        console.log('loc trigged w/ args: ', args);
     }
     addLocationSprite(gameState, data, location){
         // # draws location sprite if in view at global Xposition
@@ -80,11 +69,8 @@ class Location {
 
 buildLocation = function(locJSON){
     // # location builder
-    trig = function(){
-        console.log('trigger ', locJSON.name)
-    }
     // # console.log('build', locJSON)
-    return new Location(locJSON, trigger=trig);
+    return new Location(locJSON);
 }
 
 module.exports = LocationManager

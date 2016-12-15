@@ -127,14 +127,15 @@ gameState.prototype = {
         this.game.world.setBounds(-200, 0, globalData.gameData.worldWidth, 600);
         this.game.camera.follow(this.ship);
 
+        // TODO: add this back
         // add location sprites
-        for (var loc_i in globalData.gameData.trajectory.locations){
-            globalData.gameData.trajectory.locations[loc_i].locObj.addLocationSprite(
-                this,
-                globalData.gameData,
-                globalData.gameData.trajectory.locations[loc_i]
-            )
-        }
+        // for (var loc_i in globalData.gameData.trajectory.locations){
+        //     globalData.gameData.trajectory.locations[loc_i].locObj.addLocationSprite(
+        //         this,
+        //         globalData.gameData,
+        //         globalData.gameData.trajectory.locations[loc_i]
+        //     )
+        // }
 
         this.tileGroup.x = globalData.gameData.distanceTraveled;
         window.travelScreen = this;
