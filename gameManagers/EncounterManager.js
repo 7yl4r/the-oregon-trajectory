@@ -50,6 +50,22 @@ class EncounterManager {
         }  // else
         return null;
     }
+
+    checkForEncounter(gameData, travelScreenState){
+        // triggers encounters it if needed.
+        // handle arrival at stations/events
+        for (var location of gameData.trajectory.locations){
+            var pos = location.distance_px;
+            var loc = location.name;
+            if (pos < gameData.distanceTraveled &&
+                this.visited.indexOf(loc) < 0) {  // passing & not yet visited
+                this.visited.push(loc);
+                gameData.encounter_object = location;  // store the location obj for use by the triggered module
+                console.log('arrived at ', loc);
+                location.locObj.trigger({state:travelScreenState, data:gameData});
+            }
+        }
+    }
 }
 
 module.exports = EncounterManager

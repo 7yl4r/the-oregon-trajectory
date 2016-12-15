@@ -122,7 +122,10 @@ class Game
         # console.log('distances:', @distances)
 
 
-    travel: ()->
+    travel: (travelScreenState)->
+        if !@BYPASS_LOCATIONS
+            @encounterManager.checkForEncounter(this, travelScreenState)
+
         # progress 1 time-tick of travel and update the game values
         if @fuel >= @fuelExpense
             @distanceTraveled += TRAVEL_SPEED

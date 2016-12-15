@@ -207,27 +207,11 @@ updateBackgroundTiles = function(gameState){
 travel = function(gameState){
     // console.log('travelScreen.travel');
     if (globalData.gameData.fuel >= globalData.gameData.fuelExpense) {
-        globalData.gameData.travel();
+        globalData.gameData.travel(gameState);
 
         gameState.ship.x = globalData.gameData.distanceTraveled;
 
         updateBackgroundTiles(gameState);
-
-        // handle arrival at stations/events
-        if (!globalData.gameData.BYPASS_LOCATIONS){
-            for (var loc_i in globalData.gameData.trajectory.locations){
-                var location = globalData.gameData.trajectory.locations[loc_i];
-                var pos = location.distance_px;
-                var loc = location.name;
-                if (pos < globalData.gameData.distanceTraveled &&
-                    globalData.gameData.encounterManager.visited.indexOf(loc) < 0) {  // passing & not yet visited
-                    globalData.gameData.encounterManager.visited.push(loc);
-                    globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
-                    console.log('arrived at ', loc);
-                    globalData.gameData.trajectory.locations[loc_i].locObj.trigger({state:gameState, data:globalData.gameData});
-                }
-            }
-        }
 
         // handle random events
         // NOTE: could check if is a good time/place for an event first.
