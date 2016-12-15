@@ -46,7 +46,10 @@ module.exports = class Map
         @setTravelTime(5, gameData)
 
         for locKey of gameData.trajectory.locations
-            gameData.trajectory.locations[locKey].locObj = buildLocation( gameData.trajectory.locations[locKey], gameData )
+            gameData.trajectory.locations[locKey].locObj = buildLocation(
+                gameData.trajectory.locations[locKey],
+                gameData
+            )
 
     getLocation: (gameData, locKey)->
         for index of gameData.trajectory.locations

@@ -2,6 +2,8 @@ Reputation = require('./gameUtils/Reputation.coffee')
 Score = require('./gameUtils/Score.coffee')
 Phaser = require('phaser')
 Randy = require('./gameUtils/Randy/Randy.coffee')
+EncounterManager = require('./gameManagers/EncounterManager.js')
+LocationManager = require('./gameManagers/LocationManager.js')
 
 # TODO: remove this...
 Map = require('./gameData/Map.coffee')
@@ -46,6 +48,9 @@ class Game
 
         traj = require('./gameData/earth-europa-trajectory.js')
         @trajectory = traj.trajectory
+
+        @encounterManager = new EncounterManager()
+        @locationManager = new LocationManager()
 
         @map = new Map(this)
         @landmarks = @map.landmarks
@@ -100,6 +105,9 @@ class Game
         #   fuelEstimate:   555,    # estimate of rations to get there
         #   rationEstimate: 666
         # }
+
+    setTrajectory: (trajJSON)->
+        # sets the trajectory from a given json object
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
