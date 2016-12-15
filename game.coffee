@@ -5,9 +5,6 @@ Randy = require('./gameUtils/Randy/Randy.coffee')
 EncounterManager = require('./gameManagers/EncounterManager.js')
 LocationManager = require('./gameManagers/LocationManager.js')
 
-# TODO: remove this...
-Map = require('./gameData/Map.coffee')
-
 window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
 # NOTE: this base speed does not affect travel time between planets b/c
 #           it is used to calculate those distances. Ships can travel faster
@@ -52,10 +49,7 @@ class Game
         @encounterManager = new EncounterManager(traj)
         @locationManager = new LocationManager(traj)
 
-        @map = new Map(this)
         @setTravelTime(5, @)
-
-        @dist_adjustments = @map.dist_adjustments
 
         # debug vars
         @BYPASS_LOCATIONS = false
@@ -124,10 +118,7 @@ class Game
             loc = gameData.trajectory.locations[locKey]
             loc.distance_px = (loc.distance + loc.distance_adj) / gameData.worldWidth_AU * gameData.worldWidth
 
-        window.traj = gameData.trajectory  # TODO: remove this debug code
-        # @distances_px = {}
-        # for distKey of @distances
-        #     @distances_px[distKey] = (@distances[distKey] + @dist_adjustments[distKey]) / gameData.worldWidth_AU * gameData.worldWidth
+        # window.traj = gameData.trajectory  # TODO: remove this debug code
 
         # console.log('distances:', @distances)
 

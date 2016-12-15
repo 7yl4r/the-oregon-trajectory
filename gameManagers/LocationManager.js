@@ -1,17 +1,25 @@
 drift = require('drift')
 
 class LocationManager {
-  constructor(trajJSON) {
-      for (var location of trajJSON.trajectory.locations){
-          location.locObj = buildLocation(location);
-      }
-      console.log("LocationManager built");
-  }
-  setLocations(encountersJSON){
-      // sets potential encounters array
-      // TODO:
-      console.log('set locations');
-  }
+    constructor(trajJSON) {
+        for (var location of trajJSON.trajectory.locations){
+            location.locObj = buildLocation(location);
+        }
+    }
+    setLocations(encountersJSON){
+        // sets potential encounters array
+        // TODO:
+        console.log('set locations');
+    }
+    preload(game){
+        game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));
+        game.load.image('moon', util.absPath('assets/backgrounds/moon.png'));
+        game.load.image('earth', util.absPath('assets/backgrounds/bg.png'));
+        game.load.image('mars', util.absPath('assets/backgrounds/mars.png'));
+        game.load.image('ceres', util.absPath('assets/backgrounds/ceres.png'));
+        game.load.image('jupiter', util.absPath('assets/backgrounds/jupiter.png'));
+        game.load.image('europa', util.absPath('assets/backgrounds/europa.png'));
+    }
 }
 
 

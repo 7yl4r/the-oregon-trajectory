@@ -19,7 +19,7 @@ gameState.prototype = {
         // # visual assets #
         // #################
         // backgrounds:
-        data.map.preload_backgrounds(game);
+        data.locationManager.preload(game);
 
         // player ship:
         game.load.image('player-ship', util.absPath('assets/sprites/ship.png'));
