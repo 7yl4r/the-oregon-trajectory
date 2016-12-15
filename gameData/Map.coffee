@@ -1,15 +1,8 @@
-Location = require('./Location.coffee').Location
-buildLocation = require('./Location.coffee').buildLocation
 LANDMARKS = require('./earth-europa-trajectory.js').LANDMARK
 
 module.exports = class Map
     constructor: (gameData)->
-
-        for locKey of gameData.trajectory.locations
-            gameData.trajectory.locations[locKey].locObj = buildLocation(
-                gameData.trajectory.locations[locKey],
-                gameData
-            )
+        # nada
 
     getLocation: (gameData, locKey)->
         for index of gameData.trajectory.locations

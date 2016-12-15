@@ -50,7 +50,7 @@ class Game
         @trajectory = traj.trajectory
 
         @encounterManager = new EncounterManager(traj)
-        @locationManager = new LocationManager()
+        @locationManager = new LocationManager(traj)
 
         @map = new Map(this)
         @setTravelTime(5, @)

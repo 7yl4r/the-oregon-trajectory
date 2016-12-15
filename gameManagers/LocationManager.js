@@ -1,13 +1,82 @@
+drift = require('drift')
+
 class LocationManager {
-  constructor() {
-      // TODO:
-      console.log("LocationManager built")
+  constructor(trajJSON) {
+      for (var location of trajJSON.trajectory.locations){
+          location.locObj = buildLocation(location);
+      }
+      console.log("LocationManager built");
   }
   setLocations(encountersJSON){
       // sets potential encounters array
       // TODO:
       console.log('set locations');
   }
+}
+
+
+class Location {
+    // # constructor: (name, x, spriteKey=undefined, trigger=undefined)->
+    // #     # console.log('new Loc(', name, x, actionKey, '):', this)
+    // #     this.name = name
+    // #     this.x = x
+    // #     this.spriteKey = spriteKey
+    // #
+    // #     if trigger?
+    // #         this.trigger = trigger
+    // #
+    // #     if spriteKey?
+    // #         this.spriteKey = spriteKey
+    // #     else
+    // #         this.spriteKey = name
+    constructor(locJSON, trigger=undefined){
+        // # console.log('new Loc(', name, x, actionKey, '):', this)
+        this.name = locJSON.name;
+        this.x = locJSON.distance_px;
+        this.spriteKey = locJSON.key;
+
+        if (trigger){
+            this.trigger = trigger;
+        }
+    }
+    trigger(args){
+        console.log('arrived at event', this);
+        console.log('loc trigged w/ args: ', args);
+    }
+    addLocationSprite(gameState, data, location){
+        // # draws location sprite if in view at global Xposition
+        // # if w/in reasonable draw distance
+        game = gameState.game;
+
+        // # TODO: add rotation
+        try {
+            location.sprite = game.add.sprite(
+                location.distance + gameState.SHIP_INITIAL_POS,
+                drift(game.height/2),
+                this.spriteKey
+            );
+            location.sprite.animations.add('animation1');
+            location.sprite.animations.play('animation1', 2, true);
+            location.sprite.anchor.setTo(0.5, 0.5);
+            location.sprite.update = function(){
+                this.y = drift(this.y)
+            }
+        }catch (error){  //# probably spriteKey not found
+            console.warn(error)
+        }
+
+        // # console.log('sprite added for ', location);
+        // # window.currentLocation = location;
+    }
+}
+
+buildLocation = function(locJSON){
+    // # location builder
+    trig = function(){
+        console.log('trigger ', locJSON.name)
+    }
+    // # console.log('build', locJSON)
+    return new Location(locJSON, trigger=trig);
 }
 
 module.exports = LocationManager
