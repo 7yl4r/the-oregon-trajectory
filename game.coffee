@@ -83,7 +83,6 @@ class Game
 
         @radiationChance = .0005  # chance of being irradiated per tick
         @money = 5000
-        @visited = ['ksc']
         @nextWaypoint = @_getStatsToNextLocation()
         # nextWaypoint looks like:
         # {
@@ -213,7 +212,7 @@ class Game
         # AKA getLastEvent
         # returns most recently triggered event/location
         # returns null if no event yet triggered
-        return encounterManager.getLastEncounter(this)
+        return encounterManager.getLastEncounter()
 
     getLocationTile: (xPosition)->  # TODO: implement this
         # returns location tile key for given x coordinate

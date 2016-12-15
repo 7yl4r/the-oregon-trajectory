@@ -220,8 +220,8 @@ travel = function(gameState){
                 var pos = location.distance_px;
                 var loc = location.name;
                 if (pos < globalData.gameData.distanceTraveled &&
-                    globalData.gameData.visited.indexOf(loc) < 0) {  // passing & not yet visited
-                    globalData.gameData.visited.push(loc);
+                    globalData.gameData.encounterManager.visited.indexOf(loc) < 0) {  // passing & not yet visited
+                    globalData.gameData.encounterManager.visited.push(loc);
                     globalData.gameData.encounter_object = location;  // store the location obj for use by the triggered module
                     console.log('arrived at ', loc);
                     globalData.gameData.trajectory.locations[loc_i].locObj.trigger({state:gameState, data:globalData.gameData});

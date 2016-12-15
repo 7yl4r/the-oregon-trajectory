@@ -2,13 +2,14 @@ loadSpriteSheet = require('load-spritesheet');
 
 class EncounterManager {
     constructor(trajJSON) {
-        this.LANDMARK = trajJSON.LANDMARK
-        this.encounters = []
+        this.LANDMARK = trajJSON.LANDMARK;
+        this.encounters = [];
+        this.visited = ['ksc'];
 
         for (var loc of trajJSON.trajectory.locations){
             this.addEncounter(loc.landmark);
         }
-        window.testTraj = trajJSON.trajectory.locations
+        window.testTraj = trajJSON.trajectory.locations;
     }
 
     addEncounter(newEnc){
@@ -37,11 +38,11 @@ class EncounterManager {
         // loadSpriteSheet(game, this.LANDMARK.EUROPA+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
     }
 
-    getLastEncounter(gameData){
+    getLastEncounter(){
         // # AKA getLastEvent
         // # returns most recently triggered event/location
         // # returns null if no event yet triggered
-        var lastName = gameData.visited[gameData.visited.length-1];
+        var lastName = this.visited[this.visited.length-1];
         for (var enc of this.encounters){
             if (enc.name == lastName){
                 return enc;
