@@ -49,11 +49,10 @@ class Game
         traj = require('./gameData/earth-europa-trajectory.js')
         @trajectory = traj.trajectory
 
-        @encounterManager = new EncounterManager()
+        @encounterManager = new EncounterManager(traj)
         @locationManager = new LocationManager()
 
         @map = new Map(this)
-        @landmarks = @map.landmarks
         @dist_adjustments = @map.dist_adjustments
 
         # debug vars

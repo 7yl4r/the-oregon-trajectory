@@ -24,14 +24,8 @@ gameState.prototype = {
 
         // player ship:
         game.load.image('player-ship', util.absPath('assets/sprites/ship.png'));
-        // maneuver marker:
-        loadSpriteSheet(game, 'maneuver', require('../../assets/sprites/maneuver-node/spriteSpec'));
-        // landmark sprites:
-        loadSpriteSheet(game, data.landmarks.ISS+'-station', require('../../assets/sprites/stations/iss/spriteSpec'));
-        loadSpriteSheet(game, data.landmarks.MOON+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
-        loadSpriteSheet(game, data.landmarks.MARS+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
-        loadSpriteSheet(game, data.landmarks.CERES+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
-        loadSpriteSheet(game, data.landmarks.EUROPA+'-station', require('../../assets/sprites/stations/marker1/spriteSpec'));
+
+        data.encounterManager.preload(game);
 
         EventList.preload(game);
 
