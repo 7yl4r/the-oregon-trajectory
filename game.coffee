@@ -43,13 +43,7 @@ class Game
         # distances
         @worldWidth_AU = 13.6749  # TODO: move this into @trajectory data file
 
-        traj = require('./gameData/earth-europa-trajectory.js')
-        @trajectory = traj.trajectory
-
-        @encounterManager = new EncounterManager(traj)
-        @locationManager = new LocationManager(traj)
-
-        @setTravelTime(5, @)
+        @setTrajectory(require('./gameData/earth-europa-trajectory.js'))
 
         # debug vars
         @BYPASS_LOCATIONS = false
@@ -103,7 +97,13 @@ class Game
 
     setTrajectory: (trajJSON)->
         # sets the trajectory from a given json object
-        # TODO:
+        @trajectory = trajJSON.trajectory
+
+        @encounterManager = new EncounterManager(trajJSON)
+        @locationManager = new LocationManager(trajJSON)
+
+        @setTravelTime(5, @)
+
 
     setTravelTime: (gameLength, gameData)->
         # sets game targeted length in minutes and adjusts distances between
