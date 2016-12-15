@@ -53,6 +53,8 @@ class Game
         @locationManager = new LocationManager()
 
         @map = new Map(this)
+        @setTravelTime(5, @)
+
         @dist_adjustments = @map.dist_adjustments
 
         # debug vars
@@ -107,6 +109,28 @@ class Game
 
     setTrajectory: (trajJSON)->
         # sets the trajectory from a given json object
+        # TODO:
+
+    setTravelTime: (gameLength, gameData)->
+        # sets game targeted length in minutes and adjusts distances between
+        #   planets accordingly.
+        gameTime = gameLength*60 # convert to seconds
+        fps = 30
+        gameData.worldWidth = gameTime*TRAVEL_SPEED*fps  # [s] * [px]/[s] = [px]
+
+        console.log('gameTime set to ' + gameLength + 'min. Width:' + gameData.worldWidth + 'px')
+
+        for locKey of gameData.trajectory.locations
+            loc = gameData.trajectory.locations[locKey]
+            loc.distance_px = (loc.distance + loc.distance_adj) / gameData.worldWidth_AU * gameData.worldWidth
+
+        window.traj = gameData.trajectory  # TODO: remove this debug code
+        # @distances_px = {}
+        # for distKey of @distances
+        #     @distances_px[distKey] = (@distances[distKey] + @dist_adjustments[distKey]) / gameData.worldWidth_AU * gameData.worldWidth
+
+        # console.log('distances:', @distances)
+
 
     travel: ()->
         # progress 1 time-tick of travel and update the game values
