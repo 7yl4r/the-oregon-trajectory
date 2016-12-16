@@ -98,26 +98,28 @@ class Game
         # sets the trajectory from a given json object
         @trajectory = trajJSON.trajectory
 
-        @encounterManager = new EncounterManager(trajJSON)
-        @locationManager = new LocationManager(trajJSON)
+        @setTravelTime(@trajectory.meta.travelTime, @)
 
-        @setTravelTime(5, @)
+        @encounterManager = new EncounterManager(trajJSON);
+        @locationManager = new LocationManager(trajJSON);
 
-
-    setTravelTime: (gameLength, gameData)->
+    setTravelTime: (gameLength)->
         # sets game targeted length in minutes and adjusts distances between
         #   planets accordingly.
         gameTime = gameLength*60 # convert to seconds
         fps = 30
-        gameData.worldWidth = gameTime*TRAVEL_SPEED*fps  # [s] * [px]/[s] = [px]
+        @worldWidth = gameTime*TRAVEL_SPEED*fps  # [s] * [px]/[s] = [px]
 
-        console.log('gameTime set to ' + gameLength + 'min. Width:' + gameData.worldWidth + 'px')
+        console.log('gameTime set to ' + gameLength + 'min. Width:' + @worldWidth + 'px');
 
-        for locKey of gameData.trajectory.locations
-            loc = gameData.trajectory.locations[locKey]
-            loc.distance_px = (loc.distance + loc.distance_adj) / gameData.worldWidth_AU * gameData.worldWidth
+        @trajectory.pixelsPerAU = @worldWidth/@trajectory.meta.totalDistance;
 
-        # window.traj = gameData.trajectory  # TODO: remove this debug code
+        # TODO: remove this:
+        for locKey of @trajectory.locations
+            loc = @trajectory.locations[locKey]
+            loc.distance_px = (loc.distance + loc.distance_adj) / @worldWidth_AU * @worldWidth
+
+        # window.traj = @trajectory  # TODO: remove this debug code
 
         # console.log('distances:', @distances)
 

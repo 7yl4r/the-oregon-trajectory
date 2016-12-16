@@ -1,4 +1,5 @@
 loadSpriteSheet = require('load-spritesheet');
+drift = require('drift');
 
 class EncounterManager {
     constructor(trajJSON) {
@@ -9,7 +10,7 @@ class EncounterManager {
         this.nextEncounterDistance_px = Infinity;
 
         for (var loc of trajJSON.trajectory.locations){
-            this.addEncounter(loc.landmark);
+            this.addEncounter(loc.landmark, trajJSON.trajectory.pixelsPerAU);
         }
 
         // for debug:
@@ -18,7 +19,9 @@ class EncounterManager {
         });
     }
 
-    addEncounter(newEnc){
+    addEncounter(newEnc, pixelsPerAU){
+        console.log('addEnc', newEnc, pixelsPerAU);
+        newEnc.distance_px = newEnc.distance * pixelsPerAU;
         this.encounters.push(newEnc);
         if (newEnc.distance_px < this.nextEncounterDistance_px){
             this.nextEncounterDistance_px = newEnc.distance_px;
@@ -35,7 +38,7 @@ class EncounterManager {
         // console.log('preloading encounters', this.encounters);
         for (var encounter of this.encounters){
             loadSpriteSheet(game, encounter.spriteKey, encounter.spriteSpec);
-            // console.log('encounter:', encounter);
+            console.log('preload encounter:', encounter.spriteKey, encounter.spriteSpec);
         }
         // // maneuver marker:
         // loadSpriteSheet(game, 'maneuver', require('../assets/sprites/maneuver-node/spriteSpec'));
@@ -54,23 +57,29 @@ class EncounterManager {
     }
 
     triggerNextEncounter(gameData, travelScreenState){
-        var encounter = this.encounters.shift();
+        try {
+            var encounter = this.encounters.shift();
 
-        console.log('encountering ', encounter);
-        gameData.encounter_object = encounter;  // store the location obj for use by the triggered module
-        for (var trigger of encounter.onArrivalTriggers){
-            $(document).trigger(trigger.key, undefined, trigger.payload);
+            console.log('encountering ', encounter);
+            gameData.encounter_object = encounter;  // store the location obj for use by the triggered module
+            for (var trigger of encounter.onArrivalTriggers){
+                $(document).trigger(trigger.key, undefined, trigger.payload);
+            }
+
+            this.passedEncounters.push(encounter);
+
+            this.nextEncounterDistance_px = this.encounters[0].distance_px;
+        } catch (error){
+            console.error('no encounters left! err: ');
+            throw error;
         }
-
-        this.passedEncounters.push(encounter);
-
-        this.nextEncounterDistance_px = this.encounters[0].distance_px;
     }
 
     checkForEncounter(gameData, travelScreenState){
         // triggers encounters it if needed.
         // handle arrival at stations/events
-        if (this.nextEncounterDistance_px > gameData.distanceTraveled){
+        // console.log('nextEncDist=',this.nextEncounterDistance_px, '<', gameData.distanceTraveled, '?');
+        if (this.nextEncounterDistance_px < gameData.distanceTraveled){
             this.triggerNextEncounter(gameData, travelScreenState);
         }
     }
@@ -85,6 +94,7 @@ class EncounterManager {
 
         // get last few passedEncounters
         for (var i = this.passedEncounters.length-1; i > -1; i--){
+            // console.log(this.passedEncounters[i].distance_px, '>', minDist, '?');
             if (this.passedEncounters[i].distance_px > minDist){
                 result.push(this.passedEncounters[i]);
             } else {
@@ -101,6 +111,7 @@ class EncounterManager {
             }
         }
 
+        // console.log(result.length);
         return result;
     }
 
@@ -112,17 +123,25 @@ class EncounterManager {
         try {
             encounter.sprite = phaserGame.add.sprite(
                 x,
-                drift(y),
+                y,
                 this.spriteKey
             );
-            encounter.sprite.animations.add('animation1');
-            encounter.sprite.animations.play('animation1', 2, true);
+            try {
+                encounter.sprite.animations.add('animation1');
+                encounter.sprite.animations.play('animation1', 2, true);
+            } catch(error){
+                // assume that it's just a sprite w/ no animation
+            }
             encounter.sprite.anchor.setTo(0.5, 0.5);
             encounter.sprite.update = function(){
                 this.y = drift(this.y)
             }
-        }catch (error){  //# probably spriteKey not found
-            console.warn(error)
+        }catch (error){
+            console.error('cannot draw sprite @(',x,',',y,')',
+                'enc:', encounter,
+                'game', phaserGame,
+                'ERR:', error
+            );
         }
 
         // # console.log('sprite added for ', encounter);

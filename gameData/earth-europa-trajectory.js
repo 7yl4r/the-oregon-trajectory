@@ -42,6 +42,10 @@ LANDMARK = {  // landmark keys dict (use it like an enum)
 
 
 traj = {
+    meta: {
+        travelTime: 5,
+        totalDistance: 13.67
+    },
     locations:[  // should be in order of encounter
         {
             name: "Earth",
@@ -49,24 +53,46 @@ traj = {
             key: LANDMARK.EARTH,
             distance: 0,
             distance_adj: 0.1,
-            landmark: require('./landmarks/iss.js')  // TODO: buildLandmark(require('./landmarks/iss.js'), LANDMARK.EARTH)
+            landmark: buildLandmark({
+                json: require('./landmarks/iss.js'),
+                distance: 0.1
+            })
         },{
             name: "moon-maneuver",
             background: undefined,
             distance: 0.0015,
             distance_adj: 1.3,
-            landmark: require('./landmarks/maneuver.js')
+            landmark: buildLandmark({
+                json: require('./landmarks/maneuver.js'),
+                distance: 1.3015
+            })
         },{
             name: "Moon",
             background: "assets/backgrounds/moon.png",
             distance: 0.0015*2,
             distance_adj: 2.0,
-            landmark: require('./landmarks/station.js')
+            landmark: buildLandmark({
+                json: require('./landmarks/station.js'),
+                distance: 2.003
+            })
         }
     ]
 };
 
 // make adjustments to loaded template landmarks
 traj.locations[1].landmark.name = 'moon-maneuver-node';
+
+function buildLandmark(args){
+    // constructs landmark data object
+    // json: base json to use for the landmarks
+    // all other key-val pairs are added to json and can overload attribs on json.
+    var result = args.json;
+    for (var key in args){
+        if (key != 'json'){
+            result[key] = args[key];
+        }
+    }
+    return result;
+}
 
 module.exports = {trajectory: traj, LANDMARK: LANDMARK};

@@ -127,20 +127,6 @@ gameState.prototype = {
         this.game.world.setBounds(-200, 0, globalData.gameData.worldWidth, 600);
         this.game.camera.follow(this.ship);
 
-        // add location sprites
-        var upcomingEncounters = globalData.gameData.encounterManager.getNearbyEncounters({
-            distance: globalData.gameData.distanceTraveled,
-            searchWindow: this.game.width/2
-        });
-        for (var encounter of upcomingEncounters){
-            globalData.gameData.encounterManager.drawEncounterSprite(
-                this.game,
-                encounter,
-                encounter.distance_px,
-                this.game.width/2
-            )
-        }
-
         this.tileGroup.x = globalData.gameData.distanceTraveled;
         window.travelScreen = this;
 
@@ -162,11 +148,28 @@ gameState.prototype = {
     update: function(){
         if (!globalData.game.inMenu){  // check for menu pause
             travel(this);
+            this.drawSprites();  // NOTE: is this ok every frame? there's gonna be duplicates...
             StatusDisplay.update(this.game);
         }
     },
     render: function(){
         this.game.debug.cameraInfo(this.game.camera, 32, 32);
+    },
+    drawSprites: function(){
+        // add location sprites
+        var upcomingEncounters = globalData.gameData.encounterManager.getNearbyEncounters({
+            distance: globalData.gameData.distanceTraveled,
+            searchWindow: this.game.width/2
+        });
+        // console.log('drawing ', upcomingEncounters.length, ' sprites');
+        for (var encounter of upcomingEncounters){
+            globalData.gameData.encounterManager.drawEncounterSprite(
+                this.game,
+                encounter,
+                encounter.distance_px,
+                this.game.width/2
+            )
+        }
     }
 }
 
