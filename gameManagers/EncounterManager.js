@@ -74,6 +74,60 @@ class EncounterManager {
             this.triggerNextEncounter(gameData, travelScreenState);
         }
     }
+
+    getNearbyEncounters(args){
+        // retuns array of nearby encounters
+        // distance: location to check around [px]
+        // searchWindow: how far to look around given distance [px]
+        var minDist = args.distance - args.searchWindow;
+        var maxDist = args.distance + args.searchWindow;
+        var result = [];
+
+        // get last few passedEncounters
+        for (var i = this.passedEncounters.length-1; i > -1; i--){
+            if (this.passedEncounters[i].distance_px > minDist){
+                result.push(this.passedEncounters[i]);
+            } else {
+                break;  // don't bother searching the rest
+            }
+        }
+
+        // get first few next encounters
+        for (var i = 0; i < this.encounters.length; i++){
+            if (this.encounters[i].distance_px < maxDist){
+                result.push(this.encounters[i]);
+            } else {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    // STATIC
+    drawEncounterSprite(phaserGame, encounter, x, y){
+        // # draws encounter sprite if in view at global Xposition
+        // # if w/in reasonable draw distance
+        // # TODO: add rotation
+        try {
+            encounter.sprite = phaserGame.add.sprite(
+                x,
+                drift(y),
+                this.spriteKey
+            );
+            encounter.sprite.animations.add('animation1');
+            encounter.sprite.animations.play('animation1', 2, true);
+            encounter.sprite.anchor.setTo(0.5, 0.5);
+            encounter.sprite.update = function(){
+                this.y = drift(this.y)
+            }
+        }catch (error){  //# probably spriteKey not found
+            console.warn(error)
+        }
+
+        // # console.log('sprite added for ', encounter);
+        // # window.currentLocation = encounter;
+    }
 }
 
 module.exports = EncounterManager

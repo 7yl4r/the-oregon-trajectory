@@ -40,31 +40,6 @@ class Location {
         this.x = locJSON.distance_px;
         this.spriteKey = locJSON.key;
     }
-    addLocationSprite(gameState, data, location){
-        // # draws location sprite if in view at global Xposition
-        // # if w/in reasonable draw distance
-        game = gameState.game;
-
-        // # TODO: add rotation
-        try {
-            location.sprite = game.add.sprite(
-                location.distance + gameState.SHIP_INITIAL_POS,
-                drift(game.height/2),
-                this.spriteKey
-            );
-            location.sprite.animations.add('animation1');
-            location.sprite.animations.play('animation1', 2, true);
-            location.sprite.anchor.setTo(0.5, 0.5);
-            location.sprite.update = function(){
-                this.y = drift(this.y)
-            }
-        }catch (error){  //# probably spriteKey not found
-            console.warn(error)
-        }
-
-        // # console.log('sprite added for ', location);
-        // # window.currentLocation = location;
-    }
 }
 
 buildLocation = function(locJSON){
