@@ -141,7 +141,7 @@ gameState.prototype = {
                     gameState.game.height/2,
                     'satelite-debris-1'
                 );
-                // console.log('encounter:', event, 'sprite:', eventSprite);
+                console.log('encounter:', event, 'sprite:', eventSprite);
             }
         })(this));
     },
@@ -153,13 +153,13 @@ gameState.prototype = {
         }
     },
     render: function(){
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        // this.game.debug.cameraInfo(this.game.camera, 32, 32);
     },
     drawSprites: function(){
         // add location sprites
         var upcomingEncounters = globalData.gameData.encounterManager.getNearbyEncounters({
             distance: globalData.gameData.distanceTraveled,
-            searchWindow: this.game.width/2
+            searchWindow: this.game.width/2.0
         });
         // console.log('drawing ', upcomingEncounters.length, ' sprites');
         for (var encounter of upcomingEncounters){
@@ -167,7 +167,7 @@ gameState.prototype = {
                 this.game,
                 encounter,
                 encounter.distance_px,
-                this.game.width/2
+                this.game.height/2
             )
         }
     }

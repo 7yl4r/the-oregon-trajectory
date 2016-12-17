@@ -40,7 +40,6 @@ LANDMARK = {  // landmark keys dict (use it like an enum)
 // @dist_adjustments[@landmarks.JUPITER] =          -2.5
 // @dist_adjustments[@landmarks.EUROPA] =           -1.0
 
-
 traj = {
     meta: {
         travelTime: 5,

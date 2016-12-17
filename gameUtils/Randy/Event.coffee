@@ -29,4 +29,4 @@ module.exports = class Event
     trigger: ()->
         @count += 1
         # console.log('triggered.')
-        $(document).trigger("encounter", @)
+        # $(document).trigger("encounter", @)  // TODO: re-enable

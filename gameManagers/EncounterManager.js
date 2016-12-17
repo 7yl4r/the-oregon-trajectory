@@ -117,33 +117,38 @@ class EncounterManager {
 
     // STATIC
     drawEncounterSprite(phaserGame, encounter, x, y){
-        // # draws encounter sprite if in view at global Xposition
-        // # if w/in reasonable draw distance
+        // # draws encounter sprite
         // # TODO: add rotation
-        try {
-            encounter.sprite = phaserGame.add.sprite(
-                x,
-                y,
-                this.spriteKey
-            );
+        // console.log('g:',phaserGame,'e:',encounter,'x:',x,'y:',y);
+        if (!encounter.sprite){
             try {
-                encounter.sprite.animations.add('animation1');
-                encounter.sprite.animations.play('animation1', 2, true);
-            } catch(error){
-                // assume that it's just a sprite w/ no animation
+                encounter.sprite = phaserGame.add.sprite(
+                    x,
+                    y,
+                    encounter.spriteKey
+                );
+                try {
+                    encounter.sprite.animations.add('animation1');
+                    encounter.sprite.animations.play('animation1', 2, true);
+                } catch(error){
+                    // assume that it's just a sprite w/ no animation
+                }
+                encounter.sprite.anchor.setTo(0.5, 0.5);
+                encounter.sprite.update = function(){
+                    this.y = drift(this.y);
+                }
+                encounter.sprite.outOfBoundsKill = true;
+                encounter.sprite.checkWorldBounds = true;
+                // console.log('encounter drawn:', encounter.sprite);
+                window.sprit = encounter.sprite;
+            }catch (error){
+                console.error('cannot draw sprite @(',x,',',y,')',
+                    'enc:', encounter,
+                    'game', phaserGame,
+                    'ERR:', error
+                );
             }
-            encounter.sprite.anchor.setTo(0.5, 0.5);
-            encounter.sprite.update = function(){
-                this.y = drift(this.y)
-            }
-        }catch (error){
-            console.error('cannot draw sprite @(',x,',',y,')',
-                'enc:', encounter,
-                'game', phaserGame,
-                'ERR:', error
-            );
         }
-
         // # console.log('sprite added for ', encounter);
         // # window.currentLocation = encounter;
     }
