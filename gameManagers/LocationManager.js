@@ -5,13 +5,27 @@ class LocationManager {
         this.setLocations(trajJSON);
     }
     setLocations(trajJSON){
-        // sets potential encounters array
+        // sets locations
+        this.locations = [];
         for (var location of trajJSON.trajectory.locations){
             location = buildLocation({
                 base: location,
                 pxPerAU: trajJSON.pixelsPerAU
             });
+            this.locations.push(location);
         }
+    }
+    getLocation(distance){
+        // returns location for the given distance from start location
+        // expects distance in AU
+        var res = this.locations[0];
+        for (var loc of this.locations){
+            if (loc.distance+loc.distance_adj < distance){
+                res = loc;
+            } else {
+                return res;
+            }
+        }  // else we've passed all locations
     }
     preload(game){
         game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));

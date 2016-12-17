@@ -107,12 +107,6 @@ gameState.prototype = {
         // this.tileGroup.setAll('checkWorldBounds', true);
 
         updateBackgroundTiles(this);
-        // // globalData.gameData.locationArrivalSignal.add((function(_game, _tileGroup){
-        //     return function(tileName){
-        //         console.log('adding location tile: ' + tileName);
-        //         addTile(_game, _tileGroup, tileName);
-        //     }
-        // })(this.game, this.tileGroup));
 
         this.SHIP_INITIAL_POS = 0;
         this.ship = this.game.add.sprite(
@@ -195,19 +189,20 @@ updateBackgroundTiles = function(gameState){
     var tileGroupWidth = 0;
     gameState.tileGroup.forEachExists(function(childTile){
         tileGroupWidth += childTile.width
-    })
+    });
     var tileRightSide = gameState.tileGroup.x + tileGroupWidth;
     var screenRightEdge = getScreenRightEdge(globalData.game);
 
     if (tileRightSide < screenRightEdge){
         // console.log('grp.w:', tileGroupWidth, '\t grp.x:', gameState.tileGroup.x,
         //             '\t grp.right:', tileRightSide, "\t screenEdge:", screenRightEdge)
-        if (globalData.gameData.nextWaypoint.distanceLeft < HALF_TILE_W + globalData.game.width){
-            console.log('next loc tile: ', globalData.gameData.nextWaypoint);
-            addTile(gameState.game, gameState.tileGroup, globalData.gameData.nextWaypoint.key);
-        } else {
-            // NOTE: could choose rand filler here
+        var kkey = globalData.gameData.locationManager.getLocation(
+            globalData.gameData.getDistanceTraveled('AU')
+        ).key;
+        if (typeof(kkey) == 'undefined'){
             addTile(gameState.game, gameState.tileGroup, 'filler');
+        } else {
+            addTile(gameState.game, gameState.tileGroup, kkey);
         }
     }
 }

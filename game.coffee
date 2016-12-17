@@ -18,9 +18,6 @@ class Game
     constructor: ()->
         @gameDir = "" # "/the-oregon-trajectory" # for conversion between gh-pages and local server
 
-        # game signals
-        @locationArrivalSignal = new Phaser.Signal()
-
         @UISettings = {
             pad: 10,  # space between things
             fontSize: 16,
@@ -219,15 +216,6 @@ class Game
         # returns null if no event yet triggered
         return encounterManager.getLastEncounter()
 
-    getLocationTile: (xPosition)->  # TODO: implement this
-        # returns location tile key for given x coordinate
-        spriteW = 500
-        closestPassedLoc = @trajectory.locations[0]
-        if xPosition < @trajectory.locations[i].distance - spriteW/2
-            if closestPassedLoc.distance < @trajectory.locations[i].distance
-                closestPassedLoc = @trajectory.locations[i]
-        return closestPassedLoc.name
-
     getNextLocIndex: ()->
         # assumes trajectory.locations are in order of encounter
         # always returns first loc, even if not passed
@@ -239,6 +227,12 @@ class Game
         # console.log('.')
         # else we've passed all locations
         return 0
+
+    getDistanceTraveled:(units)->
+        if units == 'px'
+            return @distanceTraveled
+        else
+            return @distanceTraveled/@worldWidth*@trajectory.meta.totalDistance
 
     # === "private" methods ===
     _getRemainingLocations: ()->
