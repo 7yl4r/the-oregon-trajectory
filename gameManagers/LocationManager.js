@@ -28,6 +28,7 @@ class LocationManager {
         }  // else we've passed all locations
     }
     preload(game){
+        // TODO: load these from 
         game.load.image('filler', util.absPath('assets/backgrounds/filler.png'));
         game.load.image('moon', util.absPath('assets/backgrounds/moon.png'));
         game.load.image('earth', util.absPath('assets/backgrounds/bg.png'));

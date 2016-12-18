@@ -12,33 +12,9 @@ LANDMARK = {  // landmark keys dict (use it like an enum)
     EUROPA: 'europa'
 }
 
-// TODO: merge these into new traj.locations format
-// distances in AU
-// @distances[@landmarks.ISS] =              0.0010
-// @distances[@landmarks.EARTH] =            0.0
-// @distances[@landmarks.MANEUVER_MOON] =    0.0015
-// @distances[@landmarks.MOON] =             0.0015*2
-// @distances[@landmarks.MANEUVER_MARS] =    0.0015*2+1.9608
-// @distances[@landmarks.MARS] =             0.0015*2+1.9608*2
-// @distances[@landmarks.MANEUVER_CERES] =   0.0015*2+1.9608*2+1.6243
-// @distances[@landmarks.CERES] =            0.0015*2+1.9608*2+1.6243*2
-// @distances[@landmarks.MANEUVER_JUPITER] = 0.0015*2+1.9608*2+1.6243*2+3.2486
-// @distances[@landmarks.JUPITER] =          0.0015*2+1.9608*2+1.6243*2+3.2486*2
-// @distances[@landmarks.EUROPA] =           0.0015*2+1.9608*2+1.6243*2+3.2486*2+.003
-
-// @dist_adjustments = {}  # use these to move locations for gameplay reasons
-// # calculations to come to these numbers from this spreadsheet:
+// # calculations to come to distance numbers from this spreadsheet:
 // # https://docs.google.com/spreadsheets/d/1xrVJzQhPNw9-6lNZPf_-sr50t_ECjgUU8BIYq2M84ok/edit?usp=sharing
-// @dist_adjustments[@landmarks.EARTH] =             0.1
-// @dist_adjustments[@landmarks.MANEUVER_MOON] =     1.3
-// @dist_adjustments[@landmarks.MOON] =              2.0
-// @dist_adjustments[@landmarks.MANEUVER_MARS] =     1.5
-// @dist_adjustments[@landmarks.MARS] =              1.0
-// @dist_adjustments[@landmarks.MANEUVER_CERES] =    0.5
-// @dist_adjustments[@landmarks.CERES] =             0.0
-// @dist_adjustments[@landmarks.MANEUVER_JUPITER] = -1.5
-// @dist_adjustments[@landmarks.JUPITER] =          -2.5
-// @dist_adjustments[@landmarks.EUROPA] =           -1.0
+
 
 traj = {
     meta: {
@@ -50,11 +26,11 @@ traj = {
             name: "Earth",
             background: "assets/backgrounds/bg.png",
             key: LANDMARK.EARTH,
-            distance: 0,
-            distance_adj: 0.1,
+            distance: 0,    // distance in AU
+            distance_adj: 0.1,  // distance adjustment for gameplay purposes
             landmark: buildLandmark({
                 json: require('./landmarks/iss.js'),
-                distance: 0.1
+                distance: 0.2
             })
         },{
             name: "moon-maneuver",
@@ -73,6 +49,69 @@ traj = {
             landmark: buildLandmark({
                 json: require('./landmarks/station.js'),
                 distance: 2.003
+            })
+        },{
+            name: "Mars Maneuver",
+            background: undefined,
+            distance: 0.0015*2+1.9608,  // 1.9623
+            distance_adj: 1.5,
+            landmark: buildLandmark({
+                json: require('./landmarks/maneuver.js'),
+                distance: 1.97
+            })
+        },{
+            name: "Mars",
+            background: 'assets/backgrounds/mars.png',
+            distance: 0.0015*2+1.9608*2,  // 3.9246
+            distance_adj: 1.0,
+            landmark: buildLandmark({
+                json: require('./landmarks/station.js'),
+                distance: 4
+            })
+        },{
+            name: "Ceres Maneuver",
+            background: undefined,
+            distance: 0.0015*2+1.9608*2+1.6243,  // 5.5489
+            distance_adj: 0.5,
+            landmark: buildLandmark({
+                json: require('./landmarks/maneuver.js'),
+                distance: 6
+            })
+        },{
+            name: "Ceres",
+            background: 'assets/backgrounds/ceres.png',
+            distance: 7.1732,
+            distance_adj: 0.0,
+            landmark: buildLandmark({
+                json: require('./landmarks/station.js'),
+                distance: 7
+            })
+        },{
+            name: "Jupiter Maneuver",
+            background: undefined,
+            distance: 0.0015*2+1.9608*2+1.6243*2+3.2486,  // 10.4218
+            distance_adj: -1.5,
+            landmark: buildLandmark({
+                json: require('./landmarks/maneuver.js'),
+                distance: 9
+            })
+        },{
+            name: "Jupiter",
+            background: 'assets/backgrounds/juipter.png',
+            distance: 13.6704,
+            distance_adj: -2.5,
+            landmark: buildLandmark({
+                json: require('./landmarks/station.js'),
+                distance: 11.2
+            })
+        },{
+            name: "Europa",
+            background: 'assets/backgrounds/europa.png',
+            distance: 13.6734,
+            distance_adj: -1.0,
+            landmark: buildLandmark({
+                json: require('./landmarks/station.js'),
+                distance: 12.6
             })
         }
     ]
