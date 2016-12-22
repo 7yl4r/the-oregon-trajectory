@@ -96,6 +96,7 @@ class Game
         @trajectory = trajJSON.trajectory
 
         @setTravelTime(@trajectory.meta.travelTime, @)
+        trajJSON.pixelsPerAU = @trajectory.pixelsPerAU
 
         @encounterManager = new EncounterManager(trajJSON);
         @locationManager = new LocationManager(trajJSON);
@@ -110,16 +111,6 @@ class Game
         console.log('gameTime set to ' + gameLength + 'min. Width:' + @worldWidth + 'px');
 
         @trajectory.pixelsPerAU = @worldWidth/@trajectory.meta.totalDistance;
-
-        # TODO: remove this:
-        for locKey of @trajectory.locations
-            loc = @trajectory.locations[locKey]
-            loc.distance_px = (loc.distance + loc.distance_adj) / @worldWidth_AU * @worldWidth
-
-        # window.traj = @trajectory  # TODO: remove this debug code
-
-        # console.log('distances:', @distances)
-
 
     travel: (travelScreenState)->
         if !@BYPASS_LOCATIONS
@@ -217,11 +208,11 @@ class Game
         return encounterManager.getLastEncounter()
 
     getNextLocIndex: ()->
-        # assumes trajectory.locations are in order of encounter
+        # assumes locationManager.locations are in order of encounter
         # always returns first loc, even if not passed
-        for i of @trajectory.locations  # assumes we're traversing this in order...
-            # console.log(@trajectory.locations[i].name, '?')
-            if @trajectory.locations[i].distance_px > @distanceTraveled
+        for i of @locationManager.locations  # assumes we're traversing this in order...
+            # console.log(@locationManager.locations[i].name, '?')
+            if @locationManager.locations[i].distance_px > @distanceTraveled
                 # console.log('nextLoc:',i)
                 return i
         # console.log('.')
@@ -238,9 +229,9 @@ class Game
     _getRemainingLocations: ()->
         # returns array of locations not yet reached
         remainingLocs = []
-        for locKey of @trajectory.locations
-            if @trajectory[locKey].distance >  @distanceTraveled
-                remainingLocs.push(@trajectory[locKey])
+        for locKey of @locationManager.locations
+            if @locationManager[locKey].distance >  @distanceTraveled
+                remainingLocs.push(@locationManager[locKey])
         return remainingLocs
 
     _getStatsToNextLocation: ()->
@@ -259,15 +250,15 @@ class Game
         # console.log('nextLocIndex:',nextI);
 
         # add details nextLoc to fit legacy code
-        @trajectory.locations[nextI].location = @trajectory.locations[nextI].distance_px
+        @locationManager.locations[nextI].location = @locationManager.locations[nextI].distance_px
 
-        @trajectory.locations[nextI].distanceLeft = @trajectory.locations[nextI].location - @distanceTraveled
-        @trajectory.locations[nextI].displayDistance = Math.round(@trajectory.locations[nextI].distanceLeft)
-        @trajectory.locations[nextI].fuelEstimate = @trajectory.locations[nextI].distanceLeft * @fuelExpense * @fuelChance / TRAVEL_SPEED
-        @trajectory.locations[nextI].rationEstimate = @trajectory.locations[nextI].distanceLeft * @eatChance * @crewHealth.length / TRAVEL_SPEED
+        @locationManager.locations[nextI].distanceLeft = @locationManager.locations[nextI].location - @distanceTraveled
+        @locationManager.locations[nextI].displayDistance = Math.round(@locationManager.locations[nextI].distanceLeft)
+        @locationManager.locations[nextI].fuelEstimate = @locationManager.locations[nextI].distanceLeft * @fuelExpense * @fuelChance / TRAVEL_SPEED
+        @locationManager.locations[nextI].rationEstimate = @locationManager.locations[nextI].distanceLeft * @eatChance * @crewHealth.length / TRAVEL_SPEED
 
-        console.log('next location set to: ', @trajectory.locations[nextI])
-        return @trajectory.locations[nextI]
+        console.log('next location set to: ', @locationManager.locations[nextI])
+        return @locationManager.locations[nextI]
 
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaining crew members

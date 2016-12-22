@@ -197,7 +197,7 @@ updateBackgroundTiles = function(gameState){
         // console.log('grp.w:', tileGroupWidth, '\t grp.x:', gameState.tileGroup.x,
         //             '\t grp.right:', tileRightSide, "\t screenEdge:", screenRightEdge)
         var kkey = globalData.gameData.locationManager.getLocation(
-            globalData.gameData.getDistanceTraveled('AU')
+            globalData.gameData.getDistanceTraveled('px')
         ).key;
         if (typeof(kkey) == 'undefined'){
             addTile(gameState.game, gameState.tileGroup, 'filler');

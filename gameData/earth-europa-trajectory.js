@@ -26,15 +26,16 @@ traj = {
             name: "Earth",
             background: "assets/backgrounds/bg.png",
             key: LANDMARK.EARTH,
-            distance: 0,    // distance in AU
-            distance_adj: 0.1,  // distance adjustment for gameplay purposes
+            distance: 0.0,    // distance in AU
+            distance_adj: 0.5,  // distance adjustment for gameplay purposes
             landmark: buildLandmark({
                 json: require('./landmarks/iss.js'),
-                distance: 0.2
+                distance: 0.5
             })
         },{
             name: "moon-maneuver",
-            background: undefined,
+            // background: undefined,
+            // key: undefined,
             distance: 0.0015,
             distance_adj: 1.3,
             landmark: buildLandmark({
@@ -44,6 +45,7 @@ traj = {
         },{
             name: "Moon",
             background: "assets/backgrounds/moon.png",
+            key: LANDMARK.MOON,
             distance: 0.0015*2,
             distance_adj: 2.0,
             landmark: buildLandmark({
@@ -62,6 +64,7 @@ traj = {
         },{
             name: "Mars",
             background: 'assets/backgrounds/mars.png',
+            key: LANDMARK.MARS,
             distance: 0.0015*2+1.9608*2,  // 3.9246
             distance_adj: 1.0,
             landmark: buildLandmark({
@@ -80,6 +83,7 @@ traj = {
         },{
             name: "Ceres",
             background: 'assets/backgrounds/ceres.png',
+            key: LANDMARK.CERES,
             distance: 7.1732,
             distance_adj: 0.0,
             landmark: buildLandmark({
@@ -98,6 +102,7 @@ traj = {
         },{
             name: "Jupiter",
             background: 'assets/backgrounds/juipter.png',
+            key: LANDMARK.JUPITER,
             distance: 13.6704,
             distance_adj: -2.5,
             landmark: buildLandmark({
@@ -107,6 +112,7 @@ traj = {
         },{
             name: "Europa",
             background: 'assets/backgrounds/europa.png',
+            key: LANDMARK.EUROPA,
             distance: 13.6734,
             distance_adj: -1.0,
             landmark: buildLandmark({
