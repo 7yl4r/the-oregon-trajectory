@@ -51,7 +51,6 @@ class Game
         # re-initializes the game
         @randy = new Randy();
 
-        console.log('locs:', @locations)
         @reputation = new Reputation();
         @score = new Score();
 

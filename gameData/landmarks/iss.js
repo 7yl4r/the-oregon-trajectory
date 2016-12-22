@@ -1,5 +1,5 @@
 module.exports = {
-    name: "station",
+    name: "International Space Station",
     spriteKey: "iss",
     spriteSpec: require("../../assets/sprites/stations/iss/spriteSpec"),
     onArrivalTriggers: [

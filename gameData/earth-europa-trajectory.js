@@ -40,7 +40,8 @@ traj = {
             distance_adj: 1.3,
             landmark: buildLandmark({
                 json: require('./landmarks/maneuver.js'),
-                distance: 1.3015
+                distance: 1.3015,
+                name: 'moon-maneuver'
             })
         },{
             name: "Moon",
@@ -50,7 +51,8 @@ traj = {
             distance_adj: 2.0,
             landmark: buildLandmark({
                 json: require('./landmarks/station.js'),
-                distance: 2.003
+                distance: 2.003,
+                name: 'Moon Station 1'
             })
         },{
             name: "Mars Maneuver",
@@ -59,7 +61,8 @@ traj = {
             distance_adj: 1.5,
             landmark: buildLandmark({
                 json: require('./landmarks/maneuver.js'),
-                distance: 1.97
+                distance: 2.5,
+                name: 'mars-maneuver'
             })
         },{
             name: "Mars",
@@ -69,7 +72,8 @@ traj = {
             distance_adj: 1.0,
             landmark: buildLandmark({
                 json: require('./landmarks/station.js'),
-                distance: 4
+                distance: 4,
+                name: 'mars station 1'
             })
         },{
             name: "Ceres Maneuver",
@@ -78,7 +82,8 @@ traj = {
             distance_adj: 0.5,
             landmark: buildLandmark({
                 json: require('./landmarks/maneuver.js'),
-                distance: 6
+                distance: 6,
+                name: 'ceres maneuver node'
             })
         },{
             name: "Ceres",
@@ -88,7 +93,8 @@ traj = {
             distance_adj: 0.0,
             landmark: buildLandmark({
                 json: require('./landmarks/station.js'),
-                distance: 7
+                distance: 7,
+                name: 'ceres station'
             })
         },{
             name: "Jupiter Maneuver",
@@ -97,7 +103,8 @@ traj = {
             distance_adj: -1.5,
             landmark: buildLandmark({
                 json: require('./landmarks/maneuver.js'),
-                distance: 9
+                distance: 9,
+                name: 'jupiter maneuver node'
             })
         },{
             name: "Jupiter",
@@ -107,7 +114,8 @@ traj = {
             distance_adj: -2.5,
             landmark: buildLandmark({
                 json: require('./landmarks/station.js'),
-                distance: 11.2
+                distance: 11.2,
+                name: 'jupiter station 1'
             })
         },{
             name: "Europa",
@@ -117,20 +125,22 @@ traj = {
             distance_adj: -1.0,
             landmark: buildLandmark({
                 json: require('./landmarks/station.js'),
-                distance: 12.6
+                distance: 12.6,
+                name: 'europa station (you win)'
             })
         }
     ]
 };
 
-// make adjustments to loaded template landmarks
-traj.locations[1].landmark.name = 'moon-maneuver-node';
-
 function buildLandmark(args){
     // constructs landmark data object
     // json: base json to use for the landmarks
     // all other key-val pairs are added to json and can overload attribs on json.
-    var result = args.json;
+    var result = {};
+    for (var key in args.json){
+        result[key] = args.json[key];
+    }
+
     for (var key in args){
         if (key != 'json'){
             result[key] = args[key];

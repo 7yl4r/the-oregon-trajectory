@@ -10,7 +10,9 @@ class EncounterManager {
         this.nextEncounterDistance_px = Infinity;
 
         for (var loc of trajJSON.trajectory.locations){
+            // console.log('adding encounters for loc ', loc.name, '...');
             this.addEncounter(loc.landmark, trajJSON.trajectory.pixelsPerAU);
+            // console.log(loc.landmark.name);
         }
 
         // for debug:
@@ -38,16 +40,8 @@ class EncounterManager {
         // console.log('preloading encounters', this.encounters);
         for (var encounter of this.encounters){
             loadSpriteSheet(game, encounter.spriteKey, encounter.spriteSpec);
-            // console.log('preload encounter:', encounter.spriteKey, encounter.spriteSpec);
+            // console.log('preload encounter:', encounter.name, encounter.spriteSpec);
         }
-        // // maneuver marker:
-        // loadSpriteSheet(game, 'maneuver', require('../assets/sprites/maneuver-node/spriteSpec'));
-        // // landmark sprites:
-        // loadSpriteSheet(game, this.LANDMARK.ISS+'-station', require('../assets/sprites/stations/iss/spriteSpec'));
-        // loadSpriteSheet(game, this.LANDMARK.MOON+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-        // loadSpriteSheet(game, this.LANDMARK.MARS+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-        // loadSpriteSheet(game, this.LANDMARK.CERES+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
-        // loadSpriteSheet(game, this.LANDMARK.EUROPA+'-station', require('../assets/sprites/stations/marker1/spriteSpec'));
     }
 
     getLastEncounter(){
@@ -60,7 +54,7 @@ class EncounterManager {
         try {
             var encounter = this.encounters.shift();
 
-            console.log('encountering ', encounter);
+            // console.log('encountering ', encounter);
             gameData.encounter_object = encounter;  // store the location obj for use by the triggered module
             for (var trigger of encounter.onArrivalTriggers){
                 $(document).trigger(trigger.key, undefined, trigger.payload);
@@ -111,7 +105,7 @@ class EncounterManager {
             }
         }
 
-        // console.log(result.length);
+        // console.log('approaching ', result.length, 'encounters');
         return result;
     }
 
