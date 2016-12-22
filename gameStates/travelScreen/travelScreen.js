@@ -171,7 +171,7 @@ module.exports = gameState;
 
 addTile = function(game, tileGroup, newTileKey){
     // adds a tile to the scrolling background
-    console.log('add ' + newTileKey);
+    // console.log('add ' + newTileKey);
     tileGroup.create(
         getScreenRightEdge(game) - tileGroup.x,
         0,

@@ -18,15 +18,14 @@ class LocationManager {
     getLocation(distance, units='px'){
         // returns location for the given distance from start location
         // expects distance in px
-        console.log('loc @ x=',distance,':');
-        var res = this.locations[0];
+        // console.log('loc @ x=',distance,':');
         for (var locI = 0; locI < this.locations.length; locI++){
             var loc = this.locations[locI];
             if (loc.getDistance(units) < distance){
                 continue;
             } else {
-                console.log(this.locations[locI+1]);
-                return this.locations[locI+1];
+                // console.log(this.locations[locI]);
+                return this.locations[locI];
             }
         }  // else we've passed all locations
         console.warn('passed all locations!');

@@ -20,7 +20,7 @@ class EncounterManager {
     }
 
     addEncounter(newEnc, pixelsPerAU){
-        console.log('addEnc', newEnc, pixelsPerAU);
+        // console.log('addEnc', newEnc, pixelsPerAU);
         newEnc.distance_px = newEnc.distance * pixelsPerAU;
         this.encounters.push(newEnc);
         if (newEnc.distance_px < this.nextEncounterDistance_px){
@@ -38,7 +38,7 @@ class EncounterManager {
         // console.log('preloading encounters', this.encounters);
         for (var encounter of this.encounters){
             loadSpriteSheet(game, encounter.spriteKey, encounter.spriteSpec);
-            console.log('preload encounter:', encounter.spriteKey, encounter.spriteSpec);
+            // console.log('preload encounter:', encounter.spriteKey, encounter.spriteSpec);
         }
         // // maneuver marker:
         // loadSpriteSheet(game, 'maneuver', require('../assets/sprites/maneuver-node/spriteSpec'));
