@@ -14,11 +14,6 @@ class EncounterManager {
             this.addEncounter(loc.landmark, trajJSON.trajectory.pixelsPerAU);
             // console.log(loc.landmark.name);
         }
-
-        // for debug:
-        $(document).on('switch-state', function(event){
-            console.log('switch state', event.data);
-        });
     }
 
     addEncounter(newEnc, pixelsPerAU){
@@ -57,7 +52,7 @@ class EncounterManager {
             // console.log('encountering ', encounter);
             gameData.encounter_object = encounter;  // store the location obj for use by the triggered module
             for (var trigger of encounter.onArrivalTriggers){
-                $(document).trigger(trigger.key, undefined, trigger.payload);
+                gameData.eventManager.trigger(trigger.key, trigger.payload);
             }
 
             this.passedEncounters.push(encounter);

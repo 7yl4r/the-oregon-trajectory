@@ -72,6 +72,7 @@
     "drift": "./gameUtils/drift.js",
     "load-spritesheet": "./gameUtils/loadSpriteSpec.js",
     "EventList": "./gameData/EventList.js",
+    "gameEvents": "./gameEvents.js",
 
     "slick-ui": "./lib/slick-ui/dist/slick-ui.min.js",
     "slick-ui-preload": "./gamePlugins/slickUI.js",

@@ -4,6 +4,8 @@ Phaser = require('phaser')
 Randy = require('./gameUtils/Randy/Randy.coffee')
 EncounterManager = require('./gameManagers/EncounterManager.js')
 LocationManager = require('./gameManagers/LocationManager.js')
+EventManager = require('./gameManagers/EventManager.js')
+EVENTS = require('./gameEvents.js')
 
 window.TRAVEL_SPEED = 3 # pixels per movement tick of tile travel
 # NOTE: this base speed does not affect travel time between planets b/c
@@ -99,6 +101,11 @@ class Game
 
         @encounterManager = new EncounterManager(trajJSON);
         @locationManager = new LocationManager(trajJSON);
+        @eventManager = new EventManager();
+        @eventManager.on(EVENTS.SWITCH_STATE, (data)->
+            console.log('CHANGING GAME STATE TO', data.newState);
+            globalData.game.state.start(data.newState);
+        );
 
     setTravelTime: (gameLength)->
         # sets game targeted length in minutes and adjusts distances between

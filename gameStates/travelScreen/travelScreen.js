@@ -128,7 +128,7 @@ gameState.prototype = {
         PauseButton.create(this.game);
         StatusDisplay.create(this.game);
 
-        $(document).on("encounter", (function(gameState){
+        globalData.gameData.eventManager.on("encounter", (function(gameState){
             return function(event){
                 // TODO: handle encounter
                 var eventSprite = gameState.game.add.sprite(
