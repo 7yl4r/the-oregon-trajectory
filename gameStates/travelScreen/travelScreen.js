@@ -105,6 +105,7 @@ gameState.prototype = {
         this.tileGroup.classType = Phaser.Image;
         // this.tileGroup.setAll('outOfBoundsKill', true);
         // this.tileGroup.setAll('checkWorldBounds', true);
+        this.shownTileKeys = [];
 
         updateBackgroundTiles(this);
 
@@ -202,7 +203,10 @@ updateBackgroundTiles = function(gameState){
         if (typeof(kkey) == 'undefined'){
             addTile(gameState.game, gameState.tileGroup, 'filler');
         } else {
-            addTile(gameState.game, gameState.tileGroup, kkey);
+            if (!gameState.shownTileKeys.includes(kkey)){
+                gameState.shownTileKeys.push(kkey)
+                addTile(gameState.game, gameState.tileGroup, kkey);
+            }  // else already displayed this tile
         }
     }
 }
