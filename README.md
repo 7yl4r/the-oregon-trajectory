@@ -21,8 +21,6 @@ Theme: Managerial, Real-Time
 
 Educational: Planetology, History
 
-![map](http://pri.wpengine.netdna-cdn.com/wp-content/themes/planetary-resources/assets/img/map/map-bg-med.jpg)
-
 [read more about it on the wiki!](https://github.com/7yl4r/the-oregon-trajectory/wiki)
 
 ![launch](http://i.imgur.com/a7GD71v.png)
@@ -31,7 +29,7 @@ Educational: Planetology, History
 # Begin Historical Role-Play #
 This is meant to be a tongue-in-cheek re-creation of The Oregon Trail, from the perspective of a 30th century intelligence. [Rogue-lite](http://www.giantbomb.com/forums/general-discussion-30/agreedisagree-by-modern-standards-oregon-trail-was-562547/?page=1#js-message-5994632), procedural, and nearly impossible to win.
 
-Want to know more? Head over to [the game wiki](https://github.com/7yl4r/the-oregon-trajectory/wiki)
+Want to know more? Head over to [the game wiki](https://github.com/7yl4r/the-oregon-trajectory/wiki).
 
 ## Contributing ##
 First steps:
@@ -40,11 +38,16 @@ First steps:
 2. say hello [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/7yl4r/the-oregon-trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 3. see INSTALL.md for dev setup instructions
 
-## version 1.0.0 ##
-Basic, bare bones version for spaceapps comepetion. Includes some original features of The Oregon Trail and not a hair more.
 
-## version 2.0.0 ##
-Now, that's the Oregon Trail. Recreation of The Oregon Trail considered complete.
+## version 2.x.x ##
+Version 2.x.x is still in-development! Features from version 1.x.x are being ported into phaser.js, and 2.x.x will no longer depend on angular.js. This will make the code more accessible to future developers and will allow for a more smooth user  (and developer) experience switching between game states.
+
+## version 1.x.x ##
+Basic, bare bones version for spaceapps comepetion. Includes some original features of The Oregon Trail. 
+
+This is the version currently on display on our gh-pages-powered website.
+
+This version was built using a custom modular design using angular.js. Development on this branch (`angular-legacy`) has stopped, but if you want to pick it up please fork the project and take a look at the [1.x.x](https://github.com/7yl4r/the-oregon-trajectory/projects/3) project tracking board for archived discussions/issues.
 
 ## acknowledgements ##
 
