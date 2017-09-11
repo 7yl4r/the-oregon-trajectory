@@ -40,10 +40,16 @@ First steps:
 
 
 ## version 2.x.x ##
-Version 2.x.x is still in-development! Features from version 1.x.x are being ported into phaser.js, and 2.x.x will no longer depend on angular.js. This will make the code more accessible to future developers and will allow for a more smooth user  (and developer) experience switching between game states.
+Version 2.x.x is still in-development! Features from version 1.x.x are being ported into phaser.js, and 2.x.x will no longer depend on angular.js.
+This will make the code more accessible to future developers and will allow for a more smooth user  (and developer) experience switching between game states.
+
+### Getting Started ###
+Various game states are initialized and the first "gameState" activated in `./index.coffee`; this file makes for a good entry point into the code.
+The website is bundled together using less & browserify using the build.sh script; more information about building is in INSTALL.md.
+[Issues tagged "easyFix"](https://github.com/7yl4r/the-oregon-trajectory/issues?q=is%3Aopen+is%3Aissue+label%3AeasyFix) may be good starting points.
 
 ## version 1.x.x ##
-Basic, bare bones version for spaceapps comepetion. Includes some original features of The Oregon Trail. 
+Basic, bare bones version for spaceapps comepetion. Includes some original features of The Oregon Trail.
 
 This is the version currently on display on our gh-pages-powered website.
 
