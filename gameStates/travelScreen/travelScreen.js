@@ -228,7 +228,7 @@ travel = function(gameState){
     }
     // TODO: else if within range of shop and have money, switch to shop screen module to buy fuel
     else { // end game
-        globalData.gameData.end();
+        globalData.gameData.eventManager.trigger(EVENTS.GAME_OVER);
     }
 }
 

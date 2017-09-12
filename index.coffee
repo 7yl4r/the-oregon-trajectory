@@ -60,6 +60,7 @@ $(document).ready( ()->
     globalData.game.state.add('ship-chooser', require('./gameStates/shipChooser'))
     globalData.game.state.add('travel-screen', require('./gameStates/travelScreen/travelScreen'))
     globalData.game.state.add('shop', require('./gameStates/shop'))
+    globalData.game.state.add('game-over', require('./gameStates/game-over'))
 
     globalData.game.state.start('boot')  # change this to start directly into a state for testing
 

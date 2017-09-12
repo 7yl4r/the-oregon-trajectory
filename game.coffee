@@ -61,13 +61,13 @@ class Game
         @crewHealth = [100, 100]
         @shipHealth = 100
 
-        @rations = 500
+        @rations = 50
         @eatChance = 0.05  # chance of eating per tick
 
-        @water = 500
+        @water = 50
         @drinkChance = 0.10  # chance of drinking per tick
 
-        @fuel = 500
+        @fuel = 50
         @fuelExpense = 0.05; # main thruster during normal gameplay
         @fuelChance = 0.7;  # chance of expending fuel per tick
 
@@ -103,10 +103,15 @@ class Game
         @encounterManager = new EncounterManager(trajJSON);
         @locationManager = new LocationManager(trajJSON);
         @eventManager = new EventManager();
-        @eventManager.on(EVENTS.SWITCH_STATE, (event, data)->
+        @eventManager.on(EVENTS.SWITCH_STATE, (event, data) ->
             console.log('CHANGING GAME STATE TO ', data.newState);
             globalData.game.state.start(data.newState);
         );
+        @eventManager.on(EVENTS.GAME_OVER, (event, data) =>
+            console.log('GAME OVER!!!');
+            @eventManager.trigger(EVENTS.SWITCH_STATE, {newState:"game-over"})
+        );
+
 
     setTravelTime: (gameLength)->
         # sets game targeted length in minutes and adjusts distances between
@@ -130,7 +135,7 @@ class Game
             if Math.random() < @fuelChance
                 @fuel -= @fuelExpense
         else
-            @end()
+            @eventManager.trigger(EVENTS.GAME_OVER);
 
         if Math.random() < @radiationChance
             @irradiate()
@@ -192,9 +197,9 @@ class Game
         console.log('TODO: resetGame')
         return
 
-    end: ()->
-        console.log('game over!')
-        # TODO: switch to game over state
+    end: ()->  # TODO: remove this once you're sure is isn't being used anymore
+        console.warn('DEPRECATED USE OF gameData.end()!!!')
+        @eventManager.trigger(EVENTS.GAME_OVER);
         return
 
     # === debug helper methods ===
@@ -270,7 +275,7 @@ class Game
     _calcShipHealth: ()->
         # recalculates shipHealth summary of health of remaining crew members
         if @crewHealth.length < 1
-            @end()
+            @eventManager.trigger(EVENTS.GAME_OVER);
             return
 
         healthSum = @crewHealth.reduce((prev,current)->
