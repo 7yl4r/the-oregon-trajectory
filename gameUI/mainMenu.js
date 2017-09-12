@@ -26,7 +26,7 @@ module.exports = function(event){
 
         switch(choice){
             case 0:
-                event.game.state.start('ship-chooser');
+                event.game.state.start('travel-screen');
                 break;
             default:
                 break
