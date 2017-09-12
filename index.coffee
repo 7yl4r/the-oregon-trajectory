@@ -29,7 +29,6 @@ window.globalData = {
     calcCredits: () ->
         return globalData.game.money + globalData.stats.credits
 };
-window.globalData.gameData = new Game()
 
 window.util = {
     absPath: (path) ->
@@ -39,6 +38,7 @@ window.util = {
 }
 
 $(document).ready( ()->
+    window.globalData.gameData = new Game()
 
     # version number display
     version = '0.0.0';

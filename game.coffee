@@ -94,6 +94,7 @@ class Game
 
     setTrajectory: (trajJSON)->
         # sets the trajectory from a given json object
+        console.log("trajectory has been set.")
         @trajectory = trajJSON.trajectory
 
         @setTravelTime(@trajectory.meta.travelTime, @)
@@ -103,7 +104,7 @@ class Game
         @locationManager = new LocationManager(trajJSON);
         @eventManager = new EventManager();
         @eventManager.on(EVENTS.SWITCH_STATE, (data)->
-            console.log('CHANGING GAME STATE TO', data.newState);
+            console.log('CHANGING GAME STATE TO ', data.newState);
             globalData.game.state.start(data.newState);
         );
 
