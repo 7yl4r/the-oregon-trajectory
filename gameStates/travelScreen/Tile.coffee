@@ -1,3 +1,4 @@
+# defines a background tile for use in the travel screen
 module.exports = class Tile
     gameWidth = 800
 
