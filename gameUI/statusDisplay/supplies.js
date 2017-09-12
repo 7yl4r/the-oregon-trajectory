@@ -13,42 +13,64 @@ function create(args){
     var PANEL_HEIGHT = args.statusPanelHeight + OVERHANG;
     var PANEL_WIDTH = PAD*2 + args.statusSupplyWidth;
     var SECTION_WIDTH = (PANEL_WIDTH - PAD*2.0) / 4.0;
-    game.slickUI.add(panel = new SlickUI.Element.Panel(
+    game.slickUI.add(supp_panel = new SlickUI.Element.Button(
         PAD,
         -OVERHANG,
         PANEL_WIDTH,
         PANEL_HEIGHT
     ));
-    panel.alpha = args.panelAlpha;
-    panel.add(new SlickUI.Element.Text(
+    supp_panel.alpha = args.panelAlpha;
+    // === panel interactivity
+    supp_panel.inputEnabled = true;
+    supp_panel.input.useHandCursor = true;
+    supp_panel.events.onInputDown.add((function(_game) {
+        return function() {
+            if(panel_expanded) {
+                console.warn("TODO: retract panel")
+            } else {
+                _game.inMenu = true;  // pause
+                panel_expanded = true;
+                supp_panel.y = basePosition + 200;
+                _game.add.tween(supp_panel).to( {y: basePosition}, 500, Phaser.Easing.Exponential.Out, true)/*.onComplete.add(function () {
+                    pauseButton.visible = false;
+                });*/
+                _game.slickUI.container.displayGroup.bringToTop(supp_panel.container.displayGroup);
+            }
+        };
+    })(game));
+    var panel_expanded = false;
+    var basePosition = supp_panel.y
+
+    // === panel sub-elements:
+    supp_panel.add(new SlickUI.Element.Text(
         0 ,
         PAD + OVERHANG,
         "fuel water food money",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    panel.add(this.fuelText = new SlickUI.Element.Text(
+    supp_panel.add(this.fuelText = new SlickUI.Element.Text(
         PAD,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    panel.add(this.waterText = new SlickUI.Element.Text(
+    supp_panel.add(this.waterText = new SlickUI.Element.Text(
         PAD+SECTION_WIDTH,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    panel.add(this.rationText = new SlickUI.Element.Text(
+    supp_panel.add(this.rationText = new SlickUI.Element.Text(
         PAD+SECTION_WIDTH*2,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    panel.add(this.moneyText = new SlickUI.Element.Text(
+    supp_panel.add(this.moneyText = new SlickUI.Element.Text(
         PAD+SECTION_WIDTH*3,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
