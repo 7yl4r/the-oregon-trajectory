@@ -55,12 +55,12 @@ $(document).ready( ()->
     )
 
     # set up phaser game states
-    globalData.game.state.add('mining', require('./gameStates/mining/mining'))
     globalData.game.state.add('boot', require('./gameStates/boot'))
+    globalData.game.state.add('mining', require('./gameStates/mining/mining'))
     globalData.game.state.add('ship-chooser', require('./gameStates/shipChooser'))
     globalData.game.state.add('travel-screen', require('./gameStates/travelScreen/travelScreen'))
     globalData.game.state.add('shop', require('./gameStates/shop'))
 
-    globalData.game.state.start('travel-screen')  # change this to start directly into a state for testing
+    globalData.game.state.start('boot')  # change this to start directly into a state for testing
 
 )
