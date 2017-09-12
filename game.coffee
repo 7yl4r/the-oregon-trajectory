@@ -103,7 +103,7 @@ class Game
         @encounterManager = new EncounterManager(trajJSON);
         @locationManager = new LocationManager(trajJSON);
         @eventManager = new EventManager();
-        @eventManager.on(EVENTS.SWITCH_STATE, (data)->
+        @eventManager.on(EVENTS.SWITCH_STATE, (event, data)->
             console.log('CHANGING GAME STATE TO ', data.newState);
             globalData.game.state.start(data.newState);
         );
