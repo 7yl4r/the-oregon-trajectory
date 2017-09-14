@@ -13,17 +13,23 @@ function create(args){
     var PANEL_HEIGHT = args.statusPanelHeight + OVERHANG;
     var PANEL_WIDTH = PAD*2 + args.statusSupplyWidth;
     var SECTION_WIDTH = (PANEL_WIDTH - PAD*2.0) / 4.0;
-    game.slickUI.add(supp_panel = new SlickUI.Element.Button(
+    game.slickUI.add(supp_panel = new SlickUI.Element.Panel(
         PAD,
         -OVERHANG,
         PANEL_WIDTH,
         PANEL_HEIGHT
     ));
+    supp_panel.add(supp_btn = new SlickUI.Element.Button(
+        0,
+        0,
+        PANEL_WIDTH,
+        PANEL_HEIGHT
+    ));
     supp_panel.alpha = args.panelAlpha;
     // === panel interactivity
-    supp_panel.inputEnabled = true;
-    supp_panel.input.useHandCursor = true;
-    supp_panel.events.onInputDown.add((function(_game) {
+    // supp_btn.inputEnabled = true;
+    // supp_btn.input.useHandCursor = true;
+    supp_btn.events.onInputDown.add((function(_game) {
         return function() {
             if(panel_expanded) {
                 console.warn("TODO: retract panel")
@@ -42,35 +48,35 @@ function create(args){
     var basePosition = supp_panel.y
 
     // === panel sub-elements:
-    supp_panel.add(new SlickUI.Element.Text(
+    supp_btn.add(new SlickUI.Element.Text(
         0 ,
         PAD + OVERHANG,
         "fuel water food money",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    supp_panel.add(this.fuelText = new SlickUI.Element.Text(
+    supp_btn.add(this.fuelText = new SlickUI.Element.Text(
         PAD,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    supp_panel.add(this.waterText = new SlickUI.Element.Text(
+    supp_btn.add(this.waterText = new SlickUI.Element.Text(
         PAD+SECTION_WIDTH,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    supp_panel.add(this.rationText = new SlickUI.Element.Text(
+    supp_btn.add(this.rationText = new SlickUI.Element.Text(
         PAD+SECTION_WIDTH*2,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
         FONT_SIZE,
         "minecraftia-white"
     ));
-    supp_panel.add(this.moneyText = new SlickUI.Element.Text(
+    supp_btn.add(this.moneyText = new SlickUI.Element.Text(
         PAD+SECTION_WIDTH*3,
         PAD + OVERHANG + FONT_SIZE,
         " 0000",
