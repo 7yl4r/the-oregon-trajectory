@@ -43,7 +43,7 @@ function update(game){
     var newVal = globalData.gameData.displayDistanceTraveled /
         globalData.gameData.worldWidth_AU;
     // console.log('sliderTo:', newVal);
-    this.sprite_handle.cameraOffset.x = this.panel.x + this.args.pad + newVal * (panel.width-2*this.args.pad);
+    this.sprite_handle.cameraOffset.x = this.panel.x + this.args.pad + newVal * (this.panel.width-2*this.args.pad);
 
 }
 
