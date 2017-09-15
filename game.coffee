@@ -20,24 +20,7 @@ class Game
     constructor: ()->
         @gameDir = "" # "/the-oregon-trajectory" # for conversion between gh-pages and local server
 
-        @UISettings = {
-            pad: 10,  # space between things
-            fontSize: 16,
-            statusPanelHeight: 70,  # status display on travelScreen & shop
-            statusSupplyWidth: 230,
-            statusTrajWidth: 230,
-            statusHealthWidth: 230,
-            buttonH: 80,  # suggested button size
-            buttonW: 140,
-            panelAlpha: 0.4,  # suggested panel opacity
-            leftPanelW: 400-10,
-            middlePanelH: 300
-        }
-        @UISettings.middlePanelTop = @UISettings.statusPanelHeight+@UISettings.pad
-        # middle panel height should fill space in between status panel and
-        #   bottom panel / buttons row.
-        @UISettings.middlePanelH = globalData.h -
-            ( @UISettings.middlePanelTop + @UISettings.buttonH + @UISettings.pad*2)
+        @UISettings = require('./gameUI/UISettings.js')
 
         # distances
         @worldWidth_AU = 13.6749  # TODO: move this into @trajectory data file
