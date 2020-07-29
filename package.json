@@ -56,9 +56,9 @@
     },
     "phaser": {
       "exports": "Phaser"
-  },
+    },
     "slick-ui": {
-        "exports": "SlickUI"
+      "exports": "SlickUI"
     }
   },
   "browser": {
@@ -66,20 +66,14 @@
     "pause-button": "./gameUI/addPauseButton.js",
     "status-display": "./gameUI/statusDisplay/addStatusDisplay.js",
     "main-menu-controller": "./gameUI/mainMenu.js",
-
     "game": "./game.coffee",
     "si-number-formatter": "./gameUtils/SINumberFormatter.js",
     "drift": "./gameUtils/drift.js",
     "load-spritesheet": "./gameUtils/loadSpriteSpec.js",
     "EventList": "./gameData/EventList.js",
     "gameEvents": "./gameEvents.js",
-
     "slick-ui": "./lib/slick-ui/dist/slick-ui.min.js",
     "slick-ui-preload": "./gamePlugins/slickUI.js",
-
-
-
-
     "welcome": "./ng-modules/welcome/welcome.js",
     "ship-customizer": "./ng-modules/shipCustomizer/shipCustomizer.coffee",
     "leaderboard": "./ng-modules/leaderboard/leaderboard.js",
@@ -106,7 +100,6 @@
     "score": "./ng-modules/score.js",
     "nodule": "./ng-modules/theOregonTrajectory/Nodule.coffee",
     "ng-hold": "./ng-modules/ngHold.js",
-
     "angular": "./node_modules/angular/angular.min.js",
     "ui.bootstrap": "./node_modules/angular-bootstrap/ui-bootstrap.min.js",
     "ngTouch": "./node_modules/angular-touch/angular-touch.min.js",
