@@ -7,5 +7,5 @@ echo 'compiling less css...'
 echo 'browserify-ing module dependencies...'
 ./node_modules/.bin/browserify -t coffeeify index.coffee -o bundle.js
 
-echo 'starting localhost server for testing...'
-python -m SimpleHTTPServer
+echo 'starting localhost:8000 server for testing...'
+python -m http.server
