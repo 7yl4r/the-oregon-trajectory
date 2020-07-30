@@ -45,6 +45,9 @@ This will make the code more accessible to future developers and will allow for 
 
 ### Getting Started ###
 Various game states are initialized and the first "gameState" activated in `./index.coffee`; this file makes for a good entry point into the code.
+If you are looking for a particular component to work on see the "browser" entries in package.json.
+The mapping there shows how `require` names map to files.
+
 The website is bundled together using less & browserify using the build.sh script; more information about building is in INSTALL.md.
 [Issues tagged "easyFix"](https://github.com/7yl4r/the-oregon-trajectory/issues?q=is%3Aopen+is%3Aissue+label%3AeasyFix) may be good starting points.
 

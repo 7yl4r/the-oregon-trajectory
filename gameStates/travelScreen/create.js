@@ -1,4 +1,4 @@
-PauseButton = require('pause-button');
+PauseButton = require('pause-button');  // Could use '../../gameUI/addPauseButton.js'
 StatusDisplay = require('status-display');
 drift = require('drift');
 
