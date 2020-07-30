@@ -1,3 +1,9 @@
+# This file defines the "game" object.
+# An instance of this object is used to track the state of gameplay throughout
+# the game.
+# When a new game is started the data on this object will be reset using the
+# _init() function.
+
 Reputation = require('./gameUtils/Reputation.coffee')
 Score = require('./gameUtils/Score.coffee')
 Phaser = require('phaser')

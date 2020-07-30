@@ -1,3 +1,9 @@
+# This file initializes data for the game.
+# Different "scenes" are included at the bottom of the file.
+# For info on how the scenes work see the relevant gameState file.
+#
+# The game object itself is initialized in game.coffee.
+
 require('phaser')
 
 # show warning before navigating from the page

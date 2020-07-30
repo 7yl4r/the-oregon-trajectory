@@ -1,9 +1,5 @@
-Tile = require('./Tile.coffee');
+Tile = require('./Tile.coffee');  // TODO: can del this?
 Phaser = require('phaser');
-PauseButton = require('pause-button');
-StatusDisplay = require('status-display');
-drift = require('drift');
-EventList = require('EventList');
 
 gameState = function(game){}
 
@@ -11,161 +7,12 @@ MIN_TRAVELS_PER_EVENT = 10;  // min amount of travel between events
 EVENT_VARIABILITY = 2;  // affects consistency in event timing. high values = less consistent timing. must be > 0
 // units of EVENT_VARIABILITY are fraction of MIN_TRAVELS_PER_EVENT, eg 3 means MIN_TRAV./3
 
+
 gameState.prototype = {
-    preload: function() {
-        game = this.game;
-        data = globalData.gameData;
-        // #################
-        // # visual assets #
-        // #################
-        // backgrounds:
-        data.locationManager.preload(game);
-
-        // player ship:
-        game.load.image('player-ship', util.absPath('assets/sprites/ship.png'));
-
-        data.encounterManager.preload(game);
-
-        EventList.preload(game);
-
-        // // TODO could include more in spec using a more advanced loader.
-        // // Example usage of loader might be like:
-        // SpriteSpecLoader.load(game, 'sprite-key', require('../path/to/spriteSpec.js'));
-        // // loader loads files, but holds onto animation data from spec for later
-        // sprite = add.sprite('tag');
-        // // setup uses saved animation data from spec to set animations and play
-        // SpriteSpecLoader.setup(sprite, 'sprite-key');
-        // // setup does something like to:
-        // //      foreach animation in specs[key].animations
-        // //      sprite.animations.add(animation.key, animation.frames);
-        // SpriteSpecLoader.play(sprite, 'sprite-key', 'anim-key')
-        // //      sprite.animations.play(animation.key, animation.fps);
-
-
-        // ----------------
-        // music assets
-        // ----------------
-        // game.load.audio('TAG', 'FILE-PATH.mp3');
-        // music.theme = new Howl({
-        //     urls: ['assets/sound/music/theme/theme.mp3', 'assets/sound/music/theme/theme.ogg'],
-        // music.ambience = new Howl({
-        //     urls: ['assets/sound/music/ambience1/ambience1.mp3', 'assets/sound/music/ambience1/ambience1.ogg'],
-        // music.asteroidMining = new Howl({
-        //     urls: [
-        //         'assets/sound/music/asteroidMining/asteroidMining.mp3',
-        //         'assets/sound/music/asteroidMining/asteroidMining.ogg'
-        //     ],
-        // music.losing = new Howl({
-        //     urls: ['assets/sound/music/Losing.ogg', 'assets/sound/music/Losing.mp3'],
-        // music.winning = new Howl({
-        //     urls: ['assets/sound/music/winning/winning.ogg', 'assets/sound/music/winning/winning.mp3'],
-
-        // ----------------
-        // sound assets
-        // ----------------
-        // sounds.click = new Howl({
-        //     urls: ['assets/sound/effects/select/select.ogg', 'assets/sound/effects/select/select.mp3']
-        // sounds.bummer = new Howl({
-        //     urls: [
-        //         'assets/sound/effects/somethingbad/SomethingBad.mp3',
-        //         'assets/sound/effects/somethingbad/SomethingBad.ogg'
-        // sounds.shot1 = new Howl({
-        //     urls: [
-        //         'assets/sound/effects/shot1/shot1.mp3',
-        //         'assets/sound/effects/shot1/shot1.ogg',
-        //         'assets/sound/effects/shot1/shot1.wav'
-        // sounds.shot2 = new Howl({
-        //     urls:[
-        //         'assets/sound/effects/shot2/shot2.mp3',
-        //         'assets/sound/effects/shot2/shot2.ogg'
-        // sounds.clunk = new Howl({
-        //     urls:[
-        //         'assets/sound/effects/clunk/clunk.mp3',
-        //         'assets/sound/effects/clunk/clunk.ogg',
-        //         'assets/sound/effects/clunk/clunk.wav'
-        // sounds.propel = new Howl({
-        //     urls:[
-        //         'assets/sound/effects/propellant/propellant.mp3',
-        //         'assets/sound/effects/propellant/propellant.ogg',
-        //         'assets/sound/effects/propellant/propellant.wav'
-
-        // ----------------
-        // plugins
-        // ----------------
-        require('slick-ui-preload')();
-
-        PauseButton.preload(this.game)
-        StatusDisplay.preload(this.game)
-    },
-    create: function(){
-        console.log('create travelScreen');
-        this.randyTime = 0;
-
-        this.tileGroup = this.game.add.group();
-        this.tileGroup.classType = Phaser.Image;
-        // this.tileGroup.setAll('outOfBoundsKill', true);
-        // this.tileGroup.setAll('checkWorldBounds', true);
-        this.shownTileKeys = [];
-
-        updateBackgroundTiles(this);
-
-        this.SHIP_INITIAL_POS = 0;
-        this.ship = this.game.add.sprite(
-            this.SHIP_INITIAL_POS,
-            this.game.height/2,
-            'player-ship'
-        );
-        this.ship.anchor.setTo(0.5, 0.5);
-        this.ship.update = function(){
-            this.y = drift(this.y)
-        }
-        this.game.world.setBounds(-200, 0, globalData.gameData.worldWidth, 600);
-        this.game.camera.follow(this.ship);
-
-        this.tileGroup.x = globalData.gameData.distanceTraveled;
-        window.travelScreen = this;
-
-        PauseButton.create(this.game);
-        StatusDisplay.create(this.game);
-
-        globalData.gameData.eventManager.on("encounter", (function(gameState){
-            return function(event){
-                // TODO: handle encounter
-                var eventSprite = gameState.game.add.sprite(
-                    gameState.game.camera.x + gameState.game.width,
-                    gameState.game.height/2,
-                    'satelite-debris-1'
-                );
-                console.log('encounter:', event, 'sprite:', eventSprite);
-            }
-        })(this));
-    },
-    update: function(){
-        if (!globalData.game.inMenu){  // check for menu pause
-            travel(this);
-            this.drawSprites();  // NOTE: is this ok every frame? there's gonna be duplicates...
-            StatusDisplay.update(this.game);
-        }
-    },
-    render: function(){
-        // this.game.debug.cameraInfo(this.game.camera, 32, 32);
-    },
-    drawSprites: function(){
-        // add location sprites
-        var upcomingEncounters = globalData.gameData.encounterManager.getNearbyEncounters({
-            distance: globalData.gameData.distanceTraveled,
-            searchWindow: this.game.width/2.0
-        });
-        // console.log('drawing ', upcomingEncounters.length, ' sprites');
-        for (var encounter of upcomingEncounters){
-            globalData.gameData.encounterManager.drawEncounterSprite(
-                this.game,
-                encounter,
-                encounter.distance_px,
-                this.game.height/2
-            )
-        }
-    }
+	preload: require('./preload'),
+  	create: require('./create'),
+    render: function(){},
+    update: require('./update'),
 }
 
 module.exports = gameState;
